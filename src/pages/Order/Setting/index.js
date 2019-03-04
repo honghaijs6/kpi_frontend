@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import {BenExplorer} from '../../../components/BenExplorer';
 
 import ProductPage from './productPage';
+import CategoryPage from './categoryPage';
+
 
 class OrderSetting extends Component{
 
@@ -15,15 +17,16 @@ class OrderSetting extends Component{
       onAction:'',
       status:'',
 
-      onTab:'productPage',
+      onTab:'categoryPage',
       navData:[
-        {icon:'', code:'productPage',name:'Sản phẩm',active:true},
+        {icon:'', code:'productPage',name:'Sản phẩm'},
         /*{icon:'', code:'productTypePage',name:'Loại sản phẩm'},*/
-        {icon:'', code:'categoryPage',name:'Danh mục sản phẩm'},
-        {icon:'', code:'unitPage',name:'Đơn vị tính'},
+        {icon:'', code:'categoryPage',name:'Danh mục sản phẩm',active:true},
+        /*{icon:'', code:'unitPage',name:'Đơn vị tính'},
         {icon:'', code:'branchPage',name:'Thương hiệu'},
-        {icon:'', code:'supplierPage',name:'Nhà Cung Cấp'},
         {icon:'', code:'sourcePage',name:'Nguồn đơn hàng'},
+        */
+        {icon:'', code:'supplierPage',name:'Nhà Cung Cấp'},
         {icon:'', code:'causeDelPage',name:'Lý do huỷ đơn hàng'},
         {icon:'', code:'displayPage',name:'Cấu hình tạo đơn hàng'},
         {icon:'', code:'notificationPage',name:'Cài đặt thông báo'},
@@ -52,6 +55,8 @@ class OrderSetting extends Component{
               <BenExplorer onLeftSideChange={ this._onNavChange } data={this.state.navData} >
 
                 <ProductPage {...this.state} />
+                <CategoryPage {...this.state} />
+
 
               </BenExplorer>
             </main>

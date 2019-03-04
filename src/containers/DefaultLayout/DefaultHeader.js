@@ -33,7 +33,7 @@ class DefaultHeader extends Component {
         {/* LEFT  */}
         <Nav navbar>
           <NavItem className="px-3">
-              Tháng 02
+              Tháng 03
           </NavItem>
         </Nav>
 

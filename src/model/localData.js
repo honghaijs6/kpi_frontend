@@ -82,11 +82,11 @@ class LocalData {
 
   listenDataChange(onDataChange){
 
-
     const data = {
       res:this.state.res,
       list:this.data
     }
+
     onDataChange(data);
   }
 
@@ -239,6 +239,7 @@ class LocalData {
       const {url, config} = this.db ;
 
 
+
       axios.get(url,config)
             .then((res) => {
 
@@ -338,7 +339,7 @@ class LocalData {
     },
     update(res){
       let list = this._this.get(); // CAP NHẬT DATA
-      const idata = res.data ;
+      const idata = res.data.data ;
 
       list.map((item,index)=>{
 
@@ -365,7 +366,10 @@ class LocalData {
 
   socketResp(res){
 
-    this.localStorage[res.type](res);
+
+    const data = res.data ;
+    this.localStorage[data.type](res); // call method based on type to update localStorage change
+
 
     this.whereStateChange({
       onAction:'socketResp',
@@ -394,8 +398,19 @@ class LocalData {
     let  url = this.db.base +   Object.keys(this.db.paginate).map((key)=>{
         return key +'='+ this.db.paginate[key]
     }).join('&');
+    /* RECONFIG DB QUERY */
+    if(typeof this.db.method !== 'undefined'){
+
+      const base  = this.db.base.replace('?','');
+
+      url = base +'/'+ this.db.method.name+'/'+this.db.method.params+'?'+ Object.keys(this.db.paginate).map((key)=>{
+          return key +'='+ this.db.paginate[key]
+      }).join('&');
+
+    }
 
     this.db.url = url;
+
     this.db.config = server.setHeader();
 
     this.whereStateChange({

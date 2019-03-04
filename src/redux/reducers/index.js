@@ -19,6 +19,8 @@ import reducerCustomer from './reducer-customer';
 import reducerOrder from './reducer-order';
 
 import reducerProduct from './reducer-product';
+import reducerCategory from './reducer-category';
+
 
 
 const allReducers = combineReducers({
@@ -35,8 +37,9 @@ const allReducers = combineReducers({
   coin:reducerCoint,
   customer:reducerCustomer,
   order:reducerOrder,
-  product:reducerProduct
-  
+  product:reducerProduct,
+  category:reducerCategory
+
 });
 
 export default allReducers;

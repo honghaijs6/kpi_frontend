@@ -18,3 +18,4 @@ export const CUSTOMERS = 'customers';
 export const ORDERS = 'orders';
 
 export const PRODUCTS = 'products';
+export const CATEGORIES = 'categories';

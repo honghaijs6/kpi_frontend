@@ -185,6 +185,7 @@ class BenGrid extends Component{
     let disabledBtnDel = this.state.selectedData.length > 0 ? false : true;
 
     const clnRightTool =  this.state.isRightTool ? '' : 'hidden';
+    
 
     return (
 

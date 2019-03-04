@@ -114,8 +114,12 @@ class Model {
 
       const _this = this ;
       this.localData.put(id,data,(res)=>{
-          _this.listenDataChange();
-          onSuccess(res);
+
+          setTimeout(()=>{
+            _this.listenDataChange();
+            onSuccess(res);
+
+          },2000)
 
       })
 
@@ -154,8 +158,11 @@ class Model {
 
   load(){
 
+    this.localData.fetch((res)=>{
+      this.listenDataChange();
+    })
+    //this.localData.data.length === 0 ? this.localData.fetch((res)=>{ this.listenDataChange(); }) : this.listenDataChange();
 
-    this.localData.data.length === 0 ? this.localData.fetch((res)=>{ this.listenDataChange(); }) : this.listenDataChange();;
 
   }
   get(onSuccess){
@@ -190,7 +197,6 @@ class Model {
   restResp(res){
 
 
-
     this.whereStateChange({
       type:this.localData.db.type+'-'+this.model,
       list:res.list,
@@ -216,8 +222,6 @@ class Model {
 
 
     Object.assign(this.state,newState);
-
-
     store.dispatch(newState);
 
 

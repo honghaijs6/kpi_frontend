@@ -15,3 +15,4 @@ export const CUSTOMER_NAME = 'Khách hàng';
 export const ORDER_NAME = 'Đơn hàng';
 
 export const PRODUCT_NAME = 'Sản phẩm';
+export const CATEGORY_NAME = 'Danh Mục';
