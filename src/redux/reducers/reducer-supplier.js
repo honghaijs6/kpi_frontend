@@ -13,11 +13,8 @@ nhật ký : thu - chi : từ tài khoản
 import { toast } from '../../hook/after';
 
 
-import { CATEGORIES } from '../../model/model-mode';
-import { CATEGORY_NAME } from '../../model/model-name';
-
-const MODE = CATEGORIES;
-const NAME = CATEGORY_NAME;
+const MODE = 'suppliers';
+const NAME = 'Nhà cung cấp';
 
 const iniState = {
   mode:MODE,

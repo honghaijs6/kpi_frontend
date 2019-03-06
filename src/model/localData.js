@@ -8,10 +8,12 @@
 
 import Socket from './socket';
 
+
 import server from '../config/server';
 import axios from 'axios';
 
-import isExisted from '../hook/before';
+import {isExisted} from '../hook/before';
+
 
 
 class LocalData {
@@ -97,7 +99,8 @@ class LocalData {
 
       axios.delete(url,this.db.config)
             .then((res)=>{
-              this.restResp(res);
+
+              // this.restResp(res);  CAP NHÂT localStorage
               onSuccess(res.data)
             },(error)=>{
               this.onError(error)
@@ -115,7 +118,7 @@ class LocalData {
 
     axios.post(url,data,this.db.config)
           .then((res)=>{
-            this.restResp(res);
+            //this.restResp(res); // CAP NHAT localStorage
             onSuccess(res)
           },(error)=>{
 
@@ -132,11 +135,9 @@ class LocalData {
 
       const url = server.base() + '/' + this.model + '?id='+id;
 
-
-
       axios.put(url,data,this.db.config)
             .then((res)=>{
-              this.restResp(res);
+              //this.restResp(res); // KHONG UPDATE localStorage
               onSuccess(res.data)
             },(error)=>{
 
@@ -161,7 +162,7 @@ class LocalData {
 
     this.fetch((res)=>{
 
-      this.restResp(res);
+      //this.restResp(res); CAP NHAT localStorage
       onSuccess(res);
     },(err)=>{
 
@@ -190,8 +191,7 @@ class LocalData {
 
 
     this.fetch((res)=>{
-
-      this.restResp(res);
+      //this.restResp(res); //  CAP NHAT localStorage
       onSuccess(res);
     },(err)=>{
 
@@ -221,8 +221,7 @@ class LocalData {
 
 
     this.fetch((res)=>{
-
-      this.restResp(res);
+      //this.restResp(res); CAP NHAT localStorage
       onSuccess(res);
     },(err)=>{
       this.onError(err);
@@ -238,13 +237,9 @@ class LocalData {
       const _this = this ;
       const {url, config} = this.db ;
 
-
-
       axios.get(url,config)
             .then((res) => {
-
-
-              this.restResp(res);
+              //this.restResp(res); // KHÔNG LUU localStorage
               onSuccess(res)
 
             },
@@ -276,7 +271,6 @@ class LocalData {
     POST(res){
 
       const idata = res.data ;
-
 
       let list = this._this.get();
       list.unshift(idata.data);
@@ -338,6 +332,7 @@ class LocalData {
 
     },
     update(res){
+
       let list = this._this.get(); // CAP NHẬT DATA
       const idata = res.data.data ;
 
@@ -366,10 +361,8 @@ class LocalData {
 
   socketResp(res){
 
-
     const data = res.data ;
     this.localStorage[data.type](res); // call method based on type to update localStorage change
-
 
     this.whereStateChange({
       onAction:'socketResp',

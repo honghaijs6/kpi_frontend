@@ -15,9 +15,13 @@ MODEL : MAKE RESFUL API
     -> TRIGGER ON ACTION GET ERROR
 */
 
-
+import Socket from './socket';
 import store from '../redux/store';
-import LocalData from './localData';
+
+// DATABASE
+import server from '../config/server';
+import axios from 'axios';
+
 
 
 class Model {
@@ -29,7 +33,12 @@ class Model {
     this.model = model; // string
 
     this.data = [];
-    this.state = {}
+    this.state = {
+      typeAction:'',
+      onAction:'',
+      status:'',
+      res:{}
+    }
 
     //this.status = {}; /* keep context data on doing POST - PUT  */
     //this.type = ''; /* type : http: method */
@@ -42,20 +51,92 @@ class Model {
   }
 
   setup(){
-    this.localData = new LocalData(this.model);
+
+    this.jwt = localStorage.getItem('feathers-jwt');
+
+    // database
+    /*database*/
+    this.db = {
+      type:'GET',
+      url:'',
+      base:server.base() + '/'+ this.model+'?',
+      config:'',
+      paginate:server.paginate,
+      total:0
+    };
+    this.configDB();
 
 
-    this.listenOnSocketTick();
-    this.listenDataChange();
+    /*socket*/
+    this.socket = new Socket(this.model);
 
-    this.data = this.localData.list;
+
   }
 
+  configDB(){
+    const _this = this ;
+    let  url = this.db.base +   Object.keys(this.db.paginate).map((key)=>{
+        return key +'='+ this.db.paginate[key]
+    }).join('&');
+
+    /* RECONFIG DB QUERY */
+    if(typeof this.db.method !== 'undefined'){
+
+      const base  = this.db.base.replace('?','');
+
+      url = base +'/'+ this.db.method.name+'/'+this.db.method.params+'?'+ Object.keys(this.db.paginate).map((key)=>{
+          return key +'='+ this.db.paginate[key]
+      }).join('&');
+
+    }
+
+    this.db.url = url;
+    this.db.config = server.setHeader();
+
+
+  }
+
+  resetConfigDB(name,value){
+    this.db[name] = value;
+    this.configDB();
+
+
+  }
 
   /* WHEN */
   /* start listen to socket server -> save LocalData -> send to reducers
     tren cung 1 may tinh se ko cap nhat socket realtime
   */
+
+  /********WHEN *********** */
+  onError(err){
+    const data = err.response.data ;
+    const msg = data.errors[0];
+
+    this.showErr(msg);
+
+  }
+
+  showErr(msg){
+    if(typeof msg === 'object'){
+      msg = msg.message.indexOf('must be unique') >-1 ? 'Mã này đã được dùng' : msg.message ;
+    }
+
+    let el = document.querySelector("#form-err");
+
+    if(el !== null){
+      el.innerHTML = msg;
+      setTimeout(()=>{
+        el.innerHTML = 'status';
+      },2000)
+    }else{
+
+      console.log(msg);
+    }
+
+  }
+
+
 
   axios(method,data={},onSuccess){
 
@@ -93,124 +174,331 @@ class Model {
 
   delete(id,onSuccess){
 
-      this.localData.delete(id,(res)=>{
-        this.listenDataChange()
-        onSuccess(res)
-      });
+    this.db.type = 'DELETE';
+    const url = server.base() + '/' + this.model+'/'+id ;
+
+    axios.delete(url,this.db.config)
+          .then((res)=>{
+
+            this.listenDataChange(res);
+            onSuccess(res.data);
+          },(error)=>{
+            this.onError(error)
+
+      })
 
   }
 
   post(data,onSuccess){
 
-    this.localData.post(data,(res)=>{
-      this.listenDataChange()
-      onSuccess(res.data);
-    })
+    this.db.type = 'POST';
+    this.status = data ;
+
+    const url = server.base()+ '/' + this.model;
+
+    axios.post(url,data,this.db.config)
+          .then((res)=>{
+
+            this.listenDataChange(res) // CAP NHAT REDUX STORE
+            onSuccess(res.data) // callback for auto notification
+          },(error)=>{
+
+          this.onError(error);
+
+    });
 
   }
 
   put(id,data,onSuccess){
 
+    this.db.type = 'PUT';
+    this.status = data ;
 
-      const _this = this ;
-      this.localData.put(id,data,(res)=>{
+    const url = server.base() + '/' + this.model + '?id='+id;
 
-          setTimeout(()=>{
-            _this.listenDataChange();
-            onSuccess(res);
+    axios.put(url,data,this.db.config)
+          .then((res)=>{
+            this.listenDataChange(res);
+            onSuccess(res.data)
+          },(error)=>{
 
-          },2000)
+            this.onError(error)
 
-      })
+    })
 
   }
 
 
   goto(p=0,onSuccess){
 
+    const {url, config, paginate, total } = this.db ;
 
+    let offset = 0 ;
+    offset = parseInt(paginate.max) * (p);
 
-    this.localData.goto(p,(res)=>{
-      this.listenDataChange();
+    this.resetConfigDB('paginate',Object.assign(paginate,{
+      offset:offset,
+      p:p
+    }));
+
+    this.fetch((res)=>{
+
+      this.listenDataChange(res);
       onSuccess(res);
-    })
+    },(err)=>{
+
+      this.onError(err);
+
+    });
 
   }
 
   pre(onSuccess){
 
-    this.localData.pre((res)=>{
-      this.listenDataChange();
+    const {url, config, paginate,total} = this.db ;
+    let next = paginate.p - 1;
+
+    next = next < 0 ? 0 : next ;
+
+    let offset = 0 ;
+    let page = next ;
+    let pages = Math.ceil( parseInt(total) / parseInt(paginate.max));
+
+    offset = parseInt(paginate.max) * (page);
+
+    this.resetConfigDB('paginate',Object.assign(paginate,{
+      offset:offset,
+      p:page
+    }));
+
+
+    this.fetch((res)=>{
+      this.listenDataChange(res);
       onSuccess(res);
-    })
+    },(err)=>{
+
+      this.onError(err);
+
+    });
 
   }
+
   next(onSuccess){
 
-      this.localData.next((res)=>{
+    const {url, config, paginate, total } = this.db ;
+    let next = paginate.p + 1;
 
-        this.listenDataChange();
-        onSuccess(res);
-      })
+    let pages = Math.ceil( parseInt(total) / parseInt(paginate.max));
+    next = next < pages ? next : pages - 1 ;
+
+    let offset = 0 ;
+    let page = next ;
+
+    offset = parseInt(paginate.max) * (page);
+
+    this.resetConfigDB('paginate',Object.assign(paginate,{
+      offset:offset,
+      p:page
+    }));
+
+
+    this.fetch((res)=>{
+      this.listenDataChange(res);
+      onSuccess(res);
+    },(err)=>{
+      this.onError(err);
+
+    });
+
 
   }
 
+
+  // START LOAD DATA ON THE FIRST TIME
 
   load(){
 
-    this.localData.fetch((res)=>{
-      this.listenDataChange();
-    })
-    //this.localData.data.length === 0 ? this.localData.fetch((res)=>{ this.listenDataChange(); }) : this.listenDataChange();
+    this.fetch((res)=>{
+      this.listenDataChange(res);
+    });
 
+    this.listenOnSocketTick();
+    
 
   }
+
   get(onSuccess){
 
 
-      this.localData.fetch((res)=>{
-        this.listenDataChange();
+      this.fetch((res)=>{
+        this.listenDataChange(res);
         onSuccess(res.data)
       })
 
 
   }
 
+  fetch(onSuccess){
+
+      this.db.type = 'GET';
+      const {url, config} = this.db ;
+
+      axios.get(url,config)
+            .then((res) => {
+              //this.restResp(res); // KHÔNG LUU localStorage
+              onSuccess(res)
+
+            },
+            (error) => {
+                var status = error.response.status;
+                this.onError(error)
+
+              }
+            );
+  }
+
+
   listenOnSocketTick(){
 
     const _this = this ;
-    /*  START REALTIME  */
-    this.localData.listenOnSocketTick((res,list)=>{
+    this.socket.clientListenServer((res)=>{
 
-       this.socketResp(res,list)
+        // CÂP NHẬT REDUX STORE
 
-     });
-  }
-  listenDataChange(){
-    this.localData.listenDataChange((res)=>{
-       this.restResp(res);
+        let list = store.getState()[this.model].list;
+        let idata = res.data ;
+
+        switch(res.type){
+
+          case 'create':
+            list.unshift(idata);
+
+          break ;
+
+          case 'update':
+
+            list.forEach((item,index)=>{
+
+              if(parseInt(item.id) === parseInt(idata.id)){
+                 list[index] = idata;
+              }
+            });
+
+          break;
+
+          case 'remove':
+
+            list = list.filter((item) => {
+              return parseInt(item.id) !== parseInt(res.id)
+            });
+
+          break ;
+
+
+        }
+
+        this.socketResp(res,list);
+
     })
+
+
+
+  }
+
+  listenDataChange(res){
+
+    if(res){
+      let idata = res.data ; // format data
+      let list = store.getState()[this.model].list;
+
+
+      switch (this.db.type) {
+          case 'GET':
+
+            // ADD TO REDUX STORE
+            res = res.data ;
+
+            this.resetConfigDB("total",res.count);
+
+            this.restResp({
+              list:res.rows
+            });
+
+
+          break;
+
+          case 'POST':
+
+            list.unshift(idata.data);
+            this.restResp({
+              list:list
+            });
+
+          break ;
+
+          case 'PUT':
+
+            /*UPDATE REDUX STORE*/
+            const id = idata.id;
+
+            list.forEach((item,index)=>{
+              if(parseInt(item.id) === parseInt(id)){
+                 list[index] = idata;
+              }
+            })
+
+            this.restResp({
+              list:list
+            });
+
+
+          break ;
+
+          case 'DELETE':
+
+            // UPDATE DELETE ITEM : REDUX STORE
+
+            list = list.filter((item) => {
+              return parseInt(item.id) !== parseInt(idata.id)  ;
+            });
+
+            let { total } =  this.db;
+            total -= 1;
+            this.resetConfigDB("total",total);
+
+
+            this.restResp({
+              list:list
+            });
+          break ;
+
+
+      }
+    }
+
   }
   /* END WHEN*/
 
   /**** HOW ***/
   restResp(res){
 
-
+    // SAU KHI ĐÃ CẬP NHẬT REDUX STORE
     this.whereStateChange({
-      type:this.localData.db.type+'-'+this.model,
+      type:this.db.type+'-'+this.model,
       list:res.list,
-      res:res.res
+      res:res.res || {}
     })
 
   }
   socketResp(res,list){
-    if(this.localData.jwt !== res.token){
 
+    if(this.jwt !== res.token){
+
+      // SAU KHI ĐÃ CẬP NHẬT REDUX STORE
       this.whereStateChange({
         type:'reset-'+res.model,
         list:list,
-        res:res
+        res:res || {}
       })
 
     }
@@ -229,7 +517,7 @@ class Model {
   /*********END WHERE*************/
 
   set(name,value){
-    this.localData.resetConfigDB(name,value);
+    this.resetConfigDB(name,value);
   }
 
 

@@ -55,7 +55,7 @@ class GridFooter extends Component{
 
   render(){
 
-    const { paginate, total } =  this.model.localData.db;
+    const { paginate, total } =  this.model.db;
 
     this.state.pages =  Math.ceil(total /  paginate.max);
 
@@ -66,7 +66,6 @@ class GridFooter extends Component{
       const stt = a + 1 ;
       list.push(<option value={a} key={a} > { stt } </option>)
     }
-
 
 
 

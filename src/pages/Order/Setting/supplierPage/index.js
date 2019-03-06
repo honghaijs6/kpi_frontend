@@ -1,6 +1,9 @@
 
-import React, { Component } from 'react';
+/*
+supplier page
+*/
 
+import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 
 /* OBJECT - PLUGIN*/
@@ -15,11 +18,8 @@ import moment from 'moment';
 
 
 /* NAMED*/
-import { CATEGORIES } from '../../../../model/model-mode';
-import { CATEGORY_NAME } from '../../../../model/model-name';
 import { POST, SEARCH } from '../../../../model/action-mode';
 /*------------*/
-
 /* MODAL FORM & CTRL */
 import MyForm from './Form';
 import formCtrl from './formCtrl';
@@ -27,7 +27,11 @@ import formCtrl from './formCtrl';
 /*INCLUDE OTHER COMPONENT*/
 import { BenGrid } from '../../../../components/BenGrid2';
 
-export default class CategoryPage extends Component{
+const MODE = 'suppliers';
+const MODE_NAME = 'Nhà cung cấp';
+const MODE_TAB = 'supplierPage';
+
+export default class SupplierPage extends Component{
 
   constructor(props){
     super(props);
@@ -37,19 +41,24 @@ export default class CategoryPage extends Component{
       onAction:'', // string method
       status:'', // status
 
-      tab:'categoryPage'
+      tab:'supplierPage'
     }
 
     this.data = {
-      CATEGORIES:[]
+      MODE:[]
     }
 
     this.grid = {
       colums:[
-        {headerName: "Tên ", field: "name",width:400},
-        {headerName: "Thứ tự", field: "sort",width:120},
+        {headerName: "Mã", field: "code",width:200},
+        {headerName: "Tên công ty", field: "name",width:300},
+        {headerName: "Người liên hệ", field: "contact_name",width:200},
+        {headerName: "Email", field: "email",width:200},
+        {headerName: "Số ĐT", field: "phone",width:200},
+        {headerName: "Loại hình", field: "type",width:200},
+        {headerName: "Cho công nợ", field: "dept",width:150},
         {headerName: "Người tạo", field: "creator",width:200},
-        {headerName: "Ngày tạo", field: "str_date_created",width:200,
+        {headerName: "Ngày tạo", field: "str_date_created",width:150
           /* RENDER CELL html tags
           cellRenderer(params){
 
@@ -65,6 +74,7 @@ export default class CategoryPage extends Component{
     }
 
     this._setup();
+
     this.onBtnNew = this.onBtnNew.bind(this)
     this._doOpenModalUpdate = this._doOpenModalUpdate.bind(this);
 
@@ -73,12 +83,11 @@ export default class CategoryPage extends Component{
 
   _setup(){
 
-    this.model = new Model(CATEGORIES);
+    this.model = new Model(MODE);
     this.model.set('method',{
       name:'listAll',
       params:'all'
     });
-
 
     this.modal = new formCtrl(this.model);
 
@@ -89,7 +98,7 @@ export default class CategoryPage extends Component{
   /* HOW */
   resetGrid(){
 
-      let list = this.data[CATEGORIES] || []  ;
+      let list = this.data[MODE] || []  ;
       list.forEach((item)=>{
         item['str_date_created']  = moment(item['date_created']).format('YYYY-MM-DD');
       });
@@ -141,13 +150,15 @@ export default class CategoryPage extends Component{
 
     this.unsubscribe = Store.subscribe(()=>{
 
-      this.data[CATEGORIES] = Store.getState()[CATEGORIES].list || []  ;
-      this.resetGrid(this.data[CATEGORIES]);
+      this.data[MODE] = Store.getState()[MODE].list || []  ;
+      this.resetGrid(this.data[MODE]);
 
     })
   }
   componentWillReceiveProps(newProps){
-
+    if(newProps.onTab===MODE_TAB){
+      this.model.load();
+    }
   }
 
   /* WHERE*/
@@ -158,7 +169,7 @@ export default class CategoryPage extends Component{
 
   render(){
 
-    const formTitle = this.state.typeAction === 'post' ? 'Tạo '+ CATEGORY_NAME : 'Chỉnh sửa '+CATEGORY_NAME;
+    const formTitle = this.state.typeAction === 'post' ? 'Tạo '+ MODE_NAME : 'Chỉnh sửa '+MODE_NAME;
 
     return(
       <div hidden={  this.props.onTab === this.state.tab ? false : true } >

@@ -5,6 +5,8 @@ import {BenExplorer} from '../../../components/BenExplorer';
 
 import ProductPage from './productPage';
 import CategoryPage from './categoryPage';
+import SupplierPage from './supplierPage';
+
 
 
 class OrderSetting extends Component{
@@ -56,6 +58,8 @@ class OrderSetting extends Component{
 
                 <ProductPage {...this.state} />
                 <CategoryPage {...this.state} />
+                <SupplierPage {...this.state} />
+
 
 
               </BenExplorer>
