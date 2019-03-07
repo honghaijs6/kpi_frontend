@@ -14,6 +14,7 @@ import moment from 'moment';
 
 
 /* HOOKED*/
+import { doLoadSubRegion, doLoadRegion } from '../../../../hook/ultil';
 /*............*/
 
 
@@ -31,6 +32,10 @@ const MODE = 'suppliers';
 const MODE_NAME = 'Nhà cung cấp';
 const MODE_TAB = 'supplierPage';
 
+const REGION_CODE = '79'; // HCM
+const SUBREGION_CODE = '760'; // quan 1
+
+
 export default class SupplierPage extends Component{
 
   constructor(props){
@@ -41,7 +46,8 @@ export default class SupplierPage extends Component{
       onAction:'', // string method
       status:'', // status
 
-      tab:'supplierPage'
+      tab:'supplierPage',
+      isIniData:false
     }
 
     this.data = {
@@ -93,9 +99,21 @@ export default class SupplierPage extends Component{
 
     this._listenStore();
 
-  }
+  } 
 
   /* HOW */
+
+  _doInitData(){
+
+    this.model.initData();
+    doLoadRegion();
+    
+    this._whereStateChange({
+      isIniData:true
+    })
+
+  }
+
   resetGrid(){
 
       let list = this.data[MODE] || []  ;
@@ -113,20 +131,26 @@ export default class SupplierPage extends Component{
 
   _doOpenModalPost(){
 
-    this.modal.open('post');
-    this._whereStateChange({
-      typeAction:'post',
-      onAction:'_doOpenModalPost'
-    })
+    doLoadSubRegion(REGION_CODE,(res)=>{
+      this.modal.open('post');
+      this._whereStateChange({
+        typeAction:'post',
+        onAction:'_doOpenModalPost'
+      })
+    });
+    
 
   }
   _doOpenModalUpdate(data){
-    this.modal.open('put',data);
-    this._whereStateChange({
-      typeAction:'put',
-      onAction:'_doOpenModalUpdate'
-    })
 
+    doLoadSubRegion(data.region_code,(res)=>{
+      this.modal.open('put',data);
+      this._whereStateChange({
+        typeAction:'put',
+        onAction:'_doOpenModalUpdate'
+      });
+    });
+    
   }
   /* END HOW*/
 
@@ -138,8 +162,7 @@ export default class SupplierPage extends Component{
 
   componentDidMount(){
     //this._isMounted = true;
-
-    this.model.load();
+    //this.model.load();
 
   }
 
@@ -151,13 +174,19 @@ export default class SupplierPage extends Component{
     this.unsubscribe = Store.subscribe(()=>{
 
       this.data[MODE] = Store.getState()[MODE].list || []  ;
+      this.data['regions'] = Store.getState().regions.list || []  ;
+      this.data['subregions'] = Store.getState().subregions.list || []  ;
+      
+
       this.resetGrid(this.data[MODE]);
+      
 
     })
   }
   componentWillReceiveProps(newProps){
     if(newProps.onTab===MODE_TAB){
-      this.model.load();
+      //this.model.load();
+      this._doInitData()
     }
   }
 
@@ -171,13 +200,19 @@ export default class SupplierPage extends Component{
 
     const formTitle = this.state.typeAction === 'post' ? 'Tạo '+ MODE_NAME : 'Chỉnh sửa '+MODE_NAME;
 
+    
+
     return(
       <div hidden={  this.props.onTab === this.state.tab ? false : true } >
 
           <MyForm
+            width='60%'
             name={ formTitle }
             typeAction={ this.state.typeAction }
             modal={this.modal}
+            regions={ this.data.regions }
+            subregions={ this.data.subregions }
+
 
           />
           <BenGrid

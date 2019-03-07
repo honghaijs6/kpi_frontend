@@ -16,7 +16,8 @@ export default function(region_code,onSuccess){
   });
 
   SubRegions.get((res)=>{
-    onSuccess(res)
+    onSuccess(res);
+    
   })
 
 }

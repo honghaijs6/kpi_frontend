@@ -13,6 +13,8 @@ export default function(){
     sort_type:'asc'
   });
 
-  Regions.load();
+  
+  Regions.get((res)=>{});
+
   
 }

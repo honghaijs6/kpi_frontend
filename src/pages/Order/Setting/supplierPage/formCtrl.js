@@ -1,6 +1,12 @@
 
 import store from '../../../../redux/store';
 import { detectForm } from '../../../../hook/before';
+import { doLoadSubRegion } from '../../../../hook/ultil';
+
+
+const REGION_CODE = '79'; // HCM
+const SUBREGION_CODE = '760'; // quan 1
+
 
 
 class formController {
@@ -20,10 +26,34 @@ class formController {
 
     _stateDataTemp(){
       return {
+        code:'',
         name:'',
-        sort:0
+        dept:0,
+        type:'product',
+        contact_name:'',
+        company_name:'',
+        tax_no:'',
+        email:'',
+        phone:'',
+        address:'',
+        region_code:REGION_CODE,
+        subregion:SUBREGION_CODE,
+        address_2:'',
+        note:''
       }
-    }
+    } 
+
+    loadDistrictList(parent_code,onSuccess){
+
+      const _this = this;
+      doLoadSubRegion(parent_code,(res)=>{
+        this._whereStateChange({
+          onAction:'loadDistrictList'
+        })
+      })
+
+   }
+
 
     onSubmit(){
 
@@ -32,33 +62,58 @@ class formController {
       /* HOOKED detectForm before save data*/
       // -->
       const fields = [
-        'name'
+        'code','name','contact_name','company_name','tax_no','phone','address'
       ];
 
       if(detectForm(fields,this.data)===''){
 
-          delete this.data.str_date_created;
+          //  KIEM TRA TỒN TẠI 
+          const CODE = this.data.code;
+          let el = document.querySelector("#form-err");
 
           this.model.axios(typeAction,this.data,(res)=>{
-            // -->
+            
+            
             this._whereStateChange({
               onAction:'onSubmit',
               status:res.name
             });
 
-          })
+          });
+          
+
       }
 
     }
 
     onChange(name, e){
       Object.assign(this.data,{ [name]:e.target.value});
-
       //this.data[name] = e.target.value;
       // --> initial HOW -> WHERE
-      this.processForm(name,e);
+      //this.processForm(name,e);
 
     }
+
+    onChangeDist(e){
+      const code = e.target.value;
+      this.data['subregion_code'] = code ;
+      // --> HOW -> WHERE
+      //this.processForm('subregion_code',e);
+
+
+
+    }
+
+    onChangeCity(e){
+       const code = e.target.value;
+       this.data['region_code'] = code ;
+       // --> HOW -> WHERE
+       this.loadDistrictList(code);
+
+
+    }
+
+
 
     /* START : HOW */
     open(typeAction, info){
@@ -79,7 +134,6 @@ class formController {
        //-->
        this._whereStateChange({
          onAction:'processForm'
-
        });
 
     }

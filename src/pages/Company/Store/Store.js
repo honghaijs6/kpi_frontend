@@ -27,6 +27,7 @@ const REGION_CODE = '79'; // HCM
 const SUBREGION_CODE = '760'; // quan 1
 
 
+
 class Store extends Component{
 
     constructor(props){
@@ -129,6 +130,8 @@ class Store extends Component{
     _doOpenModalPost(){
 
       doLoadSubRegion(REGION_CODE,(res)=>{
+
+        
         this.Modal.open('post');
         this.whereStateChange({
 

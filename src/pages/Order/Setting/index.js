@@ -19,15 +19,10 @@ class OrderSetting extends Component{
       onAction:'',
       status:'',
 
-      onTab:'categoryPage',
+      onTab:'productPage',
       navData:[
-        {icon:'', code:'productPage',name:'Sản phẩm'},
-        /*{icon:'', code:'productTypePage',name:'Loại sản phẩm'},*/
-        {icon:'', code:'categoryPage',name:'Danh mục sản phẩm',active:true},
-        /*{icon:'', code:'unitPage',name:'Đơn vị tính'},
-        {icon:'', code:'branchPage',name:'Thương hiệu'},
-        {icon:'', code:'sourcePage',name:'Nguồn đơn hàng'},
-        */
+        {icon:'', code:'productPage',name:'Sản phẩm',active:true},
+        {icon:'', code:'categoryPage',name:'Danh mục sản phẩm'},
         {icon:'', code:'supplierPage',name:'Nhà Cung Cấp'},
         {icon:'', code:'causeDelPage',name:'Lý do huỷ đơn hàng'},
         {icon:'', code:'displayPage',name:'Cấu hình tạo đơn hàng'},

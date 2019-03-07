@@ -21,6 +21,7 @@ import store from '../redux/store';
 // DATABASE
 import server from '../config/server';
 import axios from 'axios';
+import { ELOOP } from 'constants';
 
 
 
@@ -69,7 +70,7 @@ class Model {
 
     /*socket*/
     this.socket = new Socket(this.model);
-
+    
 
   }
 
@@ -201,6 +202,8 @@ class Model {
 
             this.listenDataChange(res) // CAP NHAT REDUX STORE
             onSuccess(res.data) // callback for auto notification
+
+
           },(error)=>{
 
           this.onError(error);
@@ -313,9 +316,15 @@ class Model {
 
   }
 
+  // initial data : and start socket 
+  initData(){
+    this.fetch((res)=>{
+      this.listenDataChange(res);
+      this.listenOnSocketTick();
+    });
+  }
 
   // START LOAD DATA ON THE FIRST TIME
-
   load(){
 
     this.fetch((res)=>{
@@ -327,22 +336,25 @@ class Model {
 
   }
 
+  // auto send to redux store - callback : using on doLoadSubregion Hook
   get(onSuccess){
 
 
       this.fetch((res)=>{
-        this.listenDataChange(res);
+        this.listenDataChange(res); // auto send data to redux store
         onSuccess(res.data)
       })
 
 
-  }
+  }  
+
 
   fetch(onSuccess){
 
       this.db.type = 'GET';
       const {url, config} = this.db ;
 
+      
       axios.get(url,config)
             .then((res) => {
               //this.restResp(res); // KHÔNG LUU localStorage
@@ -368,36 +380,40 @@ class Model {
         let list = store.getState()[this.model].list;
         let idata = res.data ;
 
-        switch(res.type){
+        if(res.name==='success'){
+          switch(res.type){
 
-          case 'create':
-            list.unshift(idata);
-
-          break ;
-
-          case 'update':
-
-            list.forEach((item,index)=>{
-
-              if(parseInt(item.id) === parseInt(idata.id)){
-                 list[index] = idata;
-              }
-            });
-
-          break;
-
-          case 'remove':
-
-            list = list.filter((item) => {
-              return parseInt(item.id) !== parseInt(res.id)
-            });
-
-          break ;
-
-
+            case 'create':
+              list.unshift(idata);
+  
+            break ;
+  
+            case 'update':
+  
+              list.forEach((item,index)=>{
+  
+                if(parseInt(item.id) === parseInt(idata.id)){
+                   list[index] = idata;
+                }
+              });
+  
+            break;
+  
+            case 'remove':
+  
+              list = list.filter((item) => {
+                return parseInt(item.id) !== parseInt(res.id)
+              });
+  
+            break ;
+  
+  
+          }
+  
+          this.socketResp(res,list);
         }
 
-        this.socketResp(res,list);
+        
 
     })
 
@@ -408,15 +424,18 @@ class Model {
   listenDataChange(res){
 
     if(res){
+
       let idata = res.data ; // format data
       let list = store.getState()[this.model].list;
 
-
-      switch (this.db.type) {
+      if(idata.name==='success'){
+        switch (this.db.type) {
           case 'GET':
 
             // ADD TO REDUX STORE
             res = res.data ;
+
+            
 
             this.resetConfigDB("total",res.count);
 
@@ -473,7 +492,18 @@ class Model {
           break ;
 
 
+        }
+        
+      }else{
+
+        // SHOW ERROR HERE 
+        let el = document.querySelector("#form-err");
+        el.innerHTML = idata.message;
+        
+
       }
+
+      
     }
 
   }

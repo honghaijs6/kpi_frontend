@@ -24,6 +24,6 @@ export default function(fields=[],data={}){
   
   let el = document.querySelector("#form-err");
 
-  el.innerHTML = ret;
+  el.innerHTML = '<span class="text-danger">'+ret+'</span>';
   return ret ;
 }
