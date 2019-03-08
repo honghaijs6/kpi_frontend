@@ -79,6 +79,10 @@ export default class CategoryPage extends Component{
       params:'all'
     });
 
+    
+
+
+
 
     this.modal = new formCtrl(this.model);
 
@@ -130,7 +134,8 @@ export default class CategoryPage extends Component{
   componentDidMount(){
     //this._isMounted = true;
 
-    this.model.load();
+    //this.model.initData() ;
+
 
   }
 

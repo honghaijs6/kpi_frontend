@@ -6,6 +6,11 @@ export default function(region_code,onSuccess){
 
   const SubRegions = new Model(SUBREGIONS);
 
+  SubRegions.set('method',{
+    name:'listAll',
+    params:'all'
+  });
+
   SubRegions.set('paginate',{
     offset:0,
     p:0,
@@ -17,7 +22,7 @@ export default function(region_code,onSuccess){
 
   SubRegions.get((res)=>{
     onSuccess(res);
-    
+
   })
 
 }

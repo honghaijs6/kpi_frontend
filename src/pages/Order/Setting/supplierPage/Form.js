@@ -15,6 +15,7 @@ function BasicInfoRow(props){
   const modal = props.modal;
   const data = modal.data ;
 
+
   return(
     <div className="row-form">
       <h6 className="txt-green text-uppercase"> Thông tin cơ bản  </h6>
@@ -34,10 +35,10 @@ function BasicInfoRow(props){
           <Col md="2">
             <FormGroup>
               <label> Cho công nợ </label>
-              <Input defaultValue={ data.dept } onChange={(e)=>{ modal.onChange('dept',e) }}  id="dept" min="0" max="100" defaultValue="0"    type="number"/>
+              <Input defaultValue={ data.dept } onChange={(e)=>{ modal.onChange('dept',e) }}  id="dept" min="0" max="100"     type="number"/>
             </FormGroup>
           </Col>
-          
+
       </Row>
       <Row>
           <Col md="3">
@@ -47,10 +48,10 @@ function BasicInfoRow(props){
                 <option value="product" > Sản phẩm </option>
                 <option value="service" > Dịch vụ </option>
               </Input>
-              
+
             </FormGroup>
           </Col>
-          
+
 
           <Col md="6">
             <FormGroup>
@@ -141,7 +142,7 @@ function OtherInfoRow(props){
         </Col>
       </Row>
 
-      
+
     </div>
   )
 }
@@ -155,10 +156,10 @@ class MyForm extends Component {
 
      return(
        <BenModal width={ this.props.width } name={ this.props.name } typeAction={ this.props.typeAction } modal={ this.props.modal }  >
-          
+
           <BasicInfoRow {...this.props} />
           <OtherInfoRow {...this.props} />
-          
+
        </BenModal>
      )
    }

@@ -5,6 +5,12 @@ import { REGIONS } from '../../model/model-mode';
 export default function(){
 
   const Regions = new Model(REGIONS);
+
+  Regions.set('method',{
+    name:'listAll',
+    params:'all'
+  });
+
   Regions.set('paginate',{
     offset:0,
     p:0,
@@ -13,8 +19,8 @@ export default function(){
     sort_type:'asc'
   });
 
-  
+
   Regions.get((res)=>{});
 
-  
+
 }

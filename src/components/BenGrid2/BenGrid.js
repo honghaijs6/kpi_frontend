@@ -59,7 +59,7 @@ class BenGrid extends Component{
             enableValue: true
           },*/
       rowData: [],
-      count:0,
+      count: this.props.model.db.total ,
       selectedData:[]
     }
 
@@ -76,10 +76,17 @@ class BenGrid extends Component{
 
     if(this.state.isGridReady){
 
+      //this.gridApi.setRowData(newProps.rowData);
+      this.gridApi.refreshCells();
+
+      if( newProps.model.db.total > this.state.count){
+        this.gridApi.updateRowData({ add: [newProps.rowData[0]],addIndex: 0 });
+      }
+
       this.setState({
-        rowData:newProps.rowData
+        rowData:newProps.rowData,
+        count:newProps.model.db.total
       });
-      this.gridApi.setRowData(newProps.rowData);
 
     }
 
@@ -95,13 +102,16 @@ class BenGrid extends Component{
 
   onFindKeyUp(e){
 
-     e.key === 'Enter' ? alert(this.state.key) :  this._whereStateChange({key:e.target.value}) ;
+     e.key === 'Enter' ? this.model.find(this.state.key) :  this._whereStateChange({key:e.target.value}) ;
 
 
   }
 
   onBtnFind(){
-    alert('find key')
+
+    alert(this.state.key)
+
+
   }
 
   onBtnNew(){
@@ -163,7 +173,7 @@ class BenGrid extends Component{
 
   /* WHERE*/
   _whereStateChange(newState){
-    //this.setState(Object.assign(this.state,newState));
+    this.setState(Object.assign(this.state,newState));
   }
   render(){
 

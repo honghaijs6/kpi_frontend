@@ -11,8 +11,6 @@ import Store from '../../../../redux/store';
 import Model from '../../../../model/model';
 
 import moment from 'moment';
-
-
 /* HOOKED*/
 import { doLoadSubRegion, doLoadRegion } from '../../../../hook/ultil';
 /*............*/
@@ -99,15 +97,16 @@ export default class SupplierPage extends Component{
 
     this._listenStore();
 
-  } 
+  }
 
   /* HOW */
 
-  _doInitData(){
+  async _doInitData(){
 
-    this.model.initData();
+    await this.model.initData();
+
     doLoadRegion();
-    
+
     this._whereStateChange({
       isIniData:true
     })
@@ -132,25 +131,28 @@ export default class SupplierPage extends Component{
   _doOpenModalPost(){
 
     doLoadSubRegion(REGION_CODE,(res)=>{
+
+
       this.modal.open('post');
       this._whereStateChange({
         typeAction:'post',
         onAction:'_doOpenModalPost'
       })
     });
-    
+
 
   }
   _doOpenModalUpdate(data){
 
     doLoadSubRegion(data.region_code,(res)=>{
+
       this.modal.open('put',data);
       this._whereStateChange({
         typeAction:'put',
         onAction:'_doOpenModalUpdate'
       });
     });
-    
+
   }
   /* END HOW*/
 
@@ -176,10 +178,10 @@ export default class SupplierPage extends Component{
       this.data[MODE] = Store.getState()[MODE].list || []  ;
       this.data['regions'] = Store.getState().regions.list || []  ;
       this.data['subregions'] = Store.getState().subregions.list || []  ;
-      
+
 
       this.resetGrid(this.data[MODE]);
-      
+
 
     })
   }
@@ -200,7 +202,7 @@ export default class SupplierPage extends Component{
 
     const formTitle = this.state.typeAction === 'post' ? 'Tạo '+ MODE_NAME : 'Chỉnh sửa '+MODE_NAME;
 
-    
+
 
     return(
       <div hidden={  this.props.onTab === this.state.tab ? false : true } >
@@ -221,7 +223,7 @@ export default class SupplierPage extends Component{
 
              onBtnEdit={ this._doOpenModalUpdate }
              isRightTool={ true }
-
+             
              nextColums={ this.grid.colums }
              rowData={this.grid.rowData}
              model={ this.model }

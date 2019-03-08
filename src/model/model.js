@@ -21,11 +21,10 @@ import store from '../redux/store';
 // DATABASE
 import server from '../config/server';
 import axios from 'axios';
-import { ELOOP } from 'constants';
-
 
 
 class Model {
+
 
 
   constructor(model){
@@ -41,11 +40,16 @@ class Model {
       res:{}
     }
 
-    //this.status = {}; /* keep context data on doing POST - PUT  */
-    //this.type = ''; /* type : http: method */
-    //this.res = {};
+    /*database*/
+    this.db = {
+      type:'GET',
+      url:'',
+      base:server.base() + '/'+ this.model+'?',
+      config:'',
+      paginate:server.paginate,
+      total:0
+    };
 
-    /* initial WHO */
     this.setup();
 
 
@@ -56,21 +60,13 @@ class Model {
     this.jwt = localStorage.getItem('feathers-jwt');
 
     // database
-    /*database*/
-    this.db = {
-      type:'GET',
-      url:'',
-      base:server.base() + '/'+ this.model+'?',
-      config:'',
-      paginate:server.paginate,
-      total:0
-    };
+
     this.configDB();
 
 
     /*socket*/
     this.socket = new Socket(this.model);
-    
+
 
   }
 
@@ -316,12 +312,20 @@ class Model {
 
   }
 
-  // initial data : and start socket 
-  initData(){
-    this.fetch((res)=>{
-      this.listenDataChange(res);
-      this.listenOnSocketTick();
-    });
+  // initial data : and start socket
+  async initData(){
+
+    return new Promise((resole,reject)=>{
+      this.fetch((res)=>{
+        this.listenDataChange(res);
+        this.listenOnSocketTick();
+
+        resole(res);
+
+      });
+    })
+
+
   }
 
   // START LOAD DATA ON THE FIRST TIME
@@ -331,14 +335,13 @@ class Model {
       this.listenDataChange(res);
     });
 
-    this.listenOnSocketTick();
-    
+    //this.listenOnSocketTick(); ko active socket :
+
 
   }
 
   // auto send to redux store - callback : using on doLoadSubregion Hook
   get(onSuccess){
-
 
       this.fetch((res)=>{
         this.listenDataChange(res); // auto send data to redux store
@@ -346,15 +349,45 @@ class Model {
       })
 
 
-  }  
+  }
 
+  call(url,onSuccess){
+
+    this.db.type = 'GET';
+    const {config} = this.db ;
+
+    axios.get(url,config)
+          .then((res) => {
+            //this.restResp(res); // KHÔNG LUU localStorage
+            onSuccess(res)
+
+          },
+          (error) => {
+              var status = error.response.status;
+              this.onError(error)
+
+            }
+          );
+  }
+
+  find(key){
+
+    const base  = this.db.base.replace('?','');
+    const url = base+'/listAll/all?p=0&max=all&key='+key;
+
+    this.call(url,(res)=>{
+
+      this.listenDataChange(res);
+
+    })
+
+  }
 
   fetch(onSuccess){
 
       this.db.type = 'GET';
       const {url, config} = this.db ;
 
-      
       axios.get(url,config)
             .then((res) => {
               //this.restResp(res); // KHÔNG LUU localStorage
@@ -385,35 +418,35 @@ class Model {
 
             case 'create':
               list.unshift(idata);
-  
+
             break ;
-  
+
             case 'update':
-  
+
               list.forEach((item,index)=>{
-  
+
                 if(parseInt(item.id) === parseInt(idata.id)){
                    list[index] = idata;
                 }
               });
-  
+
             break;
-  
+
             case 'remove':
-  
+
               list = list.filter((item) => {
                 return parseInt(item.id) !== parseInt(res.id)
               });
-  
+
             break ;
-  
-  
+
+
           }
-  
+
           this.socketResp(res,list);
         }
 
-        
+
 
     })
 
@@ -427,15 +460,23 @@ class Model {
 
       let idata = res.data ; // format data
       let list = store.getState()[this.model].list;
+      let { total } =  this.db;
 
       if(idata.name==='success'){
         switch (this.db.type) {
+
+          case 'CALL':
+
+            this.restResp({
+              list:[]
+            });
+
+
+          break ;
           case 'GET':
 
             // ADD TO REDUX STORE
             res = res.data ;
-
-            
 
             this.resetConfigDB("total",res.count);
 
@@ -452,6 +493,11 @@ class Model {
             this.restResp({
               list:list
             });
+
+
+            total += 1;
+            this.resetConfigDB("total",total);
+
 
           break ;
 
@@ -481,7 +527,6 @@ class Model {
               return parseInt(item.id) !== parseInt(idata.id)  ;
             });
 
-            let { total } =  this.db;
             total -= 1;
             this.resetConfigDB("total",total);
 
@@ -493,17 +538,17 @@ class Model {
 
 
         }
-        
+
       }else{
 
-        // SHOW ERROR HERE 
+        // SHOW ERROR HERE
         let el = document.querySelector("#form-err");
         el.innerHTML = idata.message;
-        
+
 
       }
 
-      
+
     }
 
   }
@@ -513,6 +558,7 @@ class Model {
   restResp(res){
 
     // SAU KHI ĐÃ CẬP NHẬT REDUX STORE
+
     this.whereStateChange({
       type:this.db.type+'-'+this.model,
       list:res.list,
