@@ -387,7 +387,7 @@ class Model {
 
       this.db.type = 'GET';
       const {url, config} = this.db ;
-
+    
       axios.get(url,config)
             .then((res) => {
               //this.restResp(res); // KHÔNG LUU localStorage
