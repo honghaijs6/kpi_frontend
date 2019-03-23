@@ -37,8 +37,7 @@ class formController {
 
       if(detectForm(fields,this.data)===''){
 
-          delete this.data.str_date_created;
-
+          
           this.model.axios(typeAction,this.data,(res)=>{
             // -->
             this._whereStateChange({

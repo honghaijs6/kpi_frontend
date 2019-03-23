@@ -16,8 +16,6 @@ import { toast } from '../../hook/after';
 import { PRODUCTS } from '../../model/model-mode';
 import { PRODUCT_NAME } from '../../model/model-name';
 
-
-
 const MODE = PRODUCTS;
 const NAME = PRODUCT_NAME;
 

@@ -38,7 +38,7 @@ const allReducers = combineReducers({
   coin:reducerCoint,
   customer:reducerCustomer,
   order:reducerOrder,
-  product:reducerProduct,
+  products:reducerProduct,
   categories:reducerCategory,
   suppliers:reducerSupplier
 

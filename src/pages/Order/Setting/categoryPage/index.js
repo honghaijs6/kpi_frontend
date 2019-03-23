@@ -1,3 +1,7 @@
+/* 
+DANH MUC : categories 
+TAB  : categoryPage
+*/
 
 import React, { Component } from 'react';
 
@@ -10,14 +14,11 @@ import Model from '../../../../model/model';
 import moment from 'moment';
 
 
+
 /* HOOKED*/
 /*............*/
 
 
-/* NAMED*/
-import { CATEGORIES } from '../../../../model/model-mode';
-import { CATEGORY_NAME } from '../../../../model/model-name';
-import { POST, SEARCH } from '../../../../model/action-mode';
 /*------------*/
 
 /* MODAL FORM & CTRL */
@@ -26,6 +27,11 @@ import formCtrl from './formCtrl';
 
 /*INCLUDE OTHER COMPONENT*/
 import { BenGrid } from '../../../../components/BenGrid2';
+
+const  MODE = 'categories';
+const MODE_TAB = 'categoryPage';
+const MODE_NAME = 'Danh Mục';
+
 
 export default class CategoryPage extends Component{
 
@@ -37,27 +43,26 @@ export default class CategoryPage extends Component{
       onAction:'', // string method
       status:'', // status
 
-      tab:'categoryPage'
+      tab:MODE_TAB
     }
 
-    this.data = {
-      CATEGORIES:[]
-    }
+    this.data = {}
 
     this.grid = {
       colums:[
         {headerName: "Tên ", field: "name",width:400},
         {headerName: "Thứ tự", field: "sort",width:120},
         {headerName: "Người tạo", field: "creator",width:200},
-        {headerName: "Ngày tạo", field: "str_date_created",width:200,
-          /* RENDER CELL html tags
+        {headerName: "Ngày tạo", field: "date_created",width:200,
+          
           cellRenderer(params){
 
+            const humanDate = moment(params.value).format('YYYY-MM-DD')
             return `
-             ${params.value}
+             ${ humanDate }
            `
           }
-          */
+          
         }
 
       ],
@@ -73,16 +78,12 @@ export default class CategoryPage extends Component{
 
   _setup(){
 
-    this.model = new Model(CATEGORIES);
+    this.model = new Model(MODE);
     this.model.set('method',{
       name:'listAll',
       params:'all'
     });
-
     
-
-
-
 
     this.modal = new formCtrl(this.model);
 
@@ -92,13 +93,8 @@ export default class CategoryPage extends Component{
 
   /* HOW */
   resetGrid(){
-
-      let list = this.data[CATEGORIES] || []  ;
-      list.forEach((item)=>{
-        item['str_date_created']  = moment(item['date_created']).format('YYYY-MM-DD');
-      });
-
-      this.grid.rowData = list ;
+      
+      this.grid.rowData = this.data[MODE];
       this._whereStateChange({
         onAction:'resetGrid'
       });
@@ -130,15 +126,7 @@ export default class CategoryPage extends Component{
   onBtnNew(){
     this._doOpenModalPost();
   }
-
-  componentDidMount(){
-    //this._isMounted = true;
-
-    //this.model.initData() ;
-
-
-  }
-
+  
   componentWillUnmount() {
     this.unsubscribe();
   }
@@ -146,14 +134,15 @@ export default class CategoryPage extends Component{
 
     this.unsubscribe = Store.subscribe(()=>{
 
-      this.data[CATEGORIES] = Store.getState()[CATEGORIES].list || []  ;
-      this.resetGrid(this.data[CATEGORIES]);
+      this.data[MODE] = Store.getState()[MODE].list || []  ;
+      this.resetGrid();
 
     })
   }
   componentWillReceiveProps(newProps){
-
+    this.model.initData() ;
   }
+  
 
   /* WHERE*/
   _whereStateChange(newState){
@@ -163,7 +152,7 @@ export default class CategoryPage extends Component{
 
   render(){
 
-    const formTitle = this.state.typeAction === 'post' ? 'Tạo '+ CATEGORY_NAME : 'Chỉnh sửa '+CATEGORY_NAME;
+    const formTitle = this.state.typeAction === 'post' ? 'Tạo '+ MODE_NAME : 'Chỉnh sửa '+ MODE_NAME;
 
     return(
       <div hidden={  this.props.onTab === this.state.tab ? false : true } >

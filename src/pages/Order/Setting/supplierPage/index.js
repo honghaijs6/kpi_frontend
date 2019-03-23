@@ -62,15 +62,16 @@ export default class SupplierPage extends Component{
         {headerName: "Loại hình", field: "type",width:200},
         {headerName: "Cho công nợ", field: "dept",width:150},
         {headerName: "Người tạo", field: "creator",width:200},
-        {headerName: "Ngày tạo", field: "str_date_created",width:150
-          /* RENDER CELL html tags
+        {headerName: "Ngày tạo", field: "date_created",width:150,
+        
           cellRenderer(params){
 
+            const humanDate = moment(params.value).format('YYYY-MM-DD');
             return `
-             ${params.value}
+             ${ humanDate }
            `
           }
-          */
+          
         }
 
       ],
@@ -115,12 +116,8 @@ export default class SupplierPage extends Component{
 
   resetGrid(){
 
-      let list = this.data[MODE] || []  ;
-      list.forEach((item)=>{
-        item['str_date_created']  = moment(item['date_created']).format('YYYY-MM-DD');
-      });
-
-      this.grid.rowData = list ;
+      
+      this.grid.rowData = this.data[MODE] ;
       this._whereStateChange({
         onAction:'resetGrid'
       });

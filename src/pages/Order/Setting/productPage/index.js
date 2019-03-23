@@ -7,6 +7,10 @@ import { Button } from 'reactstrap';
 import Store from '../../../../redux/store';
 import Model from '../../../../model/model';
 
+
+import moment from 'moment';
+
+
 /* HOOKED*/
 /*............*/
 
@@ -14,7 +18,6 @@ import Model from '../../../../model/model';
 /* NAMED*/
 import { PRODUCTS } from '../../../../model/model-mode';
 import { PRODUCT_NAME } from '../../../../model/model-name';
-import { POST, SEARCH } from '../../../../model/action-mode';
 /*------------*/
 
 /* MODAL FORM & CTRL */
@@ -24,6 +27,10 @@ import formCtrl from './formCtrl';
 
 /*INCLUDE OTHER COMPONENT*/
 import { BenGrid } from '../../../../components/BenGrid2';
+
+const MODE = 'products';
+const MODE_NAME = 'Sản phẩm';
+const MODE_TAB = 'productPage';
 
 
 export default class CusOriginPage extends Component{
@@ -36,17 +43,15 @@ export default class CusOriginPage extends Component{
       onAction:'', // string method
       status:'', // status
       
-      tab:'productPage'
+      tab:MODE_TAB
     }
 
-    this.data = {
-      products:[]
-    }
+    this.data = {}
 
     this.grid = {
       colums:[
         {headerName: "Mã", field: "code"},
-        {headerName: "Tên SP", field: "name"},
+        {headerName: "Tên SP", field: "name"}, 
         {headerName: "Loại", field: "name"},
         {headerName: "Danh Mục", field: "name"},
         {headerName: "Giá nhà máy", field: "name"},
@@ -55,9 +60,16 @@ export default class CusOriginPage extends Component{
         {headerName: "Giá lẻ", field: "name"},
         {headerName: "ĐVT", field: "name"},
         {headerName: "Bảo hành", field: "name"},
-        {headerName: "Serial", field: "name"},
-        {headerName: "Người tạo", field: "date_created"},
-        {headerName: "Ngày tạo", field: "date_created"}
+        {headerName: "Serial", field: "is_serial"},
+        {headerName: "Người tạo", field: "creator"},
+        {headerName: "Ngày tạo", field: "date_created",
+          cellRenderer(params){
+            const humanDate = moment(params.value).format('YYYY-MM-DD')
+            return `
+              ${ humanDate }
+            `
+          }
+        }
 
       ],
       rowData: []
@@ -71,14 +83,12 @@ export default class CusOriginPage extends Component{
 
   _setup(){
 
-    this.model = new Model(PRODUCTS);
-    this.model.set('paginate',{
-      offset:0,
-      p:0,
-      max:20,
-      is_deleted:0,
-      key:''
+    this.model = new Model(MODE);
+    this.model.set('method',{
+      name:'listAll',
+      params:'all'
     });
+
 
     this.modal = new formCtrl(this.model);
 
@@ -88,17 +98,15 @@ export default class CusOriginPage extends Component{
 
   /* HOW */
   resetGrid(){
-      /*let list = this.data.users || []  ;
+        
+      this.grid.rowData = this.data[MODE];
 
-      list.filter((item)=>{
-        item['str_job_level'] = userConf.job_level[item['job_level']];
-        item['str_job_type'] = userConf.job_type[item['job_type']];
-        item['str_phone'] = item['phone'] === null ? 'n/a' : item['phone'];
-        item['str_date_created'] = moment(item['date_created']).format('YYYY-MM-DD');
+      console.log(this.grid.rowData)
+
+      this._whereStateChange({
+        onAction:'resetGrid'
       });
 
-      //alert('resetGrid');
-      this.grid.rowData = list ;*/
 
   }
 
@@ -112,7 +120,7 @@ export default class CusOriginPage extends Component{
 
   }
   _doOpenModalUpdate(data){
-
+      alert('process code')
   }
   /* END HOW*/
 
@@ -124,6 +132,8 @@ export default class CusOriginPage extends Component{
 
   componentDidMount(){
     //this._isMounted = true;
+    this.model.initData();
+
   }
 
   componentWillUnmount() {
@@ -132,19 +142,15 @@ export default class CusOriginPage extends Component{
   _listenStore(){
 
     this.unsubscribe = Store.subscribe(()=>{
+      
+      this.data[MODE] = Store.getState()[MODE].list || []  ;
+      this.resetGrid();
+      
 
-      this.data.products = Store.getState().product.list || []  ;
-
-      this._whereStateChange({
-        onAction:'_listenStore'
-      });
 
     })
   }
-  componentWillReceiveProps(newProps){
-
-  }
-
+  
   /* WHERE*/
   _whereStateChange(newState){
     this.setState(Object.assign(this.state,newState));
@@ -153,7 +159,7 @@ export default class CusOriginPage extends Component{
 
   render(){
 
-    const formTitle = this.state.typeAction === 'post' ? 'Tạo '+PRODUCT_NAME : 'Chỉnh sửa '+PRODUCT_NAME;
+    const formTitle = this.state.typeAction === 'post' ? 'Tạo '+MODE_NAME : 'Chỉnh sửa '+MODE_NAME;
 
     return(
       <div hidden={  this.props.onTab === this.state.tab ? false : true } >
