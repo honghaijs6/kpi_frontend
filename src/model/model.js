@@ -23,6 +23,10 @@ import server from '../config/server';
 import axios from 'axios';
 
 
+// HOOK
+import { preLoad } from '../hook/before';
+
+
 class Model {
 
 
@@ -174,9 +178,13 @@ class Model {
     this.db.type = 'DELETE';
     const url = server.base() + '/' + this.model+'/'+id ;
 
+    preLoad('delete');
+
+
     axios.delete(url,this.db.config)
           .then((res)=>{
-
+            
+            
             this.listenDataChange(res);
             onSuccess(res.data);
           },(error)=>{
@@ -193,6 +201,7 @@ class Model {
 
     const url = server.base()+ '/' + this.model;
 
+    preLoad('post');
     axios.post(url,data,this.db.config)
           .then((res)=>{
 
@@ -214,6 +223,8 @@ class Model {
     this.status = data ;
 
     const url = server.base() + '/' + this.model + '?id='+id;
+
+    preLoad('put');
 
     axios.put(url,data,this.db.config)
           .then((res)=>{
@@ -457,6 +468,8 @@ class Model {
   listenDataChange(res){
 
     if(res){
+
+      preLoad('stop');
 
       let idata = res.data ; // format data
       let list = store.getState()[this.model].list;

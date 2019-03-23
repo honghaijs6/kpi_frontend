@@ -14,6 +14,10 @@ import { DefaultLayout } from './containers';
 import { Login } from './pages/pages';
 import socket from './model/socket';
 
+// HOOKED ;
+
+import { preLoad } from './hook/before';
+
 
 class App extends Component {
 
@@ -21,7 +25,8 @@ class App extends Component {
       super(props);
 
       this.state = {
-        login:false
+        login:false,
+        count:0
       }
 
 
@@ -33,22 +38,49 @@ class App extends Component {
 
     /* listening error */
 
+    preLoad('authenticate');
+
+
 
     socket.client.authenticate().catch((err)=>{
+      
+      preLoad('stop');
+      
       this.setState({login:false})
-      console.log(err);
+      
+      
+    
     });
 
 
     socket.client.on('authenticated',login=>{
+
+      preLoad('stop');
+      
+      socket.client.passport.verifyJWT(login.accessToken).then(res=>{
+        
+        socket.client.service('users').get(res.userId).then(info=>{
+
+          // WRITE LOCAL STOREAGE 
+          window.USERINFO = info; 
+          
+
+        });
+
+
+      })
+
+      
       this.setState({login});
 
-      //console.log(login);
+      
 
     });
 
 
     socket.client.on('logout', ()=>{
+      preLoad('stop');
+      
       this.setState({login:null})
     });
 
@@ -63,7 +95,7 @@ class App extends Component {
 
 
             {
-               this.state.login ? (<Route path="/" name="Home" component={DefaultLayout} />) : (<Route exact path="/" name="Login Page" component={Login} />)
+               this.state.login ? (<Route path="/" name="Home" component={DefaultLayout} />) : (<Route exact name="Login Page" component={Login} />)
             }
 
 
