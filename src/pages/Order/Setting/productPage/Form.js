@@ -1,65 +1,87 @@
-'use strict'
-
 import React, { Component } from 'react';
-import {  Row, Col, Label,  Form, FormGroup,FormText, Input } from 'reactstrap';
+import {  Row, Col,  FormGroup, Input  } from 'reactstrap';
 
-/* LIB*/
-import reactCSS from 'reactcss'
-import { SketchPicker } from 'react-color'
-
-
-import BenColor from '../../../../components/BenColor';
 import BenModal from '../../../../components/BenModal';
-import { COIN_TYPES } from '../../../../config/coin.type';
+
+import SelectCity from '../../../../components/SelectCity';
+import SelectDist from '../../../../components/SelectDist';
 
 
 
 
-export default class CusOriginForm extends Component {
+
+function FormRow1(props){
+
+  const modal = props.modal;
+  const data = modal.data ;
+
+  return(
+    <div className="row-form">
+      <h6 className="txt-green text-uppercase"> Thông tin sản phẩm  </h6>
+      <Row>
+          <Col md="3">
+            <FormGroup>
+              <label> Mã  <span className="text-danger">*</span></label>
+              <Input  id="code" onChange={(e)=>{ modal.onChange('code',e) }} defaultValue={ data.code }  type="text"/>
+            </FormGroup>
+          </Col>
+          <Col md="4">
+            <FormGroup>
+              <label> Tên hiển thị <span className="text-danger">*</span> </label>
+              <Input defaultValue={ data.name } onChange={(e)=>{ modal.onChange('name',e) }}  id="name" placeholder=""    type="text"/>
+            </FormGroup>
+          </Col>
+          <Col md="2">
+            <FormGroup>
+              <label> Serial? </label>
+              <Input defaultValue={ data.dept } onChange={(e)=>{ modal.onChange('dept',e) }}  id="dept" min="0" max="100"     type="number"/>
+            </FormGroup>
+          </Col>
+
+      </Row>
+      <Row>
+          <Col md="3">
+            <FormGroup>
+              <label> Loại hình cung cấp </label>
+              <Input id="type" defaultValue={ data.type } onChange={(e)=>{ modal.onChange('type',e) }} type="select">
+                <option value="product" > Sản phẩm </option>
+                <option value="service" > Dịch vụ </option>
+              </Input>
+
+            </FormGroup>
+          </Col>
+
+
+          <Col md="6">
+            <FormGroup>
+              <label> Tên người liên hệ <span className="text-danger">*</span> </label>
+              <Input  defaultValue={ data.contact_name }  onChange={(e)=>{ modal.onChange('contact_name',e) }} id="contact_name"    type="text"/>
+            </FormGroup>
+          </Col>
+      </Row>
+
+
+
+    </div>
+  )
+}
+
+
+class MyForm extends Component {
 
    render(){
 
-    const modal = this.props.modal || {};
-    const data = modal.data || {};
-
-    const coinType = [
-      'Tiền mặt'
-    ];
-
 
      return(
-       <BenModal name={ this.props.name } typeAction={ this.props.typeAction } modal={ this.props.modal }  >
-           <Row>
-             <Col md={4}>
-               <FormGroup>
-                 <Label for="code"> Loại <span className="text-danger">*</span></Label>
-                 <Input type="text" id="code"/>
-               </FormGroup>
-             </Col>
-             <Col md={2}>
-                <BenColor onChange={(data)=>{  console.log(data); }} />
-             </Col>
-           </Row>
+       <BenModal width={ this.props.width } name={ this.props.name } typeAction={ this.props.typeAction } modal={ this.props.modal }  >
 
-           <Row>
-              <Col md={6}>
-                <FormGroup>
-                  <Label for="code"> Tên <span className="text-danger">*</span></Label>
-                  <Input type="text" id="name"  defaultValue={ data.name }  placeholder="nhập tên nhà kho" />
-                </FormGroup>
-              </Col>
-           </Row>
+          <FormRow1 {...this.props} />
 
-           <Row>
-              <Col md={12}>
-              <FormGroup>
-                <Label for="code"> Ghi chú </Label>
-                <Input type="textarea" id="name"   />
-              </FormGroup>
-              </Col>
-           </Row>
+
 
        </BenModal>
      )
    }
  }
+
+ export default MyForm;

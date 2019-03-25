@@ -4,7 +4,14 @@ import PropTypes from 'prop-types';
 
 import { AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import logo from '../../assets/img/brand/logo.png'
-import sygnet from '../../assets/img/brand/sygnet.svg'
+import sygnet from '../../assets/img/brand/sygnet.svg' ;
+
+import { Link } from 'react-router-dom';
+
+
+import Socket from '../../model/socket';
+
+
 
 const propTypes = {
   children: PropTypes.node,
@@ -13,10 +20,39 @@ const propTypes = {
 const defaultProps = {};
 
 class DefaultHeader extends Component {
+
+  constructor(props){
+    super(props);
+
+    this.state = {
+      userInfo:{}
+    }
+
+    this._logout = this._logout.bind(this);
+
+  }
+
+  _logout(){
+
+    Socket.client.logout();
+
+  }
+  componentDidMount(){
+
+    this.setState({
+      userInfo:window.USERINFO
+    });
+
+
+  }
+
+
   render() {
 
     // eslint-disable-next-line
     const { children, ...attributes } = this.props;
+
+    const avatar = this.state.userInfo.photoURL  || 'https://firebasestorage.googleapis.com/v0/b/benjamin-region-hongkong.appspot.com/o/images%2F31.jpg?alt=media';
 
     return (
       <React.Fragment>
@@ -24,7 +60,7 @@ class DefaultHeader extends Component {
         <AppSidebarToggler className="d-lg-none" display="md" mobile />
 
         <AppNavbarBrand
-          full={{ src: logo,  height: 45, alt: 'CoreUI Logo' }}
+          full={{ src: logo,  height: 45 }}
           minimized={{ src: sygnet, width: 30, height: 30, alt: 'CoreUI Logo' }}
         />
 
@@ -49,15 +85,19 @@ class DefaultHeader extends Component {
           <AppHeaderDropdown className="px-3  " direction="down">
 
             <DropdownToggle nav>
-              <img src={'assets/img/avatars/6.jpg'} className="img-avatar" />
+              <img src={avatar} className="img-avatar" />
             </DropdownToggle>
 
             <DropdownMenu right style={{ right: 'auto' }}>
 
-              <DropdownItem><i className="fa fa-user"></i> Tài khoản</DropdownItem>
+              <DropdownItem>
+                <Link to="/404">
+                  <i className="fa fa-user"></i> Tài khoản
+                </Link>
+              </DropdownItem>
               <DropdownItem><i className="fa fa-wrench"></i> Thiết lập </DropdownItem>
 
-              <DropdownItem><i className="fa fa-lock"></i> Đăng xuất </DropdownItem>
+              <DropdownItem onClick={this._logout} ><i className="fa fa-lock"></i> Đăng xuất </DropdownItem>
             </DropdownMenu>
 
           </AppHeaderDropdown>
@@ -65,7 +105,8 @@ class DefaultHeader extends Component {
 
         <AppAsideToggler className="d-md-down-none" />
 
-        {/*<AppAsideToggler className="d-lg-none" mobile />*/}
+        {<AppAsideToggler className="d-lg-none" mobile />}
+
       </React.Fragment>
     );
   }

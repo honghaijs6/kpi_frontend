@@ -28,7 +28,7 @@ class BenGrid extends Component{
 
     const gridID = props.gridID || 'id';
 
-    
+
 
     this.state = {
       isGridReady:false,
@@ -41,7 +41,7 @@ class BenGrid extends Component{
         {
           headerName: "SID",
           field: gridID,
-          width:200,
+          width:140,
           checkboxSelection: true,
           filterParams: { newRowsAction: "keep" },
           checkboxSelection: function(params) {
@@ -92,7 +92,7 @@ class BenGrid extends Component{
         // REMOVE ROW
         this.gridApi.updateRowData({ remove: this.state.selectedData });
       }
-      
+
     }
 
     this.setState({
@@ -129,9 +129,9 @@ class BenGrid extends Component{
   }
   onBtnEdit(){
 
-    
+
     this.props.onBtnEdit(this.state.selectedData[0]);
-    
+
 
   }
 
@@ -140,7 +140,7 @@ class BenGrid extends Component{
 
   }
 
-  async onBtnDel(){ 
+  async onBtnDel(){
 
     const records = this.state.selectedData.length;
 
@@ -148,7 +148,7 @@ class BenGrid extends Component{
       title: 'Warning',
       message: "Are you sure you want to delete "+ records+' records ?',
 
-      
+
 
     });
 
@@ -180,7 +180,7 @@ class BenGrid extends Component{
     if(this.props.onCellSelected){
       this.props.onCellSelected(selectedData[0]) // this.props.onBtnEdit(this.state.selectedData[0]);
     }
-    
+
   }
 
   /* HOW */
@@ -205,7 +205,7 @@ class BenGrid extends Component{
 
     grLeftBtn = this.state.isLeftTool ? grLeftBtn : null ;
 
-    
+
 
     return (
 
@@ -213,7 +213,7 @@ class BenGrid extends Component{
           <div className="toolbar">
             <Row>
               <Col md={6}>
-                  
+
                   { grLeftBtn }
                   { this.props.leftButton }
               </Col>
@@ -221,7 +221,7 @@ class BenGrid extends Component{
 
                 { this.props.customButton }
                 <ButtonGroup>
-                    
+
                     <Input  placeholder="Search" onKeyUp={ this.onFindKeyUp }  style={{borderRadius:0}}  />
                     <Button style={{marginRight:10}} onClick={ this.onBtnFind }  className="btn-ubuntu"> <i className="fa fa-search"></i> </Button>
 
@@ -235,7 +235,7 @@ class BenGrid extends Component{
           <div className="ag-theme-material" id="myGrid" style={{boxSizing: "border-box", height: this.state.height, padding:'1rem'}}>
               <AgGridReact
 
-                  
+
                   onSelectionChanged={this.onSelectionChanged.bind(this)}
                   enableSorting={true}
                   rowSelection={this.state.rowSelection}
