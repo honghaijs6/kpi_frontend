@@ -2,6 +2,7 @@ import React from 'react';
 
 import { BenExplorer } from '../../../components/BenExplorer';
 
+import IntroPage from './introPage';
 import DevicePage from './devicePage';
 import PersonPage from './personPage';
 import TimeSegmentPage from './timeSegmentPage';
@@ -23,20 +24,29 @@ class PushSDKContent extends React.Component {
 
       onTab:'devicePage',
       navData:[
+        {icon:'', code:'introPage',name:'Giới thiệu'},
+        {icon:'', code:'settingDevicePage',name:'Cấu hình thiết bị'},
         {icon:'', code:'devicePage',name:'Devices',active:true},
-        {icon:'', code:'personPage',name:'Persons Operation'},
-        {icon:'', code:'timeSegmentPage',name:'Time Segment'},
-        {icon:'', code:'accessLevelPage',name:'Access Level'},
-        {icon:'', code:'transactionPage',name:'Transactions'},
-        {icon:'', code:'realtimePage',name:'Realtime'},
+        {icon:'', code:'personPage',name:'Môi trường Sanbox'},
+        {icon:'', code:'timeSegmentPage',name:'Realtime'},
+
+        
       ]
     }
 
     this._onNavChange = this._onNavChange.bind(this);
+    this.viewSupport = this.viewSupport.bind(this);
 
   }
 
   /* WHEN */
+
+  viewSupport(){
+     this._whereStateChange({
+       onAction:'viewSupport'
+     })
+  }
+
   _onNavChange(code){
     this._whereStateChange({
       onTab:code
@@ -65,9 +75,31 @@ class PushSDKContent extends React.Component {
               paddingLeft: 15,
               borderBottom:'1px solid #ddd'
             }}>
-              Home
+              <div className="pull-left">
+                {
+                  this.state.navData.map((item,index)=>{
+                    if(item.code===this.state.onTab){
+                      return(
+                        <span key={index} style={{
+                            fontSize: 15,
+                            color:'#18A689',
+                            fontWeight: 500
+                          }}> { item.name } </span>
+                      )
+                    }
+
+
+                  })
+                }
+              </div>
+              <div className="pull-right" style={{paddingRight: 15}} >
+                <button onClick={this.viewSupport} className="btn btn-sm btn-success"> <i className="fa fa-support mr-5" /> Hướng dẩn </button>
+              </div>
             </div>
+
+
             <div style={{padding: 15}}>
+              <IntroPage {...this.state } />
               <DevicePage {...this.state}  />
               <PersonPage {...this.state} />
               <TimeSegmentPage {...this.state} />

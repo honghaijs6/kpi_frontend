@@ -5,17 +5,14 @@ import { Nav, NavItem, NavLink, Container } from 'reactstrap';
 
 /* lib load*/
 import {
-  AppAside,
-  AppBreadcrumb,
+
   AppFooter,
-  AppHeader,
-  AppSidebar,
-  AppSidebarFooter,
-  AppSidebarForm,
-  AppSidebarHeader,
-  AppSidebarMinimizer,
-  AppSidebarNav,
+  AppHeader
 } from '@coreui/react';
+
+/* Toast plugin */
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 import Content from './content';
@@ -46,7 +43,7 @@ class PushSDK extends React.Component {
           </Nav>
 
         </AppHeader>
-        
+
         <div className="app-body">
 
             <main className="main">
@@ -64,14 +61,16 @@ class PushSDK extends React.Component {
                 <img src={'assets/img/avatars/2.jpg'} className="img-avatar" id="user-avatar" />
               </div>
             </div>
+
            </span>
 
-          <span className="ml-20" id="users-activities">  </span>
+          <span className="ml-20" id="users-activities"> Khách  </span>
 
-          <span className="ml-auto"> &copy; 2018   Code with <i className='fa fa-heart'> </i> </span>
+          <span className="ml-auto"> &copy; VIKHANG 2019    Code with <i className='fa fa-heart'> </i> </span>
 
         </AppFooter>
 
+        <ToastContainer autoClose={2000} />
 
       </div>
 
