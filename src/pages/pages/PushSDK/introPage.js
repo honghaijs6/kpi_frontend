@@ -80,7 +80,6 @@ export default class IntroPage extends React.Component {
                     <li> Time Segment </li>
                     <li> Access level  </li>
                     <li> Transactions  </li>
-                    <li> Access level  </li>
                     <li> Device controll  </li>
                 
             </p>

@@ -2,12 +2,11 @@ import React from 'react';
 
 import { BenExplorer } from '../../../components/BenExplorer';
 
+
 import IntroPage from './introPage';
 import DevicePage from './devicePage';
-import DeviceCommandPage from './deviceCommandPage';
-import TimeSegmentPage from './timeSegmentPage';
-import AccessLevelPage from './accessLevelPage';
-import TransactionPage from './transactionPage';
+import DeviceCommandPage from './deviceCommandPage/';
+import SettingDevicePage from './settingDevicePage';
 import RealtimePage from './realtimePage';
 
 
@@ -22,13 +21,13 @@ class PushSDKContent extends React.Component {
       onAction:'',
       status:'',
 
-      onTab:'devicePage',
+      onTab:'introPage',
       navData:[
-        {icon:'', code:'introPage',name:'Giới thiệu'},
+        {icon:'', code:'introPage',name:'Giới thiệu',active:true},
         {icon:'', code:'settingDevicePage',name:'Cấu hình thiết bị'},
-        {icon:'', code:'devicePage',name:'Access Devices',active:true},
+        {icon:'', code:'devicePage',name:'Access Devices'},
         {icon:'', code:'deviceCommandPage',name:'Device Commands'},
-        {icon:'', code:'timeSegmentPage',name:'Realtime'},
+        {icon:'', code:'realtimePage',name:'Realtime'},
 
         
       ]
@@ -93,17 +92,19 @@ class PushSDKContent extends React.Component {
                 }
               </div>
               <div className="pull-right" style={{paddingRight: 15}} >
-                <button onClick={this.viewSupport} className="btn btn-sm btn-success"> <i className="fa fa-support mr-5" /> Hướng dẩn </button>
+                
               </div>
             </div>
 
 
             <div style={{padding: 15}}>
+                
               <IntroPage {...this.state } />
               <DevicePage {...this.state}  />
               <DeviceCommandPage {...this.state} />
+              <SettingDevicePage {...this.state} />
               <RealtimePage {...this.state} />
-              <TimeSegmentPage {...this.state} />
+              
               
             </div>
 

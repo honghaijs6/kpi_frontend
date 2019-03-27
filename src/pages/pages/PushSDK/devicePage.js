@@ -57,6 +57,14 @@ class Devices extends React.Component {
       rowData: []
     }
 
+    this._viewSupport = this._viewSupport.bind(this);
+
+  }
+
+  _viewSupport(){
+    this.setState({
+      viewSupport: !this.state.viewSupport
+    })
   }
 
   _openDoor(json){
@@ -122,7 +130,11 @@ class Devices extends React.Component {
 
     
     return (
-      <div hidden={  this.props.onTab === this.state.tab ? false : true } >
+      <div style={{padding:30}} hidden={  this.props.onTab === this.state.tab ? false : true } >
+          
+          <div style={{marginBottom:20}}>
+            <button onClick={this._viewSupport} className="btn btn-sm btn-success"> <i className="fa fa-support mr-5" /> Hướng dẩn </button>
+          </div>
           
           <div hidden={!this.state.viewSupport ? false : true } >
             <Table  className="table" >
@@ -255,6 +267,14 @@ class Devices extends React.Component {
                 <p> URL:/pushapi/createCmd?cmdType=userDefined&sn=[<span className="txt-green">serialNo</span>]&originalCmd=<span className="txt-green">CONTROL DEVICE 01010103</span> </p>
                 <p> Response : JSON Object </p>
                 
+                <br></br>
+                <br></br>
+
+                <br></br>
+                <br></br>
+
+                <br></br>
+                <br></br>
               </div>
           </div>
 

@@ -54,7 +54,14 @@ class Login extends Component {
                   <CardBody>
 
                     <div style={{ textAlign:'center',marginBottom:20  }}>
-                      <img style={{marginLeft:-20}} src="/assets/img/ssc.png"/>
+                      {/*<img style={{marginLeft:-20}} src="/assets/img/ssc.png"/>*/}
+                      <span style={{
+                        fontFamily:'Roboto',
+                        fontSize:30,
+                        color:'#CF9D48'
+                      }}> 
+                          Login sanbox
+                      </span>
                     </div>
                     <Form name="form-login" onSubmit={ this.login } >
 

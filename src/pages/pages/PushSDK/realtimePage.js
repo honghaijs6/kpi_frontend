@@ -18,7 +18,7 @@ export default class RealtimePage extends React.Component {
   render() {
     return (
       <div hidden={  this.props.onTab === this.state.tab ? false : true } >
-          realtimePage
+          Đang cập nhật ...
       </div>
     );
   }
