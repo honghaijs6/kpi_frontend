@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class Person extends React.Component {
+export default class DeviceCommandPage extends React.Component {
 
   constructor(props){
     super(props);
@@ -10,7 +10,7 @@ export default class Person extends React.Component {
       onAction:'', // string method
       status:'', // status
 
-      tab:'personPage',
+      tab:'deviceCommandPage',
 
     }
 
@@ -18,7 +18,7 @@ export default class Person extends React.Component {
   render() {
     return (
       <div hidden={  this.props.onTab === this.state.tab ? false : true } >
-          Person Operation
+          deviceCommandPage
       </div>
     );
   }
