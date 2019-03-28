@@ -116,7 +116,7 @@ export default class AccessLevel extends React.Component {
         const res = responese.data ;
         
         if(res.desc==='ok'){
-          console.log(res);
+          
           this.setState({
               commandRes:res.cmdData === "" ? 'listening..' :res.cmdData
           });
@@ -142,7 +142,7 @@ export default class AccessLevel extends React.Component {
   }
 
   componentWillReceiveProps(newProps){
-    console.log(newProps)
+    
   }
   
   render() {
@@ -174,7 +174,7 @@ export default class AccessLevel extends React.Component {
             <FormGroup>
                 <Row>
                     <Col md="3">
-                        <Label> Users CURD </Label>
+                        <Label> Phương thức CURD </Label>
                         <Input onChange={ (e)=>{ this._onChangeCommandAction(e) } } type="select">
                             <option key=""  value=""> Vui lòng chọn </option>
                             {

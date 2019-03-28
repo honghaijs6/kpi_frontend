@@ -70,15 +70,15 @@ class Devices extends React.Component {
   _openDoor(json){
 
     const url = server.base()+'/pushapi/createCmd?cmdType=userDefined&sn='+json.sn+'&originalCmd=CONTROL DEVICE 01010103';
-
+    toast.info('Đã mở khoá ');
     axios.post(url).then((responese)=>{
       const res = responese.data ;
 
-      console.log(res);
-
-      if(res.desc==='ok'){
+      toast.info('Khoá đã đóng : '+json.sn);
+      
+      /*if(res.desc==='ok'){
            toast.info('Đã mở khoá : '+json.sn);
-      }
+      }*/
 
     })
   }
@@ -184,7 +184,7 @@ class Devices extends React.Component {
                         <td style={{width: 140}}>
                           <ButtonGroup>
 
-                              <Button onClick={ ()=>{ this._openDoor(item) } } className="btn btn-sm btn-success"><i className="fa fa-unlock mr-5" />  Open </Button>
+                              <Button onClick={ ()=>{ this._openDoor(item) } } className="btn btn-sm btn-success"><i className="fa fa-unlock mr-5" /> Remote Open </Button>
                               <Button onClick={ ()=>{ this._synchronize(item) } } className="btn btn-sm btn-danger"><i className="fa fa-unlock mr-5" />  Synchronize </Button>
 
                           </ButtonGroup>

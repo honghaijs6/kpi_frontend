@@ -171,7 +171,7 @@ export default class TimeSegment extends React.Component {
             <FormGroup>
                 <Row>
                     <Col md="3">
-                        <Label> Users CURD </Label>
+                        <Label> Phương thức CURD </Label>
                         <Input onChange={ (e)=>{ this._onChangeCommandAction(e) } } type="select">
                             <option key=""  value=""> Vui lòng chọn </option>
                             {
