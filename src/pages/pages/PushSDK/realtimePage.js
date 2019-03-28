@@ -24,7 +24,7 @@ const MAU_JSON = `{
 
 
       }
-      
+
   ]
 }`;
 
@@ -42,10 +42,12 @@ export default class RealTimePage extends React.Component {
       server: server.base(),
       typeAction:'', // post - put - delete ...
       onAction:'', // string method
-      status:'', 
+      status:'',
       viewSupport:false,
 
       tab:'realtimePage',
+
+      isInitRealtime:false
 
     }
 
@@ -56,11 +58,11 @@ export default class RealTimePage extends React.Component {
         {headerName: "CardNo", field: "cardno",width:140},
         {headerName: "In/Out", field: "inoutstatus",width:100},
         {headerName: "Time", field: "time",width:200},
-        
+
         {headerName: "Event Point", field: "eventaddr",width:200},
         {headerName: "Event Type", field: "event",width:200},
         {headerName: "Verification Type", field: "verifytype",width:200}
-        
+
 
 
       ],
@@ -85,7 +87,7 @@ export default class RealTimePage extends React.Component {
       const res = responese.data ;
 
       toast.info('Khoá đã đóng : '+json.sn);
-      
+
       /*if(res.desc==='ok'){
            toast.info('Đã mở khoá : '+json.sn);
       }*/
@@ -101,22 +103,23 @@ export default class RealTimePage extends React.Component {
       if(res.desc==='ok'){
            toast.info('Đã đồng bộ  : '+json.sn);
       }
-  
+
 
     })
 
 
   }
-  
-  _realEvent(){
+
+  _realEvent(status){
     const url = server.base()+'/pushapi/realEvent';
+
+    this.state.isInitRealtime = status;
+
     axios.post(url).then((responese)=>{
       const res = responese.data ;
       if(res.desc==='ok'){
-        //this.grid.rowData = res.data ;
 
-        console.log(res.data);
-
+      
         if(res.data.length>0){
 
           res.data.map((item)=>{
@@ -126,34 +129,45 @@ export default class RealTimePage extends React.Component {
           this.setState({
             onAction:'_realEvent'
           })
-        }
-        
 
-        this._realEvent();
+
+        }
+
+
+
+        if(this.state.isInitRealtime !== false){
+          this._realEvent(true);
+        }
+
+
       }
     })
   }
 
+
+
   componentWillReceiveProps(newProps){
+    if(newProps.onTab===this.state.tab){
+      if(!this.state.isInitRealtime){
 
+         this._realEvent(true) ;
+
+      }
+    }else{ this._realEvent(false) }
   }
 
-  componentDidMount(){
-    
-    this._realEvent() ;
 
-  }
 
   render() {
 
-    
+
     return (
       <div style={{padding:30}} hidden={  this.props.onTab === this.state.tab ? false : true } >
-          
+
           <div style={{marginBottom:20}}>
             <button onClick={this._viewSupport} className="btn btn-sm btn-success"> <i className="fa fa-support mr-5" /> Hướng dẩn </button>
           </div>
-          
+
           <div hidden={!this.state.viewSupport ? false : true } >
             <Table  className="table" >
               <thead style={{ border:0, background:'#222D32', color:'#fff' }} >
@@ -210,13 +224,13 @@ export default class RealTimePage extends React.Component {
             </Table>
           </div>
 
-          
+
           <div style={{ fontFamily:'Roboto'}} hidden={ !this.state.viewSupport ? true : false }>
               <div className="guidebook">
 
               <h3> Thao tác về Realtime  </h3>
               <p>  Phần này là hướng dẩn cho chương trình demo về lấy trạng thái của thiết bị khi có tương tác đầu đọc thẻ  </p>
-              
+
               <h5> Request </h5>
               <ul>
                   <li> URL: /pushapi/realEvent</li>
@@ -231,9 +245,9 @@ export default class RealTimePage extends React.Component {
                 }}>
                   { MAU_JSON }
                 </pre>
-                
+
                 <p>
-                  Mặc định là tất cả các thiết bị khi kết nối vào Push server nó sẽ luôn trả tín hiệu trạng thái về Push server cloud, 
+                  Mặc định là tất cả các thiết bị khi kết nối vào Push server nó sẽ luôn trả tín hiệu trạng thái về Push server cloud,
                   công việc của nhà phát triển là tạo ra 1 cơ chế poll, đệ quy để liên tục lấy tín hiệu này
                 </p>
 
@@ -249,4 +263,3 @@ export default class RealTimePage extends React.Component {
     );
   }
 }
-
