@@ -5,6 +5,7 @@ import { BenExplorer } from '../../../components/BenExplorer';
 
 import IntroPage from './introPage';
 import DevicePage from './devicePage';
+import TutorialPage from './toturialPage';
 import DeviceCommandPage from './deviceCommandPage/';
 import SettingDevicePage from './settingDevicePage';
 import RealtimePage from './realtimePage';
@@ -25,6 +26,8 @@ class PushSDKContent extends React.Component {
       navData:[
         {icon:'', code:'introPage',name:'Giới thiệu',active:true},
         {icon:'', code:'settingDevicePage',name:'Cấu hình thiết bị'},
+        {icon:'', code:'tutorialPage',name:'Tài liệu Device command'},
+        
         {icon:'', code:'devicePage',name:'Access Devices'},
         {icon:'', code:'deviceCommandPage',name:'Device Commands'},
         {icon:'', code:'realtimePage',name:'Realtime'},
@@ -101,6 +104,7 @@ class PushSDKContent extends React.Component {
                 
               <IntroPage {...this.state } />
               <DevicePage {...this.state}  />
+              <TutorialPage {...this.state}/>
               <DeviceCommandPage {...this.state} />
               <SettingDevicePage {...this.state} />
               <RealtimePage {...this.state} />

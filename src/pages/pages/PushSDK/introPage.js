@@ -84,7 +84,8 @@ export default class IntroPage extends React.Component {
                 
             </p>
             <br></br>
-            <br></br>
+            <br></br> 
+            
 
 
         </div>      
