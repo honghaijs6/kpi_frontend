@@ -108,11 +108,13 @@ export default class ToturialPage extends React.Component {
                             <ul>
                                 <li> - trường hợp : fielddesc=* 	// không có điều kiện </li>
                                 <li>  - trường hơp : fielddesc=“NewRecord” và tablename=transaction // nó chỉ lấy những transaction mới nhất  </li>
-                                <li> - trường hợp : fielddesc=“starttime= \t endtime=”  // nó chỉ lấy  trong khoản thời gian  </li>
+
                             </ul>
                         </li>
                         <li> + filter : điều kiện  </li>
+
                         <li> VD : DATA QUERY tablename=user,fielddesc=*,filter=*  // Lấy tất cả record của table user  </li>
+                        <li> VD : DATA QUERY tablename=transaction, filter=“starttime= \t endtime=”  // nó chỉ lấy  trong khoản thời gian  </li>
                 </ul>
             </div>
 
@@ -155,7 +157,7 @@ export default class ToturialPage extends React.Component {
             <br></br>
 
             {/* ------------------------------------ */}
-            <h5>6. Đồng bộ dữ liệu thiết bị  </h5>
+            <h5>6. Dữ liệu trên thiết bị  </h5>
             <div style={{
                 background:'#DEEAF6',
                 padding:10,
@@ -245,7 +247,7 @@ export default class ToturialPage extends React.Component {
             {/* ------------------------------------ */}
 
 
-            
+
         </div>
 
       </div>
