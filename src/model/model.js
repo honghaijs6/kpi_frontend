@@ -15,7 +15,8 @@ MODEL : MAKE RESFUL API
     -> TRIGGER ON ACTION GET ERROR
 */
 
-import Socket from './socket';
+//import Socket from './socket';
+
 import store from '../redux/store';
 
 // DATABASE
@@ -63,14 +64,11 @@ class Model {
   setup(){
 
     this.jwt = localStorage.getItem('feathers-jwt');
-
     // database
-
     this.configDB();
 
-
     /*socket*/
-    this.socket = new Socket(this.model);
+    //this.socket = new Socket(this.model);
 
 
   }
@@ -82,7 +80,7 @@ class Model {
     }).join('&');
 
     /* RECONFIG DB QUERY */
-    if(typeof this.db.method !== 'undefined'){
+    if(typeof this.db.method !== 'undefined'){   
 
       const base  = this.db.base.replace('?','');
 
@@ -184,8 +182,6 @@ class Model {
 
     axios.delete(url,this.db.config)
           .then((res)=>{
-            
-            
             this.listenDataChange(res);
             onSuccess(res.data);
           },(error)=>{
@@ -330,7 +326,8 @@ class Model {
     return new Promise((resole,reject)=>{
       this.fetch((res)=>{
         this.listenDataChange(res);
-        this.listenOnSocketTick();
+
+        //this.listenOnSocketTick();
 
         resole(res);
 
@@ -346,9 +343,6 @@ class Model {
     this.fetch((res)=>{
       this.listenDataChange(res);
     });
-
-    //this.listenOnSocketTick(); ko active socket :
-
 
   }
 
@@ -399,7 +393,7 @@ class Model {
 
       this.db.type = 'GET';
       const {url, config} = this.db ;
-    
+
       axios.get(url,config)
             .then((res) => {
               //this.restResp(res); // KHÔNG LUU localStorage
@@ -414,14 +408,13 @@ class Model {
             );
   }
 
-
+  /*
   listenOnSocketTick(){
 
     const _this = this ;
     this.socket.clientListenServer((res)=>{
 
         // CÂP NHẬT REDUX STORE
-
         let list = store.getState()[this.model].list;
         let idata = res.data ;
 
@@ -465,6 +458,7 @@ class Model {
 
 
   }
+  */
 
   listenDataChange(res){
 
@@ -580,7 +574,7 @@ class Model {
     })
 
   }
-  socketResp(res,list){
+  /*socketResp(res,list){
 
     if(this.jwt !== res.token){
 
@@ -592,7 +586,7 @@ class Model {
       })
 
     }
-  }
+  }*/
   /**** END HOW *****/
 
   /******WHERE*******/

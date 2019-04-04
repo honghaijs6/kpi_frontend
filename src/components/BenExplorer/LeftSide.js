@@ -6,7 +6,7 @@ function LeftSide(props){
   return(
     <nav>
       <ul style={{
-          paddingTop:'20px'
+          paddingTop:'30px'
         }} className="nav">
 
           {

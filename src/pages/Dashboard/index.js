@@ -1,16 +1,32 @@
 
 import React, { Component } from 'react';
+import { Row, Col } from 'reactstrap'
+
+import MyHeader from './Header';
+
+import RealtimeBox from './RealtimeBox';
+import TimeLine from './TimeLine';
 
 class Dashboard extends Component{
 
   render(){
     return (
       <div className="animated fadeIn">
-        <div className="ubuntu-app " style={{border:0, padding:10}}>
-            <main>
-                Dashboard here 
-            </main>
-        </div>
+        <main style={{marginTop: 20, padding: 20, height:'89vh', overflow:'auto'}}>
+
+            <MyHeader />
+
+            <Row>
+              <Col md={9}>
+                 <TimeLine />
+              </Col>
+              <Col md={3}>
+                <RealtimeBox />
+              </Col>
+            </Row>
+
+        </main>
+
       </div>
     )
   }

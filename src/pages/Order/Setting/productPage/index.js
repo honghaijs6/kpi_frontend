@@ -198,7 +198,7 @@ export default class CusOriginPage extends Component{
           />
           <BenGrid
 
-             height='74vh'
+             height='79vh'
 
              onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
              isRightTool={ true }

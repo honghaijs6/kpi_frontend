@@ -492,7 +492,7 @@ a:focus {
   left: 55px;
 }
 .user-panel > .info > p {
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 9px;
 }
 .user-panel > .info > a {
@@ -1375,7 +1375,7 @@ a:focus {
   width: 3px;
 }
 .progress-group .progress-text {
-  font-weight: 600;
+  font-weight: 500;
 }
 .progress-group .progress-number {
   float: right;
@@ -1444,6 +1444,7 @@ a:focus {
   display: block;
   margin-bottom: 20px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
 }
 .small-box > .inner {
   padding: 10px;
@@ -1458,6 +1459,7 @@ a:focus {
   z-index: 10;
   background: rgba(0, 0, 0, 0.1);
   text-decoration: none;
+  font-size: 16px;
 }
 .small-box > .small-box-footer:hover {
   color: #fff;
@@ -1842,7 +1844,7 @@ a:focus {
 .box-comments .username {
   color: #444;
   display: block;
-  font-weight: 600;
+  font-weight: 500;
 }
 .box-comments .text-muted {
   font-weight: 400;
@@ -1872,7 +1874,7 @@ a:focus {
 .todo-list > li .text {
   display: inline-block;
   margin-left: 5px;
-  font-weight: 600;
+  font-weight: 500;
 }
 .todo-list > li .label {
   margin-left: 10px;
@@ -1952,10 +1954,13 @@ a:focus {
 .chat .item > .message {
   margin-left: 55px;
   margin-top: -40px;
+  font-size: 15px; color: #333;
+  line-height: 20px;
+  font-family: 'Roboto' !important;
 }
 .chat .item > .message > .name {
   display: block;
-  font-weight: 600;
+  font-weight: 500;
 }
 .chat .item > .attachment {
   border-radius: 3px;
@@ -1966,12 +1971,12 @@ a:focus {
 }
 .chat .item > .attachment > h4 {
   margin: 0 0 5px 0;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
 }
 .chat .item > .attachment > p,
 .chat .item > .attachment > .filename {
-  font-weight: 600;
+  font-weight: 500;
   font-size: 13px;
   font-style: italic;
   margin: 0;
@@ -2122,7 +2127,7 @@ a:focus {
   line-height: 1.1;
 }
 .timeline > li > .timeline-item > .timeline-header > a {
-  font-weight: 600;
+  font-weight: 500;
 }
 .timeline > li > .timeline-item > .timeline-body,
 .timeline > li > .timeline-item > .timeline-footer {
@@ -2144,7 +2149,7 @@ a:focus {
   top: 0;
 }
 .timeline > .time-label > span {
-  font-weight: 600;
+  font-weight: 500;
   padding: 5px;
   display: inline-block;
   background-color: #fff;
@@ -2336,7 +2341,7 @@ a:focus {
 }
 .callout h4 {
   margin-top: 0;
-  font-weight: 600;
+  font-weight: 500;
 }
 .callout p:last-child {
   margin-bottom: 0;
@@ -2365,7 +2370,7 @@ a:focus {
   border-radius: 3px;
 }
 .alert h4 {
-  font-weight: 600;
+  font-weight: 500;
 }
 .alert .icon {
   margin-right: 10px;
@@ -2406,8 +2411,8 @@ a:focus {
   margin: 0px !important;
   padding: 10px;
   padding-left: 0%;
-  
-  
+
+
 }
 
 .nav > li > a:hover,
@@ -2433,7 +2438,7 @@ a:focus {
   border-top-color: #3c8dbc;
 }
 .nav-pills > li.active > a {
-  font-weight: 600;
+  font-weight: 500;
 }
 /* NAV STACKED */
 .nav-stacked > li > a {
@@ -2470,14 +2475,17 @@ a:focus {
   border-top-left-radius: 3px;
 }
 .nav-tabs-custom > .nav-tabs > li {
+  padding: 10px 20px;
   border-top: 3px solid transparent;
   margin-bottom: -2px;
-  margin-right: 5px;
+  margin-right: 5px; cursor: pointer;
 }
 .nav-tabs-custom > .nav-tabs > li > a {
   color: #444;
+  cursor: pointer;;
   border-radius: 0;
 }
+.nav-tabs-custom > .nav-tabs > li > a i{ font-size: 16px}
 .nav-tabs-custom > .nav-tabs > li > a.text-muted {
   color: #999;
 }
@@ -2545,6 +2553,7 @@ a:focus {
   padding: 10px;
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
+
 }
 .nav-tabs-custom .dropdown.open > a:active,
 .nav-tabs-custom .dropdown.open > a:focus {
@@ -2594,7 +2603,7 @@ a:focus {
   margin-left: 60px;
 }
 .products-list .product-title {
-  font-weight: 600;
+  font-weight: 500;
 }
 .products-list .product-description {
   display: block;
@@ -2773,7 +2782,7 @@ table.text-center th {
   font-size: 12px;
 }
 .direct-chat-name {
-  font-weight: 600;
+  font-weight: 500;
 }
 .direct-chat-timestamp {
   color: #999;
@@ -2828,7 +2837,7 @@ table.text-center th {
   display: block;
 }
 .contacts-list-name {
-  font-weight: 600;
+  font-weight: 500;
 }
 .contacts-list-status {
   font-size: 12px;
@@ -2909,7 +2918,7 @@ table.text-center th {
   display: block;
 }
 .users-list-name {
-  font-weight: 600;
+  font-weight: 500;
   color: #444;
   overflow: hidden;
   white-space: nowrap;
@@ -3135,7 +3144,7 @@ table.text-center th {
 /* User name [optional] */
 .lockscreen .lockscreen-name {
   text-align: center;
-  font-weight: 600;
+  font-weight: 500;
 }
 /* Will contain the image and the sign in form */
 .lockscreen-item {
@@ -4585,7 +4594,7 @@ table.text-center th {
 }
 .user-block .username {
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
 }
 .user-block .description {
   color: #999;
