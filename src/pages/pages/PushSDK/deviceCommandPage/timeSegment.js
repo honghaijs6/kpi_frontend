@@ -164,8 +164,8 @@ export default class TimeSegment extends React.Component {
 
                     <ul>
                       <li>  VD : Phân đoạn từ : 14:00 ~ 17:30  </li>
-                      <li>  = (1400 + 0) {`<<16`} + (1700 + 30)  </li>
-                      <li>  = { (1400 + 0)<<16 + (1700 + 30) } </li>
+                      <li>  = ((1400 + 0) {`<<16)`} + (1700 + 30)  </li>
+                      <li>  = { ((1400 + 0)<<16) + (0 + 30) } </li>
                     </ul>
 
             </div>
