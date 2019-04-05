@@ -30,7 +30,7 @@ export default class TimeSegment extends React.Component {
       indexCommand:0,
       command:'',
       commands:[
-            "DATA UPDATE timezone timezoneid=1\tsuntime1=367001600",
+            "DATA UPDATE timezone timezoneid=1\tsuntime1=91750430",
             "DATA DELETE timezone timezoneid=1",
             "DATA QUERY tablename=timezone,fielddesc=*,filter =*",
             "DATA COUNT timezone"
