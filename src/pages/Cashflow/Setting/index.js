@@ -22,12 +22,12 @@ class CashflowSetting extends Component{
       onAction:'',
       status :'',
 
-      onTab:'cointrack_setting',
+      onTab:'coin',
       leftData:[
-        {icon:'', code:'coin',name:'Loại tài khoản'},
+        {icon:'', code:'coin',name:'Loại tài khoản',active:true},
         {icon:'', code:'cointrack_in',name:'Loại phiếu thu'},
         {icon:'', code:'cointrack_out',name:'Loại phiếu chi'},
-        {icon:'', code:'cointrack_setting',name:'Cấu hình Thu - Chi',active:true}
+        {icon:'', code:'cointrack_setting',name:'Cấu hình Thu - Chi'}
       ]
     }
 
@@ -52,7 +52,7 @@ class CashflowSetting extends Component{
 
     return (
       <div className="animated fadeIn">
-        <div className="ubuntu-app " style={{border:0, padding:10}}>
+        <div className="ubuntu-app " style={{border:0, marginTop:20}}>
             <main>
 
                 <BenExplorer onLeftSideChange={ this._onLeftSideChange } data={this.state.leftData} >

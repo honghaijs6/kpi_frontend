@@ -70,6 +70,7 @@ REDUX
         3. Provider -> Container : pages : -> Components
               // Getting data from root component via : mapStateToProps()
               import { connect } from 'react-redux';
+              
 
               function mapStateToProps(state){
                  return {

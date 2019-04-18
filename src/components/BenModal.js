@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 
-import { Button, Modal, ModalHeader, ModalBody, Form,
-  Popover, PopoverHeader, PopoverBody
-} from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, Form} from 'reactstrap';
 
 
 /*
@@ -21,38 +19,26 @@ class BenModal extends Component{
 
     super(props)
 
-
     this.toggle = this.toggle.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.popoverToggle = this.popoverToggle.bind(this);
-    this.btnYes = this.btnYes.bind(this);
+
   }
 
   toggle(){
-
     this.props.modal.toggle()
   }
 
-  popoverToggle(){
-    this.props.modal.popover.toggle()
-  }
-
-  btnYes(){
-    this.props.modal.popover.btnYes()
-  }
   onSubmit(){
     this.props.modal.onSubmit()
   }
 
   render(){
 
-
-
     return(
       <Modal  size="lg" style={{
           'minWidth': this.props.width
         }}  isOpen={ this.props.modal.active } fade={false}   toggle={ this.toggle } >
-        <ModalHeader toggle={ this.toggle }> <i className="fa fa-plus"></i> { this.props.name }  </ModalHeader>
+        <ModalHeader toggle={ this.toggle }> { this.props.name }  </ModalHeader>
 
         <ModalBody style={{
             padding:30
@@ -73,25 +59,11 @@ class BenModal extends Component{
 
         </div>
 
-        <div className="modal-err " >
-           <div className="float-left form-err text-muted" id="form-err">
+        <div className="modal-err" >
+           <div className="form-err text-muted" id="form-err">
                status
            </div>
-           <div className="float-right">
-             <a id="btnDel" hidden={ this.props.typeAction === 'post' ? true : false  } className={'text-muted btn-delete ' } onClick={ this.popoverToggle }>
-               <i className="fa fa-trash"></i> Xoá
-             </a>
-             <Popover placement="bottom" isOpen={this.props.modal.popover.active } target="btnDel"  toggle={ this.popoverToggle }>
-               <PopoverHeader>Bạn có chắc chắn không?</PopoverHeader>
-               <PopoverBody className="text-center pa-15">
-                 <button  onClick={ this.btnYes } className="btn bg-green btn-sm btn-success mr-20">Có</button>
-
-                 <button onClick={ this.popoverToggle } className="btn btn-sm btn-secondary">Không</button>
-               </PopoverBody>
-             </Popover>
-           </div>
         </div>
-
 
       </Modal>
     )

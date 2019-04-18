@@ -1,5 +1,5 @@
 
-import store from '../../../../redux/store';
+
 import { detectForm } from '../../../../hook/before';
 import { doLoadSubRegion } from '../../../../hook/ultil';
 
@@ -11,7 +11,7 @@ const SUBREGION_CODE = '760'; // quan 1
 
 class formController {
 
-    constructor(model){
+    constructor(model,dispatcher=null){
       this.active = false ; /* FOR OPEN MODAL */
 
       this.state = {
@@ -21,6 +21,7 @@ class formController {
       }
 
       this.model = model ;
+      this.dispatcher = dispatcher; 
 
     }
 
@@ -43,14 +44,14 @@ class formController {
       }
     } 
 
-    loadDistrictList(parent_code,onSuccess){
+    loadDistrictList(parent_code){
 
-      const _this = this;
-      doLoadSubRegion(parent_code,(res)=>{
+      doLoadSubRegion(parent_code,this.dispatcher,(res)=>{
         this._whereStateChange({
           onAction:'loadDistrictList'
         })
-      })
+      });
+      
 
    }
 
@@ -97,6 +98,8 @@ class formController {
     onChangeDist(e){
       const code = e.target.value;
       this.data['subregion_code'] = code ;
+
+      
       // --> HOW -> WHERE
       //this.processForm('subregion_code',e);
 
@@ -160,11 +163,14 @@ class formController {
       if(newState.status ==='success'){
         this.toggle()
       }else{
-        //alert('FORM-'+this.model.model);
-        store.dispatch({
-          type:'STATE-'+this.model.model,
-          state:this.state
-        })
+
+        if(this.dispatcher!==null){
+          this.dispatcher({
+            type:'STATE-'+this.model.model,
+            state:this.state
+          })
+        }
+
       }
 
     }

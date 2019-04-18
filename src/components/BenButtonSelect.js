@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Row, Col,
-  Button,ButtonGroup, InputGroup, Input, InputGroupAddon
+  Button,ButtonGroup
 } from 'reactstrap';
 
 
@@ -17,6 +16,24 @@ class BenButtonSelect extends Component{
       data:props.data
     }
   }
+
+  _onSelect(key){
+
+    // clear all active item
+    this.state.data.map((item,index)=>{
+       delete item.active ; 
+       if(parseInt(key)===index){
+         item.active = true;
+       }
+    });
+
+    this.setState({
+      data:this.state.data
+    });
+
+    this.props.onSelectItem(key);
+
+  }
   render(){
 
     const listBtn = this.state.data;
@@ -31,7 +48,11 @@ class BenButtonSelect extends Component{
                 let active =  listBtn[key].active === true ? 'active' :'';
 
                 return(
-                    <Button key={key}  className={ 'btn-ubuntu-select btn-ubuntu-select-'+active} ><i className={'fa '+listBtn[key].icon}></i> { listBtn[key].name} </Button>
+                    <Button key={key} 
+                      onClick={ ()=>{ this._onSelect(key) } }  
+                      className={ 'btn-ubuntu-select btn-ubuntu-select-'+active} >
+                        <i className={'fa '+listBtn[key].icon}></i> { listBtn[key].name} 
+                    </Button>
                 )
               })
             }

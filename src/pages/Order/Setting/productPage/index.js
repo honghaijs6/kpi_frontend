@@ -1,19 +1,19 @@
-
-import React, { Component } from 'react';
-import { Button } from 'reactstrap';
+import {PRODUCT_TYPE} from '../../../../config/product.conf';
 
 /* OBJECT - PLUGIN*/
-import numeral from 'numeral';
-import Store from '../../../../redux/store';
 import Model from '../../../../model/model';
 
 
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { Button } from 'reactstrap';
+
+
+
 import moment from 'moment';
+import numeral from 'numeral';
 
-
-/* HOOKED*/
-/*............*/
-/*------------*/
 
 /* MODAL FORM & CTRL */
 import MyForm from './Form';
@@ -23,14 +23,13 @@ import formCtrl from './formCtrl';
 /*INCLUDE OTHER COMPONENT*/
 import { BenGrid } from '../../../../components/BenGrid2';
 
-import {PRODUCT_TYPE} from '../../../../config/product.conf';
 
 const MODE = 'products';
 const MODE_NAME = 'Sản phẩm';
 const MODE_TAB = 'productPage';
 
 
-export default class CusOriginPage extends Component{
+class ProductPage extends Component{
 
   constructor(props){
     super(props);
@@ -108,7 +107,8 @@ export default class CusOriginPage extends Component{
 
   _setup(){
 
-    this.model = new Model(MODE);
+    this.model = new Model(MODE,this.props.dispatch);
+
     this.model.set('method',{
       name:'listAll',
       params:'all'
@@ -117,7 +117,6 @@ export default class CusOriginPage extends Component{
 
     this.modal = new formCtrl(this.model);
 
-    this._listenStore();
 
   }
 
@@ -125,8 +124,7 @@ export default class CusOriginPage extends Component{
   resetGrid(){
 
       this.grid.rowData = this.data[MODE];
-
-      console.log(this.grid.rowData)
+      
 
       this._whereStateChange({
         onAction:'resetGrid'
@@ -161,19 +159,13 @@ export default class CusOriginPage extends Component{
 
   }
 
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-  _listenStore(){
 
-    this.unsubscribe = Store.subscribe(()=>{
+  componentWillReceiveProps(newProps){
 
-      this.data[MODE] = Store.getState()[MODE].list || []  ;
-      this.resetGrid();
+    // revice redux data 
+    this.data[MODE] = newProps[MODE]['list'] || [] ;
+    this.resetGrid();
 
-
-
-    })
   }
 
   /* WHERE*/
@@ -185,7 +177,7 @@ export default class CusOriginPage extends Component{
   render(){
 
     const formTitle = this.state.typeAction === 'post' ? 'Tạo '+MODE_NAME : 'Chỉnh sửa '+MODE_NAME;
-
+    
     return(
       <div hidden={  this.props.onTab === this.state.tab ? false : true } >
 
@@ -216,3 +208,12 @@ export default class CusOriginPage extends Component{
     )
   }
 }
+
+function mapStateToProps(state){
+  return {
+     [MODE]:state[MODE]
+  }
+}
+
+
+export default connect(mapStateToProps)(ProductPage)

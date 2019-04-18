@@ -1,50 +1,21 @@
 
-/* MODEL NÀY CÓ THỂ KẾT NỐI VỚI REDUX - MOBX để luu cache database dùng lại*/
-
-/*
-MODEL : MAKE RESFUL API
-
-    TRIGGER AFFTER DONE WITH DATABASE
-    - SAVE PRIVATE DATA
-    - SAVE GLOBAL DATA
-          on POST
-          on PUT
-          on DELETE
-
-    -> TRIGGER FOR MAIN DATACHANGE
-    -> TRIGGER ON ACTION GET ERROR
-*/
-
-//import Socket from './socket';
-
-import store from '../redux/store';
-
 // DATABASE
 import server from '../config/server';
 import axios from 'axios';
 
-
 // HOOK
 import { preLoad } from '../hook/before';
 
-
-
 class Model {
 
-
-
-  constructor(model){
-
+  constructor(model,dispatcher=null){
 
     this.model = model; // string
+    this.dispatcher = dispatcher ;
+
 
     this.data = [];
-    this.state = {
-      typeAction:'',
-      onAction:'',
-      status:'',
-      res:{}
-    }
+    this.state = {}
 
     /*database*/
     this.db = {
@@ -52,9 +23,21 @@ class Model {
       url:'',
       base:server.base() + '/'+ this.model+'?',
       config:'',
-      paginate:server.paginate,
       total:0
     };
+
+    this.paginate = {
+      p:0,
+      offset:0,
+      max:20,
+      is_deleted:0,
+      key:'',
+      sort_by:'date_created',
+      sort_type:'DESC'
+    }
+
+    this.total = 0
+
 
     this.setup();
 
@@ -67,25 +50,21 @@ class Model {
     // database
     this.configDB();
 
-    /*socket*/
-    //this.socket = new Socket(this.model);
-
-
   }
 
   configDB(){
     const _this = this ;
-    let  url = this.db.base +   Object.keys(this.db.paginate).map((key)=>{
-        return key +'='+ this.db.paginate[key]
+    let  url = this.db.base +   Object.keys(this.paginate).map((key)=>{
+        return key +'='+ this.paginate[key]
     }).join('&');
 
     /* RECONFIG DB QUERY */
-    if(typeof this.db.method !== 'undefined'){   
+    if(typeof this.db.method !== 'undefined'){
 
       const base  = this.db.base.replace('?','');
 
-      url = base +'/'+ this.db.method.name+'/'+this.db.method.params+'?'+ Object.keys(this.db.paginate).map((key)=>{
-          return key +'='+ this.db.paginate[key]
+      url = base +'/'+ this.db.method.name+'/'+this.db.method.params+'?'+ Object.keys(this.paginate).map((key)=>{
+          return key +'='+ this.paginate[key]
       }).join('&');
 
     }
@@ -97,7 +76,15 @@ class Model {
   }
 
   resetConfigDB(name,value){
-    this.db[name] = value;
+    if(name==='paginate'){
+
+        this.paginate = value ; // value = {}
+
+    }else{
+      this.db[name] = value;
+
+    }
+
     this.configDB();
 
 
@@ -113,11 +100,7 @@ class Model {
     const data = err.response.data ;
     const msg = data.errors[0];
 
-    this.showErr(msg);
-
-  }
-
-  showErr(msg){
+    // show err
     if(typeof msg === 'object'){
       msg = msg.message.indexOf('must be unique') >-1 ? 'Mã này đã được dùng' : msg.message ;
     }
@@ -129,13 +112,9 @@ class Model {
       setTimeout(()=>{
         el.innerHTML = 'status';
       },2000)
-    }else{
-
-      console.log(msg);
-    }
-
+    }else{  console.log(msg);}
+    // end show
   }
-
 
 
   axios(method,data={},onSuccess){
@@ -223,6 +202,7 @@ class Model {
 
     preLoad('put');
 
+
     axios.put(url,data,this.db.config)
           .then((res)=>{
             this.listenDataChange(res);
@@ -238,7 +218,7 @@ class Model {
 
   goto(p=0,onSuccess){
 
-    const {url, config, paginate, total } = this.db ;
+    const paginate  = this.paginate ;
 
     let offset = 0 ;
     offset = parseInt(paginate.max) * (p);
@@ -262,14 +242,16 @@ class Model {
 
   pre(onSuccess){
 
-    const {url, config, paginate,total} = this.db ;
+    const { total } = this.db ;
+    const paginate = this.paginate ;
+
     let next = paginate.p - 1;
 
-    next = next < 0 ? 0 : next ;
+    let pages = Math.ceil( parseInt(total) / parseInt(paginate.max));
+    next = next < pages ? next : pages - 1 ;
 
     let offset = 0 ;
     let page = next ;
-    let pages = Math.ceil( parseInt(total) / parseInt(paginate.max));
 
     offset = parseInt(paginate.max) * (page);
 
@@ -283,7 +265,6 @@ class Model {
       this.listenDataChange(res);
       onSuccess(res);
     },(err)=>{
-
       this.onError(err);
 
     });
@@ -292,7 +273,8 @@ class Model {
 
   next(onSuccess){
 
-    const {url, config, paginate, total } = this.db ;
+    const { total } = this.db ;
+    const paginate = this.paginate;
     let next = paginate.p + 1;
 
     let pages = Math.ceil( parseInt(total) / parseInt(paginate.max));
@@ -327,13 +309,10 @@ class Model {
       this.fetch((res)=>{
         this.listenDataChange(res);
 
-        //this.listenOnSocketTick();
-
         resole(res);
 
       });
     })
-
 
   }
 
@@ -467,8 +446,9 @@ class Model {
       preLoad('stop');
 
       let idata = res.data ; // format data
-      let list = store.getState()[this.model].list;
+      let list = this.data ;  //store.getState()[this.model].list;
       let { total } =  this.db;
+
 
       if(idata.name==='success'){
         switch (this.db.type) {
@@ -485,6 +465,7 @@ class Model {
 
             // ADD TO REDUX STORE
             res = res.data ;
+            this.data = res.rows ;
 
             this.resetConfigDB("total",res.count);
 
@@ -594,7 +575,11 @@ class Model {
 
 
     Object.assign(this.state,newState);
-    store.dispatch(newState);
+    if(this.dispatcher!==null){
+      this.dispatcher(newState);
+    }
+
+    //store.dispatch(newState);
 
 
   }

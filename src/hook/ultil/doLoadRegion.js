@@ -2,9 +2,9 @@
 import Model from '../../model/model';
 import { REGIONS } from '../../model/model-mode';
 
-export default function(){
+export default function(dispatcher){
 
-  const Regions = new Model(REGIONS);
+  const Regions = new Model(REGIONS,dispatcher);
 
   Regions.set('method',{
     name:'listAll',

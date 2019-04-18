@@ -55,8 +55,8 @@ class GridFooter extends Component{
 
   render(){
 
-    const { paginate, total } =  this.model.db;
-
+    const { total } =  this.model.db;
+    const paginate = this.model.paginate;
     this.state.pages =  Math.ceil(total /  paginate.max);
 
 

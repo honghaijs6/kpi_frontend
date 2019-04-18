@@ -145,7 +145,7 @@ class Warehouse extends Component{
 
     return (
       <div className="animated fadeIn">
-        <div className="ubuntu-app " style={{border:0, padding:10}}>
+        <div className="ubuntu-app " style={{border:0, marginTop:20}}>
             <main>
               <WarehouseForm
                 name={ formTitle }
@@ -157,7 +157,7 @@ class Warehouse extends Component{
 
                  onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
                  isRightTool={ true }
-
+                 height="79.9vh"  
                  nextColums={ this.grid.colums }
                  rowData={this.grid.rowData}
                  model={ this.model }

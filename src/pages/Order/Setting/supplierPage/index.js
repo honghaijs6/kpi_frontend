@@ -3,12 +3,17 @@
 supplier page
 */
 
+/* OBJECT - PLUGIN*/
+import Model from '../../../../model/model';
+
+
+
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+
 import { Button } from 'reactstrap';
 
-/* OBJECT - PLUGIN*/
-import Store from '../../../../redux/store';
-import Model from '../../../../model/model';
 
 import moment from 'moment';
 /* HOOKED*/
@@ -16,9 +21,7 @@ import { doLoadSubRegion, doLoadRegion } from '../../../../hook/ultil';
 /*............*/
 
 
-/* NAMED*/
-import { POST, SEARCH } from '../../../../model/action-mode';
-/*------------*/
+
 /* MODAL FORM & CTRL */
 import MyForm from './Form';
 import formCtrl from './formCtrl';
@@ -34,7 +37,9 @@ const REGION_CODE = '79'; // HCM
 const SUBREGION_CODE = '760'; // quan 1
 
 
-export default class SupplierPage extends Component{
+class SupplierPage extends Component{
+
+  _isData = false;
 
   constructor(props){
     super(props);
@@ -49,7 +54,9 @@ export default class SupplierPage extends Component{
     }
 
     this.data = {
-      MODE:[]
+      [MODE]:[],
+      regions:[],
+      subregions:[]
     }
 
     this.grid = {
@@ -63,7 +70,7 @@ export default class SupplierPage extends Component{
         {headerName: "Cho công nợ", field: "dept",width:150},
         {headerName: "Người tạo", field: "creator",width:200},
         {headerName: "Ngày tạo", field: "date_created",width:150,
-        
+
           cellRenderer(params){
 
             const humanDate = moment(params.value).format('YYYY-MM-DD');
@@ -71,7 +78,7 @@ export default class SupplierPage extends Component{
              ${ humanDate }
            `
           }
-          
+
         }
 
       ],
@@ -88,15 +95,15 @@ export default class SupplierPage extends Component{
 
   _setup(){
 
-    this.model = new Model(MODE);
+    this.model = new Model(MODE,this.props.dispatch);
+
     this.model.set('method',{
       name:'listAll',
       params:'all'
     });
 
-    this.modal = new formCtrl(this.model);
+    this.modal = new formCtrl(this.model,this.props.dispatch);
 
-    this._listenStore();
 
   }
 
@@ -106,7 +113,8 @@ export default class SupplierPage extends Component{
 
     await this.model.initData();
 
-    doLoadRegion();
+    doLoadRegion(this.props.dispatch);
+
 
     this._whereStateChange({
       isIniData:true
@@ -116,7 +124,7 @@ export default class SupplierPage extends Component{
 
   resetGrid(){
 
-      
+
       this.grid.rowData = this.data[MODE] ;
       this._whereStateChange({
         onAction:'resetGrid'
@@ -127,27 +135,36 @@ export default class SupplierPage extends Component{
 
   _doOpenModalPost(){
 
-    doLoadSubRegion(REGION_CODE,(res)=>{
+    doLoadSubRegion(REGION_CODE,this.props.dispatch,(res)=>{
 
 
-      this.modal.open('post');
       this._whereStateChange({
         typeAction:'post',
         onAction:'_doOpenModalPost'
-      })
+      });
+
+      this.modal.open('post');
+
+
+
     });
 
 
   }
   _doOpenModalUpdate(data){
 
-    doLoadSubRegion(data.region_code,(res)=>{
+    doLoadSubRegion(data.region_code,this.props.dispatch,(res)=>{
 
-      this.modal.open('put',data);
+      this.data.subregions = res.rows ;
+
       this._whereStateChange({
         typeAction:'put',
         onAction:'_doOpenModalUpdate'
       });
+
+      this.modal.open('put',data);
+
+
     });
 
   }
@@ -159,34 +176,24 @@ export default class SupplierPage extends Component{
     this._doOpenModalPost();
   }
 
-  componentDidMount(){
-    //this._isMounted = true;
-    //this.model.load();
-
-  }
 
   componentWillUnmount() {
-    this.unsubscribe();
+    //this.unsubscribe();
+    this._isData = false ;
   }
-  _listenStore(){
 
-    this.unsubscribe = Store.subscribe(()=>{
-
-      this.data[MODE] = Store.getState()[MODE].list || []  ;
-      this.data['regions'] = Store.getState().regions.list || []  ;
-      this.data['subregions'] = Store.getState().subregions.list || []  ;
-
-
-      this.resetGrid(this.data[MODE]);
-
-
-    })
-  }
   componentWillReceiveProps(newProps){
-    if(newProps.onTab===MODE_TAB){
-      //this.model.load();
-      this._doInitData()
+
+    if(!this._isData){
+      this._doInitData();
+      this._isData = true ;
     }
+
+    this.data[MODE] = newProps[MODE]['list'] || [] ;
+    this.resetGrid();
+
+
+
   }
 
   /* WHERE*/
@@ -199,6 +206,10 @@ export default class SupplierPage extends Component{
 
     const formTitle = this.state.typeAction === 'post' ? 'Tạo '+ MODE_NAME : 'Chỉnh sửa '+MODE_NAME;
 
+    const regions = this.props.regions.list || [] ;
+    const subregions = this.props.subregions.list || [] ;
+
+
 
 
     return(
@@ -209,18 +220,18 @@ export default class SupplierPage extends Component{
             name={ formTitle }
             typeAction={ this.state.typeAction }
             modal={this.modal}
-            regions={ this.data.regions }
-            subregions={ this.data.subregions }
+            regions={ regions }
+            subregions={ subregions }
 
 
           />
           <BenGrid
 
-             height='74vh'
+             height='79.9vh'
 
              onBtnEdit={ this._doOpenModalUpdate }
              isRightTool={ true }
-             
+
              nextColums={ this.grid.colums }
              rowData={this.grid.rowData}
              model={ this.model }
@@ -234,3 +245,13 @@ export default class SupplierPage extends Component{
     )
   }
 }
+
+function mapStateToProps(state){
+  return {
+     [MODE]:state[MODE],
+     regions:state.regions,
+     subregions:state.subregions
+  }
+}
+
+export default connect(mapStateToProps)(SupplierPage);

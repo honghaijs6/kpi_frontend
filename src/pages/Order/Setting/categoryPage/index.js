@@ -3,23 +3,21 @@ DANH MUC : categories
 TAB  : categoryPage
 */
 
+/* OBJECT - PLUGIN*/
+import Model from '../../../../model/model';
+
+
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+
 
 import { Button } from 'reactstrap';
 
-/* OBJECT - PLUGIN*/
-import Store from '../../../../redux/store';
-import Model from '../../../../model/model';
+
 
 import moment from 'moment';
 
-
-
-/* HOOKED*/
-/*............*/
-
-
-/*------------*/
 
 /* MODAL FORM & CTRL */
 import MyForm from './Form';
@@ -28,13 +26,14 @@ import formCtrl from './formCtrl';
 /*INCLUDE OTHER COMPONENT*/
 import { BenGrid } from '../../../../components/BenGrid2';
 
-const  MODE = 'categories';
+const MODE = 'categories';
 const MODE_TAB = 'categoryPage';
 const MODE_NAME = 'Danh Mục';
 
 
-export default class CategoryPage extends Component{
+class CategoryPage extends Component{
 
+  _isData = false;
   constructor(props){
     super(props);
 
@@ -44,6 +43,7 @@ export default class CategoryPage extends Component{
       status:'', // status
 
       tab:MODE_TAB
+      
     }
 
     this.data = {}
@@ -78,16 +78,14 @@ export default class CategoryPage extends Component{
 
   _setup(){
 
-    this.model = new Model(MODE);
+    this.model = new Model(MODE,this.props.dispatch);
     this.model.set('method',{
       name:'listAll',
       params:'all'
     });
     
-
-    this.modal = new formCtrl(this.model);
-
-    this._listenStore();
+    this.modal = new formCtrl(this.model,this.props.dispatch);
+    
 
   }
 
@@ -127,20 +125,35 @@ export default class CategoryPage extends Component{
     this._doOpenModalPost();
   }
   
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
+  
+
   _listenStore(){
 
-    this.unsubscribe = Store.subscribe(()=>{
+    /*this.unsubscribe = Store.subscribe(()=>{
 
       this.data[MODE] = Store.getState()[MODE].list || []  ;
       this.resetGrid();
 
-    })
+    })*/
+  }
+
+  componentWillUnmount(){
+    console.log('unmoutn from catepage');
+    this._isData = false; 
+
   }
   componentWillReceiveProps(newProps){
-    this.model.initData() ;
+    
+    if(!this._isData){
+      this.model.initData() ; 
+      this._isData = true ; 
+      
+    }
+
+    this.data[MODE] = newProps[MODE]['list'] || [] ;
+    this.resetGrid();
+
+
   }
   
 
@@ -165,7 +178,7 @@ export default class CategoryPage extends Component{
           />
           <BenGrid
 
-             height='74vh'
+             height='79.9vh'
 
              onBtnEdit={ this._doOpenModalUpdate }
              isRightTool={ true }
@@ -183,3 +196,12 @@ export default class CategoryPage extends Component{
     )
   }
 }
+
+function mapStateToProps(state){
+  return {
+     [MODE]:state[MODE]
+  }
+}
+
+
+export default connect(mapStateToProps)(CategoryPage)

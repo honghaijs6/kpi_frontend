@@ -5,7 +5,7 @@ import { detectForm } from '../../../../hook/before';
 
 class formController {
 
-    constructor(model){
+    constructor(model,dispatcher=null){
       this.active = false ; /* FOR OPEN MODAL */
 
       this.state = {
@@ -15,6 +15,7 @@ class formController {
       }
 
       this.model = model ;
+      this.dispatcher = dispatcher; 
 
     }
 
@@ -106,10 +107,14 @@ class formController {
         this.toggle()
       }else{
         //alert('FORM-'+this.model.model);
-        store.dispatch({
-          type:'STATE-'+this.model.model,
-          state:this.state
-        })
+
+        if(this.dispatcher!==null){
+          this.dispatcher({
+            type:'STATE-'+this.model.model,
+            state:this.state
+          })
+        }
+
       }
 
     }

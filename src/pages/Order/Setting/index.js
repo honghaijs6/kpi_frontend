@@ -7,6 +7,12 @@ import {BenExplorer} from '../../../components/BenExplorer';
 import ProductPage from './productPage';
 import CategoryPage from './categoryPage';
 import SupplierPage from './supplierPage';
+import CauseDelPage from './causeDelPage';
+
+import SettingOrderPage from './settingOrderPage';
+import NotificationPage from './notificationPage';
+
+
 
 
 
@@ -26,7 +32,7 @@ class OrderSetting extends Component{
         {icon:'', code:'categoryPage',name:'Danh mục sản phẩm'},
         {icon:'', code:'supplierPage',name:'Nhà Cung Cấp'},
         {icon:'', code:'causeDelPage',name:'Lý do huỷ đơn hàng'},
-        {icon:'', code:'displayPage',name:'Cấu hình tạo đơn hàng'},
+        {icon:'', code:'settingOrderPage',name:'Cấu hình tạo đơn hàng'},
         {icon:'', code:'notificationPage',name:'Cài đặt thông báo'},
       ]
     }
@@ -55,6 +61,10 @@ class OrderSetting extends Component{
                 <ProductPage {...this.state} />
                 <CategoryPage {...this.state} />
                 <SupplierPage {...this.state} />
+                <CauseDelPage {...this.state} />
+                <SettingOrderPage {...this.state} />
+                <NotificationPage {...this.state} />
+
 
 
 

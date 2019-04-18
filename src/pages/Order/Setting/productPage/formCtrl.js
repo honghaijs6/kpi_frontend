@@ -5,7 +5,7 @@ import { detectForm } from '../../../../hook/before';
 
 class formController {
 
-    constructor(model){
+    constructor(model,dispatcher=null){
       this.active = false ; /* FOR OPEN MODAL */
 
       this.state = {
@@ -15,6 +15,7 @@ class formController {
       }
 
       this.model = model ;
+      this.dispatcher = dispatcher || null ;
 
     }
 
@@ -88,8 +89,7 @@ class formController {
     toggle(){
 
       this.active = !this.active;
-      this.popover.active =  false;
-
+      
       // -->
       this._whereStateChange({
         onAction:'toggle_modal'
@@ -113,37 +113,6 @@ class formController {
         })
       }
 
-    }
-
-    popover = {
-        active:false,
-
-        parent:this,
-        btnYes(){
-
-
-          const id = this.parent.data.id;
-
-          this.parent.model.delete(id,(res)=>{
-
-              this.parent._whereStateChange({
-                onAction:'btnYes',
-                typeAction:'delete',
-                status:res.name
-              });
-
-          })
-
-        },
-
-        toggle(){
-
-           this.active = !this.active;
-           this.parent._whereStateChange({
-             onAction:'toggle_popover'
-           })
-
-        }
     }
 
 

@@ -30,10 +30,11 @@
     "enzyme-adapter-react-16": "^1.6.0",
     "flag-icon-css": "^3.2.1",
     "font-awesome": "^4.7.0",
-    "handlebars": "^4.1.1",
-    "js-yaml": "^3.13.0",
+    "handlebars": "^4.1.2",
+    "jodit-react": "^1.0.26",
+    "js-yaml": "^3.13.1",
     "moment": "^2.22.2",
-    "node-sass": "^4.9.4",
+    "node-sass": "^4.11.0",
     "numeral": "^2.0.6",
     "prop-types": "^15.6.2",
     "react": "^16.6.0",
@@ -51,7 +52,8 @@
     "reactstrap": "^6.5.0",
     "redux": "^4.0.1",
     "simple-line-icons": "^2.4.1",
-    "socket.io-client": "^2.1.1"
+    "socket.io-client": "^2.1.1",
+    "tar": "^4.4.8"
   },
   "devDependencies": {
     "react-scripts": "^2.1.2"

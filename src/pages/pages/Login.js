@@ -3,12 +3,16 @@ import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGr
 
 import client from '../../feathers';
 
+import {preLoad} from '../../hook/before';
+
 class Login extends Component {
 
   constructor(){
     super();
 
-    this.state = {};
+    this.state = {
+      err:''
+    };
 
 
     this.updateField = this.updateField.bind(this);
@@ -17,28 +21,31 @@ class Login extends Component {
   }
 
   updateField(name,ev){
-     //this.setState({[name]:ev.target.velue});
-     //this.setState({[name]:ev.target.value});
-
      this.setState({[name]: ev.target.value})
 
   }
 
   login(e){
 
+    preLoad('authenticate');
+
     e.preventDefault();
 
     const {email, password} = this.state;
-
-
+    
     return client.authenticate({
       "strategy":"local",
     	"email":email,
     	"password":password
     }).then((res)=>{
+      
+      preLoad('stop');
 
     }).catch((error)=>{
-      console.log(error);
+      
+      
+      this.setState({err:error.message})
+      preLoad('stop');
     })
 
 
@@ -90,7 +97,7 @@ class Login extends Component {
                         </Col>
                       </Row>
                       <Row style={{marginTop:20}}>
-                        <Col xs="12">
+                        <Col xs="12" className="txt-red">
                           { this.state.err }
                         </Col>
                       </Row>

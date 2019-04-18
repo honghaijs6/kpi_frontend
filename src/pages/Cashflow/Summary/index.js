@@ -30,7 +30,7 @@ class CashflowSummary extends Component{
   render(){
     return (
       <div className="animated fadeIn">
-        <div className="ubuntu-app " style={{border:0, padding:10}}>
+        <div className="ubuntu-app " style={{border:0, marginTop:20}}>
             <main className="form-general" >
                 <Row style={{ borderBottom:0}}>
                   <Col md="12">

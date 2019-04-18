@@ -163,7 +163,7 @@ export default class CusPointRulePage extends Component{
           />
           <BenGrid
 
-             height='74vh'
+             height='79.9vh'
 
              onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
              isRightTool={ true }

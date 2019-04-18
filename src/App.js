@@ -6,8 +6,6 @@ import './App.scss';
 import './scss/filemanager.scss';
 import './scss/ubuntu-style.scss';
 
-
-
 // Containers
 import { DefaultLayout } from './containers';
 // Pages
@@ -33,21 +31,15 @@ class App extends Component {
   }
 
   componentDidMount(){
-    // Try to authenticate with the JWT stored in localStorage
-    //const users = client.service('users');
-
-    /* listening error */
-
+    
     preLoad('authenticate');
-
     socket.client.authenticate().catch((err)=>{
 
       preLoad('stop');
       this.setState({login:false})
 
     });
-
-
+    
     socket.client.on('authenticated',login=>{
 
       preLoad('stop');
@@ -59,7 +51,6 @@ class App extends Component {
           window.USERINFO = info;
           this.setState({login});
 
-
         });
 
       })
@@ -69,7 +60,6 @@ class App extends Component {
 
     socket.client.on('logout', ()=>{
       preLoad('stop');
-
       this.setState({login:false})
     });
 
