@@ -26,12 +26,13 @@
     "chart.js": "^2.7.3",
     "classnames": "^2.2.6",
     "core-js": "^2.5.7",
+    "draft-js": "^0.10.5",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
+    "firebase": "^5.10.0",
     "flag-icon-css": "^3.2.1",
     "font-awesome": "^4.7.0",
     "handlebars": "^4.1.2",
-    "jodit-react": "^1.0.26",
     "js-yaml": "^3.13.1",
     "moment": "^2.22.2",
     "node-sass": "^4.11.0",
@@ -43,6 +44,7 @@
     "react-codemirror": "^1.0.0",
     "react-color": "^2.17.0",
     "react-dom": "^16.6.0",
+    "react-draft-wysiwyg": "^1.13.2",
     "react-loadable": "^5.5.0",
     "react-redux": "^6.0.0",
     "react-router-config": "^4.4.0-beta.6",
@@ -52,8 +54,7 @@
     "reactstrap": "^6.5.0",
     "redux": "^4.0.1",
     "simple-line-icons": "^2.4.1",
-    "socket.io-client": "^2.1.1",
-    "tar": "^4.4.8"
+    "socket.io-client": "^2.1.1"
   },
   "devDependencies": {
     "react-scripts": "^2.1.2"

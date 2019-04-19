@@ -1,11 +1,20 @@
+
+import uploadPhoto from '../../../../hook/ultil/uploadPhoto';
+
 import React, { Component } from 'react';
 import {  Row, Col,  FormGroup, Input  } from 'reactstrap';
 
 import BenModal from '../../../../components/BenModal';
 
-import SelectCity from '../../../../components/SelectCity';
-import SelectDist from '../../../../components/SelectDist';
 
+import { EditorState, ContentState, convertFromHTML, convertToRaw  } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+
+import htmlToDraft from 'html-to-draftjs';
+
+
+
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 
 
@@ -147,8 +156,8 @@ function FormRow2(props){
             </Col>
           </Row>
         </Col>
-      </Row>
-
+      </Row>  
+      
     </div>
   )
 }
@@ -157,22 +166,85 @@ function FormRow2(props){
 
 class MyForm extends Component {
 
-   render(){
+
+  constructor(props){
+    super(props);
+
+    
+    this.state = {
+      editorState: EditorState.createWithContent(
+        ContentState.createFromBlockArray(
+          convertFromHTML('<p> Hello </p>')
+        )
+      ),
+      contentState:null
+    }
+
+    
+  }
+  
+
+  onEditorStateChange(editorState){
+    
+    const rawState = convertToRaw(editorState.getCurrentContent())
+    console.log(rawState)
 
 
-     return(
+    this.setState({
+      editorState,
+    });
+    
+  };
+
+  onContentStateChange(contentState){
+    this.setState({
+      contentState
+    });
+
+  }
+
+
+  
+
+  render(){
+
+    const { editorState } = this.state;
+
+    
+
+    return(
        <BenModal width={ this.props.width } name={ this.props.name } typeAction={ this.props.typeAction } modal={ this.props.modal }  >
 
           <FormRow1 {...this.props} />
-
           <FormRow2 {...this.props} />
 
+          <div>
+              <Editor
+              
+                editorState={editorState}
+                
+                toolbarClassName="toolbar-class"
+                wrapperClassName="rdw-storybook-editor"
+                editorClassName="rdw-storybook-textarea"
+                onEditorStateChange={this.onEditorStateChange.bind(this)}
 
+                onContentStateChange={this.onContentStateChange.bind(this)}
 
-
+                toolbar={{
+                  options: ['inline', 'blockType', 'textAlign', 'link', 'remove', 'history'],
+                  inline: {
+                    options: ['bold', 'italic', 'underline', 'strikethrough'],
+                  },
+                }}
+                
+                
+              />
+              
+          </div>
+      
        </BenModal>
      )
-   }
- }
+  }
+}
 
  export default MyForm;

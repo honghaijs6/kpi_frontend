@@ -72,6 +72,37 @@ label{ font-weight: 500 !important; font-size: 14px;}
 .form-general .row p{ font-weight: 500}
 
 
+
+/* WYSIWYD */
+.rdw-storybook-root {
+  margin: 50px !important;
+  width: 90% !important; 
+}
+.rdw-storybook-editor {
+  border: 1px solid #dddddd !important;
+  padding: 5px !important;
+  border-radius: 2px !important;
+  
+  
+}
+.rdw-storybook-toolbar{
+  top: -130px !important;
+}   
+.rdw-storybook-textarea{
+  margin-top: 0px;
+  resize: none;
+  padding: 10px !important; 
+  width: 100%;
+  border: 1px solid #dddddd;
+  height: 320px !important;
+}
+.toolbar-class{
+  border: 0px solid #000 !important
+}
+
+/* WYSIWYD */
+
+
 /* GUIDE BOOK */
 
 .guidebook{
