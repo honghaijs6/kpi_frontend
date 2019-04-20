@@ -1,21 +1,16 @@
 
+import {PRODUCT_TYPE} from '../../../../config/product.conf';
+
+// hook
 import uploadPhoto from '../../../../hook/ultil/uploadPhoto';
 
 import React, { Component } from 'react';
 import {  Row, Col,  FormGroup, Input  } from 'reactstrap';
 
 import BenModal from '../../../../components/BenModal';
+import InputNumeral from '../../../../components/InputNumeral';
 
-
-import { EditorState, ContentState, convertFromHTML, convertToRaw  } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-
-import htmlToDraft from 'html-to-draftjs';
-
-
-
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-
+import CKEditor from "react-ckeditor-component";
 
 
 
@@ -31,19 +26,19 @@ function FormRow1(props){
           <Col md="2">
             <FormGroup>
               <label> Mã  <span className="text-danger">*</span></label>
-              <Input  id="code" onChange={(e)=>{ modal.onChange('code',e) }} defaultValue={ data.code }  type="text"/>
+              <Input  id="code" onChange={(e)=>{ modal.onChange('code',e.target.value) }} defaultValue={ data.code }  type="text"/>
             </FormGroup>
           </Col>
           <Col md="4">
             <FormGroup>
               <label> Tên sản phẩm  <span className="text-danger">*</span> </label>
-              <Input defaultValue={ data.name } onChange={(e)=>{ modal.onChange('name',e) }}  id="name"    type="text"/>
+              <Input id="name" defaultValue={ data.name } onChange={(e)=>{ modal.onChange('name',e.target.value) }}    type="text"/>
             </FormGroup>
           </Col>
           <Col md="2">
             <FormGroup>
               <label> Serial? </label>
-              <Input type="select">
+              <Input id="is_serial" onChange={(e)=>{ modal.onChange('is_serial',e.target.value) }}  type="select">
                 <option value={0}> Không </option>
                 <option value={1}> Có </option>
               </Input>
@@ -63,9 +58,8 @@ function FormRow1(props){
           <Col md={2}>
              <FormGroup>
                 <label> Nhà cung cấp </label>
-                <Input id="supplier_codes" type="select">
-                  <option>  </option>
-                </Input>
+                <Input id="supplier_codes"  type="text" />
+                <ul className="suggest-holder" ></ul>
              </FormGroup>
           </Col>
 
@@ -90,19 +84,22 @@ function FormRow2(props){
           <Col md="2">
             <FormGroup>
               <label> Giá nhà máy <span className="text-danger">*</span></label>
-              <Input  id="price_1" onChange={(e)=>{ modal.onChange('price_1',e) }} defaultValue={ data.price_1 }  type="text"/>
+              {/*<Input  id="price_1"  defaultValue={ data.price_1 }  type="text"/> */}
+
+              <InputNumeral onChange={(value)=>{ console.log(value); }} id="price_1"  defaultValue={ data.price_1 } />
+
             </FormGroup>
           </Col>
           <Col md="2">
             <FormGroup>
               <label> Giá gốc  <span className="text-danger">*</span> </label>
-              <Input defaultValue={ data.price_2 } onChange={(e)=>{ modal.onChange('price_2',e) }}  id="price_2"    type="text"/>
+              <InputNumeral id="price_2" defaultValue={ data.price_2 }   type="text"/>
             </FormGroup>
           </Col>
           <Col md="2">
             <FormGroup>
               <label>Giá ĐL </label>
-              <Input defaultValue={ data.price_3 } onChange={(e)=>{ modal.onChange('price_3',e) }}  id="price_3"    type="text"/>
+              <InputNumeral id="price_3"  defaultValue={ data.price_3 }    type="text"/>
 
             </FormGroup>
           </Col>
@@ -110,7 +107,7 @@ function FormRow2(props){
           <Col md={2}>
             <FormGroup>
               <label>Giá lẻ </label>
-              <Input defaultValue={ data.price_4 } onChange={(e)=>{ modal.onChange('price_4',e) }}  id="price_4"    type="text"/>
+              <InputNumeral id="price_4"  defaultValue={ data.price_4 }  type="text"/>
             </FormGroup>
           </Col>
 
@@ -125,8 +122,18 @@ function FormRow2(props){
           <Col md="2">
              <FormGroup>
                 <label> Thuộc </label>
-                <Input type="select">
-                    <option>  </option>
+                <Input id="type" type="select">
+                    {
+
+                      Object.keys(PRODUCT_TYPE).map((item)=>{
+                        return(
+                          <option key={item} value={ item }> { PRODUCT_TYPE[item] } </option>
+                        )
+                      })
+
+                    }
+
+
                 </Input>
              </FormGroup>
           </Col>
@@ -156,8 +163,8 @@ function FormRow2(props){
             </Col>
           </Row>
         </Col>
-      </Row>  
-      
+      </Row>
+
     </div>
   )
 }
@@ -170,47 +177,27 @@ class MyForm extends Component {
   constructor(props){
     super(props);
 
-    
     this.state = {
-      editorState: EditorState.createWithContent(
-        ContentState.createFromBlockArray(
-          convertFromHTML('<p> Hello </p>')
-        )
-      ),
-      contentState:null
+      contentState:null,
+      updateContent:'Hello'
     }
 
-    
-  }
-  
-
-  onEditorStateChange(editorState){
-    
-    const rawState = convertToRaw(editorState.getCurrentContent())
-    console.log(rawState)
-
-
-    this.setState({
-      editorState,
-    });
-    
-  };
-
-  onContentStateChange(contentState){
-    this.setState({
-      contentState
-    });
+    this.onChange = this.onChange.bind(this);
 
   }
 
+  onChange(evt){
 
-  
+      var newContent = evt.editor.getData();
+
+      this.setState({
+        content: newContent
+      })
+  }
+
 
   render(){
 
-    const { editorState } = this.state;
-
-    
 
     return(
        <BenModal width={ this.props.width } name={ this.props.name } typeAction={ this.props.typeAction } modal={ this.props.modal }  >
@@ -219,29 +206,16 @@ class MyForm extends Component {
           <FormRow2 {...this.props} />
 
           <div>
-              <Editor
-              
-                editorState={editorState}
-                
-                toolbarClassName="toolbar-class"
-                wrapperClassName="rdw-storybook-editor"
-                editorClassName="rdw-storybook-textarea"
-                onEditorStateChange={this.onEditorStateChange.bind(this)}
+            <CKEditor
+              activeClass="p10"
+              content={this.state.content}
+              events={{
 
-                onContentStateChange={this.onContentStateChange.bind(this)}
-
-                toolbar={{
-                  options: ['inline', 'blockType', 'textAlign', 'link', 'remove', 'history'],
-                  inline: {
-                    options: ['bold', 'italic', 'underline', 'strikethrough'],
-                  },
-                }}
-                
-                
-              />
-              
+                "change": this.onChange
+              }}
+             />
           </div>
-      
+
        </BenModal>
      )
   }

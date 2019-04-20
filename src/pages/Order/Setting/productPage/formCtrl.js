@@ -1,7 +1,5 @@
 
-import store from '../../../../redux/store';
 import { detectForm } from '../../../../hook/before';
-
 
 class formController {
 
@@ -23,21 +21,30 @@ class formController {
       return {
         code:'',
         name:'',
-        address:''
+        is_serial:0,
+        categories_id:0,
+        supplier_codes:'',
+        price_1:0,
+        price_2:0,
+        price_3:0,
+        price_4:0,
+        unit:'',
+        type:'main',
+        images:'',
+        content:''
       }
     }
 
     onSubmit(){
 
       const typeAction = this.state.typeAction; /* PUT - POST */
-
       /* HOOKED detectForm before save data*/
       // -->
       const fields = [
-        'code','name','address'
+        'code','name','price_1','price_2','price_3','price_4'
       ];
-
-      if(detectForm(fields,this.data)===''){
+      
+      /*if(detectForm(fields,this.data)===''){
 
           this.model.axios(typeAction,this.data,(res)=>{
             // -->
@@ -47,17 +54,16 @@ class formController {
             });
 
           })
-      }
+      }*/
 
     }
 
-    onChange(name, e){
-      Object.assign(this.data,{ [name]:e.target.value});
-
+    onChange(name, value){
+      //Object.assign(this.data,{ [name]:e.target.value});
+      Object.assign(this.data,{ [name]:value});
       //this.data[name] = e.target.value;
       // --> initial HOW -> WHERE
-      this.processForm(name,e);
-
+      this.processForm(name,value);
     }
 
     /* START : HOW */
@@ -79,17 +85,15 @@ class formController {
        //-->
        this._whereStateChange({
          onAction:'processForm'
-
        });
 
-       console.log(this.data);
     }
 
 
     toggle(){
 
       this.active = !this.active;
-      
+
       // -->
       this._whereStateChange({
         onAction:'toggle_modal'
@@ -107,7 +111,7 @@ class formController {
         this.toggle()
       }else{
         //alert('FORM-'+this.model.model);
-        store.dispatch({
+        this.dispatcher({
           type:'STATE-'+this.model.model,
           state:this.state
         })

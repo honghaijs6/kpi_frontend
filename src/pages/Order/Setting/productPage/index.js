@@ -1,4 +1,5 @@
-import {PRODUCT_TYPE} from '../../../../config/product.conf';
+import {PRODUCT_TYPE_DECO} from '../../../../config/product.conf';
+
 
 /* OBJECT - PLUGIN*/
 import Model from '../../../../model/model';
@@ -13,6 +14,7 @@ import { Button } from 'reactstrap';
 
 import moment from 'moment';
 import numeral from 'numeral';
+
 
 
 /* MODAL FORM & CTRL */
@@ -51,7 +53,7 @@ class ProductPage extends Component{
         {headerName: "Loại", field: "type",width:100,
           cellRenderer(params){
 
-            return PRODUCT_TYPE[params.value];
+            return PRODUCT_TYPE_DECO[params.value];
           }
         },
         {headerName: "Danh Mục", field: "category",width:140},
@@ -108,14 +110,12 @@ class ProductPage extends Component{
   _setup(){
 
     this.model = new Model(MODE,this.props.dispatch);
-
     this.model.set('method',{
       name:'listAll',
       params:'all'
     });
 
-
-    this.modal = new formCtrl(this.model);
+    this.modal = new formCtrl(this.model,this.props.dispatch);
 
 
   }
@@ -124,7 +124,7 @@ class ProductPage extends Component{
   resetGrid(){
 
       this.grid.rowData = this.data[MODE];
-      
+
 
       this._whereStateChange({
         onAction:'resetGrid'
@@ -162,7 +162,7 @@ class ProductPage extends Component{
 
   componentWillReceiveProps(newProps){
 
-    // revice redux data 
+    // revice redux data
     this.data[MODE] = newProps[MODE]['list'] || [] ;
     this.resetGrid();
 
@@ -177,7 +177,7 @@ class ProductPage extends Component{
   render(){
 
     const formTitle = this.state.typeAction === 'post' ? 'Tạo '+MODE_NAME : 'Chỉnh sửa '+MODE_NAME;
-    
+
     return(
       <div hidden={  this.props.onTab === this.state.tab ? false : true } >
 

@@ -30,14 +30,19 @@ body{
 
 /* END COLOR */
 
-/* CODE EDITOR*/
-.ReactCodeMirror,.CodeMirror-lines,.CodeMirror-gutter,.CodeMirror-code,.CodeMirror-linenumbers{ background-color: #263238 !important }
+/* SUGGEST HOLDER*/
 
-.cm-tag{ color: #C73638 !important}
-.cm-attribute{ color: #F1BF51 !important}
-.cm-string{ color: #C3E88D !important}
-.CodeMirror-code [role=presentation]{ color: #E9EDED !important}
-/*  CODE EDITOER */
+.suggest-holder,.suggest-holder-2{
+    margin: 0px; padding: 0px; border: 1px solid rgba(0,0,0,0.1);background: #fff; width: 100%; position: absolute; border-top: 0px; z-index: 2000;
+    display: none;
+    max-height: 500px; overflow-y: auto; overflow-x: hidden;
+}
+.suggest-holder-2{ position: absolute; width: 100%; display: block;}
+.suggest-holder li,.suggest-holder-2 li{ list-style: none; display: block; padding: 10px; border-bottom: 1px solid rgba(0,0,0,0.1); cursor: pointer;}
+
+.suggest-holder li:hover,.suggest-holder li.active{ background: rgba(0,0,0,0.1);}
+
+/* END SUGGEST HOLDER */
 
 
 /* FORM */
@@ -76,22 +81,22 @@ label{ font-weight: 500 !important; font-size: 14px;}
 /* WYSIWYD */
 .rdw-storybook-root {
   margin: 50px !important;
-  width: 90% !important; 
+  width: 90% !important;
 }
 .rdw-storybook-editor {
   border: 1px solid #dddddd !important;
   padding: 5px !important;
   border-radius: 2px !important;
-  
-  
+
+
 }
 .rdw-storybook-toolbar{
   top: -130px !important;
-}   
+}
 .rdw-storybook-textarea{
   margin-top: 0px;
   resize: none;
-  padding: 10px !important; 
+  padding: 10px !important;
   width: 100%;
   border: 1px solid #dddddd;
   height: 320px !important;
