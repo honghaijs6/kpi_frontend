@@ -21,6 +21,7 @@ import reducerOrder from './reducer-order';
 import reducerProduct from './reducer-product';
 import reducerCategory from './reducer-category';
 import reducerSupplier from './reducer-supplier';
+import reducerUnit from './reducer-unit';
 
 
 
@@ -40,7 +41,8 @@ const allReducers = combineReducers({
   order:reducerOrder,
   products:reducerProduct,
   categories:reducerCategory,
-  suppliers:reducerSupplier
+  suppliers:reducerSupplier,
+  units:reducerUnit
 
 });
 

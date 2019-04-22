@@ -1,8 +1,11 @@
 import {PRODUCT_TYPE_DECO} from '../../../../config/product.conf';
 
-
 /* OBJECT - PLUGIN*/
 import Model from '../../../../model/model';
+
+/*  HOOKS */
+import doLoadAll from '../../../../hook/ultil/doLoadAll';
+
 
 
 import React, { Component } from 'react';
@@ -44,7 +47,11 @@ class ProductPage extends Component{
       tab:MODE_TAB
     }
 
-    this.data = {}
+    this.data = {
+      [MODE]:[],
+      'categories':[],
+      'units':[]
+    }
 
     this.grid = {
       colums:[
@@ -156,7 +163,7 @@ class ProductPage extends Component{
   componentDidMount(){
     //this._isMounted = true;
     this.model.initData();
-
+    
   }
 
 
@@ -164,13 +171,29 @@ class ProductPage extends Component{
 
     // revice redux data
     this.data[MODE] = newProps[MODE]['list'] || [] ;
-    this.resetGrid();
+    this.resetGrid(); // HAD INSIDE setSatte 
+    
 
   }
 
   /* WHERE*/
-  _whereStateChange(newState){
+  async _whereStateChange(newState){
     this.setState(Object.assign(this.state,newState));
+
+    switch(newState.onAction){
+        case 'open_modal':
+        const resCate =  await doLoadAll('categories'); 
+        this.data.categories = resCate.name === 'success' ? resCate.rows : [] ; 
+        this.setState({
+          onAction:'doLoadAll'
+        });
+        
+        const resUnit = await doLoadAll('units') ; 
+        this.data.units = resUnit.name === 'success' ? resUnit.rows : [] ;
+        this.setState({onAction:'doLoadAll'});
+      break ;
+    }
+
   }
 
 
@@ -186,6 +209,9 @@ class ProductPage extends Component{
             typeAction={ this.state.typeAction }
             modal={this.modal}
             width='70%'
+
+            categories={ this.data.categories }
+            units={ this.data.units }
 
           />
           <BenGrid
@@ -211,7 +237,9 @@ class ProductPage extends Component{
 
 function mapStateToProps(state){
   return {
-     [MODE]:state[MODE]
+     [MODE]:state[MODE],
+     'categories':state.categories,
+     'units':state.units
   }
 }
 

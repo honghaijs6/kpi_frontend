@@ -7,10 +7,16 @@ import uploadPhoto from '../../../../hook/ultil/uploadPhoto';
 import React, { Component } from 'react';
 import {  Row, Col,  FormGroup, Input  } from 'reactstrap';
 
+import CKEditor from "react-ckeditor-component";
+
+
+
+
 import BenModal from '../../../../components/BenModal';
 import InputNumeral from '../../../../components/InputNumeral';
+import InputSuggest from '../../../../components/InputSuggest'; 
 
-import CKEditor from "react-ckeditor-component";
+
 
 
 
@@ -18,7 +24,7 @@ function FormRow1(props){
 
   const modal = props.modal;
   const data = modal.data ;
-
+  
   return(
     <div className="row-form">
       <h6 className="txt-green text-uppercase"> Thông tin sản phẩm  </h6>
@@ -49,17 +55,21 @@ function FormRow1(props){
             <FormGroup>
               <label> Danh mục </label>
               <Input id="categories_id" type="select">
-                <option>  </option>
+                {
+                  props.categories.map((item)=>{
+                    return(
+                      <option key={item.id} value={item.id}> { item.name } </option>
+                    )
+                  })
+                }
               </Input>
-
-
             </FormGroup>
           </Col>
           <Col md={2}>
              <FormGroup>
                 <label> Nhà cung cấp </label>
-                <Input id="supplier_codes"  type="text" />
-                <ul className="suggest-holder" ></ul>
+                <InputSuggest id="supplier_codes" />  
+                
              </FormGroup>
           </Col>
 
@@ -115,7 +125,13 @@ function FormRow2(props){
              <FormGroup>
                 <label> ĐVT </label>
                 <Input id="unit" type="select">
-                  <option>  </option>
+                  {
+                    props.units.map((item)=>{
+                      return(
+                        <option key={item.id} value={item.id} > { item.name } </option>
+                      )
+                    })
+                  }
                 </Input>
              </FormGroup>
           </Col>

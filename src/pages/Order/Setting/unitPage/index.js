@@ -25,9 +25,9 @@ import formCtrl from './formCtrl';
 /*INCLUDE OTHER COMPONENT*/
 import { BenGrid } from '../../../../components/BenGrid2';
 
-const MODE = 'categories';
-const MODE_TAB = 'categoryPage';
-const MODE_NAME = 'Danh Mục';
+const MODE = 'units';
+const MODE_TAB = 'unitPage';
+const MODE_NAME = 'Đơn vị tính';
 
 
 class CategoryPage extends Component{
@@ -50,7 +50,6 @@ class CategoryPage extends Component{
     this.grid = {
       colums:[
         {headerName: "Tên ", field: "name",width:400},
-        {headerName: "Thứ tự", field: "sort",width:120},
         {headerName: "Người tạo", field: "creator",width:200},
         {headerName: "Ngày tạo", field: "date_created",width:200,
           
@@ -126,7 +125,16 @@ class CategoryPage extends Component{
   
   
 
-  
+  _listenStore(){
+
+    /*this.unsubscribe = Store.subscribe(()=>{
+
+      this.data[MODE] = Store.getState()[MODE].list || []  ;
+      this.resetGrid();
+
+    })*/
+  }
+
   componentWillUnmount(){
     console.log('unmoutn from catepage');
     this._isData = false; 
@@ -164,7 +172,7 @@ class CategoryPage extends Component{
             name={ formTitle }
             typeAction={ this.state.typeAction }
             modal={this.modal}
-
+            
           />
           <BenGrid
 

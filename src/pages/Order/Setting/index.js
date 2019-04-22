@@ -11,6 +11,7 @@ import CauseDelPage from './causeDelPage';
 
 import SettingOrderPage from './settingOrderPage';
 import NotificationPage from './notificationPage';
+import UnitPage from './unitPage';
 
 
 
@@ -34,6 +35,7 @@ class OrderSetting extends Component{
         {icon:'', code:'causeDelPage',name:'Lý do huỷ đơn hàng'},
         {icon:'', code:'settingOrderPage',name:'Cấu hình tạo đơn hàng'},
         {icon:'', code:'notificationPage',name:'Cài đặt thông báo'},
+        {icon:'', code:'unitPage',name:'Đơn vị tính'},
       ]
     }
 
@@ -64,9 +66,8 @@ class OrderSetting extends Component{
                 <CauseDelPage {...this.state} />
                 <SettingOrderPage {...this.state} />
                 <NotificationPage {...this.state} />
-
-
-
+                <UnitPage {...this.state} /> 
+        
 
               </BenExplorer>
             </main>

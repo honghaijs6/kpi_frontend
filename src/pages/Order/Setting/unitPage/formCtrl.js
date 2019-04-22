@@ -1,4 +1,5 @@
 
+
 import { detectForm } from '../../../../hook/before';
 
 
@@ -21,7 +22,6 @@ class formController {
     _stateDataTemp(){
       return {
         name:'',
-        sort:0
       }
     }
 
@@ -87,7 +87,7 @@ class formController {
     toggle(){
 
       this.active = !this.active;
-      this.popover.active =  false;
+      
 
       // -->
       this._whereStateChange({
@@ -118,36 +118,7 @@ class formController {
 
     }
 
-    popover = {
-        active:false,
-
-        parent:this,
-        btnYes(){
-
-
-          const id = this.parent.data.id;
-
-          this.parent.model.delete(id,(res)=>{
-
-              this.parent._whereStateChange({
-                onAction:'btnYes',
-                typeAction:'delete',
-                status:res.name
-              });
-
-          })
-
-        },
-
-        toggle(){
-
-           this.active = !this.active;
-           this.parent._whereStateChange({
-             onAction:'toggle_popover'
-           })
-
-        }
-    }
+    
 
 
 }

@@ -13,11 +13,8 @@ nhật ký : thu - chi : từ tài khoản
 import { toast } from '../../hook/after';
 
 
-import { CATEGORIES } from '../../model/model-mode';
-import { CATEGORY_NAME } from '../../model/model-name';
-
-const MODE = CATEGORIES;
-const NAME = CATEGORY_NAME;
+const MODE = 'units';
+const NAME = 'Đơn vị tính'; 
 
 const iniState = {
   mode:MODE,
@@ -41,8 +38,6 @@ export default function(state = iniState ,action = {}){
 
     /* PROACTIVE : DATA */
     case 'GET-'+MODE:
-
-      console.log(action.list);
 
       return {
         ...state,
@@ -87,14 +82,12 @@ export default function(state = iniState ,action = {}){
 
     /* PASSIVE DATA : realtime received on listenServer  */
     case 'reset-'+MODE:
-
-
       return {
         ...state,
         list:action.list
       }
     break ;
-
+      
 
     default:
 
