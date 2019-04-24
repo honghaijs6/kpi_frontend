@@ -16,6 +16,7 @@ import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import GridFooter from './GridFooter';
 
 import BenConfirm from '../BenConfirm';
+import BenMessage from '../BenMessage';
 
 
 
@@ -26,9 +27,23 @@ class BenGrid extends Component{
     super(props);
 
 
-    const gridID = props.gridID || 'id';
-
-
+    const gridID = props.gridID || '_id';
+    
+    this.tools = {
+      add:{
+        icon:'fa fa-plus',
+        name:'Add'
+      },
+      edit:{
+        icon:'fa fa-pencil',
+        name:'Remove'
+      },
+      remove:{
+        icon:'fa fa-trash',
+        name:'Remove'
+      }
+      
+    }
 
     this.state = {
       isGridReady:false,
@@ -41,7 +56,7 @@ class BenGrid extends Component{
         {
           headerName: "SID",
           field: gridID,
-          width:140,
+          width:200,
           checkboxSelection: true,
           filterParams: { newRowsAction: "keep" },
           checkboxSelection: function(params) {
@@ -55,7 +70,7 @@ class BenGrid extends Component{
         },
         ...props.nextColums
       ],
-      rowSelection: "multiple",//"multiple",
+      rowSelection:  props.rowSelection || "multiple" ,
 
           /*defaultColDef: {
             editable: true,
@@ -64,13 +79,14 @@ class BenGrid extends Component{
             enableValue: true
           },*/
       rowData: [],
-      count: this.props.model.db.total ,
-      selectedData:[]
+      count: props.model.db.total ,
+      selectedData:[],  
+      displayBtn: props.displayBtn ||  ['add','edit','remove']
     }
 
     this.model = props.model;
 
-    this.onBtnNew = this.onBtnNew.bind(this);
+    
     this.onFindKeyUp = this.onFindKeyUp.bind(this);
     this.onBtnFind = this.onBtnFind.bind(this);
 
@@ -92,7 +108,7 @@ class BenGrid extends Component{
         // REMOVE ROW
         this.gridApi.updateRowData({ remove: this.state.selectedData });
       }
-
+      
     }
 
     this.setState({
@@ -123,33 +139,15 @@ class BenGrid extends Component{
 
 
   }
-
-  onBtnNew(){
-    this.props.onBtnNew();
-  }
-  onBtnEdit(){
-
-
-    this.props.onBtnEdit(this.state.selectedData[0]);
-
-
-  }
-
-  onDownload(){
-    alert(JSON.stringify(this.state.rowData));
-
-  }
-
-  async onBtnDel(){
+  
+  async _remove(){ 
 
     const records = this.state.selectedData.length;
 
     let result = await BenConfirm({
       title: 'Warning',
       message: "Are you sure you want to delete "+ records+' records ?',
-
-
-
+      
     });
 
     if(result){
@@ -164,9 +162,40 @@ class BenGrid extends Component{
 
     }
 
-    //this.props.onBtnDel(this.state.selectedData);
 
   }
+
+  _onBtnClick(action){
+    
+    
+    if(action==='add'){
+
+      if(this.props.onBtnAdd !== undefined){
+        this.props.onBtnAdd();
+      }
+
+    }else{
+
+      const records = this.state.selectedData.length;
+      if(records>0){
+
+        switch(action){
+
+          case 'edit':
+            this.props.onBtnEdit(this.state.selectedData[0]);
+          break ;
+
+          case 'remove':
+            this._remove();
+          break ;
+
+        }
+      }else{ BenMessage({message:'You have to select record first!'}) }
+      
+    }
+    
+    
+  } 
 
   onSelectionChanged(){
     const selectedNodes = this.gridApi.getSelectedNodes()
@@ -178,9 +207,9 @@ class BenGrid extends Component{
 
     // alway call back data on selected ;
     if(this.props.onCellSelected){
-      this.props.onCellSelected(selectedData[0]) // this.props.onBtnEdit(this.state.selectedData[0]);
+      this.props.onCellSelected(selectedData[0]) 
     }
-
+    
   }
 
   /* HOW */
@@ -191,21 +220,9 @@ class BenGrid extends Component{
   }
   render(){
 
-    let disabledBtnEdit = this.state.selectedData.length > 0 ? false : true;
-    disabledBtnEdit = this.state.selectedData.length > 1 ? true : disabledBtnEdit;
-    let disabledBtnDel = this.state.selectedData.length > 0 ? false : true;
-
+    
     const clnRightTool =  this.state.isRightTool ? '' : 'hidden';
-
-
-    let grLeftBtn = <ButtonGroup>
-                        <Button disabled={ disabledBtnEdit } onClick={ this.onBtnEdit.bind(this) } className={ 'btn-ubuntu'} > <i className="fa fa-pencil"></i> </Button>
-                        <Button disabled={ disabledBtnDel } onClick={ this.onBtnDel.bind(this) }  className={ 'btn-ubuntu'} > <i className="fa fa-trash"></i> </Button>
-                      </ButtonGroup>
-
-    grLeftBtn = this.state.isLeftTool ? grLeftBtn : null ;
-
-
+    
 
     return (
 
@@ -213,15 +230,23 @@ class BenGrid extends Component{
           <div className="toolbar">
             <Row>
               <Col md={6}>
+                <ButtonGroup>
+                  {
+                    this.state.displayBtn.map((item,index)=>{
+                       return(
+                        <Button key={index}  onClick={ ()=>{ this._onBtnClick(item) } } className={ 'btn-ubuntu'} > <i className={ this.tools[item]['icon'] }></i> </Button>
+                       )
+                    })
+                  }
+                  </ButtonGroup>
 
-                  { grLeftBtn }
                   { this.props.leftButton }
               </Col>
               <Col md={6} className={'text-right '+ clnRightTool}>
 
                 { this.props.customButton }
-                <ButtonGroup>
-
+                <ButtonGroup style={{marginRight:6}}>
+                    
                     <Input  placeholder="Search" onKeyUp={ this.onFindKeyUp }  style={{borderRadius:0}}  />
                     <Button style={{marginRight:10}} onClick={ this.onBtnFind }  className="btn-ubuntu"> <i className="fa fa-search"></i> </Button>
 
@@ -234,7 +259,6 @@ class BenGrid extends Component{
 
           <div className="ag-theme-material" id="myGrid" style={{boxSizing: "border-box", height: this.state.height, padding:'1rem'}}>
               <AgGridReact
-
 
                   onSelectionChanged={this.onSelectionChanged.bind(this)}
                   enableSorting={true}

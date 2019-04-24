@@ -358,7 +358,7 @@ class Model {
   find(key){
 
     const base  = this.db.base.replace('?','');
-    const url = base+'/listAll/all?p=0&max=all&key='+key;
+    const url = base+'/listAll/all?p=0&max='+this.paginate.max+'&key='+key;
 
     this.call(url,(res)=>{
 

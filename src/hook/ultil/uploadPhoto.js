@@ -4,7 +4,7 @@ const uploadPhoto=(file)=>{
     return new Promise((resolve,reject)=>{
         const xhr = new XMLHttpRequest(); // eslint-disable-line no-undef
         xhr.open("POST", "https://api.imgur.com/3/image");
-        xhr.setRequestHeader("Authorization", "Client-ID 8d26ccd12712fca");
+        xhr.setRequestHeader("Authorization", "Client-ID c3714c01c1bddb4");
         const data = new FormData(); // eslint-disable-line no-undef
         data.append("image", file);
         xhr.send(data);

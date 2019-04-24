@@ -1,8 +1,6 @@
 
 import {PRODUCT_TYPE} from '../../../../config/product.conf';
 
-// hook
-import uploadPhoto from '../../../../hook/ultil/uploadPhoto';
 
 import React, { Component } from 'react';
 import {  Row, Col,  FormGroup, Input  } from 'reactstrap';
@@ -15,6 +13,7 @@ import CKEditor from "react-ckeditor-component";
 import BenModal from '../../../../components/BenModal';
 import InputNumeral from '../../../../components/InputNumeral';
 import InputSuggest from '../../../../components/InputSuggest'; 
+import ButtonUploadImage from '../../../../components/ButtonUploadImage';
 
 
 
@@ -24,6 +23,7 @@ function FormRow1(props){
 
   const modal = props.modal;
   const data = modal.data ;
+
   
   return(
     <div className="row-form">
@@ -44,7 +44,7 @@ function FormRow1(props){
           <Col md="2">
             <FormGroup>
               <label> Serial? </label>
-              <Input id="is_serial" onChange={(e)=>{ modal.onChange('is_serial',e.target.value) }}  type="select">
+              <Input id="is_serial" onChange={(e)=>{ modal.onChange('is_serial',e.target.value) }} defaultValue={ data.is_serial }  type="select">
                 <option value={0}> Không </option>
                 <option value={1}> Có </option>
               </Input>
@@ -54,7 +54,8 @@ function FormRow1(props){
           <Col md={2}>
             <FormGroup>
               <label> Danh mục </label>
-              <Input id="categories_id" type="select">
+              <Input id="categories_id" onChange={(e)=>{ modal.onChange('categories_id',e.target.value) }} value={ data.categories_id } type="select">
+                <option value=""> Vui lòng chọn </option>
                 {
                   props.categories.map((item)=>{
                     return(
@@ -68,8 +69,8 @@ function FormRow1(props){
           <Col md={2}>
              <FormGroup>
                 <label> Nhà cung cấp </label>
-                <InputSuggest id="supplier_codes" />  
-                
+                <InputSuggest strModel='suppliers' onSelected={(code)=>{ modal.onChange('supplier_codes',code) }} value={ data.supplier_codes }  id="supplier_codes" />  
+                  
              </FormGroup>
           </Col>
 
@@ -84,8 +85,9 @@ function FormRow2(props){
   const modal = props.modal;
   const data = modal.data ;
 
-  let photo_url = data.photo ;
-  photo_url = props.onAction === 'handleFile' ? props.photo.base64 : photo_url;
+  let photo_url = data.images ;
+  
+  
 
   return(
     <div style={{marginTop: -20}} className="row-form">
@@ -94,22 +96,20 @@ function FormRow2(props){
           <Col md="2">
             <FormGroup>
               <label> Giá nhà máy <span className="text-danger">*</span></label>
-              {/*<Input  id="price_1"  defaultValue={ data.price_1 }  type="text"/> */}
-
-              <InputNumeral onChange={(value)=>{ console.log(value); }} id="price_1"  defaultValue={ data.price_1 } />
+              <InputNumeral onChange={(value)=>{ modal.onChange('price_1',value) }} id="price_1"  defaultValue={ data.price_1 } />
 
             </FormGroup>
           </Col>
           <Col md="2">
             <FormGroup>
               <label> Giá gốc  <span className="text-danger">*</span> </label>
-              <InputNumeral id="price_2" defaultValue={ data.price_2 }   type="text"/>
+              <InputNumeral id="price_2" onChange={(value)=>{ modal.onChange('price_2',value) }} defaultValue={ data.price_2 }   type="text"/>
             </FormGroup>
           </Col>
           <Col md="2">
             <FormGroup>
               <label>Giá ĐL </label>
-              <InputNumeral id="price_3"  defaultValue={ data.price_3 }    type="text"/>
+              <InputNumeral id="price_3" onChange={(value)=>{ modal.onChange('price_3',value) }}  defaultValue={ data.price_3 }    type="text"/>
 
             </FormGroup>
           </Col>
@@ -117,14 +117,15 @@ function FormRow2(props){
           <Col md={2}>
             <FormGroup>
               <label>Giá lẻ </label>
-              <InputNumeral id="price_4"  defaultValue={ data.price_4 }  type="text"/>
+              <InputNumeral id="price_4" onChange={(value)=>{ modal.onChange('price_4',value) }} defaultValue={ data.price_4 }  type="text"/>
             </FormGroup>
           </Col>
 
           <Col md={2}>
              <FormGroup>
                 <label> ĐVT </label>
-                <Input id="unit" type="select">
+                <Input id="unit" type="select" onChange={(e)=>{ modal.onChange('unit',e.target.value) }} value={ data.unit } >
+                  <option value="">Vui lòng chọn</option>
                   {
                     props.units.map((item)=>{
                       return(
@@ -138,7 +139,7 @@ function FormRow2(props){
           <Col md="2">
              <FormGroup>
                 <label> Thuộc </label>
-                <Input id="type" type="select">
+                <Input id="type" type="select" onChange={(e)=>{ modal.onChange('type',e.target.value) }} value={ data.type } >
                     {
 
                       Object.keys(PRODUCT_TYPE).map((item)=>{
@@ -160,13 +161,9 @@ function FormRow2(props){
         <Col md={6}>
           <Row>
             <Col md={6}>
-                <button className="btn btn-ubuntu" style={{
-                    width: 90,height: 90
-                  }}>
-                    <i className="fa fa-upload" style={{fontSize: 20}}></i>
-                    <Input id="photo" style={{width: 90,height: 90,position: 'absolute', top:0, left: 15, opacity: 0}} type="file"
-                    onChange={ (e)=> { props.handleFile(e) } } ></Input>
-                </button>
+                
+                <ButtonUploadImage onUploaded={(res)=>{ props.onUploaded(res) }} />
+                
             </Col>
             <Col md={6}>
                 <div style={{
@@ -194,35 +191,57 @@ class MyForm extends Component {
     super(props);
 
     this.state = {
-      contentState:null,
-      updateContent:'Hello'
+      onAction:'',
+      content:props.modal.data.content,
+
     }
 
     this.onChange = this.onChange.bind(this);
 
   }
 
+  componentWillReceiveProps(newProps){
+
+    this.setState({
+      content:newProps.modal.data.content
+    })
+  }
+
   onChange(evt){
 
-      var newContent = evt.editor.getData();
+      const newContent = evt.editor.getData();
+      this.props.modal.onChange('content',newContent);
 
       this.setState({
         content: newContent
       })
   }
 
+  _onUploadImage(res){
+    if(res.success !== false){
 
+      this.props.modal.onChange('images',res.data.link);
+      this.setState({
+        onAction:'_onUploadImage'
+      })
+
+    }
+  }
+
+  
   render(){
 
+    
 
     return(
        <BenModal width={ this.props.width } name={ this.props.name } typeAction={ this.props.typeAction } modal={ this.props.modal }  >
 
           <FormRow1 {...this.props} />
-          <FormRow2 {...this.props} />
+          <FormRow2 onUploaded={(res)=>{ this._onUploadImage(res) }} {...this.props} />
 
           <div>
             <CKEditor
+              
               activeClass="p10"
               content={this.state.content}
               events={{

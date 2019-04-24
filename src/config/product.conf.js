@@ -11,3 +11,10 @@ export const PRODUCT_TYPE = {
   'root-project':'Dự án',
   'root-service':'Dịch vụ'
 }
+
+export const LIST_PRODUCT_TYPE = [
+  { code:'root', name:'SP Chính' },
+  { code:'non-root', name:'SP Phụ' },
+  { code:'root-project', name:'SP Dự án' },
+  { code:'root-service', name:'SP Dịch vụ' },
+];

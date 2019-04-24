@@ -1,17 +1,19 @@
-import {PRODUCT_TYPE_DECO} from '../../../../config/product.conf';
+import {PRODUCT_TYPE_DECO,LIST_PRODUCT_TYPE} from '../../../../config/product.conf';
+
 
 /* OBJECT - PLUGIN*/
 import Model from '../../../../model/model';
 
 /*  HOOKS */
 import doLoadAll from '../../../../hook/ultil/doLoadAll';
+import { doGetModelInfo } from '../../../../hook/ultil'
 
 
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Button } from 'reactstrap';
+import { Button, Input, ButtonGroup } from 'reactstrap';
 
 
 
@@ -27,6 +29,8 @@ import formCtrl from './formCtrl';
 
 /*INCLUDE OTHER COMPONENT*/
 import { BenGrid } from '../../../../components/BenGrid2';
+import SelectListModel  from '../../../../components/SelectListModel';
+import SelectList from '../../../../components/SelectList'; 
 
 
 const MODE = 'products';
@@ -149,8 +153,17 @@ class ProductPage extends Component{
     })
 
   }
-  _doOpenModalUpdate(data){
-      alert('process code')
+  async _doOpenModalUpdate(data){
+      
+      const info =  await doGetModelInfo('products',data.id);
+      Object.assign(data,info)
+      this.modal.open('put',data);
+
+      this._whereStateChange({
+        typeAction:'put',
+        onAction:'open_modal'
+      });
+
   }
   /* END HOW*/
 
@@ -217,17 +230,23 @@ class ProductPage extends Component{
           <BenGrid
 
              height='79vh'
-
+             rowSelection="single"
+             gridID="id"
              onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
-             isRightTool={ true }
+             onBtnAdd={this.onBtnNew} 
 
+             isRightTool={ true }
              nextColums={ this.grid.colums }
              rowData={this.grid.rowData}
              model={ this.model }
 
              customButton={
-               <Button onClick={this.onBtnNew}  style={{ marginRight:10, borderRadius:0}}  className="btn-ubuntu"  > <i className="fa fa-plus"></i> Tạo  </Button>
+                <ButtonGroup style={{marginRight:10}}>
 
+                    <SelectListModel onChange={(e)=>{ alert(e.target.value) }} strModel="categories" name="Danh Mục" style={{borderRadius:0, marginRight:10}} />
+                    <SelectList onChange={(e)=>{ alert(e.target.value) }} name="Loại" style={{borderRadius:0}} rows={ LIST_PRODUCT_TYPE } />
+
+                </ButtonGroup>
              }
           />
       </div>

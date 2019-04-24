@@ -12,6 +12,7 @@ class formController {
         status:''
       }
 
+      this.data = {};
       this.model = model ;
       this.dispatcher = dispatcher || null ;
 
@@ -28,8 +29,8 @@ class formController {
         price_2:0,
         price_3:0,
         price_4:0,
-        unit:'',
-        type:'main',
+        unit:0,
+        type:'root',
         images:'',
         content:''
       }
@@ -41,20 +42,21 @@ class formController {
       /* HOOKED detectForm before save data*/
       // -->
       const fields = [
-        'code','name','price_1','price_2','price_3','price_4'
+        'code','name','categories_id','supplier_codes','price_1','price_2','price_3','price_4','unit'
       ];
+
       
-      /*if(detectForm(fields,this.data)===''){
+      
+      if(detectForm(fields,this.data)===''){
 
           this.model.axios(typeAction,this.data,(res)=>{
-            // -->
             this._whereStateChange({
               onAction:'onSubmit',
               status:res.name
             });
 
           })
-      }*/
+      }
 
     }
 
@@ -63,7 +65,11 @@ class formController {
       Object.assign(this.data,{ [name]:value});
       //this.data[name] = e.target.value;
       // --> initial HOW -> WHERE
-      this.processForm(name,value);
+      
+      if(name!=='content'){
+        this.processForm(name,value);
+      }
+
     }
 
     /* START : HOW */
@@ -108,7 +114,8 @@ class formController {
       Object.assign(this.state,newState);
 
       if(newState.status ==='success'){
-        this.toggle()
+        this.toggle(); 
+
       }else{
         //alert('FORM-'+this.model.model);
         this.dispatcher({
