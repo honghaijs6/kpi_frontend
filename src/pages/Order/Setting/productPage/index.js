@@ -20,7 +20,7 @@ import { Button, Input, ButtonGroup } from 'reactstrap';
 import moment from 'moment';
 import numeral from 'numeral';
 
-
+  
 
 /* MODAL FORM & CTRL */
 import MyForm from './Form';

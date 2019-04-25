@@ -1,11 +1,11 @@
 
-import store from '../../../redux/store';
-import { detectForm } from '../../../hook/before';
+
+import { detectForm } from '../../../../hook/before';
 
 
 class formController {
 
-    constructor(model){
+    constructor(model,dispatcher=null){
       this.active = false ; /* FOR OPEN MODAL */
 
       this.state = {
@@ -15,14 +15,14 @@ class formController {
       }
 
       this.model = model ;
+      this.dispatcher = dispatcher; 
 
     }
 
     _stateDataTemp(){
       return {
-        code:'',
         name:'',
-        address:''
+        description:''
       }
     }
 
@@ -33,11 +33,12 @@ class formController {
       /* HOOKED detectForm before save data*/
       // -->
       const fields = [
-        'code','name','address'
+        'name'
       ];
 
       if(detectForm(fields,this.data)===''){
 
+          
           this.model.axios(typeAction,this.data,(res)=>{
             // -->
             this._whereStateChange({
@@ -81,14 +82,13 @@ class formController {
 
        });
 
-       console.log(this.data);
     }
 
 
     toggle(){
 
       this.active = !this.active;
-      this.popover.active =  false;
+      
 
       // -->
       this._whereStateChange({
@@ -107,44 +107,19 @@ class formController {
         this.toggle()
       }else{
         //alert('FORM-'+this.model.model);
-        store.dispatch({
-          type:'STATE-'+this.model.model,
-          state:this.state
-        })
+
+        if(this.dispatcher!==null){
+          this.dispatcher({
+            type:'STATE-'+this.model.model,
+            state:this.state
+          })
+        }
+
       }
 
     }
 
-    popover = {
-        active:false,
-
-        parent:this,
-        btnYes(){
-
-
-          const id = this.parent.data.id;
-
-          this.parent.model.delete(id,(res)=>{
-
-              this.parent._whereStateChange({
-                onAction:'btnYes',
-                typeAction:'delete',
-                status:res.name
-              });
-
-          })
-
-        },
-
-        toggle(){
-
-           this.active = !this.active;
-           this.parent._whereStateChange({
-             onAction:'toggle_popover'
-           })
-
-        }
-    }
+    
 
 
 }

@@ -2,16 +2,6 @@ import React, {Component} from 'react';
 
 import { Button, Modal, ModalHeader, ModalBody, Form} from 'reactstrap';
 
-
-/*
-BenModal : props
-  - onAction :  rule state : { onAction, status}
-  - modal : it is a controller class
-  - name : string
-
-  refErr : React.createRef  object
-*/
-
 class BenModal extends Component{
 
 
@@ -67,6 +57,14 @@ class BenModal extends Component{
 
       </Modal>
     )
+  }
+}
+
+BenModal.defaultProps = {
+  modal:{
+    active:false,
+    toggle:function(){ alert('toggle close Modal') },
+    onSubmit:function(){ alert('on submit form') }
   }
 }
 

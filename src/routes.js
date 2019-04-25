@@ -96,6 +96,13 @@ const OrderView = Loadable({
   loading:Loading
 });
 
+//  TẠO BÁO GIÁ
+const OrderAddQuot = Loadable({
+  loader:()=> import('./pages/Order/AddQuot'),
+  loading:Loading 
+});
+
+
 const OrderPromotion = Loadable({
   loader:()=> import('./pages/Order/Promotion'),
   loading:Loading
@@ -183,6 +190,7 @@ const routes = [
   { path: '/customer/crmsms', exact:true , name:'Lịch sử gủi SMS', component:CustomerCrmsms},
 
   { path: '/order/_s', exact:true , name:'DS Đơn hàng', component:OrderView},
+  { path: '/order/add', name:'Tạo Báo Giá', component:OrderAddQuot },
   { path: '/order/promotion', exact:true , name:'Chương trình khuyến mãi', component:OrderPromotion},
   { path: '/order/shippingmethod', exact:true , name:'Nhà Vận Chuyển', component:OrderShippingMethod},
   { path: '/order/summary', exact:true , name:'Báo cáo', component:OrderSummary},

@@ -5,10 +5,10 @@ import React, { Component } from 'react';
 /* INCLUDE */
 import {BenExplorer} from '../../../components/BenExplorer';
 
-import Coin from './Coin'; // LOAD TÀI KHOẢN
-import CoinTrackIn from './CoinTrackIn'; // LOAD PHIẾU THU
-import CoinTrackOut from './CoinTrackOut'; // LOAD PHIẾU THU
-import CointSetting from './CointSetting'; // LOAD PHIẾU THU
+import BillAccountPage from './BillAccountPage'; // LOAI TÀI KHOẢN THANH TOÁN
+import BillDisplaySetting from './BillDisplaySetting' ; 
+import PaymentLimitPage from './PaymentLimitPage' ;
+
 
 
 class CashflowSetting extends Component{
@@ -22,12 +22,12 @@ class CashflowSetting extends Component{
       onAction:'',
       status :'',
 
-      onTab:'coin',
+      onTab:'BillAccountPage',
       leftData:[
-        {icon:'', code:'coin',name:'Loại tài khoản',active:true},
-        {icon:'', code:'cointrack_in',name:'Loại phiếu thu'},
-        {icon:'', code:'cointrack_out',name:'Loại phiếu chi'},
-        {icon:'', code:'cointrack_setting',name:'Cấu hình Thu - Chi'}
+        {icon:'', code:'BillAccountPage',name:'Loại tài khoản',active:true},
+        {icon:'', code:'BillDisplaySetting',name:'Cấu hình Thu - Chi'},
+        {icon:'', code:'PaymentLimitPage',name:'Hạn mức thanh toán'}
+        
       ]
     }
 
@@ -56,10 +56,11 @@ class CashflowSetting extends Component{
             <main>
 
                 <BenExplorer onLeftSideChange={ this._onLeftSideChange } data={this.state.leftData} >
-                   <Coin {...this.state} />
-                   <CoinTrackIn {...this.state} />
-                   <CoinTrackOut {...this.state} />
-                   <CointSetting {...this.state} />
+
+                   <BillAccountPage {...this.state} />
+                   <BillDisplaySetting {...this.state} /> 
+                   <PaymentLimitPage {...this.state} />
+                   
 
                 </BenExplorer>
 

@@ -1,8 +1,10 @@
+'use strict'
+
 import React, { Component } from 'react';
 import {  Row, Col, Label,  Form, FormGroup,FormText, Input, Table, Button, ButtonGroup  } from 'reactstrap';
 
+
 import BenModal from '../../../components/BenModal';
-import BenButtonSelect from '../../../components/BenButtonSelect';
 
 function FrmLeft(props){
 
@@ -51,7 +53,6 @@ function FrmLeft(props){
   )
 
 }
-
 
 function FrmRight(props){
 
@@ -181,13 +182,18 @@ function FrmRight(props){
     </div>
   )
 }
-class OrderForm extends Component {
+
+
+export default class MyForm extends Component {
 
    render(){
 
+    const modal = this.props.modal || {};
+    const data = modal.data || {};
 
+  
      return(
-       <BenModal width={ this.props.width } name={ this.props.name } typeAction={ this.props.typeAction } modal={ this.props.modal }  >
+       <BenModal width={ this.props.width } name={ this.props.name }  modal={ this.props.modal }  >
           <Row>
             <Col md={3}>
               <FrmLeft modal={ this.props.modal} />
@@ -200,5 +206,3 @@ class OrderForm extends Component {
      )
    }
  }
-
- export default OrderForm;

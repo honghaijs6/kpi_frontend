@@ -22,6 +22,11 @@ import reducerProduct from './reducer-product';
 import reducerCategory from './reducer-category';
 import reducerSupplier from './reducer-supplier';
 import reducerUnit from './reducer-unit';
+import reducerDeleteReason from './reducer-delete-reason';
+import reducerTransporter from './reducer-transporter';
+
+import reducerBillAccount from './reducer-bill-account';
+import reducerPayment from './reducer-payment';
 
 
 
@@ -42,7 +47,11 @@ const allReducers = combineReducers({
   products:reducerProduct,
   categories:reducerCategory,
   suppliers:reducerSupplier,
-  units:reducerUnit
+  units:reducerUnit,
+  delete_reasons:reducerDeleteReason,
+  transporters:reducerTransporter,
+  bill_accounts:reducerBillAccount,
+  payments:reducerPayment
 
 });
 

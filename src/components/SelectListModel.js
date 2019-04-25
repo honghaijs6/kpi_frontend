@@ -34,7 +34,7 @@ class SelectListModel extends React.Component {
     render() {
         return (
             <Input onChange={(e)=>{ this.props.onChange(e) }} type="select" style={ this.props.style || {} }>
-                <option value=""> { this.state.name } : Tất cả </option>
+                <option value=""> { this.state.name } </option>
                 {
                     this.state.rows.map((item)=>{
                         return(

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import {  Row, Col, Label,  Form, FormGroup,FormText, Input } from 'reactstrap';
 
-import BenModal from '../../../components/BenModal';
+import BenModal from '../../../../components/BenModal';
 
-import { COIN_TYPES } from '../../../config/coin.type';
+import { COIN_TYPES } from '../../../../config/coin.type';
 
 
 
-class CoinForm extends Component {
+class MyForm extends Component {
 
 
 
@@ -57,4 +57,4 @@ class CoinForm extends Component {
    }
  }
 
- export default CoinForm;
+ export default MyForm;

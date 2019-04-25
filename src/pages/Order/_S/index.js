@@ -1,26 +1,26 @@
-import React, { Component } from 'react';
-
-import { ButtonGroup, Button } from 'reactstrap';
 
 /* OBJECT - PLUGIN*/
-import Store from '../../../redux/store';
 import Model from '../../../model/model';
 
-/* HOOKED*/
-/*............*/
+// HOOK ULTI 
+import moment from 'moment';
 
-/* NAMED*/
-import { ORDERS } from '../../../model/model-mode';
-import { ORDER_NAME } from '../../../model/model-name';
-import { POST, SEARCH } from '../../../model/action-mode';
-/*------------*/
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-/* MODAL FORM & CTRL*/
-import OrderForm from './Form';
-import orderFormCtrl from './formCtrl';
+
+
+
+/* MODAL FORM & CTRL */
+import MyForm from './Form';
+import formCtrl from './formCtrl';
+
 
 /*INCLUDE OTHER COMPONENT*/
 import { BenGrid } from '../../../components/BenGrid2';
+
+const MODE = 'transporters';
+const MODE_NAME = 'Báo giá';
 
 
 class OrderView extends Component{
@@ -36,9 +36,7 @@ class OrderView extends Component{
 
     }
 
-    this.data = {
-      orders:[]
-    }
+    this.data = {}
 
     this.grid = {
       colums:[
@@ -62,42 +60,29 @@ class OrderView extends Component{
 
     this._setup();
 
+    this.onBtnNew = this.onBtnNew.bind(this);
+
+
+
   }
 
   _setup(){
 
-    this.model = new Model(ORDERS);
-    this.model.set('paginate',{
-      offset:0,
-      p:0,
-      max:20,
-      is_deleted:0,
-      key:''
+    this.model = new Model(MODE,this.props.dispatch);
+    this.model.set('method',{
+      name:'listAll',
+      params:'all'
     });
 
-    this.formCtrl = new orderFormCtrl(this.model);
-
-    this._listenStore();
-
-    this.onBtnNew = this.onBtnNew.bind(this);
-
+    this.formCtrl = new formCtrl(this.model,this.props.dispatch);
+    
+    
 
   }
 
   /* HOW */
   resetGrid(){
-      /*let list = this.data.users || []  ;
-
-      list.filter((item)=>{
-        item['str_job_level'] = userConf.job_level[item['job_level']];
-        item['str_job_type'] = userConf.job_type[item['job_type']];
-        item['str_phone'] = item['phone'] === null ? 'n/a' : item['phone'];
-        item['str_date_created'] = moment(item['date_created']).format('YYYY-MM-DD');
-      });
-
-      //alert('resetGrid');
-      this.grid.rowData = list ;*/
-
+      
   }
 
   _doOpenModalPost(){
@@ -129,26 +114,8 @@ class OrderView extends Component{
   onBtnNew(){
     this._doOpenForm();
   }
-  /*componentDidMount(){}*/
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-  _listenStore(){
-
-    this.unsubscribe = Store.subscribe(()=>{
-
-      this.data.orders = Store.getState().order.list || []  ;
-
-      this._whereStateChange({
-        onAction:'_listenStore'
-      });
-
-    })
-  }
-
-
+  
   /* WHERE*/
-
   _whereStateChange(newState){
     this.setState(Object.assign(this.state,newState));
   }
@@ -156,39 +123,38 @@ class OrderView extends Component{
 
   render(){
 
-    const formTitle = this.state.typeAction === POST ? 'Tạo '+ ORDER_NAME  : 'Chỉnh sửa '+ORDER_NAME;
+    
     return (
       <div className="animated fadeIn">
         <div className="ubuntu-app " style={{border:0, marginTop: 20}}>
             <main>
 
-              <OrderForm
+              <MyForm
 
                 width='90%'
-                name={ formTitle }
+                name={ MODE_NAME }
                 typeAction={ this.state.typeAction }
                 modal={this.formCtrl}
 
               />
+
               <BenGrid
 
                  onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
+                 onBtnAdd={this.onBtnNew}
+                 gridID='id'
+                 rowSelection='single'
+
                  isRightTool={ true }
                  height="79.9vh"
 
                  nextColums={ this.grid.colums }
                  rowData={this.grid.rowData}
                  model={ this.model }
-                 customButton={
-                   <ButtonGroup>
 
-
-                      <Button style={{ marginRight:10, borderRadius:0}} onClick={ this.onBtnNew }  className="btn-ubuntu"  > <i className="fa fa-plus mr-5"></i> Tạo Báo Giá  </Button>
-
-                   </ButtonGroup>
-
-                 }
+                 
               />
+              
             </main>
         </div>
       </div>
@@ -196,4 +162,11 @@ class OrderView extends Component{
   }
 }
 
-export default OrderView;
+
+function mapStateToProps(state){
+  return {
+     [MODE]:state[MODE]
+  }
+}
+
+export default connect(mapStateToProps)(OrderView);

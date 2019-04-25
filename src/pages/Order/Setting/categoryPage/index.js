@@ -163,24 +163,24 @@ class CategoryPage extends Component{
           <MyForm
             name={ formTitle }
             typeAction={ this.state.typeAction }
-            modal={this.modal}
+            modal={this.modal} 
 
           />
           <BenGrid
 
              height='79.9vh'
-
+             gridID="id"
              onBtnEdit={ this._doOpenModalUpdate }
+             onBtnAdd={this.onBtnNew}   
+             rowSelection='single'
+
              isRightTool={ true }
 
              nextColums={ this.grid.colums }
              rowData={this.grid.rowData}
              model={ this.model }
 
-             customButton={
-               <Button onClick={this.onBtnNew}  style={{ marginRight:10, borderRadius:0}}  className="btn-ubuntu"  > <i className="fa fa-plus"></i> Tạo  </Button>
-
-             }
+             
           />
       </div>
     )

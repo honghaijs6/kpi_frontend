@@ -44,7 +44,7 @@
     padding: 1rem;
     border-right: 1px solid #c8ced3;
     height: 89vh + 0.5 ; overflow-y:auto;
-    background: #DEDEDE; //F0F0F0
+    background: #f0f0f0; //F0F0F0
 }
 
 .ubuntu-app nav .btn-block {
@@ -66,9 +66,11 @@
 }
 .ubuntu-app nav .nav-item:hover,.ubuntu-app nav .nav-item.active {
     position: relative;
-    background: #f0f0f0;
+    background: #18A689;
+    color: #ffffff
 
 }
+.ubuntu-app nav .nav-item span:hover,.ubuntu-app nav .nav-item.active a{ color: #fff}
 
 .ubuntu-app nav .nav-link {
     color: #23282c;

@@ -222,24 +222,24 @@ class SupplierPage extends Component{
             modal={this.modal}
             regions={ regions }
             subregions={ subregions }
-
+  
 
           />
           <BenGrid
 
              height='79.9vh'
-
+             gridID='id'
+             rowSelection='single'
+             
              onBtnEdit={ this._doOpenModalUpdate }
+             onBtnAdd={this.onBtnNew}
+
              isRightTool={ true }
 
              nextColums={ this.grid.colums }
              rowData={this.grid.rowData}
              model={ this.model }
 
-             customButton={
-               <Button onClick={this.onBtnNew}  style={{ marginRight:10, borderRadius:0}}  className="btn-ubuntu"  > <i className="fa fa-plus"></i> Tạo  </Button>
-
-             }
           />
       </div>
     )

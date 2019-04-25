@@ -1,12 +1,7 @@
 
 import React, { Component } from 'react';
-import {  Row, Col, Label,  Form, FormGroup,FormText, Input, Button } from 'reactstrap';
+import {  Row, Col, Label, FormGroup, Input, Button } from 'reactstrap';
 
-
-import CodeMirrow from 'react-codemirror';
-import 'codemirror/mode/markdown/markdown';
-import 'codemirror/mode/xml/xml';
-import 'codemirror/lib/codemirror.css';
 
 import { MAU_PHIEUCHI } from '../../../config/temp-code';
 
@@ -14,13 +9,13 @@ import { MAU_PHIEUCHI } from '../../../config/temp-code';
 import { AppSwitch } from '@coreui/react'
 
 
-class CoinTrackSetting extends Component{
+class BillDisplaySetting extends Component{
 
   constructor(props){
     super(props);
     this.state = {
 
-      tab:'cointrack_setting'
+      tab:'BillDisplaySetting'
     }
   }
 
@@ -86,16 +81,8 @@ class CoinTrackSetting extends Component{
                    <Col md="12">
                        <Label> Mẫu PHIẾU CHI để IN  </Label>
                        <a className="pl-20 pull-right"> Xem trước </a>
-
-                         <CodeMirrow
-
-                             options={{
-                               mode:"markdown",
-                               lineNumbers:true,
-                               height:600
-                             }}
-                             value={MAU_PHIEUCHI}
-                         />
+                       <Input type="textarea" defaultValue={MAU_PHIEUCHI} style={{height:300}}  />
+                        
 
 
                    </Col>
@@ -107,20 +94,8 @@ class CoinTrackSetting extends Component{
                    <Col md="12">
                       <Label> Mẫu PHIẾU THU để IN </Label>
                       <a className="pl-20 pull-right"> Xem trước </a>
-
-                        <CodeMirrow
-                            style={{
-                              height:800
-                            }}
-                            options={{
-                              mode:"markdown",
-                              lineNumbers:true
-                            }}
-                            value={MAU_PHIEUCHI}
-                        />
-
-
-
+                      <Input type="textarea" defaultValue={MAU_PHIEUCHI} style={{height:300}}  />
+                      
                    </Col>
 
                 </Row>
@@ -141,4 +116,4 @@ class CoinTrackSetting extends Component{
   }
 }
 
-export default CoinTrackSetting;
+export default BillDisplaySetting;

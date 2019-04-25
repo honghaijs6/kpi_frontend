@@ -31,6 +31,11 @@ export default {
       icon: 'icon-screen-desktop',
       children:[
         {
+          name:'Tạo báo giá',
+          url:'/order/add',
+          icon:''
+        },
+        {
           name:'DS đơn hàng',
           url:'/order/_s',
           icon:''

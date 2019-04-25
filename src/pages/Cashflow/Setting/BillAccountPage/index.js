@@ -9,9 +9,13 @@ import Model from '../../../../model/model';
 // HOOK ULTI 
 import moment from 'moment';
 
+
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+
+import { Button } from 'reactstrap';
 
 
 /* MODAL FORM & CTRL */
@@ -21,12 +25,12 @@ import formCtrl from './formCtrl';
 /*INCLUDE OTHER COMPONENT*/
 import { BenGrid } from '../../../../components/BenGrid2';
 
-const MODE = 'delete_reasons';
-const MODE_TAB = 'causeDelPage';
-const MODE_NAME = 'Lý Do Huỷ Đơn Hàng';
+const MODE = 'bill_accounts';
+const MODE_TAB = 'BillAccountPage';
+const MODE_NAME = 'Tài Khoản Thanh Toán';
 
 
-class CategoryPage extends Component{
+class BillAccountPage extends Component{
 
   _isData = false;
   constructor(props){
@@ -45,19 +49,13 @@ class CategoryPage extends Component{
 
     this.grid = {
       colums:[
-        {headerName: "Tên ", field: "name",width:400},
-        {headerName: "Người tạo", field: "creator",width:200},
-        {headerName: "Ngày tạo", field: "date_created",width:200,
-          
-          cellRenderer(params){
-
-            const humanDate = moment(params.value).format('YYYY-MM-DD')
-            return `
-             ${ humanDate }
-           `
-          }
-          
-        }
+        {headerName: "Tên", field: "code"},
+        {headerName: "Loại", field: "name", width:320},
+        {headerName: "Số TK", field: "address", width:410},
+        {headerName: "Phiếu thu", field: "creator_id"},
+        {headerName: "Phiếu Chi", field: "date_created"},
+        {headerName: "Người tạo", field: "date_created"},
+        {headerName: "Ngày tạo", field: "date_created"},
 
       ],
       rowData: []
@@ -121,8 +119,9 @@ class CategoryPage extends Component{
   
   
 
+  
   componentWillUnmount(){
-    
+    console.log('unmoutn from catepage');
     this._isData = false; 
 
   }
@@ -148,7 +147,6 @@ class CategoryPage extends Component{
 
 
   render(){
-
     
     return(
       <div hidden={  this.props.onTab === this.state.tab ? false : true } >
@@ -156,16 +154,17 @@ class CategoryPage extends Component{
           <MyForm
             name={ MODE_NAME }
             typeAction={ this.state.typeAction }
-            modal={this.modal}
-            
+            modal={this.modal} 
+
           />
           <BenGrid
-             
-             rowSelection='single'
+
              height='79.9vh'
-             gridID='id'
+             gridID="id"
              onBtnEdit={ this._doOpenModalUpdate }
-             onBtnAdd={ this.onBtnNew }
+             onBtnAdd={this.onBtnNew}   
+             rowSelection='single'
+
              isRightTool={ true }
 
              nextColums={ this.grid.colums }
@@ -186,4 +185,4 @@ function mapStateToProps(state){
 }
 
 
-export default connect(mapStateToProps)(CategoryPage)
+export default connect(mapStateToProps)(BillAccountPage)
