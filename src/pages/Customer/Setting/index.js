@@ -12,7 +12,8 @@ import CusPointRulePage from './CusPointRulePage/';
 
 
 
-class Customer extends Component{
+
+class CustomerSetting extends Component{
 
   constructor(){
     super();
@@ -22,12 +23,14 @@ class Customer extends Component{
       onAction:'',
       status:'',
 
-      onTab:'CusPointRulePage',
+      onTab:'CusTypePage',
       leftData:[
-        {icon:'', code:'CusTypePage',name:'Nhóm khách hàng'},
-        {icon:'', code:'CusStatusPage',name:'Trạng thái khách hàng'},
-        {icon:'', code:'CusOriginPage',name:'Nguồn khách hàng'},
-        {icon:'', code:'CusPointRulePage',name:'Công thức tính điểm',active:true},
+        {icon:'fa fa-folder-open', code:'CusTypePage',name:'Nhóm khách hàng',active:true},
+        {icon:'fa fa-heartbeat', code:'CusStatusPage',name:'Trạng thái khách hàng'},
+        {icon:'fa fa-anchor', code:'CusOriginPage',name:'Nguồn khách hàng'},
+        {icon:'fa fa-lightbulb-o', code:'CusPointRulePage',name:'Công thức tính điểm'},
+        {icon:'fa fa-shield', code:'CusLevelPage',name:'Cấp bậc khách hàng'},
+        
 
       ]
 
@@ -70,4 +73,4 @@ class Customer extends Component{
   }
 }
 
-export default Customer;
+export default CustomerSetting;

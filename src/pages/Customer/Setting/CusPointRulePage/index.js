@@ -78,7 +78,7 @@ export default class CusPointRulePage extends Component{
 
     this.modal = new customFormCtrl(this.model);
 
-    this._listenStore();
+    
 
   }
 
@@ -120,28 +120,7 @@ export default class CusPointRulePage extends Component{
     this._doOpenModalPost();
   }
 
-  componentDidMount(){
-    //this._isMounted = true;
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-  _listenStore(){
-
-    this.unsubscribe = Store.subscribe(()=>{
-      this.data.coins = Store.getState().coin.list || []  ;
-
-      this._whereStateChange({
-        onAction:'_listenStore'
-      });
-
-    })
-  }
-  componentWillReceiveProps(newProps){
-
-  }
-
+  
   /* WHERE*/
   _whereStateChange(newState){
     this.setState(Object.assign(this.state,newState));

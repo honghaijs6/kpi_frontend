@@ -135,9 +135,8 @@ class BenGrid extends Component{
 
   onBtnFind(){
 
-    alert(this.state.key)
-
-
+    this.model.find(this.state.key);
+    
   }
   
   async _remove(){ 

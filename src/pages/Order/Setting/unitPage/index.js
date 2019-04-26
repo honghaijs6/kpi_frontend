@@ -124,17 +124,6 @@ class CategoryPage extends Component{
   }
   
   
-
-  _listenStore(){
-
-    /*this.unsubscribe = Store.subscribe(()=>{
-
-      this.data[MODE] = Store.getState()[MODE].list || []  ;
-      this.resetGrid();
-
-    })*/
-  }
-
   componentWillUnmount(){
     
     this._isData = false; 

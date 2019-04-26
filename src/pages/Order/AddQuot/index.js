@@ -1,8 +1,13 @@
+import { isExisted } from '../../../hook/before'; 
+
 import React from 'react';
 import {  Row, Col, Label,  Form, FormGroup,FormText, Input, Table, Button, ButtonGroup  } from 'reactstrap';
 import BenModal from '../../../components/BenModal';
 
+import numeral from 'numeral';
 
+import InputNumeral from '../../../components/InputNumeral'; 
+import InputSuggest from '../../../components/InputSuggest'; 
 import SelectListModel from '../../../components/SelectListModel'; 
  
 
@@ -15,30 +20,30 @@ function FrmLeft(props){
   
           <FormGroup>
             <Label> Mã KH </Label>
-            <Input type="text" id="customer_id"  />
+            <InputSuggest onSelected={(json)=>{ props.onSelectedCustomer(json) }} strModel='customers' id="customer_id"  />
           </FormGroup>
   
           <FormGroup>
             <Label> Công ty </Label>
-            <Input type="text" disabled   />
+            <Input type="text" defaultValue={props.customer_info.name} disabled   />
           </FormGroup>
   
           <FormGroup>
             <Row>
               <Col md="6">
                 <Label> MST </Label>
-                <Input disabled type="text"   />
+                <Input disabled defaultValue={props.customer_info.tax_no} type="text"   />
               </Col>
               <Col>
                 <Label> Thuế VAT </Label>
-                <Input type="number" min={0} max={50}  defaultValue={10} id="vat"  />
+                <Input type="number" min={0} max={50} defaultValue={10} onChange={(e)=>{ props.onChange('vat',e.target.value) }} id="vat"  />
               </Col>
             </Row>
           </FormGroup>
   
           <FormGroup>
-            <Label>Hình thức thanh toán </Label>
-            <SelectListModel strModel='payments' name="Thanh Toán" />
+            <Label>Hạn mức thanh toán </Label>
+            <SelectListModel strModel='payments' name="Vui Lòng Chọn" />
 
             
             </FormGroup>
@@ -59,12 +64,12 @@ function FrmLeft(props){
   
     return(
       <div>
-        <h5 className="txt-green text-uppercase font-14 mb-20"> <i className="fa fa-file-text mr-5"></i> Báo giá cho : ABC </h5>
+        <h5 className="txt-green text-uppercase font-14 mb-20"> <i className="fa fa-file-text mr-5"></i> Báo giá cho : { props.customer_info.name } </h5>
         <FormGroup>
           <Row>
             <Col md="4">
               <Label> Sản phẩm chính </Label>
-              <Input type="text" id=""  />
+              <InputSuggest strModel='products' onSelected={(json)=>{ props.onSelectedProduct(json) }}   />
             </Col>
             <Col md="2">
               <Label> Sản phẩm phụ </Label>
@@ -118,61 +123,55 @@ function FrmLeft(props){
                 </thead>
   
                 <tbody>
-  
-                  <tr>
-                    <td style={{width:60}}>1</td>
-                    <td style={{ width:150 }}> vt300 </td>
-                    <td style={{width:410}}> Máy chấm công vân tay hiệu: Vigilance, Mã hàng : VT300+ID, hàng mới 100% </td>
-                    <td style={{ width:150 }}>
-                      <img style={{height:90,border:'1px solid #ddd'}} src="http://kpi.vikhang.com:9000/files/kpi.vikhang.com/takumi/photos/XPedPlnV5n.png"  />
-                    </td>
-                    <td tyle={{ width:90 }}> Cái </td>
-                    <td style={{width:90}}>
-                        <Input type="number" defaultValue="1" />
-                    </td>
-                    <td style={{width:120}}> <Input style={{width:'100%'}} type="text" defaultValue="200,000" />  </td>
-                    <td style={{width:120}}> 200.000,000  </td>
-                    <td style={{width:120}}> 230.000  </td>
-                    <td style={{width:90}}>
-                      <Button className="btn-trio"><i className="fa fa-trash"></i></Button>
-                    </td>
-                  </tr>
-  
-                  <tr>
-                    <td style={{width:60}}>2</td>
-                    <td style={{ width:150 }}> id-card </td>
-                    <td style={{width:410}}> Thẻ cảm ứng loại dày mã hàng : ID card (thick), hàng mới 100% </td>
-                    <td style={{ width:150 }}>
-                      <img style={{height:90,border:'1px solid #ddd'}} src="http://kpi.vikhang.com:9000/files/kpi.vikhang.com/mruan/photos/EHMZkXre6n.png"  />
-                    </td>
-                    <td tyle={{ width:90 }}> Cái </td>
-                    <td style={{width:90}}>
-                        <Input type="number" defaultValue="1" />
-                    </td>
-                    <td style={{width:120}}> <Input style={{width:'100%'}} type="text" defaultValue="200,000" />  </td>
-                    <td style={{width:120}}> 200.000,000  </td>
-                    <td style={{width:120}}> 230.000  </td>
-                    <td style={{width:90}}>
-                      <Button className="btn-trio"><i className="fa fa-trash"></i></Button>
-                    </td>
-                  </tr>
-  
-  
+
+                  {
+                    props.cart.map((item)=>{
+                      
+                      const amount = 1 ; 
+                      const price = item.price_1;
+                      const total = parseInt(price) * amount ; 
+                      const totalWithVat = 0 ;
+
+                      return(
+                        <tr key={item.id}>
+                          <td style={{width:60}}>1</td>
+                          <td style={{ width:100 }}> { item.code } </td>
+                          <td style={{width:330}}> {item.name} </td>
+                          <td style={{ width:150 }}>
+                            <img style={{height:90,border:'1px solid #ddd'}} src={ item.images }  />
+                          </td>
+                          <td tyle={{ width:90 }}> Cái </td>
+                          <td style={{width:120}}>
+                              <Input type="number" min={1} max={1000} defaultValue={1} />
+                          </td>
+                          <td style={{width:150}}> 
+                            <InputNumeral onChange={(value)=>{ props.onCardChange({row_id:item.id,field:'price',value:value}) }} defaultValue={price} />
+                          </td>
+                          <td style={{width:150}}> { numeral(total).format('0,0') }  </td>
+                          <td style={{width:130}}> { totalWithVat }  </td>
+                          <td style={{width:130}}>
+                            <Button onClick={()=>{ props.onRemoveCard(item.id) }}  className="btn-trio"><i className="fa fa-trash"></i></Button>
+                          </td>
+                        </tr>
+                      )
+                    })
+                  }
+                  
   
                 </tbody>
   
                 <tfoot>
                   <tr>
-                    <td style={{width:60}}></td>
-                    <td style={{ width:150 }}>  </td>
-                    <td style={{width:410}}>  </td>
-                    <td style={{ width:150 }}>  </td>
-                    <td tyle={{ width:90 }}>  </td>
-                    <td style={{width:90}}>   </td>
-                    <td style={{width:90}}>  Tổng tiền  </td>
-                    <td style={{width:90}}> 200.000  </td>
-                    <td style={{width:90}}>   </td>
-                    <td style={{width:90}}>   </td>
+                    <td></td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>   </td>
+                    <td>  Tổng tiền  </td>
+                    <td> 200.000  </td>
+                    <td>   </td>
+                    <td>   </td>
                   </tr>
                 </tfoot>
   
@@ -186,19 +185,94 @@ function FrmLeft(props){
 
 
 class AddQuotation extends React.Component {
+
+
+    constructor(props){
+      super(props);
+
+      this.state = {
+        customer_info:{},
+        cart:[],
+        vat:10,
+        payment_code:'',
+        note:''
+      }
+
+      this._calculateCart = this._calculateCart.bind(this) ; 
+      this._addCard = this._addCard.bind(this);
+      this._onChange = this._onChange.bind(this);
+      this._onSelectedCustomer = this._onSelectedCustomer.bind(this) ; 
+
+    }
+
+    _onSelectedCustomer(json){
+      this.setState({
+        customer_info:json
+      });
+    }
+
+    _calculateCart(json){
+      //console.log()
+      //alert(JSON.stringify(json));
+      console.log(this.state.cart);
+      
+    }
+    _updateCard(){
+
+    }
+    _removeCard(id){
+      let cart = this.state.cart ; 
+      const newCart2 = cart.filter(item=>item.id !== id) ;
+
+      this.setState({
+        cart:newCart2
+      });
+      
+
+    }
+    _addCard(json){
+
+      
+      if(!isExisted(this.state.cart,json.id)){
+
+        let cart = this.state.cart;
+        cart.push(json); 
+
+        this.setState({
+          cart:cart
+        });
+        
+      }
+      
+      
+    }
+
+    _onChange(name,value){
+       this.setState({
+         [name]:value
+       });
+       
+    }
+
     render() {
         return (
             <div className="animated fadeIn">
                 <div className="ubuntu-app " style={{border:0, marginTop: 20}}>
+
                     <Row style={{padding:40}}>
                         <Col md={3}>
-                            <FrmLeft  />
+                            <FrmLeft {...this.state} onChange={this._onChange}  onSelectedCustomer={ this._onSelectedCustomer }  />
                         </Col>
                         <Col md={9}>
 
-                            <FrmRight />
+                            <FrmRight 
+                                {...this.state} 
+                                onCardChange={ this._calculateCart } 
+                                onRemoveCard={(id)=>{ this._removeCard(id) }}  
+                                onSelectedProduct={(json)=>{  this._addCard(json)  }} 
+                            />
                             
-                            <Button style={{width:120}} className="btn btn-lg btn-ubuntu "> Đồng Ý </Button>
+                            <Button style={{width:120}} onClick={()=>{ alert(this.state.vat) }} className="btn btn-lg btn-ubuntu "> Đồng Ý </Button>
                         </Col>
                     </Row>
                     

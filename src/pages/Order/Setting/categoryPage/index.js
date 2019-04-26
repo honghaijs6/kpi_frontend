@@ -125,10 +125,7 @@ class CategoryPage extends Component{
   }
   
   
-
-  
   componentWillUnmount(){
-    console.log('unmoutn from catepage');
     this._isData = false; 
 
   }

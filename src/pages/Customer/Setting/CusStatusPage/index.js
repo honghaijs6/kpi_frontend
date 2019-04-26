@@ -76,7 +76,7 @@ export default class CusStatusPage extends Component{
 
     this.modal = new cusStatusFormCtrl(this.model);
 
-    this._listenStore();
+    //this._listenStore();
 
   }
 
@@ -121,19 +121,9 @@ export default class CusStatusPage extends Component{
   }
 
   componentWillUnmount() {
-    this.unsubscribe();
+    //this.unsubscribe();
   }
-  _listenStore(){
-
-    this.unsubscribe = Store.subscribe(()=>{
-      this.data.coins = Store.getState().coin.list || []  ;
-
-      this._whereStateChange({
-        onAction:'_listenStore'
-      });
-
-    })
-  }
+  
   componentWillReceiveProps(newProps){
 
   }

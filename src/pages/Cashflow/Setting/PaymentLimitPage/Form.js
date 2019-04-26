@@ -16,7 +16,7 @@ export default class MyForm extends Component {
 
 
      return(
-       <BenModal  {...this.props}  >
+       <BenModal  {...this.props} >
            <Row>
 
              <Col md={4}>

@@ -7,13 +7,9 @@ import reducerOffice from './reducer-office';
 import reducerStore from './reducer-store';
 import reducerUser from './reducer-user';
 
-import reducerInventory from './reducer-inventory';
-import reducerInventoryTrack from './reducer-inventory-track';
-
 import reducerPurchase from './reducer-purchase';
 
-import reducerCointTrack from './reducer-coin-track';
-import reducerCoint from './reducer-coin';
+
 
 import reducerCustomer from './reducer-customer';
 import reducerOrder from './reducer-order';
@@ -28,6 +24,8 @@ import reducerTransporter from './reducer-transporter';
 import reducerBillAccount from './reducer-bill-account';
 import reducerPayment from './reducer-payment';
 
+import reducerCusType from './reducer-customer-type' ;
+
 
 
 const allReducers = combineReducers({
@@ -37,11 +35,10 @@ const allReducers = combineReducers({
   regions:reducerRegion,
   subregions:reducerSubregion,
   store:reducerStore,
-  inventory:reducerInventory,
-  inventory_track:reducerInventoryTrack,
+  
+  
   purchase:reducerPurchase,
-  coin_track: reducerCointTrack,
-  coin:reducerCoint,
+
   customer:reducerCustomer,
   order:reducerOrder,
   products:reducerProduct,
@@ -51,7 +48,8 @@ const allReducers = combineReducers({
   delete_reasons:reducerDeleteReason,
   transporters:reducerTransporter,
   bill_accounts:reducerBillAccount,
-  payments:reducerPayment
+  payments:reducerPayment,
+  customer_types:reducerCusType
 
 });
 

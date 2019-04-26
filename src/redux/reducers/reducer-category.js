@@ -42,8 +42,6 @@ export default function(state = iniState ,action = {}){
     /* PROACTIVE : DATA */
     case 'GET-'+MODE:
 
-      console.log(action.list);
-
       return {
         ...state,
         list:action.list

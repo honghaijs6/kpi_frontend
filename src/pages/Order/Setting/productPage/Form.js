@@ -54,7 +54,7 @@ function FormRow1(props){
           <Col md={2}>
             <FormGroup>
               <label> Danh mục </label>
-              <Input id="categories_id" onChange={(e)=>{ modal.onChange('categories_id',e.target.value) }} value={ data.categories_id } type="select">
+              <Input id="categories_id" onChange={(e)=>{ modal.onChange('categories_id',e.target.value) }} defaultValue={ data.categories_id } type="select">
                 <option value=""> Vui lòng chọn </option>
                 {
                   props.categories.map((item)=>{
@@ -69,7 +69,7 @@ function FormRow1(props){
           <Col md={2}>
              <FormGroup>
                 <label> Nhà cung cấp </label>
-                <InputSuggest strModel='suppliers' onSelected={(code)=>{ modal.onChange('supplier_codes',code) }} value={ data.supplier_codes }  id="supplier_codes" />  
+                <InputSuggest strModel='suppliers' onSelected={(json)=>{ modal.onChange('supplier_codes',json.code) }} value={ data.supplier_codes }  id="supplier_codes" />  
                   
              </FormGroup>
           </Col>

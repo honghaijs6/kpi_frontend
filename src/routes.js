@@ -79,15 +79,7 @@ const CustomerSetting = Loadable({
   loading:Loading
 });
 
-const CustomerCrmemail = Loadable({
-  loader:()=> import('./pages/Customer/Crmemail'),
-  loading:Loading
-});
 
-const CustomerCrmsms = Loadable({
-  loader:()=> import('./pages/Customer/Crmsms'),
-  loading:Loading
-});
 /* END CUSTOMER */
 
 /* ORDER*/
@@ -186,8 +178,6 @@ const routes = [
   { path: '/customer/_S', exact:true , name:'Danh sách khách hàng', component:Customer},
   { path: '/customer/point', exact:true , name:'Điểm tích luỹ', component:CustomerPoint},
   { path: '/customer/setting', exact:true , name:'Thiết lập khách hàng', component:CustomerSetting},
-  { path: '/customer/crmemail', exact:true , name:'Lịch sử gủi e-mail', component:CustomerCrmemail},
-  { path: '/customer/crmsms', exact:true , name:'Lịch sử gủi SMS', component:CustomerCrmsms},
 
   { path: '/order/_s', exact:true , name:'DS Đơn hàng', component:OrderView},
   { path: '/order/add', name:'Tạo Báo Giá', component:OrderAddQuot },

@@ -7,15 +7,18 @@ import { SketchPicker } from 'react-color'
 
 export default class BenColor extends Component{
 
-  state = {
-   displayColorPicker: false,
-   color: {
-     r: '241',
-     g: '112',
-     b: '19',
-     a: '1',
-   },
-  }
+
+   constructor(props){
+
+    super(props);
+
+    this.state = {
+      displayColorPicker: false,
+      color: props.color
+    }
+
+   } 
+ 
 
     handleClick = () => {
       this.setState({ displayColorPicker: !this.state.displayColorPicker })
@@ -78,3 +81,13 @@ export default class BenColor extends Component{
     )
   }
 }
+
+BenColor.defaultProps = {
+  color: {
+    r: '241',
+    g: '112',
+    b: '19',
+    a: '1',
+  }
+}
+

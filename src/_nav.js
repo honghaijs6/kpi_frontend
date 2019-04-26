@@ -133,7 +133,7 @@ export default {
           url:'/customer/point',
           icon:''
         },
-        {
+        /*{
           name:'Lịch sử gủi e-mail',
           url:'/customer/crmemail',
           icon:''
@@ -142,7 +142,7 @@ export default {
           name:'Lich sử gủi SMS',
           url:'/customer/crmsms',
           icon:''
-        },
+        },*/
 
         {
           name:'Thiết Lập',

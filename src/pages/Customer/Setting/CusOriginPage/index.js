@@ -76,7 +76,7 @@ export default class CusOriginPage extends Component{
 
     this.modal = new cusOriginFormCtrl(this.model);
 
-    this._listenStore();
+    
 
   }
 
@@ -120,23 +120,7 @@ export default class CusOriginPage extends Component{
     //this._isMounted = true;
   }
 
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-  _listenStore(){
-
-    this.unsubscribe = Store.subscribe(()=>{
-      this.data.coins = Store.getState().coin.list || []  ;
-
-      this._whereStateChange({
-        onAction:'_listenStore'
-      });
-
-    })
-  }
-  componentWillReceiveProps(newProps){
-
-  }
+  
 
   /* WHERE*/
   _whereStateChange(newState){

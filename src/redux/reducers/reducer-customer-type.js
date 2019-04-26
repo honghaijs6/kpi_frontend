@@ -6,18 +6,14 @@ action = {
   data:{}
   id:0
 }
+
+nhật ký : thu - chi : từ tài khoản
 */
 
+import { toast } from '../../hook/after';
 
-import { myToast } from '../../hook/after';
-
-
-import { INVENTORIES } from '../../model/model-mode';
-import { INVENTORIES_NAME } from '../../model/model-name';
-
-
-const MODE = INVENTORIES;
-const NAME = INVENTORIES_NAME;
+const MODE = 'customer_types';
+const NAME = 'Nhóm Khách Hàng';
 
 const iniState = {
   mode:MODE,
@@ -27,15 +23,17 @@ const iniState = {
 }
 
 export default function(state = iniState ,action = {}){
+
   switch(action.type){
 
-     case 'STATE-'+MODE:
-       return {
-         ...state,
-         state:action.state
 
-       }
-     break;
+    case 'STATE-'+MODE:
+      return {
+        ...state,
+        state:action.state
+
+      }
+    break;
 
     /* PROACTIVE : DATA */
     case 'GET-'+MODE:
@@ -49,8 +47,8 @@ export default function(state = iniState ,action = {}){
 
     case 'POST-'+MODE:
 
-      myToast('post',state)
-      
+      toast('post',msg);
+
       return {
         ...state,
         list:action.list
@@ -60,8 +58,9 @@ export default function(state = iniState ,action = {}){
 
     case 'PUT-'+MODE:
 
-      myToast('put',state);
+      const msg = NAME;
 
+      toast('put',msg);
 
       return {
         ...state,
@@ -72,9 +71,7 @@ export default function(state = iniState ,action = {}){
 
     case 'DELETE-'+MODE:
 
-
-      myToast('delete',state);
-
+      toast('delete',msg);
 
       return {
         ...state,
@@ -85,6 +82,8 @@ export default function(state = iniState ,action = {}){
 
     /* PASSIVE DATA : realtime received on listenServer  */
     case 'reset-'+MODE:
+
+      console.log(action.list);
 
       return {
         ...state,

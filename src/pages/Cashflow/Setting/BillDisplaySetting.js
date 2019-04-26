@@ -33,7 +33,7 @@ class BillDisplaySetting extends Component{
 
       <div hidden={  this.props.onTab === this.state.tab ? false : true } >
           <div className="pa-30 need-scroll">
-              <h5> Quản lý sổ tiền </h5>
+              <h5> Cấu Hình Phiếu  </h5>
               <p> Cấu hình liên quan đến tính năng sổ tiền </p>
 
               <div className="container pt-30 pb-30">

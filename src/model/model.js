@@ -78,7 +78,13 @@ class Model {
   resetConfigDB(name,value){
     if(name==='paginate'){
 
-        this.paginate = value ; // value = {}
+        //this.paginate = value ; // value = {}
+        Object.assign(this.paginate,value);
+
+
+
+
+
 
     }else{
       this.db[name] = value;
@@ -357,15 +363,12 @@ class Model {
 
   find(key){
 
-    const base  = this.db.base.replace('?','');
-    const url = base+'/listAll/all?p=0&max='+this.paginate.max+'&key='+key;
+    this.set('paginate',{
+      key:key
+    });
 
-    this.call(url,(res)=>{
-
-      this.listenDataChange(res);
-
-    })
-
+    this.load();
+    
   }
 
   fetch(onSuccess){
