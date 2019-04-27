@@ -9,6 +9,7 @@ import CusTypePage from './CusTypePage/';
 import CusStatusPage from './CusStatusPage/';
 import CusOriginPage from './CusOriginPage/';
 import CusPointRulePage from './CusPointRulePage/';
+import CusLevelPage from './CusLevelPage' ; 
 
 
 
@@ -62,8 +63,8 @@ class CustomerSetting extends Component{
                  <CusTypePage {...this.state} />
                  <CusStatusPage {...this.state} />
                  <CusOriginPage {...this.state} />
-
                  <CusPointRulePage {...this.state} />
+                 <CusLevelPage {...this.state} />
 
               </BenExplorer>
             </main>

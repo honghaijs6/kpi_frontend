@@ -42,6 +42,7 @@ class CusTypeForm extends Component {
       }
     }
     
+    
      return(
        <BenModal {...this.props}  >
            <Row>
@@ -59,17 +60,9 @@ class CusTypeForm extends Component {
              </Col>
              <Col md={3}>
                 <FormGroup>
-                    <Label> Giá tham chiếu </Label>
-                    <Input type="select" id="ref_price" defaultValue={ data.ref_price } onChange={(e)=>{  modal.onChange('ref_price',e.target.value) }}>
-                      {
-                        REF_PRICES.map((item,index)=>{
-                          return(
-                            <option value={index} key={index}> { item } </option>
-                          )
-                        })
-                      }
-                      
-                    </Input>
+                    <Label> Ưu đãi giảm giá </Label>
+                    <Input type="number" id="benefit_discount" min="0" max="100" defaultValue={ data.benefit_discount } onChange={(e)=>{  modal.onChange('benefit_discount',e.target.value) }} />
+
                 </FormGroup>
              </Col>
              <Col md={2}>

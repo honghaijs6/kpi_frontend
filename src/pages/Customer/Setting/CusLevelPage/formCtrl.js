@@ -25,7 +25,7 @@ class formController {
         name:'',
         decription:'', 
         color_code:'rgba(30,49,121,1)',
-        ref_price:0
+        benefit_discount:0
       }
     }
 
@@ -36,7 +36,7 @@ class formController {
       /* HOOKED detectForm before save data*/
       // -->
       const fields = [
-        'code','name','ref_price'
+        'code','name'
       ];
 
       if(detectForm(fields,this.data)===''){

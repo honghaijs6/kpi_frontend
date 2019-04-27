@@ -1,4 +1,3 @@
-import { REF_PRICES } from '../../../../config/price.conf'
 /* OBJECT - PLUGIN*/
 import Model from '../../../../model/model';
 // HOOK ULTI  
@@ -18,12 +17,12 @@ import formCtrl from './formCtrl';
 /*INCLUDE OTHER COMPONENT*/
 import { BenGrid } from '../../../../components/BenGrid2';
 
-const MODE = 'customer_types';
-const MODE_TAB = 'CusTypePage';
-const MODE_NAME = 'Nhóm Khách Hàng';
+const MODE = 'levels';
+const MODE_TAB = 'CusLevelPage';
+const MODE_NAME = 'Cấp bậc Khách Hàng';
 
 
-class CategoryPage extends Component{
+class CusLevelPage extends Component{
 
   _isData = false;
   constructor(props){
@@ -56,11 +55,10 @@ class CategoryPage extends Component{
         },
         
         {headerName: "Tên ", field: "name",width:320},
-        {headerName:"Giá tham chiếu", field:"ref_price", width:180,
+        {headerName:"Giảm giá", field:"benefit_discount", width:180,
 
           cellRenderer(params){
-            
-            return REF_PRICES[params.value]
+            return params.value+ ' %'
           }
         },
         {headerName: "Khách Hàng ", field: "total_customer",width:140},
@@ -139,12 +137,13 @@ class CategoryPage extends Component{
     this._doOpenModalPost();
   }
   
-  
-  componentDidMount(){
-    this.model.initData();
-  }
   componentWillReceiveProps(newProps){
     
+    if(!this._isData){
+        this.model.initData(); 
+        this._isData = true  ; 
+    }
+
     this.data[MODE] = newProps[MODE]['list'] || [] ;
     this.resetGrid();
     
@@ -193,4 +192,4 @@ function mapStateToProps(state){
 }
 
 
-export default connect(mapStateToProps)(CategoryPage)
+export default connect(mapStateToProps)(CusLevelPage)
