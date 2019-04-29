@@ -1,11 +1,11 @@
 
-
-import { detectForm } from '../../../../hook/before';
+import store from '../../../redux/store';
+import { detectForm } from '../../../hook/before';
 
 
 class formController {
 
-    constructor(model,dispatcher=null){
+    constructor(model){
       this.active = false ; /* FOR OPEN MODAL */
 
       this.state = {
@@ -15,16 +15,12 @@ class formController {
       }
 
       this.model = model ;
-      this.dispatcher = dispatcher; 
 
     }
 
     _stateDataTemp(){
       return {
-        code:'',
-        name:'',
-        decription:'', 
-        color_code:'rgba(30,49,121,1)'
+        code:0,
       }
     }
 
@@ -35,7 +31,7 @@ class formController {
       /* HOOKED detectForm before save data*/
       // -->
       const fields = [
-        'code','name'
+        'code'
       ];
 
       if(detectForm(fields,this.data)===''){
@@ -52,11 +48,12 @@ class formController {
 
     }
 
-    onChange(name, value){
-      Object.assign(this.data,{ [name]:value});
+    onChange(name, e){
+      Object.assign(this.data,{ [name]:e.target.value});
+
       //this.data[name] = e.target.value;
       // --> initial HOW -> WHERE
-      this.processForm(name,value);
+      this.processForm(name,e);
 
     }
 
@@ -82,12 +79,15 @@ class formController {
 
        });
 
+       console.log(this.data);
     }
 
 
     toggle(){
 
       this.active = !this.active;
+      this.popover.active =  false;
+
       // -->
       this._whereStateChange({
         onAction:'toggle_modal'
@@ -105,19 +105,44 @@ class formController {
         this.toggle()
       }else{
         //alert('FORM-'+this.model.model);
-
-        if(this.dispatcher!==null){
-          this.dispatcher({
-            type:'STATE-'+this.model.model,
-            state:this.state
-          })
-        }
-
+        store.dispatch({
+          type:'STATE-'+this.model.model,
+          state:this.state
+        })
       }
 
     }
 
-    
+    popover = {
+        active:false,
+
+        parent:this,
+        btnYes(){
+
+
+          const id = this.parent.data.id;
+
+          this.parent.model.delete(id,(res)=>{
+
+              this.parent._whereStateChange({
+                onAction:'btnYes',
+                typeAction:'delete',
+                status:res.name
+              });
+
+          })
+
+        },
+
+        toggle(){
+
+           this.active = !this.active;
+           this.parent._whereStateChange({
+             onAction:'toggle_popover'
+           })
+
+        }
+    }
 
 
 }

@@ -1,186 +1,86 @@
+'use strict'
+ 
+
 import React, { Component } from 'react';
-import {  Row, Col, Label,  Form, FormGroup,FormText, Input, Table, Button, ButtonGroup  } from 'reactstrap';
+import {  Row, Col, Label, FormGroup, Input } from 'reactstrap';
 
+import BenColor from '../../../components/BenColor';
 import BenModal from '../../../components/BenModal';
-import BenButtonSelect from '../../../components/BenButtonSelect';
-
-
-function GeneralInfoRow(props){
-
-  return(
-    <div className="row-form">
-      <h6 className="txt-organge text-uppercase"> Thông tin chung  </h6>
-      <Row>
-          <Col md="3">
-            <FormGroup>
-              <label> Mã KH </label>
-              <Input  className="form-control" id="code"    type="text"/>
-            </FormGroup>
-          </Col>
-          <Col md="6">
-            <FormGroup>
-              <label> Công ty </label>
-              <Input  className="form-control" id="code"    type="text"/>
-            </FormGroup>
-          </Col>
-          <Col md="3">
-            <FormGroup>
-              <label> Người liên hệ </label>
-              <Input  className="form-control" id="code"    type="text"/>
-            </FormGroup>
-          </Col>
-      </Row>
-      <Row>
-          <Col md="3">
-            <FormGroup>
-              <label> Số ĐT </label>
-              <Input  className="form-control" id="code"    type="text"/>
-            </FormGroup>
-          </Col>
-          <Col md="6">
-            <FormGroup>
-              <label> E-mail </label>
-              <Input  className="form-control" id="code"    type="text"/>
-            </FormGroup>
-          </Col>
-          <Col md="3">
-            <FormGroup>
-              <label> Mã số thuế </label>
-              <Input  className="form-control" id="code"    type="text"/>
-            </FormGroup>
-          </Col>
-      </Row>
-    </div>
-  )
-}
-
-function ContactInfoRow(props){
-  return(
-    <div className="row-form">
-      <h6 className="txt-organge text-uppercase"> Thông tin Liên hệ  </h6>
-      <Row>
-          <Col md="6">
-            <FormGroup>
-              <label> Địa chỉ </label>
-              <Input  className="form-control" id="code"    type="text"/>
-            </FormGroup>
-          </Col>
-          <Col md="3">
-            <FormGroup>
-              <label> Tỉnh / Thành </label>
-              <Input  className="form-control" id="code"    type="text"/>
-            </FormGroup>
-          </Col>
-          <Col md="3">
-            <FormGroup>
-              <label> Quận / Huyện </label>
-              <Input  className="form-control" id="code"    type="text"/>
-            </FormGroup>
-          </Col>
-      </Row>
-      <Row>
-          <Col md="6">
-            <FormGroup>
-              <label> Địa chỉ giao hàng </label>
-              <Input  className="form-control" id="code"    type="text"/>
-            </FormGroup>
-          </Col>
-          <Col md="6">
-            <FormGroup>
-              <label> Địa chỉ xuất hoá đơn </label>
-              <Input  className="form-control" id="code"    type="text"/>
-            </FormGroup>
-          </Col>
-
-      </Row>
-    </div>
-  )
-}
-
-
-function ClassifyInfoRow(props){
-  return(
-    <div className="row-form">
-      <h6 className="txt-organge text-uppercase"> Phân loại khách hàng  </h6>
-      <Row>
-          <Col md="3">
-            <FormGroup>
-              <label> Loại KH </label>
-              <Input  className="form-control" id="code"    type="text"/>
-            </FormGroup>
-          </Col>
-          <Col md="3">
-            <FormGroup>
-              <label> Cấp bậc </label>
-              <Input  className="form-control" id="code"    type="text"/>
-            </FormGroup>
-          </Col>
-
-          <Col md="3">
-            <FormGroup>
-              <label> Nhóm KH </label>
-              <Input  className="form-control" id="code"    type="text"/>
-            </FormGroup>
-          </Col>
-          <Col md="3">
-            <FormGroup>
-              <label> Nguồn </label>
-              <Input  className="form-control" id="code"    type="text"/>
-            </FormGroup>
-          </Col>
-      </Row>
-
-    </div>
-  )
-}
-
-
-function OtherInfoRow(props){
-  return(
-    <div className="row-form">
-      <h6 className="txt-organge text-uppercase"> Thông tin khác  </h6>
-      <Row>
-          <Col md="3">
-            <FormGroup>
-              <label> NV Phụ trách </label>
-              <Input  className="form-control" id="code"    type="text"/>
-            </FormGroup>
-          </Col>
-          <Col md="3">
-            <FormGroup>
-              <label> Gán thẻ  </label>
-              <Input  className="form-control" id="code"    type="text"/>
-            </FormGroup>
-          </Col>
-          <Col md="6">
-            <FormGroup>
-              <Label> Ghi chú </Label>
-              <Input style={{ height:90}} type="textarea"   />
-            </FormGroup>
-          </Col>
-      </Row>
-    </div>
-  )
-}
 
 
 
-
-class CustomerForm extends Component {
+class CusForm extends Component {
 
    render(){
 
+    const modal = this.props.modal || {};
+    const data = modal.data || {};
 
+    
+    let COLOR = {
+      r: '241',
+      g: '112',
+      b: '19',
+      a: '1'
+    }; 
+
+    if(data.color_code !==undefined){
+      if(data.color_code.indexOf('rgba')>-1){
+        let colors = data.color_code.split('(');
+        colors = colors[1].split(')');
+        colors = colors[0].split(',');
+
+        COLOR = {
+          r:colors[0],
+          g:colors[1],
+          b:colors[2],
+          a:colors[3]
+        }
+        
+
+      }
+    }
+    
+    
      return(
-       <BenModal width={ this.props.width } name={ this.props.name } typeAction={ this.props.typeAction } modal={ this.props.modal }  >
-          <GeneralInfoRow modal={ this.props.modal } />
-          <ContactInfoRow modal={ this.props.modal } />
-          <ClassifyInfoRow modal={ this.props.modal }  />
-          <OtherInfoRow modal={ this.props.modal} />
+       <BenModal {...this.props}  >
+           <Row>
+             <Col md={3}>
+               <FormGroup>
+                 <Label> Mã <span className="text-danger">*</span></Label>
+                 <Input type="text" onChange={(e)=>{ modal.onChange('code',e.target.value) }}  defaultValue={data.code}  id="code"/>
+               </FormGroup>
+             </Col>
+             <Col md={4}>
+                <FormGroup>
+                  <Label> Tên <span className="text-danger">*</span></Label>
+                  <Input type="text" id="name" onChange={(e)=>{ modal.onChange('name',e.target.value) }}  defaultValue={ data.name } />
+                </FormGroup>
+             </Col>
+             <Col md={3}>
+                <FormGroup>
+                    <Label> Ưu đãi giảm giá </Label>
+                    <Input type="number" id="benefit_discount" min="0" max="100" defaultValue={ data.benefit_discount } onChange={(e)=>{  modal.onChange('benefit_discount',e.target.value) }} />
+
+                </FormGroup>
+             </Col>
+             <Col md={2}>
+                <BenColor color={COLOR} onChange={(data)=>{   modal.onChange('color_code', `rgba(${data.r},${data.g},${data.b},${data.a})` )  }} />
+             </Col>
+           </Row>
+
+           <Row>
+              <Col md={12}>
+              <FormGroup>
+                <Label for="code"> Ghi chú </Label>
+                <Input type="textarea" id="decription" defaultValue={ data.decription } onChange={(e)=>{ modal.onChange('decription',e.target.value) }}  />
+              </FormGroup>
+              </Col>
+           </Row>
 
        </BenModal>
      )
    }
  }
 
- export default CustomerForm;
+ export default CusForm;

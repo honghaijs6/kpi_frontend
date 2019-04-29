@@ -26,6 +26,8 @@ import reducerPayment from './reducer-payment';
 
 import reducerCusType from './reducer-customer-type' ;
 import reducerLevel from './reducer-level'; 
+import reducerCusStatus from './reducer-customer-status'; 
+import reducerCusOriginal from './reducer-customer-original'; 
 
 
 
@@ -51,7 +53,9 @@ const allReducers = combineReducers({
   bill_accounts:reducerBillAccount,
   payments:reducerPayment,
   customer_types:reducerCusType,
-  levels:reducerLevel
+  levels:reducerLevel,
+  customer_status:reducerCusStatus,
+  customer_originals:reducerCusOriginal
 
 });
 

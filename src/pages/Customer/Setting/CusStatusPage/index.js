@@ -1,57 +1,74 @@
+/* OBJECT - PLUGIN*/
+import Model from '../../../../model/model';
+// HOOK ULTI  
+import moment from 'moment';
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 
 import { Button } from 'reactstrap';
 
-/* OBJECT - PLUGIN*/
-import Store from '../../../../redux/store';
-import Model from '../../../../model/model';
-
-/* HOOKED*/
-/*............*/
-
-
-/* NAMED*/
-import { COINS } from '../../../../model/model-mode';
-import { COIN_NAME } from '../../../../model/model-name';
-import { POST, SEARCH } from '../../../../model/action-mode';
-/*------------*/
 
 /* MODAL FORM & CTRL */
-import CusStatusForm from './Form';
-import cusStatusFormCtrl from './formCtrl';
-
+import MyForm from './Form';
+import formCtrl from './formCtrl';
 
 /*INCLUDE OTHER COMPONENT*/
 import { BenGrid } from '../../../../components/BenGrid2';
 
+const MODE = 'customer_status';
+const MODE_TAB = 'CusStatusPage';
+const MODE_NAME = 'Trạng Thái Khách Hàng';
 
-export default class CusStatusPage extends Component{
 
+class CusLevelPage extends Component{
+
+  _isData = false;
   constructor(props){
     super(props);
 
     this.state = {
-      typeAction:'',
-      onAction:'',
-      status:'',
+      typeAction:'', // post - put - delete ...
+      onAction:'', // string method
+      status:'', // status
 
-      tab:'CusStatusPage'
+      tab:MODE_TAB
+      
     }
 
-    this.data = {
-      cusStatus:[]
-    }
+    this.data = {}
 
     this.grid = {
       colums:[
-        {headerName: "Mã", field: "code"},
-        {headerName: "Tên ", field: "name"},
-        {headerName: "Thứ tự ", field: "name"},
-        {headerName: "Mô tả", field: "address", width:360},
-        {headerName: "Khách hàng", field: "creator_id"},
-        {headerName: "Người tạo", field: "date_created"},
-        {headerName: "Ngày tạo", field: "date_created"}
+
+        {headerName: "Màu ", field: "color_code",width:90,
+          cellRenderer(params){
+
+            return `<span class="badge" style="background:${ params.value }; color:${params.value}">1111</span>`
+          }
+        },
+        {headerName: "Mã ", field: "code",width:140,
+          cellRenderer(params){
+            return `<span class="text-uppercase"> ${params.value} </span>`
+          }
+        },
+        
+        {headerName: "Tên ", field: "name",width:320},
+        
+        {headerName: "Khách Hàng ", field: "total_customer",width:140},
+        {headerName: "Người tạo", field: "creator",width:200},
+        {headerName: "Ngày tạo", field: "date_created",width:200,
+          
+          cellRenderer(params){
+
+            const humanDate = moment(params.value).format('YYYY-MM-DD')
+            return `
+             ${ humanDate }
+           `
+          }
+          
+        }
 
       ],
       rowData: []
@@ -59,40 +76,32 @@ export default class CusStatusPage extends Component{
 
     this._setup();
     this.onBtnNew = this.onBtnNew.bind(this)
+    this._doOpenModalUpdate = this._doOpenModalUpdate.bind(this);
 
 
   }
 
   _setup(){
 
-    this.model = new Model(COINS);
-    this.model.set('paginate',{
-      offset:0,
-      p:0,
-      max:20,
-      is_deleted:0,
-      key:''
+    this.model = new Model(MODE,this.props.dispatch);
+    this.model.set('method',{
+      name:'listAll',
+      params:'all'
     });
-
-    this.modal = new cusStatusFormCtrl(this.model);
-
-    //this._listenStore();
+    
+    this.modal = new formCtrl(this.model,this.props.dispatch);
+    
 
   }
 
   /* HOW */
   resetGrid(){
-      /*let list = this.data.users || []  ;
-
-      list.filter((item)=>{
-        item['str_job_level'] = userConf.job_level[item['job_level']];
-        item['str_job_type'] = userConf.job_type[item['job_type']];
-        item['str_phone'] = item['phone'] === null ? 'n/a' : item['phone'];
-        item['str_date_created'] = moment(item['date_created']).format('YYYY-MM-DD');
+      
+      this.grid.rowData = this.data[MODE];
+      this._whereStateChange({
+        onAction:'resetGrid'
       });
 
-      //alert('resetGrid');
-      this.grid.rowData = list ;*/
 
   }
 
@@ -101,11 +110,18 @@ export default class CusStatusPage extends Component{
     this.modal.open('post');
     this._whereStateChange({
       typeAction:'post',
-      onAction:'open_modal'
+      onAction:'_doOpenModalPost'
     })
 
   }
   _doOpenModalUpdate(data){
+
+    
+    this.modal.open('put',data);
+    this._whereStateChange({
+      typeAction:'put',
+      onAction:'_doOpenModalUpdate'
+    })
 
   }
   /* END HOW*/
@@ -115,18 +131,19 @@ export default class CusStatusPage extends Component{
   onBtnNew(){
     this._doOpenModalPost();
   }
-
-  componentDidMount(){
-    //this._isMounted = true;
-  }
-
-  componentWillUnmount() {
-    //this.unsubscribe();
-  }
   
   componentWillReceiveProps(newProps){
+    
+    if(!this._isData){
+        this.model.initData(); 
+        this._isData = true  ; 
+    }
 
+    this.data[MODE] = newProps[MODE]['list'] || [] ;
+    this.resetGrid();
+    
   }
+  
 
   /* WHERE*/
   _whereStateChange(newState){
@@ -136,33 +153,38 @@ export default class CusStatusPage extends Component{
 
   render(){
 
-
     return(
       <div hidden={  this.props.onTab === this.state.tab ? false : true } >
 
-          <CusStatusForm
-            name={ 'Form' }
-            typeAction={ this.state.typeAction }
+          <MyForm
+            name={ MODE_NAME }
             modal={this.modal}
-
+            
           />
           <BenGrid
 
              height='79.9vh'
-
-             onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
+             gridID='id'
+             onBtnEdit={ this._doOpenModalUpdate }
+             onBtnAdd={ this.onBtnNew }
              isRightTool={ true }
 
              nextColums={ this.grid.colums }
              rowData={this.grid.rowData}
              model={ this.model }
 
-             customButton={
-               <Button onClick={this.onBtnNew}  style={{ marginRight:10, borderRadius:0}}  className="btn-ubuntu"  > <i className="fa fa-plus"></i> Tạo Trang thái KH  </Button>
-
-             }
+             
           />
       </div>
     )
   }
 }
+
+function mapStateToProps(state){
+  return {
+     [MODE]:state[MODE]
+  }
+}
+
+
+export default connect(mapStateToProps)(CusLevelPage)

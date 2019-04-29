@@ -1,35 +1,29 @@
 
-import React, { Component } from 'react';
-import { ButtonGroup, Button } from 'reactstrap';
-
 /* OBJECT - PLUGIN*/
-import Store from '../../../redux/store';
 import Model from '../../../model/model';
 
-/* HOOKED*/
-/*............*/
+// HOOK ULTI 
+import moment from 'moment';
 
-/* NAMED*/
-import { CUSTOMERS } from '../../../model/model-mode';
-import { CUSTOMER_NAME } from '../../../model/model-name';
-import { POST, SEARCH } from '../../../model/action-mode';
-/*------------*/
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-/* MODAL FORM & CTRL*/
-import CustomerForm from './Form';
-import customerFormCtrl from './formCtrl';
 
-import ImportForm from './ImportForm';
-import importFormCtrl from './importFormCtrl';
 
+
+/* MODAL FORM & CTRL */
+import MyForm from './Form';
+import formCtrl from './formCtrl';
 
 
 /*INCLUDE OTHER COMPONENT*/
 import { BenGrid } from '../../../components/BenGrid2';
 
+const MODE = 'customers';
+const MODE_NAME = 'Khách Hàng';
 
 
-class Customer extends Component{
+class Customers extends Component{
 
   constructor(props){
     super(props);
@@ -42,25 +36,23 @@ class Customer extends Component{
 
     }
 
-    this.data = {
-      customers:[]
-    }
+    this.data = {}
 
     this.grid = {
       colums:[
-        {headerName: "Mã", field: "type"},
-        {headerName: "Thông tin liên hệ", field: "type"},
-        {headerName: "Tỉnh/Thành", field: "type"},
-        {headerName: "Điểm", field: "date_created"},
-        {headerName: "Nhóm", field: "code"},
-        {headerName: "nguồn", field: "inventory_id"},
-        {headerName: "NV Phụ trách", field: "action_type"},
-        {headerName: "Đơn hàng", field: "group_code"},
-        {headerName: "Doanh thu", field: "creator_id"},
-        {headerName: "Trạng thái", field: "status"},
-        {headerName: "Người tạo", field: "note"},
-        {headerName: "Ngày tạo", field: "note"},
-        {headerName: "Cập nhật", field: "note"}
+        {headerName: "Mã KH", field: "type"},
+        {headerName: "Mã Đơn hàng", field: "type"},
+        {headerName: "Trạng thái", field: "type"},
+        {headerName: "HT Thanh toán", field: "date_created"},
+        {headerName: "Ngày tạo báo giá", field: "note"},
+        {headerName: "Ngày xuất kho", field: "code"},
+        {headerName: "Chưa VAT", field: "inventory_id"},
+        {headerName: "Thành tiền", field: "action_type"},
+        {headerName: "Có VAT", field: "group_code"},
+        {headerName: "Ngày kết thúc", field: "creator_id"},
+        {headerName: "Đã thanh toán", field: "status"},
+        {headerName: "Phụ trách", field: "note"},
+        
 
       ],
       rowData: []
@@ -68,46 +60,29 @@ class Customer extends Component{
 
     this._setup();
 
-    this.onBtnNewCustomer = this.onBtnNewCustomer.bind(this);
-    this.onBtnImportData = this.onBtnImportData.bind(this);
-    this.onBtnSchedule = this.onBtnSchedule.bind(this);
+    this.onBtnNew = this.onBtnNew.bind(this);
+
+
 
   }
 
   _setup(){
 
-    this.model = new Model(CUSTOMERS);
-    this.model.set('paginate',{
-      offset:0,
-      p:0,
-      max:20,
-      is_deleted:0,
-      key:''
+    this.model = new Model(MODE,this.props.dispatch);
+    this.model.set('method',{
+      name:'listAll',
+      params:'all'
     });
 
-    this.formCtrl = new customerFormCtrl(this.model);
-    this.importFormCtrl = new importFormCtrl(this.model);
-
-
-    this._listenStore();
-
+    this.formCtrl = new formCtrl(this.model,this.props.dispatch);
+    
+    
 
   }
 
   /* HOW */
   resetGrid(){
-      /*let list = this.data.users || []  ;
-
-      list.filter((item)=>{
-        item['str_job_level'] = userConf.job_level[item['job_level']];
-        item['str_job_type'] = userConf.job_type[item['job_type']];
-        item['str_phone'] = item['phone'] === null ? 'n/a' : item['phone'];
-        item['str_date_created'] = moment(item['date_created']).format('YYYY-MM-DD');
-      });
-
-      //alert('resetGrid');
-      this.grid.rowData = list ;*/
-
+      
   }
 
   _doOpenModalPost(){
@@ -124,33 +99,7 @@ class Customer extends Component{
 
   }
 
-  _doOpenForm(type){
-
-    this.formCtrl.open('post');
-
-    this._whereStateChange({
-      recType:type,
-      typeAction:'post',
-      onAction:'open_modal'
-    })
-  }
-
-  /* WHEN */
-
-  onBtnSchedule(){
-
-    alert('navigate schedule calendar')
-  }
-  onBtnImportData(){
-
-    this.importFormCtrl.open('navigate');
-    this._whereStateChange({
-      typeAction:'navigate',
-      onAction:'open_modal'
-    })
-  }
-  onBtnNewCustomer(){
-
+  _doOpenForm(){
 
     this.formCtrl.open('post');
 
@@ -160,26 +109,13 @@ class Customer extends Component{
     })
   }
 
-  /*componentDidMount(){}*/
-  componentWillUnmount() {
-    this.unsubscribe();
+  /* WHEN*/
+
+  onBtnNew(){
+    this._doOpenForm();
   }
-  _listenStore(){
-
-    this.unsubscribe = Store.subscribe(()=>{
-
-      this.data.customers = Store.getState().customer.list || []  ;
-
-      this._whereStateChange({
-        onAction:'_listenStore'
-      });
-
-    })
-  }
-
-
+  
   /* WHERE*/
-
   _whereStateChange(newState){
     this.setState(Object.assign(this.state,newState));
   }
@@ -187,49 +123,38 @@ class Customer extends Component{
 
   render(){
 
-    const formTitle = this.state.typeAction === POST ? 'Tạo '+ CUSTOMER_NAME : 'Chỉnh sửa '+ CUSTOMER_NAME
+    
     return (
-
       <div className="animated fadeIn">
-        <div className="ubuntu-app " style={{border:0, marginTop:20}}>
+        <div className="ubuntu-app " style={{border:0, marginTop: 20}}>
             <main>
 
+              <MyForm
 
-              <ImportForm
-
-                name={ 'Import file excel' }
-                typeAction={ 'import_file' }
-                modal={this.importFormCtrl}
-              />
-              <CustomerForm
-
-                width='60%'
-                name={ formTitle }
+                width='90%'
+                name={ MODE_NAME }
                 typeAction={ this.state.typeAction }
                 modal={this.formCtrl}
 
               />
+
               <BenGrid
 
                  onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
+                 onBtnAdd={this.onBtnNew}
+                 gridID='id'
+                 rowSelection='single'
+
                  isRightTool={ true }
                  height="79.9vh"
 
                  nextColums={ this.grid.colums }
                  rowData={this.grid.rowData}
                  model={ this.model }
-                 customButton={
-                   <ButtonGroup>
 
-                      <Button style={{ marginRight:10, borderRadius:0}} onClick={ this.onBtnSchedule }  className="btn-ubuntu"  > <i className="fa fa-calendar-o mr-5"></i> Lịch hẹn  </Button>
-
-                      <Button style={{ marginRight:10, borderRadius:0}} onClick={ this.onBtnImportData }  className="btn-ubuntu"  > <i className="fa fa-file-excel-o mr-5"></i> Import Data  </Button>
-                      <Button style={{ marginRight:10, borderRadius:0}} onClick={ this.onBtnNewCustomer}  className="btn-ubuntu"  > <i className="fa fa-plus mr-5"></i> Tạo khách hàng  </Button>
-
-                   </ButtonGroup>
-
-                 }
+                 
               />
+              
             </main>
         </div>
       </div>
@@ -237,4 +162,11 @@ class Customer extends Component{
   }
 }
 
-export default Customer;
+
+function mapStateToProps(state){
+  return {
+     [MODE]:state[MODE]
+  }
+}
+
+export default connect(mapStateToProps)(Customers);
