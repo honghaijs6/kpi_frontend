@@ -30,8 +30,9 @@ body{
 
 /* END COLOR */
 
-/* SUGGEST HOLDER*/
+.myBadge{ padding: 4px 7px !important; border-radius: 9px !important;}
 
+/* SUGGEST HOLDER*/
 .suggest-holder,.suggest-holder-2{
     margin: 0px; padding: 0px; border: 1px solid rgba(0,0,0,0.1);background: #fff; width: 100%; position: absolute; border-top: 0px; z-index: 2000;
     display: none;
@@ -330,7 +331,7 @@ a.btn-delete:hover{ color:#DC3545 !important}
 /* DATA GRID*/
 
 /* btn-datagrid*/
-.btn-datagrid{ background: transparent;  border: 0px solid rgba(0,0,0,0.1) ;  color: #455361}
+.btn-datagrid{ background: transparent; background-color: #eee;  border: 1px solid rgba(0,0,0,0.1) ;  color: #455361}
 .btn-datagrid:hover{ background: #455361; color: #fff; border: 1px solid rgba(0,0,0,0.1)}
 
 .ag-theme-material .ag-footer{

@@ -10,6 +10,7 @@ import SelectDist from '../../../../components/SelectDist';
 
 
 
+
 function BasicInfoRow(props){
 
   const modal = props.modal;

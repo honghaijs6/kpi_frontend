@@ -14,6 +14,7 @@ import socket from './model/socket';
 
 // HOOKED ;
 
+import doGetModelInfo from './hook/ultil/doGetModelInfo' ; 
 import { preLoad } from './hook/before';
 
 
@@ -30,7 +31,12 @@ class App extends Component {
 
   }
 
-  componentDidMount(){
+  async _getUserInfo(login,id){
+    const res = await doGetModelInfo('users',id) ;
+    window.USERINFO = res.name === 'success' ? res.data : {};
+    this.setState({login});    
+  }
+  componentDidMount(){  
     
     preLoad('authenticate');
     socket.client.authenticate().catch((err)=>{
@@ -46,12 +52,16 @@ class App extends Component {
 
       socket.client.passport.verifyJWT(login.accessToken).then(res=>{
 
-        socket.client.service('users').get(res.userId).then(info=>{
+        
+        this._getUserInfo(login,res.userId)
+       
+
+        /*socket.client.service('users').get(res.userId).then(info=>{
           // WRITE LOCAL STOREAGE
           window.USERINFO = info;
           this.setState({login});
-
-        });
+          
+        });*/
 
       })
 

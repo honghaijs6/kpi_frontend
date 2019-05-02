@@ -258,7 +258,7 @@ class BenGrid extends Component{
 
           <div className="ag-theme-material" id="myGrid" style={{boxSizing: "border-box", height: this.state.height, padding:'1rem'}}>
               <AgGridReact
-
+                  
                   onSelectionChanged={this.onSelectionChanged.bind(this)}
                   enableSorting={true}
                   rowSelection={this.state.rowSelection}

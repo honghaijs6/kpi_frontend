@@ -160,7 +160,7 @@ class CategoryPage extends Component{
   render(){
 
     return(
-      <div hidden={  this.props.onTab === this.state.tab ? false : true } >
+      <div hidden={  this.props.onTab === this.state.tab ? false : true } style={{padding:10}} >
 
           <MyForm
             name={ MODE_NAME }
@@ -169,7 +169,7 @@ class CategoryPage extends Component{
           />
           <BenGrid
 
-             height='79.9vh'
+             height='78vh'
              gridID='id'
              onBtnEdit={ this._doOpenModalUpdate }
              onBtnAdd={ this.onBtnNew }

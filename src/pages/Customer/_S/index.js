@@ -23,7 +23,7 @@ const MODE = 'customers';
 const MODE_NAME = 'Khách Hàng';
 
 
-class Customers extends Component{
+class OrderView extends Component{
 
   constructor(props){
     super(props);
@@ -40,20 +40,71 @@ class Customers extends Component{
 
     this.grid = {
       colums:[
-        {headerName: "Mã KH", field: "type"},
-        {headerName: "Mã Đơn hàng", field: "type"},
-        {headerName: "Trạng thái", field: "type"},
-        {headerName: "HT Thanh toán", field: "date_created"},
-        {headerName: "Ngày tạo báo giá", field: "note"},
-        {headerName: "Ngày xuất kho", field: "code"},
-        {headerName: "Chưa VAT", field: "inventory_id"},
-        {headerName: "Thành tiền", field: "action_type"},
-        {headerName: "Có VAT", field: "group_code"},
-        {headerName: "Ngày kết thúc", field: "creator_id"},
-        {headerName: "Đã thanh toán", field: "status"},
-        {headerName: "Phụ trách", field: "note"},
+        {headerName: "Mã KH", field: "code",
+          cellRenderer(params){
+
+            return `<span class="badge text-uppercase" style="color:${params.data.color_code}; font-size:14px"> ${ params.value } <span>` ; 
+          }
+        },
+        {headerName: "Nhóm", field: "type_name",width:120,
+          cellRenderer(params){
+
+            return `<span class="badge myBadge" style="color:#fff; background:${params.data.color_code}"> ${ params.value } <span>` ; 
+          }
+        },
+
+        {headerName: "Cấp bậc", field: "level_code",width:120,
+          cellRenderer(params){
+
+            return `<span class="badge myBadge" style="color:#fff; background:${params.data.color_code}"> ${ params.value } <span>` ; 
+          }
+        },
+
+        {headerName: "Trạng thái", field: "customer_status",width:140,
+          cellRenderer(params){
+
+            return `<span class="badge myBadge" style="color:#fff; background:${params.data.color_code}"> ${ params.value || 'n/a' } <span>` ; 
+          }
+        },
+
+        {headerName: "Nguồn", field: "customer_original",width:160,
+          cellRenderer(params){
+
+            return `<span class="badge myBadge" style="color:#fff; background:${params.data.color_code}"> ${ params.value || 'n/a' } <span>` ; 
+          }
+        },
+        
         
 
+        
+
+        {headerName: "Khách Hàng", field: "name",width:400},
+        
+        {headerName: "Địa chỉ ", field: "address",width:400},
+        {headerName: "MST", field: "tax_no"},
+        {headerName: "Số ĐT", field: "phone"},
+        {headerName: "Người Liên Hệ", field: "contact_name"},
+        {headerName: "Quản lý bởi", field: "belong_user",
+          cellRenderer(params){
+            return `<span class="badge myBadge" style="color:#fff; background:${params.data.color_code}"> <i class="fa fa-user mr-5"></i> ${ params.value } <span>` ; 
+          }
+        },
+        {headerName: "Người tạo", field: "creator",
+          cellRenderer(params){
+             return params.value || 'system' 
+          }
+        },
+        {headerName: "Ngày tạo", field: "date_created",
+          
+          cellRenderer(params){
+
+              const humanDate = moment(params.value).format('YYYY-MM-DD')
+              return `
+                ${ humanDate }
+              `;
+          }
+        }
+        
       ],
       rowData: []
     }
@@ -82,7 +133,12 @@ class Customers extends Component{
 
   /* HOW */
   resetGrid(){
-      
+    
+    this.grid.rowData = this.data[MODE];
+    this._whereStateChange({
+      onAction:'resetGrid'
+    });
+
   }
 
   _doOpenModalPost(){
@@ -111,6 +167,16 @@ class Customers extends Component{
 
   /* WHEN*/
 
+  componentDidMount(){
+    this.model.initData() ; 
+  }
+  componentWillReceiveProps(newProps){
+
+    this.data[MODE] = newProps[MODE]['list'] || [] ;
+    this.resetGrid();
+
+  }
+
   onBtnNew(){
     this._doOpenForm();
   }
@@ -127,11 +193,11 @@ class Customers extends Component{
     return (
       <div className="animated fadeIn">
         <div className="ubuntu-app " style={{border:0, marginTop: 20}}>
-            <main>
+            <main style={{padding:10}}>
 
               <MyForm
 
-                width='90%'
+                width='81%'
                 name={ MODE_NAME }
                 typeAction={ this.state.typeAction }
                 modal={this.formCtrl}
@@ -146,7 +212,7 @@ class Customers extends Component{
                  rowSelection='single'
 
                  isRightTool={ true }
-                 height="79.9vh"
+                 height="78vh"
 
                  nextColums={ this.grid.colums }
                  rowData={this.grid.rowData}
@@ -169,4 +235,4 @@ function mapStateToProps(state){
   }
 }
 
-export default connect(mapStateToProps)(Customers);
+export default connect(mapStateToProps)(OrderView);

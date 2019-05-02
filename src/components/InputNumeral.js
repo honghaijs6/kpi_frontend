@@ -17,6 +17,13 @@ class InputNumeral extends React.Component {
     this._onChange = this._onChange.bind(this);
   }
 
+  componentWillReceiveProps(newProps){
+    this.setState({
+      defaultValue:newProps.defaultValue
+    });
+    
+  }
+
   _onChange(e){
     let value = e.target.value.replace(/,/g,'');
     let number = numeral(value).format('0,0');
@@ -33,7 +40,7 @@ class InputNumeral extends React.Component {
 
   render() {
     return (
-      <Input onChange={ this._onChange } id={ this.props.id || 0 } value={ numeral(this.state.defaultValue).format('0,0') } type="text" />
+      <Input style={this.props.style} onChange={ this._onChange } id={ this.props.id || 0 } value={ numeral(this.state.defaultValue).format('0,0') } type="text" />
     );
   }
 }

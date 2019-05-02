@@ -1,29 +1,18 @@
 
+/* HOOKS */
+import { detectForm } from '../../../../hook/before' ; 
+import doUpdateModelInfo from '../../../../hook/ultil/doUpdateModelInfo' ; 
+
 import React, { Component } from 'react';
-
-import { Button } from 'reactstrap';
-
-/* OBJECT - PLUGIN*/
-import Store from '../../../../redux/store';
-import Model from '../../../../model/model';
-
-/* HOOKED*/
-/*............*/
+import {  Row, Col, Label, Button, FormGroup, Input, ButtonGroup } from 'reactstrap';
 
 
-/* NAMED*/
-import { COINS } from '../../../../model/model-mode';
-import { COIN_NAME } from '../../../../model/model-name';
-import { POST, SEARCH } from '../../../../model/action-mode';
-/*------------*/
 
-/* MODAL FORM & CTRL */
-import CusPointRuleForm from './Form';
-import customFormCtrl from './formCtrl';
+import SelectListModel from '../../../../components/SelectListModel';
+import SelectListModelCode from '../../../../components/SelectListModelCode';
 
-
-/*INCLUDE OTHER COMPONENT*/
-import { BenGrid } from '../../../../components/BenGrid2';
+import InputNumeral  from '../../../../components/InputNumeral'
+ 
 
 
 export default class CusPointRulePage extends Component{
@@ -36,126 +25,132 @@ export default class CusPointRulePage extends Component{
       onAction:'',
       status:'',
 
-      tab:'CusPointRulePage'
+      tab:'CusPointRulePage' , 
+
+      
     }
 
     this.data = {
-      cusPointRules:[]
+      min_total:0,
+      max_total:0,
+      level_id:'',
+      payment_code:'',
+      value:0
     }
+    
+    this._onSubmit = this._onSubmit.bind(this); 
 
-    this.grid = {
-      colums:[
+  }
+ 
+  async _onSubmit(){
+    //alert(JSON.stringify(this.data));
 
-        {headerName: "Tên ", field: "name"},
-        {headerName: "Giá trị đơn hàng ", field: "name"},
-        {headerName: "SL Sản phẩm", field: "address", width:360},
-        {headerName: "Điều kiện áp dụng", field: "creator_id"},
-        {headerName: "Trạng thái", field: "date_created"},
-        {headerName: "Người tạo", field: "date_created"},
-        {headerName: "Ngày tạo", field: "date_created"},
+    const fields = ['min_total','max_total','formula'] ;
 
+    if(detectForm(fields,this.data)===''){
+       //  CHECK VALUE FORMULA ; 
+       const res =  await doUpdateModelInfo('companies',{
+         id:window.USERINFO.company_id, 
+         point_formula:this.data
+       }) ; 
+       
 
-      ],
-      rowData: []
     }
-
-    this._setup();
-    this.onBtnNew = this.onBtnNew.bind(this)
-
 
   }
 
-  _setup(){
-
-    this.model = new Model(COINS);
-    this.model.set('paginate',{
-      offset:0,
-      p:0,
-      max:20,
-      is_deleted:0,
-      key:''
+  _onChange(name,value){
+    this.data[name] = value ; 
+    this._whereStateChange({
+      onAction:'onChange'
     });
-
-    this.modal = new customFormCtrl(this.model);
-
     
 
   }
 
-  /* HOW */
-  resetGrid(){
-      /*let list = this.data.users || []  ;
-
-      list.filter((item)=>{
-        item['str_job_level'] = userConf.job_level[item['job_level']];
-        item['str_job_type'] = userConf.job_type[item['job_type']];
-        item['str_phone'] = item['phone'] === null ? 'n/a' : item['phone'];
-        item['str_date_created'] = moment(item['date_created']).format('YYYY-MM-DD');
-      });
-
-      //alert('resetGrid');
-      this.grid.rowData = list ;*/
-
-  }
-
-  _doOpenModalPost(){
-
-
-
-    this.modal.open('post');
-    this._whereStateChange({
-      typeAction:'post',
-      onAction:'open_modal'
-    })
-
-  }
-  _doOpenModalUpdate(data){
-
-  }
-  /* END HOW*/
-
-  /* WHEN*/
-
-  onBtnNew(){
-    this._doOpenModalPost();
-  }
-
-  
   /* WHERE*/
   _whereStateChange(newState){
     this.setState(Object.assign(this.state,newState));
   }
 
+  componentDidMount(){
+    const formulaData = window.USERINFO.point_formula !== null ? JSON.parse(window.USERINFO.point_formula)  : {};
+    
+    if(JSON.stringify(formulaData)!=='{}'){
+      this.data = formulaData ;
+      this.setState({
+        onAction:'get_formula'
+      });
+
+    }
+
+
+  }
+
 
   render(){
 
-
+    
     return(
-      <div hidden={  this.props.onTab === this.state.tab ? false : true } >
+      <div hidden={  this.props.onTab === this.state.tab ? false : true }  >
+        <div style={{padding:30}}>
+           <h5 className="font-12 text-uppercase txt-green"> Thông tin chung </h5>
+           <Row style={{marginTop:20}}>
+              <Col md={3}>
+                <FormGroup>
+                  <Label for="code"> Giá trị đơn hàng (tối thiểu) <span className="text-danger">*</span></Label>
+                  <InputNumeral id="min_total" defaultValue={this.data.min_total} onChange={(value)=>{ this._onChange('min_total',value) }}  />
+                </FormGroup>
+              </Col>
+              <Col md={3}>
+                <FormGroup>
+                <Label for="code"> Giá trị đơn hàng (tối đa) <span className="text-danger">*</span></Label>
+                  <InputNumeral id="max_total" defaultValue={this.data.max_total} onChange={(value)=>{ this._onChange('max_total',value) }} />
 
-          <CusPointRuleForm
-            width='80%'
-            name={ 'Form' }
-            typeAction={ this.state.typeAction }
-            modal={this.modal}
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={3}>
+                <FormGroup>
+                  <Label> Áp dụng cho khách hàng </Label>
+                  <SelectListModel defaultValue={this.data.level_id} onChange={(e)=>{  this._onChange('level_id',e.target.value) }} strModel="levels" name="Tất cả"  />
+                </FormGroup>
+              </Col>
+              <Col md={3}>
+                <FormGroup>
+                  <Label> Áp dụng cho hạn mức thanh toán </Label>
+                  <SelectListModelCode defaultValue={this.data.payment_code} onChange={(e)=>{ this._onChange('payment_code',e.target.value) }} strModel="payments" name="Tất cả" />
+                </FormGroup>
+              </Col>
+            </Row>
 
-          />
-          <BenGrid
+            <Row>
+              <Col md={6}>
+                <FormGroup>
+                  <Label> Công thức </Label> <br></br>
+                  <ButtonGroup>
+                    <Button disabled className="btn btn-success" > total_order_value /  </Button>
+                    <InputNumeral defaultValue={this.data.value} style={{borderRadius:0}} id="formular" type="text" onChange={(value)=>{ this._onChange('value',value) }} />
+                    <Button disabled className="btn btn-success" > = 1 điểm  </Button>
+                  </ButtonGroup>
+                  
+                </FormGroup>
+              </Col>
+            </Row>
 
-             height='79.9vh'
+            <Row style={{marginTop:20}}>
+              <Col md={3}>
+                <Button onClick={this._onSubmit} style={{width:120}} className="btn btn-ubuntu"> Cập nhật </Button>
+              </Col>
+              
+            </Row>
+            
+            <div style={{position:'relative',bottom:-20,marginTop:30}}  className="form-err text-muted" id="form-err"></div>
 
-             onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
-             isRightTool={ true }
+            
 
-             nextColums={ this.grid.colums }
-             rowData={this.grid.rowData}
-             model={ this.model }
-
-             customButton={
-               <Button onClick={this.onBtnNew}  style={{ marginRight:10, borderRadius:0}}  className="btn-ubuntu"  > <i className="fa fa-plus"></i> Tạo Công thức  </Button>
-
-             }
-          />
+        </div>  
       </div>
     )
   }

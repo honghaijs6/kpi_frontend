@@ -71,24 +71,27 @@ class GridFooter extends Component{
 
     return(
       <div className="ag-footer">
-         <div className="text-center">
-             <ButtonGroup>
-               <Button size="xs" onClick={ this.first } className="btn-datagrid" > <i className="fa fa-step-backward"></i> </Button>
-               <Button size="xs" onClick={ this.pre } className="btn-datagrid" > <i className="fa fa-chevron-left"></i> </Button>
-               <Input className="btn-datagrid"  onChange={ (e)=>{ this.onChange(e) } } type="select" style={{
-                 borderRadius:0,
-                 borderLeft:0,
-                 borderRight:0,
-                 fontWeight:500
+         <div className="pull-left">
+            <ButtonGroup>
+              <Button size="xs" onClick={ this.first } className="btn-datagrid" > <i className="fa fa-step-backward"></i> </Button>
+              <Button size="xs" onClick={ this.pre } className="btn-datagrid" > <i className="fa fa-chevron-left"></i> </Button>
+              <Input className="btn-datagrid"  onChange={ (e)=>{ this.onChange(e) } } type="select" style={{
+                borderRadius:0,
+                borderLeft:0,
+                borderRight:0,
+                fontWeight:500
 
-               }} value={ paginate.p } >
+              }} value={ paginate.p } >
                 { list }
-               </Input>
-               <Button className="btn-datagrid" onClick={ this.next } size="xs" > <i className="fa fa-chevron-right"></i> </Button>
-               <Button size="xs" onClick={ this.last } className="btn-datagrid" > <i className="fa fa-step-forward"></i> </Button>
+              </Input>
+              <Button className="btn-datagrid" onClick={ this.next } size="xs" > <i className="fa fa-chevron-right"></i> </Button>
+              <Button size="xs" onClick={ this.last } className="btn-datagrid" > <i className="fa fa-step-forward"></i> </Button>
 
-             </ButtonGroup>
-             <span className="info">
+            </ButtonGroup>
+         </div>
+         <div className="pull-right" style={{marginTop:10}}>
+             
+             <span className="info" >
                 { paginate.max} dòng / trang
                 { ' của '+ total }
              </span>

@@ -7,7 +7,7 @@ import React from 'react';
 import { Input  } from 'reactstrap';
 
 
-class SelectListModel extends React.Component {
+class SelectListModelCode extends React.Component {
 
     constructor(props){
         super(props);
@@ -22,6 +22,7 @@ class SelectListModel extends React.Component {
 
     }
 
+
     componentWillReceiveProps(newProps){
         this.setState({
             defaultValue:newProps.defaultValue
@@ -29,6 +30,7 @@ class SelectListModel extends React.Component {
         
 
     }
+
     async componentDidMount(){
         const res = await doLoadAll(this.state.strModel); 
         if(res.name==='success'){
@@ -41,12 +43,12 @@ class SelectListModel extends React.Component {
 
     render() {
         return (
-            <Input value={ this.props.defaultValue } onChange={(e)=>{ this.props.onChange(e) }} type="select" style={ this.props.style || {} }>
+            <Input value={ this.state.defaultValue } onChange={(e)=>{ this.props.onChange(e) }} type="select" style={ this.props.style || {} }>
                 <option value=""> { this.state.name } </option>
                 {
                     this.state.rows.map((item)=>{
                         return(
-                            <option key={item.id} value={item.id}> { item.name } </option>
+                            <option key={item.id} value={item.code}> { item.name } </option>
                         )
                     })
                 }
@@ -56,17 +58,17 @@ class SelectListModel extends React.Component {
     }
 }
 
-SelectListModel.propTypes = {
+SelectListModelCode.propTypes = {
     strModel:PropTypes.string,
     name:PropTypes.string,
     onChange:PropTypes.func
 }
 
-SelectListModel.defaultProps = {
+SelectListModelCode.defaultProps = {
     strModel:'categories',
     name:'Danh Mục',
     onChange:function(){}
 }
 
 
-export default SelectListModel;
+export default SelectListModelCode;

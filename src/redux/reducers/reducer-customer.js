@@ -12,14 +12,8 @@ nhật ký : thu - chi : từ tài khoản
 
 import { toast } from '../../hook/after';
 
-
-import { CUSTOMERS } from '../../model/model-mode';
-import { CUSTOMER_NAME } from '../../model/model-name';
-
-
-
-const MODE = CUSTOMERS;
-const NAME = CUSTOMER_NAME;
+const MODE = 'customers';
+const NAME = 'Khách Hàng';
 
 const iniState = {
   mode:MODE,
@@ -67,9 +61,6 @@ export default function(state = iniState ,action = {}){
       const msg = NAME;
 
       toast('put',msg);
-
-      //console.log(action.res);
-
 
       return {
         ...state,
