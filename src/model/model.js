@@ -77,15 +77,9 @@ class Model {
 
   resetConfigDB(name,value){
     if(name==='paginate'){
-
         //this.paginate = value ; // value = {}
         Object.assign(this.paginate,value);
-
-
-
-
-
-
+        
     }else{
       this.db[name] = value;
 

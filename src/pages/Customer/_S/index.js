@@ -74,9 +74,6 @@ class OrderView extends Component{
           }
         },
         
-        
-
-        
 
         {headerName: "Khách Hàng", field: "name",width:400},
         
@@ -197,7 +194,7 @@ class OrderView extends Component{
 
               <MyForm
 
-                width='81%'
+                width='72%'
                 name={ MODE_NAME }
                 typeAction={ this.state.typeAction }
                 modal={this.formCtrl}

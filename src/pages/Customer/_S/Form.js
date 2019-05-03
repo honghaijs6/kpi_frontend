@@ -5,12 +5,15 @@ import BenModal from '../../../components/BenModal';
 
 import SelectListModelCode from '../../../components/SelectListModelCode' ; 
 import SelectListModel from '../../../components/SelectListModel' ; 
-
-
+import InputSuggest from '../../../components/InputSuggest'; 
 
 
 
 function GeneralInfoRow(props){
+
+  const modal = props.modal; 
+  const data = modal.data; 
+
 
   return(
     <div className="row-form">
@@ -19,19 +22,19 @@ function GeneralInfoRow(props){
           <Col md="3">
             <FormGroup>
               <label> Mã KH </label>
-              <Input  id="code"  type="text"/>
+              <Input defaultValue={data.code} onChange={(e)=>{ modal.onChange('code',e.target.value) }}  id="code"  type="text"/>
             </FormGroup>
           </Col>
           <Col md="6">
             <FormGroup>
               <label> Công ty </label>
-              <Input id="name" type="text"   />
+              <Input defaultValue={ data.name } onChange={(e)=>{ modal.onChange('name',e.target.value) }}  id="name" type="text"   />
             </FormGroup>
           </Col>
           <Col md="3">
             <FormGroup>
               <label> Người liên hệ </label>
-              <Input id="contact_name"  type="text"  />
+              <Input defaultValue={data.contact_name} onChange={(e)=>{ modal.onChange('contact_name',e.target.value) }}  id="contact_name"  type="text"  />
             </FormGroup>
           </Col>
       </Row>
@@ -39,19 +42,19 @@ function GeneralInfoRow(props){
           <Col md="3">
             <FormGroup>
               <label> Số ĐT </label>
-              <Input  id="phone"    type="text"/>
+              <Input  defaultValue={data.phone} onChange={(e)=>{ modal.onChange('phone',e.target.value) }} id="phone"    type="text"/>
             </FormGroup>
           </Col>
           <Col md="6">
             <FormGroup>
               <label> E-mail </label>
-              <Input  id="email"    type="text"/>
+              <Input  id="email" defaultValue={data.email} onChange={(e)=>{ modal.onChange('email',e.target.value) }}   type="text"/>
             </FormGroup>
           </Col>
           <Col md="3">
             <FormGroup>
               <label> Mã số thuế </label>
-              <Input id="tax_no"    type="text"/>
+              <Input defaultValue={data.tax_no} onChange={(e)=>{ modal.onChange('tax_no',e.target.value) }} id="tax_no"    type="text"/>
             </FormGroup>
           </Col>
       </Row>
@@ -60,6 +63,11 @@ function GeneralInfoRow(props){
 }
 
 function ContactInfoRow(props){
+
+  const modal = props.modal; 
+  const data = modal.data; 
+  
+
   return(
     <div className="row-form">
       <h6 className="txt-green text-uppercase"> Thông tin Liên hệ  </h6>
@@ -67,13 +75,17 @@ function ContactInfoRow(props){
           <Col md="6">
             <FormGroup>
               <label> Địa chỉ </label>
-              <Input  id="address" type="text"/>
+              <Input defaultValue={data.address} onChange={(e)=>{ modal.onChange('address',e.target.value) }}  id="address" type="text"/>
             </FormGroup>
           </Col>
           <Col md="3">
             <FormGroup>
               <label> Tỉnh / Thành </label>
-              <SelectListModelCode id="region_code" strModel="regions" name="Vui lòng chọn" />
+              <SelectListModelCode 
+                defaultValue={data.region_code} 
+                onChange={(e)=>{  modal.onChange('region_code',e.target.value) }} 
+                id="region_code" strModel="regions" name="Vui lòng chọn" 
+              />
 
             </FormGroup>
           </Col>
@@ -88,13 +100,13 @@ function ContactInfoRow(props){
           <Col md="6">
             <FormGroup>
               <label> Địa chỉ giao hàng </label>
-              <Input  id="address"    type="text"/>
+              <Input defaultValue={data.address_delivery} onChange={(e)=>{ modal.onChange('address_delivery',e.target.value) }}  id="address_delivery"    type="text"/>
             </FormGroup>
           </Col>
           <Col md="6">
             <FormGroup>
               <label> Địa chỉ xuất hoá đơn </label>
-              <Input id="address_xhd"    type="text"/>
+              <Input id="address_xhd"  defaultValue={data.address_xhd}  onChange={(e)=>{ modal.onChange('address_xhd',e.target.value) }}  type="text"/>
             </FormGroup>
           </Col>
 
@@ -105,6 +117,11 @@ function ContactInfoRow(props){
 
 
 function ClassifyInfoRow(props){
+
+  const modal = props.modal; 
+  const data = modal.data; 
+  
+
   return(
     <div className="row-form">
       <h6 className="txt-green text-uppercase"> Phân loại khách hàng  </h6>
@@ -112,7 +129,7 @@ function ClassifyInfoRow(props){
           <Col md="3">
             <FormGroup>
               <label> Nhóm KH </label>
-              <SelectListModelCode id="type" strModel="customer_types" name="Vui lòng chọn" /> 
+              <SelectListModelCode id="type" defaultValue={data.type} onChange={(e)=>{  modal.onChange('type',e.target.value)  }}  strModel="customer_types" name="Vui lòng chọn" /> 
 
 
             </FormGroup>
@@ -120,21 +137,24 @@ function ClassifyInfoRow(props){
           <Col md="3">
             <FormGroup>
               <label> Cấp bậc </label>
-              <SelectListModel strModel="levels" name="Vui lòng chọn" id="level_id" />
+              <SelectListModel strModel="levels" defaultValue={ data.level_id } onChange={(e)=>{  modal.onChange('level_id',e.target.value) }} name="Vui lòng chọn" id="level_id" />
             </FormGroup>
           </Col>
 
           <Col md="3">
             <FormGroup>
               <label> Trạng thái KH </label>
-              <SelectListModelCode strModel="customer_status" name="Vui lòng chọn" id="status_code" />
+              <SelectListModelCode defaultValue={ data.status_code } onChange={(e)=>{ modal.onChange('status_code',e.target.value) }} strModel="customer_status" name="Vui lòng chọn" id="status_code" />
 
             </FormGroup>
           </Col>
           <Col md="3">
             <FormGroup>
               <label> Nguồn </label>
-              <SelectListModelCode strModel="customer_originals" name="Vui lòng chọn" id="status_code" />
+              <SelectListModelCode 
+                defaultValue={data.original_code} 
+                onChange={(e)=>{ modal.onChange('original_code',e.target.value) }} 
+                strModel="customer_originals" name="Vui lòng chọn" id="original_code" />
 
             </FormGroup>
           </Col>
@@ -146,6 +166,11 @@ function ClassifyInfoRow(props){
 
 
 function OtherInfoRow(props){
+
+  const modal = props.modal; 
+  const data = modal.data; 
+  
+
   return(
     <div className="row-form">
       <h6 className="txt-green text-uppercase"> Thông tin khác  </h6>
@@ -153,19 +178,19 @@ function OtherInfoRow(props){
           <Col md="3">
             <FormGroup>
               <label> NV Phụ trách </label>
-              <Input  className="form-control" id="code"    type="text"/>
-            </FormGroup>
-          </Col>
-          <Col md="3">
-            <FormGroup>
-              <label> Gán thẻ  </label>
-              <Input  className="form-control" id="code"    type="text"/>
+              <InputSuggest 
+                strModel='users' 
+                code="username" 
+                onSelected={(value)=>{ modal.onChange('belong_user',value.username) }} defaultValue={ data.belong_user }  id="belong_user" 
+              />
+
+
             </FormGroup>
           </Col>
           <Col md="6">
             <FormGroup>
               <Label> Ghi chú </Label>
-              <Input style={{ height:90}} type="textarea"   />
+              <Input id="note" onChange={(e)=>{ modal.onChange('note',e.target.value) }} defaultValue={ data.note } style={{ height:90}} type="textarea"   />
             </FormGroup>
           </Col>
       </Row>
@@ -183,7 +208,7 @@ class CustomerForm extends Component {
 
      return(
        <BenModal width={ this.props.width } name={ this.props.name } typeAction={ this.props.typeAction } modal={ this.props.modal }  >
-          <div style={{padding:20}}>
+          <div style={{padding:0}}>
             <GeneralInfoRow modal={ this.props.modal } />
             <ContactInfoRow modal={ this.props.modal } />
             <ClassifyInfoRow modal={ this.props.modal }  />

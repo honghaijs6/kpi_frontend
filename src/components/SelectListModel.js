@@ -41,7 +41,7 @@ class SelectListModel extends React.Component {
 
     render() {
         return (
-            <Input value={ this.props.defaultValue } onChange={(e)=>{ this.props.onChange(e) }} type="select" style={ this.props.style || {} }>
+            <Input id={this.props.id} value={ this.props.defaultValue } onChange={(e)=>{ this.props.onChange(e) }} type="select" style={ this.props.style || {} }>
                 <option value=""> { this.state.name } </option>
                 {
                     this.state.rows.map((item)=>{
@@ -65,7 +65,8 @@ SelectListModel.propTypes = {
 SelectListModel.defaultProps = {
     strModel:'categories',
     name:'Danh Mục',
-    onChange:function(){}
+    onChange:function(){},
+    id:'none'
 }
 
 

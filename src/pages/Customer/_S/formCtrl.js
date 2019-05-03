@@ -14,6 +14,8 @@ class formController {
         status:''
       }
 
+      this.data = {}
+
       this.model = model ;
       this.dispatcher = dispatcher; 
 
@@ -23,9 +25,21 @@ class formController {
       return {
         code:'',
         name:'',
-        decription:'', 
-        color_code:'rgba(30,49,121,1)',
-        benefit_discount:0
+        contact_name:'', 
+        phone:'',
+        email:'',
+        tax_no:'',
+        address:'',
+        region_code:'',
+        subregion_code:'',
+        address_delivery:'',
+        address_xhd:'',
+        type:'',
+        level_id:0,
+        status_code:'',
+        original_code:'',
+        belong_user:'',
+        note:''
       }
     }
 
@@ -36,7 +50,7 @@ class formController {
       /* HOOKED detectForm before save data*/
       // -->
       const fields = [
-        'code','name'
+        'code','name','phone','email','tax_no','address','region_code','subregion_code','type','level_id','status_code','original_code','belong_user'
       ];
 
       if(detectForm(fields,this.data)===''){
@@ -47,7 +61,6 @@ class formController {
               onAction:'onSubmit',
               status:res.name
             });
-
           })
       }
 

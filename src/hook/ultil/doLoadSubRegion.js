@@ -2,7 +2,7 @@
 import Model from '../../model/model';
 import { SUBREGIONS } from '../../model/model-mode';
 
-export default function(region_code,dispatcher,onSuccess){
+export default function(region_code,dispatcher=null,onSuccess){
 
   const SubRegions = new Model(SUBREGIONS,dispatcher);
 

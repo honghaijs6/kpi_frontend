@@ -15,10 +15,11 @@ export default class InputSuggest extends Component{
         
         this.state = {
             display:'none',
-            value:props.value || '',
+            value:props.defaultValue || '',
             rows:[],
             selectedIndex:null,
-            strModel:props.strModel || 'suppliers'
+            strModel:props.strModel || 'suppliers',
+            code:props.code || 'code'
         }
 
         this._keyHandling = this._keyHandling.bind(this); 
@@ -51,7 +52,7 @@ export default class InputSuggest extends Component{
                     index = this.state.rows.length === 1 ? 0 : index; 
                     this.setState({
                         selectedIndex:index,
-                        value:this.state.rows[index]['code']
+                        value:this.state.rows[index][this.state.code]
                     });
                     
     
@@ -62,7 +63,7 @@ export default class InputSuggest extends Component{
                     
                     this.setState({
                         selectedIndex:index,
-                        value:this.state.rows[index]['code']
+                        value:this.state.rows[index][this.state.code]
                     });
     
                 break ;
@@ -97,9 +98,10 @@ export default class InputSuggest extends Component{
     }*/
 
     _onSelected(item){
+        
         this.setState({
             display:'none',
-            value:item.code
+            value:item[this.state.code]
         });
 
         if(this.props.onSelected !== undefined){
@@ -111,10 +113,17 @@ export default class InputSuggest extends Component{
 
     render(){
 
-        
         return(
             <div>
-                <Input onKeyUp={ this._keyHandling } id={this.props.id || 0 } placeholder="nhập từ khoá..." onClick={()=>{ this.setState({value:''}) }} value={this.state.value} onChange={(e)=>{ this._onChange(e.target.value) }}  type="text" />
+                <Input 
+                    onKeyUp={ this._keyHandling } 
+                    id={this.props.id || 0 } 
+                    placeholder="nhập từ khoá..." 
+                    
+                    value={this.state.value} 
+                    onChange={(e)=>{ this._onChange(e.target.value) }}  
+                    
+                    type="text" />
                     
                 <ul className="suggest-holder" style={{display:this.state.display}} >
                     {
