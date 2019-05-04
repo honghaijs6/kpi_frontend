@@ -3,6 +3,7 @@
 import Model from '../../../model/model';
 
 // HOOK ULTI 
+import doGetModelInfo from '../../../hook/ultil/doGetModelInfo' ; 
 import moment from 'moment';
 
 import React, { Component } from 'react';
@@ -148,7 +149,17 @@ class OrderView extends Component{
 
   }
 
-  _doOpenModalUpdate(data){
+  async _doOpenModalUpdate(data){
+    
+    const info = await doGetModelInfo('customers',data.id);
+    Object.assign(data,info.data) ; 
+    this.formCtrl.open('put',data);
+
+    this._whereStateChange({
+      typeAction:'put',
+      onAction:'open_modal'
+    }); 
+
 
   }
 
@@ -168,9 +179,12 @@ class OrderView extends Component{
     this.model.initData() ; 
   }
   componentWillReceiveProps(newProps){
-
+    
     this.data[MODE] = newProps[MODE]['list'] || [] ;
+    Object.assign(this.state,newProps[MODE]['state']) ;
+    
     this.resetGrid();
+
 
   }
 
@@ -198,6 +212,9 @@ class OrderView extends Component{
                 name={ MODE_NAME }
                 typeAction={ this.state.typeAction }
                 modal={this.formCtrl}
+
+                status={this.state.status}
+                
 
               />
 

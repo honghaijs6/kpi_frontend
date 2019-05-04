@@ -22,9 +22,14 @@ const NAME = USERS_NAME;
 const iniState = {
   mode:MODE,
   name:NAME,
-  state:{},
+  state:{
+    onAction:'',   // function call name
+    typeAction:'', // refer to model type action : post - put - update - delete 
+    status:'' // refer to form status 
+  },
   list:[]
 }
+
 
 export default function(state = iniState ,action = {}){
   switch(action.type){

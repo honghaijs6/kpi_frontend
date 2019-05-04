@@ -7,14 +7,14 @@ import React from 'react';
 import { Input  } from 'reactstrap';
 
 
-class SelectListModelCode extends React.Component {
+class SelectRegion extends React.Component {
 
     constructor(props){
         super(props);
 
         
         this.state = {
-            strModel:props.strModel,
+            strModel:'regions',
             name:props.name,
             rows:[],
             defaultValue:props.defaultValue || ''
@@ -59,19 +59,17 @@ class SelectListModelCode extends React.Component {
     }
 }
 
-SelectListModelCode.propTypes = {
-    strModel:PropTypes.string,
+SelectRegion.propTypes = {
     name:PropTypes.string,
     onChange:PropTypes.func,
     id:PropTypes.string
 }
 
-SelectListModelCode.defaultProps = {
-    strModel:'categories',
-    name:'Danh Mục',
+SelectRegion.defaultProps = {
+    name:'Vui lòng chọn',
     onChange:function(){},
     id:'none'
 }
 
 
-export default SelectListModelCode;
+export default SelectRegion;

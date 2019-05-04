@@ -30,8 +30,8 @@ class formController {
         email:'',
         tax_no:'',
         address:'',
-        region_code:'',
-        subregion_code:'',
+        region_code:'79', // HCM
+        subregion_code:'760',  //  quan 1
         address_delivery:'',
         address_xhd:'',
         type:'',
@@ -104,31 +104,33 @@ class formController {
       this.active = !this.active;
       // -->
       this._whereStateChange({
-        onAction:'toggle_modal'
-      })
-
-
+        onAction:'toggle_modal',
+        status:'closed',
+      });
+      
     }
 
     /* START : WHERE */
     _whereStateChange(newState={}){
 
-      Object.assign(this.state,newState);
+      switch(newState){
+        case 'onSubmit' :
+          this.toggle() ; 
+        break ;
 
-      if(newState.status ==='success'){
-        this.toggle()
-      }else{
-        //alert('FORM-'+this.model.model);
+        default:
 
-        if(this.dispatcher!==null){
-          this.dispatcher({
-            type:'STATE-'+this.model.model,
-            state:this.state
-          })
-        }
+          Object.assign(this.state,newState);
+          if(this.dispatcher!==null){
+            this.dispatcher({
+              type:'STATE-'+this.model.model,
+              state:this.state
+            })
+          }
 
+        break ;
       }
-
+      
     }
 
     

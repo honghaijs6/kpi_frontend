@@ -18,7 +18,11 @@ const NAME = 'Khách Hàng';
 const iniState = {
   mode:MODE,
   name:NAME,
-  state:{},
+  state:{
+    onAction:'',   // function call name
+    typeAction:'', // refer to model type action : post - put - update - delete 
+    status:'' // refer to form status 
+  },
   list:[]
 }
 

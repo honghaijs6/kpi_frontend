@@ -5,6 +5,8 @@ import BenModal from '../../../components/BenModal';
 
 import SelectListModelCode from '../../../components/SelectListModelCode' ; 
 import SelectListModel from '../../../components/SelectListModel' ; 
+import SelectRegion from '../../../components/SelectRegion';
+import SelectSubRegion from '../../../components/SelectSubRegion';
 import InputSuggest from '../../../components/InputSuggest'; 
 
 
@@ -81,10 +83,10 @@ function ContactInfoRow(props){
           <Col md="3">
             <FormGroup>
               <label> Tỉnh / Thành </label>
-              <SelectListModelCode 
-                defaultValue={data.region_code} 
+              <SelectRegion 
+                defaultValue={ data.region_code === null ? '' : data.region_code } 
                 onChange={(e)=>{  modal.onChange('region_code',e.target.value) }} 
-                id="region_code" strModel="regions" name="Vui lòng chọn" 
+                id="region_code"  name="Vui lòng chọn" 
               />
 
             </FormGroup>
@@ -92,7 +94,12 @@ function ContactInfoRow(props){
           <Col md="3">
             <FormGroup>
               <label> Quận / Huyện </label>
-              <Input  id="subregion_code"    type="text"/>
+              <SelectSubRegion 
+                  status={props.status}
+                  onChange={(e)=>{ modal.onChange('subregion_code',e.target.value) }} 
+                  defaultValue={data.subregion_code === null ? '' : data.subregion_code } 
+                  parent_code={data.region_code} name="Vui lòng chọn" />
+
             </FormGroup>
           </Col>
       </Row>
@@ -144,7 +151,7 @@ function ClassifyInfoRow(props){
           <Col md="3">
             <FormGroup>
               <label> Trạng thái KH </label>
-              <SelectListModelCode defaultValue={ data.status_code } onChange={(e)=>{ modal.onChange('status_code',e.target.value) }} strModel="customer_status" name="Vui lòng chọn" id="status_code" />
+              <SelectListModelCode defaultValue={ data.status_code === null ? '' : data.status_code } onChange={(e)=>{ modal.onChange('status_code',e.target.value) }} strModel="customer_status" name="Vui lòng chọn" id="status_code" />
 
             </FormGroup>
           </Col>
@@ -152,7 +159,7 @@ function ClassifyInfoRow(props){
             <FormGroup>
               <label> Nguồn </label>
               <SelectListModelCode 
-                defaultValue={data.original_code} 
+                defaultValue={ data.original_code === null ? '' : data.original_code } 
                 onChange={(e)=>{ modal.onChange('original_code',e.target.value) }} 
                 strModel="customer_originals" name="Vui lòng chọn" id="original_code" />
 
@@ -209,10 +216,10 @@ class CustomerForm extends Component {
      return(
        <BenModal width={ this.props.width } name={ this.props.name } typeAction={ this.props.typeAction } modal={ this.props.modal }  >
           <div style={{padding:0}}>
-            <GeneralInfoRow modal={ this.props.modal } />
-            <ContactInfoRow modal={ this.props.modal } />
-            <ClassifyInfoRow modal={ this.props.modal }  />
-            <OtherInfoRow modal={ this.props.modal} />
+            <GeneralInfoRow {...this.props} />
+            <ContactInfoRow {...this.props} />
+            <ClassifyInfoRow {...this.props}  />
+            <OtherInfoRow {...this.props} />
           </div>
        </BenModal>
      )
