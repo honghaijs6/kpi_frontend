@@ -42,10 +42,10 @@ export default class ButtonExpand extends Component {
   render() {
 
     const display = this.state.display === false ? 'none' : 'block' ; 
-    const displayIcon = this.state.display === false ? 'fa-plus' : 'fa-close ';
+    
     return (
         <ButtonGroup className="div-holder-filter">
-            <Button onClick={ this._onClick } style={{marginRight:10, borderRadius:0}} className="btn btn-ubuntu btn-open-expand"> <i className={'fa '+displayIcon}></i> </Button>        
+            <Button onClick={ this._onClick } style={{marginRight:10, borderRadius:0}} className="btn btn-ubuntu btn-open-expand"> <i className='fa fa-filter'></i> </Button>        
             <div className="filter-holder" style={{display:display}}>
                 { this.props.children }
             </div>
