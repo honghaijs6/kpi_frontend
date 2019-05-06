@@ -7,14 +7,18 @@ import doGetModelInfo from '../../../hook/ultil/doGetModelInfo' ;
 import moment from 'moment';
 
 import React, { Component } from 'react';
+import { ButtonGroup, Button, FormGroup, Input, Label } from 'reactstrap'; 
 import { connect } from 'react-redux';
-
-
-
 
 /* MODAL FORM & CTRL */
 import MyForm from './Form';
 import formCtrl from './formCtrl';
+
+
+import ButtonExpand from '../../../components/ButtonExpand'; 
+import SelectListModelCode from '../../../components/SelectListModelCode';
+import SelectListModel from '../../../components/SelectListModel';
+
 
 
 /*INCLUDE OTHER COMPONENT*/
@@ -125,14 +129,26 @@ class OrderView extends Component{
 
     this.formCtrl = new formCtrl(this.model,this.props.dispatch);
     
-    
+  }
 
+  _doFilter(name,value){
+    if(value!==''){
+      this.model.set('paginate',{
+        [name]:value
+      });
+    }else{
+      this.model.remove(name) ; 
+    }
+
+    this.model.load(); 
+      
   }
 
   /* HOW */
   resetGrid(){
     
     this.grid.rowData = this.data[MODE];
+
     this._whereStateChange({
       onAction:'resetGrid'
     });
@@ -180,9 +196,13 @@ class OrderView extends Component{
   }
   componentWillReceiveProps(newProps){
     
+    // RESET GRID DATA
     this.data[MODE] = newProps[MODE]['list'] || [] ;
-    Object.assign(this.state,newProps[MODE]['state']) ;
     
+    
+    // UPDATE STATE FORM DATA
+    Object.assign(this.state,newProps[MODE]['state']) ;
+
     this.resetGrid();
 
 
@@ -232,6 +252,29 @@ class OrderView extends Component{
                  rowData={this.grid.rowData}
                  model={ this.model }
 
+                 customButton={
+                    <ButtonExpand>
+                        <FormGroup>
+                              <label> Nhóm </label>
+                              <SelectListModelCode onChange={(e)=>{ this._doFilter('type',e.target.value) }} name="Tất cả" strModel='customer_types' />
+                        </FormGroup>
+                        <FormGroup>
+                              <label> Cấp Bậc </label>
+                              <SelectListModel onChange={(e)=>{ this._doFilter('level_id',e.target.value) }} name="Tất cả" strModel='levels' />
+                        </FormGroup>
+
+                        <FormGroup>
+                              <label> Trạng Thái </label>
+                              <SelectListModelCode onChange={(e)=>{ this._doFilter('status_code',e.target.value) }} name="Tất cả" strModel='customer_status' />
+
+                        </FormGroup>
+                          
+                        <FormGroup>
+                              <label> Nguồn </label>
+                              <SelectListModelCode onChange={(e)=>{ this._doFilter('original_code',e.target.value) }} name="Tất cả" strModel='customer_originals' />
+                        </FormGroup>
+                    </ButtonExpand>     
+                 }
                  
               />
               

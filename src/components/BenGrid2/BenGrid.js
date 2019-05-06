@@ -95,11 +95,12 @@ class BenGrid extends Component{
   /* WHEN*/
   componentWillReceiveProps(newProps){
 
-    this.gridApi.refreshCells();
+    //this.gridApi.refreshCells();
+
     if(this.state.isGridReady){
 
       //this.gridApi.setRowData(newProps.rowData);
-      this.gridApi.refreshCells();
+      //this.gridApi.refreshCells();
 
       // ADD ROW
       if( newProps.model.db.total > this.state.count){
@@ -107,6 +108,12 @@ class BenGrid extends Component{
       }else if(newProps.model.db.total < this.state.count){
         // REMOVE ROW
         this.gridApi.updateRowData({ remove: this.state.selectedData });
+      }else if(newProps.model.db.total === this.state.count){
+        
+        
+        this.gridApi.setRowData(newProps.rowData);
+        
+
       }
       
     }

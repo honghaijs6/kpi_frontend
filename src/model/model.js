@@ -107,6 +107,8 @@ class Model {
 
     let el = document.querySelector("#form-err");
 
+    console.log(err);
+
     if(el !== null){
       el.innerHTML = msg;
       setTimeout(()=>{
@@ -367,10 +369,11 @@ class Model {
 
   fetch(onSuccess){
 
-      this.db.type = 'GET';
-      const {url, config} = this.db ;
+    this.db.type = 'GET';
+    const {url, config} = this.db ;
 
-      axios.get(url,config)
+      
+    axios.get(url,config)
             .then((res) => {
               //this.restResp(res); // KHÔNG LUU localStorage
               onSuccess(res)
@@ -381,7 +384,7 @@ class Model {
                 this.onError(error)
 
               }
-            );
+    );
   }
 
   /*
@@ -490,11 +493,13 @@ class Model {
           case 'PUT':
 
             /*UPDATE REDUX STORE*/
-            const id = idata.id;
+            const id = idata.data.id;
+            
 
             list.forEach((item,index)=>{
+              
               if(parseInt(item.id) === parseInt(id)){
-                 list[index] = idata;
+                 list[index] = idata.data;
               }
             })
 
@@ -582,6 +587,11 @@ class Model {
   }
   /*********END WHERE*************/
 
+  remove(name){
+
+    delete this.paginate[name] ; 
+    this.configDB();
+  }
   set(name,value){
     this.resetConfigDB(name,value);
   }

@@ -56,6 +56,7 @@ class formController {
       if(detectForm(fields,this.data)===''){
 
           this.model.axios(typeAction,this.data,(res)=>{
+
             // -->
             this._whereStateChange({
               onAction:'onSubmit',
@@ -78,6 +79,8 @@ class formController {
     open(typeAction, info){
 
       //const {temp} = info || FORM_TEMP ;
+
+      
       this.data = info || this._stateDataTemp() ;
       this.active = true ;
 
