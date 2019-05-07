@@ -1,5 +1,6 @@
 
 import { detectForm } from '../../../../hook/before';
+import error from '../../../../hook/after/error' ; 
 
 
 class formController {
@@ -33,7 +34,7 @@ class formController {
       // -->
       const fields = [
         'name'
-      ];
+      ]; 
 
       if(detectForm(fields,this.data)===''){
 
@@ -44,6 +45,11 @@ class formController {
               onAction:'onSubmit',
               status:res.name
             });
+
+            // on success 
+            res.name === 'success' ? this.toggle() : error(this.model.model) ;  
+
+
 
           })
       }
@@ -100,23 +106,27 @@ class formController {
     /* START : WHERE */
     _whereStateChange(newState={}){
 
-      Object.assign(this.state,newState);
+      switch(newState){
+        case 'onSubmit' :
+          this.toggle() ; 
+        break ;
 
-      if(newState.status ==='success'){
-        this.toggle()
-      }else{
-        //alert('FORM-'+this.model.model);
+        default:
 
-        if(this.dispatcher!==null){
-          this.dispatcher({
-            type:'STATE-'+this.model.model,
-            state:this.state
-          })
-        }
+          Object.assign(this.state,newState);
+          if(this.dispatcher!==null){
+            this.dispatcher({
+              type:'STATE-'+this.model.model,
+              state:this.state
+            })
+          }
 
+        break ;
       }
 
+
     }
+
 
     popover = {
         active:false,

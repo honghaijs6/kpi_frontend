@@ -152,26 +152,26 @@ class CategoryPage extends Component{
 
   render(){
 
-    const formTitle = this.state.typeAction === 'post' ? 'Tạo '+ MODE_NAME : 'Chỉnh sửa '+ MODE_NAME;
-
+    
     return(
-      <div hidden={  this.props.onTab === this.state.tab ? false : true } >
+      <div hidden={  this.props.onTab === this.state.tab ? false : true } style={{padding:10}} >
 
           <MyForm
-            name={ formTitle }
-            typeAction={ this.state.typeAction }
+            
+            name={ MODE_NAME }
             modal={this.modal} 
 
           />
           <BenGrid
 
-             height='79.9vh'
+             height='78vh'
              gridID="id"
              onBtnEdit={ this._doOpenModalUpdate }
              onBtnAdd={this.onBtnNew}   
              rowSelection='single'
 
              isRightTool={ true }
+             
 
              nextColums={ this.grid.colums }
              rowData={this.grid.rowData}

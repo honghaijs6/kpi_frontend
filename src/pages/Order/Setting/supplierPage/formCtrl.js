@@ -1,8 +1,7 @@
 
 
 import { detectForm } from '../../../../hook/before';
-import { doLoadSubRegion } from '../../../../hook/ultil';
-
+import error from '../../../../hook/after/error' ; 
 
 const REGION_CODE = '79'; // HCM
 const SUBREGION_CODE = '760'; // quan 1
@@ -43,18 +42,7 @@ class formController {
         note:''
       }
     } 
-
-    loadDistrictList(parent_code){
-
-      doLoadSubRegion(parent_code,this.dispatcher,(res)=>{
-        this._whereStateChange({
-          onAction:'loadDistrictList'
-        })
-      });
-      
-
-   }
-
+    
 
     onSubmit(){
 
@@ -69,9 +57,6 @@ class formController {
       if(detectForm(fields,this.data)===''){
 
           //  KIEM TRA TỒN TẠI 
-          const CODE = this.data.code;
-          let el = document.querySelector("#form-err");
-
           this.model.axios(typeAction,this.data,(res)=>{
             
             
@@ -80,6 +65,11 @@ class formController {
               status:res.name
             });
 
+            window.setTimeout(()=>{
+              res.name === 'success' ? this.toggle() : error(this.model.model) ;  
+            },2000)
+            
+
           });
           
 
@@ -87,35 +77,14 @@ class formController {
 
     }
 
-    onChange(name, e){
-      Object.assign(this.data,{ [name]:e.target.value});
+    onChange(name,value){
+      Object.assign(this.data,{ [name]:value});
       //this.data[name] = e.target.value;
       // --> initial HOW -> WHERE
-      //this.processForm(name,e);
-
-    }
-
-    onChangeDist(e){
-      const code = e.target.value;
-      this.data['subregion_code'] = code ;
-
+      this.processForm(name,value);
       
-      // --> HOW -> WHERE
-      //this.processForm('subregion_code',e);
-
-
-
-    }
-
-    onChangeCity(e){
-       const code = e.target.value;
-       this.data['region_code'] = code ;
-       // --> HOW -> WHERE
-       this.loadDistrictList(code);
-
-
-    }
-
+    } 
+    
 
 
     /* START : HOW */
@@ -145,67 +114,37 @@ class formController {
     toggle(){
 
       this.active = !this.active;
-      this.popover.active =  false;
-
       // -->
       this._whereStateChange({
-        onAction:'toggle_modal'
-      })
-
-
+        onAction:'toggle_modal',
+        status:'closed',
+      });
+      
     }
 
     /* START : WHERE */
     _whereStateChange(newState={}){
 
-      Object.assign(this.state,newState);
+      switch(newState){
+        case 'onSubmit' :
+          this.toggle() ; 
+        break ;
 
-      if(newState.status ==='success'){
-        this.toggle()
-      }else{
+        default:
 
-        if(this.dispatcher!==null){
-          this.dispatcher({
-            type:'STATE-'+this.model.model,
-            state:this.state
-          })
-        }
+          Object.assign(this.state,newState);
+          if(this.dispatcher!==null){
+            this.dispatcher({
+              type:'STATE-'+this.model.model,
+              state:this.state
+            })
+          }
 
+        break ;
       }
-
+      
     }
-
-    popover = {
-        active:false,
-
-        parent:this,
-        btnYes(){
-
-
-          const id = this.parent.data.id;
-
-          this.parent.model.delete(id,(res)=>{
-
-              this.parent._whereStateChange({
-                onAction:'btnYes',
-                typeAction:'delete',
-                status:res.name
-              });
-
-          })
-
-        },
-
-        toggle(){
-
-           this.active = !this.active;
-           this.parent._whereStateChange({
-             onAction:'toggle_popover'
-           })
-
-        }
-    }
-
+    
 
 }
 

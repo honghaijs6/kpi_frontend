@@ -10,11 +10,13 @@ import CKEditor from "react-ckeditor-component";
 
 
 
+
 import BenModal from '../../../../components/BenModal';
 import InputNumeral from '../../../../components/InputNumeral';
 import InputSuggest from '../../../../components/InputSuggest'; 
 import ButtonUploadImage from '../../../../components/ButtonUploadImage';
 
+import SelectListModel from '../../../../components/SelectListModel'; 
 
 
 
@@ -54,22 +56,24 @@ function FormRow1(props){
           <Col md={2}>
             <FormGroup>
               <label> Danh mục </label>
-              <Input id="categories_id" onChange={(e)=>{ modal.onChange('categories_id',e.target.value) }} defaultValue={ data.categories_id } type="select">
-                <option value=""> Vui lòng chọn </option>
-                {
-                  props.categories.map((item)=>{
-                    return(
-                      <option key={item.id} value={item.id}> { item.name } </option>
-                    )
-                  })
-                }
-              </Input>
+              <SelectListModel id="categories_id" 
+                  defaultValue={ data.categories_id } 
+                  strModel="categories" onChange={(e)=>{ modal.onChange('categories_id',e.target.value) }} 
+                  name="Vui lòng chọn" 
+              />
+              
+              
             </FormGroup>
           </Col>
           <Col md={2}>
              <FormGroup>
                 <label> Nhà cung cấp </label>
-                <InputSuggest strModel='suppliers' onSelected={(json)=>{ modal.onChange('supplier_codes',json.code) }} value={ data.supplier_codes }  id="supplier_codes" />  
+                <InputSuggest 
+                  strModel='suppliers' 
+                  defaultValue={data.supplier_codes} 
+                  onSelected={(json)=>{ modal.onChange('supplier_codes',json.code) }} 
+                  value={ data.supplier_codes }  id="supplier_codes" 
+                />  
                   
              </FormGroup>
           </Col>
@@ -124,22 +128,15 @@ function FormRow2(props){
           <Col md={2}>
              <FormGroup>
                 <label> ĐVT </label>
-                <Input id="unit" type="select" onChange={(e)=>{ modal.onChange('unit',e.target.value) }} value={ data.unit } >
-                  <option value="">Vui lòng chọn</option>
-                  {
-                    props.units.map((item)=>{
-                      return(
-                        <option key={item.id} value={item.id} > { item.name } </option>
-                      )
-                    })
-                  }
-                </Input>
+                <SelectListModel id="unit" defaultValue={ data.unit } onChange={(e)=>{ modal.onChange('unit',e.target.value) }} strModel="units" name="Vui lòng chọn" />
+
+                
              </FormGroup>
           </Col>
           <Col md="2">
              <FormGroup>
                 <label> Thuộc </label>
-                <Input id="type" type="select" onChange={(e)=>{ modal.onChange('type',e.target.value) }} value={ data.type } >
+                <Input id="type" type="select" onChange={(e)=>{ modal.onChange('type',e.target.value) }} defaultValue={ data.type } >
                     {
 
                       Object.keys(PRODUCT_TYPE).map((item)=>{

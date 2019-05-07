@@ -39,6 +39,9 @@ class BenModal extends Component{
         </ModalBody>
 
         <div className="my-modal-footer">
+           <div className="float-left" style={{marginTop:10}}>
+              <div className="form-err text-muted" id="form-err"></div>
+           </div>
            <div className="float-right">
                <div role="group" className="btn-group">
                      <Button className="btn-ubuntu bg-dark" onClick={ this.toggle }> <i className="fa fa fa-reply"></i> Từ Chối  </Button>
@@ -48,13 +51,7 @@ class BenModal extends Component{
            </div>
 
         </div>
-
-        <div className="modal-err" >
-           <div className="form-err text-muted" id="form-err">
-               status
-           </div>
-        </div>
-
+        
       </Modal>
     )
   }

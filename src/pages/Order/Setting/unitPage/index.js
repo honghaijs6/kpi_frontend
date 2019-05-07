@@ -9,13 +9,9 @@ import Model from '../../../../model/model';
 // HOOK ULTI 
 import moment from 'moment';
 
-
-
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-
-import { Button } from 'reactstrap';
 
 
 /* MODAL FORM & CTRL */
@@ -30,7 +26,7 @@ const MODE_TAB = 'unitPage';
 const MODE_NAME = 'Đơn vị tính';
 
 
-class CategoryPage extends Component{
+class UnitPage extends Component{
 
   _isData = false;
   constructor(props){
@@ -152,20 +148,18 @@ class CategoryPage extends Component{
 
   render(){
 
-    const formTitle = this.state.typeAction === 'post' ? 'Tạo '+ MODE_NAME : 'Chỉnh sửa '+ MODE_NAME;
-
+    
     return(
-      <div hidden={  this.props.onTab === this.state.tab ? false : true } >
+      <div hidden={  this.props.onTab === this.state.tab ? false : true } style={{padding:10}} >
 
           <MyForm
-            name={ formTitle }
-            typeAction={ this.state.typeAction }
+            name={ MODE_NAME }
             modal={this.modal}
             
           />
           <BenGrid
 
-             height='79.9vh'
+             height='78vh'
              gridID='id'
              onBtnEdit={ this._doOpenModalUpdate }
              onBtnAdd={ this.onBtnNew }
@@ -189,4 +183,4 @@ function mapStateToProps(state){
 }
 
 
-export default connect(mapStateToProps)(CategoryPage)
+export default connect(mapStateToProps)(UnitPage)

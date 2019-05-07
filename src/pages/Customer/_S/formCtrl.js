@@ -1,6 +1,8 @@
 
 
 import { detectForm } from '../../../hook/before';
+import error from '../../../hook/after/error' ; 
+
 
 
 class formController {
@@ -57,11 +59,15 @@ class formController {
 
           this.model.axios(typeAction,this.data,(res)=>{
 
-            // -->
             this._whereStateChange({
               onAction:'onSubmit',
               status:res.name
             });
+
+            window.setTimeout(()=>{
+              res.name === 'success' ? this.toggle() : error(this.model.model) ;  
+            },1000)
+            
           })
       }
 

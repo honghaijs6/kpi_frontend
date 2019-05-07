@@ -13,7 +13,7 @@ import { doGetModelInfo } from '../../../../hook/ultil'
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Button, Input, ButtonGroup } from 'reactstrap';
+import { FormGroup } from 'reactstrap';
 
 
 
@@ -31,6 +31,8 @@ import formCtrl from './formCtrl';
 import { BenGrid } from '../../../../components/BenGrid2';
 import SelectListModel  from '../../../../components/SelectListModel';
 import SelectList from '../../../../components/SelectList'; 
+
+import ButtonExpand from '../../../../components/ButtonExpand'; 
 
 
 const MODE = 'products';
@@ -60,7 +62,7 @@ class ProductPage extends Component{
     this.grid = {
       colums:[
         {headerName: "Mã", field: "code",width:140},
-        {headerName: "Tên SP", field: "name",width:330},
+        {headerName: "Tên SP", field: "name",width:280},
         {headerName: "Loại", field: "type",width:100,
           cellRenderer(params){
 
@@ -68,6 +70,8 @@ class ProductPage extends Component{
           }
         },
         {headerName: "Danh Mục", field: "category",width:140},
+        {headerName: "Nhà Cung Cấp", field: "supplier_codes",width:160},
+
         {headerName: "Giá nhà máy", field: "price_1",width:140,
           cellRenderer(params){
 
@@ -156,7 +160,7 @@ class ProductPage extends Component{
   async _doOpenModalUpdate(data){
       
       const info =  await doGetModelInfo('products',data.id);
-      Object.assign(data,info)
+      Object.assign(data,info.data); 
       this.modal.open('put',data);
 
       this._whereStateChange({
@@ -192,61 +196,65 @@ class ProductPage extends Component{
   /* WHERE*/
   async _whereStateChange(newState){
     this.setState(Object.assign(this.state,newState));
-
-    switch(newState.onAction){
-        case 'open_modal':
-        const resCate =  await doLoadAll('categories'); 
-        this.data.categories = resCate.name === 'success' ? resCate.rows : [] ; 
-        this.setState({
-          onAction:'doLoadAll'
-        });
-        
-        const resUnit = await doLoadAll('units') ; 
-        this.data.units = resUnit.name === 'success' ? resUnit.rows : [] ;
-        this.setState({onAction:'doLoadAll'});
-      break ;
-    }
-
+    
   }
 
+  _doFilter(name,value){
+
+    
+
+    if(value!==''){
+      this.model.set('paginate',{
+        [name]:value
+      });
+    }else{
+      this.model.remove(name) ; 
+    }
+
+    this.model.load(); 
+      
+  }
 
   render(){
 
-    const formTitle = this.state.typeAction === 'post' ? 'Tạo '+MODE_NAME : 'Chỉnh sửa '+MODE_NAME;
-
+    
     return(
-      <div hidden={  this.props.onTab === this.state.tab ? false : true } >
+      <div hidden={  this.props.onTab === this.state.tab ? false : true } style={{padding:10}} >
 
           <MyForm
-            name={ formTitle }
+            name={ MODE_NAME }
             typeAction={ this.state.typeAction }
             modal={this.modal}
             width='70%'
-
-            categories={ this.data.categories }
-            units={ this.data.units }
-
+            
           />
           <BenGrid
 
-             height='79vh'
+             height='78vh'
              rowSelection="single"
              gridID="id"
              onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
              onBtnAdd={this.onBtnNew} 
-
+ 
              isRightTool={ true }
              nextColums={ this.grid.colums }
              rowData={this.grid.rowData}
              model={ this.model }
 
              customButton={
-                <ButtonGroup style={{marginRight:10}}>
+                  <ButtonExpand>
+                    <FormGroup>
+                          <label> Danh mục </label>
+                          <SelectListModel onChange={(e)=>{ this._doFilter('categories_id',e.target.value) }} name="Tất cả" strModel='categories' />
+                    </FormGroup>
+                    <FormGroup>
+                          <label> Loại hình</label>
+                          <SelectList onChange={(e)=>{ this._doFilter('type',e.target.value) }} name="Tất cả" style={{borderRadius:0}} rows={ LIST_PRODUCT_TYPE } />
 
-                    <SelectListModel onChange={(e)=>{ alert(e.target.value) }} strModel="categories" name="Danh Mục" style={{borderRadius:0, marginRight:10}} />
-                    <SelectList onChange={(e)=>{ alert(e.target.value) }} name="Loại" style={{borderRadius:0}} rows={ LIST_PRODUCT_TYPE } />
-
-                </ButtonGroup>
+                    </FormGroup>
+                    
+                </ButtonExpand>     
+                
              }
           />
       </div>
@@ -256,9 +264,7 @@ class ProductPage extends Component{
 
 function mapStateToProps(state){
   return {
-     [MODE]:state[MODE],
-     'categories':state.categories,
-     'units':state.units
+     [MODE]:state[MODE]
   }
 }
 

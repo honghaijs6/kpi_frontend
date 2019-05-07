@@ -6,20 +6,12 @@ supplier page
 /* OBJECT - PLUGIN*/
 import Model from '../../../../model/model';
 
-
-
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-
-import { Button } from 'reactstrap';
-
-
 import moment from 'moment';
-/* HOOKED*/
-import { doLoadSubRegion, doLoadRegion } from '../../../../hook/ultil';
-/*............*/
 
+/*............*/
 
 
 /* MODAL FORM & CTRL */
@@ -33,10 +25,6 @@ const MODE = 'suppliers';
 const MODE_NAME = 'Nhà cung cấp';
 const MODE_TAB = 'supplierPage';
 
-const REGION_CODE = '79'; // HCM
-const SUBREGION_CODE = '760'; // quan 1
-
-
 class SupplierPage extends Component{
 
   _isData = false;
@@ -49,24 +37,24 @@ class SupplierPage extends Component{
       onAction:'', // string method
       status:'', // status
 
-      tab:'supplierPage',
+      tab:MODE_TAB,
       isIniData:false
     }
 
     this.data = {
-      [MODE]:[],
-      regions:[],
-      subregions:[]
+      [MODE]:[]
     }
 
     this.grid = {
       colums:[
         {headerName: "Mã", field: "code",width:200},
         {headerName: "Tên công ty", field: "name",width:300},
+        {headerName: "Loại hình", field: "type",width:140},
+
         {headerName: "Người liên hệ", field: "contact_name",width:200},
+        {headerName: "Số ĐT", field: "phone",width:150},
         {headerName: "Email", field: "email",width:200},
-        {headerName: "Số ĐT", field: "phone",width:200},
-        {headerName: "Loại hình", field: "type",width:200},
+        
         {headerName: "Cho công nợ", field: "dept",width:150},
         {headerName: "Người tạo", field: "creator",width:200},
         {headerName: "Ngày tạo", field: "date_created",width:150,
@@ -112,10 +100,7 @@ class SupplierPage extends Component{
   async _doInitData(){
 
     await this.model.initData();
-
-    doLoadRegion(this.props.dispatch);
-
-
+    
     this._whereStateChange({
       isIniData:true
     })
@@ -135,37 +120,22 @@ class SupplierPage extends Component{
 
   _doOpenModalPost(){
 
-    doLoadSubRegion(REGION_CODE,this.props.dispatch,(res)=>{
-
-
-      this._whereStateChange({
-        typeAction:'post',
-        onAction:'_doOpenModalPost'
-      });
-
-      this.modal.open('post');
-
-
-
+    this._whereStateChange({
+      typeAction:'post',
+      onAction:'_doOpenModalPost'
     });
 
-
+    this.modal.open('post');
   }
   _doOpenModalUpdate(data){
 
-    doLoadSubRegion(data.region_code,this.props.dispatch,(res)=>{
-
-      this.data.subregions = res.rows ;
-
-      this._whereStateChange({
-        typeAction:'put',
-        onAction:'_doOpenModalUpdate'
-      });
-
-      this.modal.open('put',data);
-
-
+    this._whereStateChange({
+      typeAction:'put',
+      onAction:'_doOpenModalUpdate'
     });
+
+    this.modal.open('put',data);
+
 
   }
   /* END HOW*/
@@ -190,6 +160,11 @@ class SupplierPage extends Component{
     }
 
     this.data[MODE] = newProps[MODE]['list'] || [] ;
+
+    // UPDATE STATE FORM DATA
+    Object.assign(this.state,newProps[MODE]['state']) ;
+    
+
     this.resetGrid();
 
 
@@ -204,30 +179,21 @@ class SupplierPage extends Component{
 
   render(){
 
-    const formTitle = this.state.typeAction === 'post' ? 'Tạo '+ MODE_NAME : 'Chỉnh sửa '+MODE_NAME;
-
-    const regions = this.props.regions.list || [] ;
-    const subregions = this.props.subregions.list || [] ;
-
-
-
 
     return(
-      <div hidden={  this.props.onTab === this.state.tab ? false : true } >
+      <div hidden={  this.props.onTab === this.state.tab ? false : true } style={{padding:10}} >
 
           <MyForm
             width='60%'
-            name={ formTitle }
-            typeAction={ this.state.typeAction }
+            name={ MODE_NAME }
+            
             modal={this.modal}
-            regions={ regions }
-            subregions={ subregions }
-  
-
+            status={this.state.status}
+            
           />
           <BenGrid
 
-             height='79.9vh'
+             height='78vh'
              gridID='id'
              rowSelection='single'
              
@@ -248,9 +214,7 @@ class SupplierPage extends Component{
 
 function mapStateToProps(state){
   return {
-     [MODE]:state[MODE],
-     regions:state.regions,
-     subregions:state.subregions
+     [MODE]:state[MODE]
   }
 }
 

@@ -14,7 +14,7 @@ export const PRODUCT_TYPE = {
 
 export const LIST_PRODUCT_TYPE = [
   { code:'root', name:'SP Chính' },
-  { code:'non-root', name:'SP Phụ' },
+  { code:'none-root', name:'SP Phụ' },
   { code:'root-project', name:'SP Dự án' },
   { code:'root-service', name:'SP Dịch vụ' },
 ];

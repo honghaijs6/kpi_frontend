@@ -56,7 +56,7 @@ class BenGrid extends Component{
         {
           headerName: "SID",
           field: gridID,
-          width:200,
+          width:120,
           checkboxSelection: true,
           filterParams: { newRowsAction: "keep" },
           checkboxSelection: function(params) {

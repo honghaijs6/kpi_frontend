@@ -10,8 +10,8 @@ import SupplierPage from './supplierPage';
 import CauseDelPage from './causeDelPage';
 
 import SettingOrderPage from './settingOrderPage';
-import NotificationPage from './notificationPage';
 import UnitPage from './unitPage';
+import FormulaPricePage from './formulaPricePage' ; 
 
 
 
@@ -29,13 +29,15 @@ class OrderSetting extends Component{
  
       onTab:'productPage',
       navData:[
-        {icon:'', code:'productPage',name:'Sản phẩm',active:true},
-        {icon:'', code:'categoryPage',name:'Danh mục sản phẩm'},
-        {icon:'', code:'supplierPage',name:'Nhà Cung Cấp'},
-        {icon:'', code:'unitPage',name:'Đơn vị tính'},
-        {icon:'', code:'causeDelPage',name:'Lý do huỷ đơn hàng'},
-        {icon:'', code:'settingOrderPage',name:'Cấu hình tạo đơn hàng'},
-        {icon:'', code:'notificationPage',name:'Cài đặt thông báo'},
+        {icon:'fa fa-get-pocket', code:'productPage',name:'Sản phẩm',active:true},
+        {icon:'fa fa-folder', code:'categoryPage',name:'Danh mục sản phẩm'},
+        {icon:'fa fa-gg', code:'supplierPage',name:'Nhà Cung Cấp'},
+        {icon:'fa fa-tags', code:'unitPage',name:'Đơn vị tính'},
+        {icon:'fa fa-trash', code:'causeDelPage',name:'Lý do huỷ đơn hàng'},
+        {icon:'fa  fa-codepen', code:'settingOrderPage',name:'Cấu hình tạo đơn hàng'},
+        {icon:'fa  fa-dollar', code:'formulaPricePage',name:'Công thức tính giá'},
+        
+        
         
       ]
     }
@@ -66,8 +68,8 @@ class OrderSetting extends Component{
                 <SupplierPage {...this.state} />
                 <CauseDelPage {...this.state} />
                 <SettingOrderPage {...this.state} />
-                <NotificationPage {...this.state} />
                 <UnitPage {...this.state} /> 
+                <FormulaPricePage {...this.state} />
         
 
               </BenExplorer>

@@ -524,7 +524,7 @@ class Model {
 
             this.restResp({
               list:list
-            });
+            }); 
           break ;
 
 
@@ -534,8 +534,8 @@ class Model {
 
         // SHOW ERROR HERE
         let el = document.querySelector("#form-err");
-        el.innerHTML = idata.message;
-
+        el.innerHTML = '<span class="text-danger">'+idata.message+'</span>';
+        
 
       }
 

@@ -130,7 +130,7 @@ export default {
         },
         {
           name:'Điểm tích luỹ',
-          url:'/customer/point',
+          url:'/customer/point',  
           icon:''
         },
         /*{

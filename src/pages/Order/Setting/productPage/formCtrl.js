@@ -1,5 +1,7 @@
 
 import { detectForm } from '../../../../hook/before';
+import error from '../../../../hook/after/error' ; 
+
 
 class formController {
 
@@ -14,7 +16,9 @@ class formController {
 
       this.data = {};
       this.model = model ;
-      this.dispatcher = dispatcher || null ;
+      this.dispatcher = dispatcher || null ; 
+
+      
 
     }
 
@@ -50,11 +54,15 @@ class formController {
       if(detectForm(fields,this.data)===''){
 
           this.model.axios(typeAction,this.data,(res)=>{
+            
             this._whereStateChange({
               onAction:'onSubmit',
               status:res.name
             });
 
+            // on success 
+            res.name === 'success' ? this.toggle() : error(this.model.model) ;  
+            
           })
       }
 
@@ -63,8 +71,6 @@ class formController {
     onChange(name, value){
       //Object.assign(this.data,{ [name]:e.target.value});
       Object.assign(this.data,{ [name]:value});
-      //this.data[name] = e.target.value;
-      // --> initial HOW -> WHERE
       
       if(name!=='content'){
         this.processForm(name,value);
@@ -80,7 +86,7 @@ class formController {
       this.active = true ;
 
       this._whereStateChange({
-        typeAction:typeAction,
+        typeAction:typeAction,   
         onAction:'open',
         status:'opened'
       });
@@ -99,30 +105,35 @@ class formController {
     toggle(){
 
       this.active = !this.active;
-
       // -->
       this._whereStateChange({
-        onAction:'toggle_modal'
-      })
-
-
+        onAction:'toggle_modal',
+        status:'closed',
+      });
+      
     }
 
     /* START : WHERE */
     _whereStateChange(newState={}){
 
-      Object.assign(this.state,newState);
+      switch(newState){
+        case 'onSubmit' :
+          this.toggle() ; 
+        break ;
 
-      if(newState.status ==='success'){
-        this.toggle(); 
+        default:
 
-      }else{
-        //alert('FORM-'+this.model.model);
-        this.dispatcher({
-          type:'STATE-'+this.model.model,
-          state:this.state
-        })
+          Object.assign(this.state,newState);
+          if(this.dispatcher!==null){
+            this.dispatcher({
+              type:'STATE-'+this.model.model,
+              state:this.state
+            })
+          }
+
+        break ;
       }
+
 
     }
 

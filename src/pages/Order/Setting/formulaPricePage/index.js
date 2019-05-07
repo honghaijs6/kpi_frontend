@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 
+const MODE_TAB = 'formulaPricePage' ;
+
+
 class SettingOrderPage extends Component{
 
     constructor(props){
@@ -12,16 +15,16 @@ class SettingOrderPage extends Component{
             onAction:'', // string method
             status:'', // status
             
-            tab:'settingOrderPage',
-            isIniData:false
+            tab:MODE_TAB
         }
     }
+
 
     render(){
 
         return(
-            <div hidden={  this.props.onTab === this.state.tab ? false : true } style={{padding:10}}>
-                Cấu tạo đơn hàng   
+            <div hidden={  this.props.onTab === this.state.tab ? false : true } style={{padding:10}} >
+                   Công thức tính giá 
             </div>
         )
     }

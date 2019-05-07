@@ -22,7 +22,7 @@ export default function(fields=[],data={}){
   }
   
   let el = document.querySelector("#form-err");
-  el.innerHTML = '<span class="text-danger">'+ret+'</span>';
+  el.innerHTML = '<span class="text-danger"><i class="fa fa-exclamation-triangle"></i> '+ret+'</span>';
 
   if(ret!==''){
     window.setTimeout(()=>{

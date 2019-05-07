@@ -7,7 +7,7 @@ import doGetModelInfo from '../../../hook/ultil/doGetModelInfo' ;
 import moment from 'moment';
 
 import React, { Component } from 'react';
-import { ButtonGroup, Button, FormGroup, Input, Label } from 'reactstrap'; 
+import {   FormGroup } from 'reactstrap'; 
 import { connect } from 'react-redux';
 
 /* MODAL FORM & CTRL */
@@ -132,6 +132,7 @@ class OrderView extends Component{
   }
 
   _doFilter(name,value){
+    
     if(value!==''){
       this.model.set('paginate',{
         [name]:value
@@ -198,10 +199,9 @@ class OrderView extends Component{
     
     // RESET GRID DATA
     this.data[MODE] = newProps[MODE]['list'] || [] ;
-    
-    
     // UPDATE STATE FORM DATA
     Object.assign(this.state,newProps[MODE]['state']) ;
+
 
     this.resetGrid();
 
@@ -230,7 +230,7 @@ class OrderView extends Component{
 
                 width='72%'
                 name={ MODE_NAME }
-                typeAction={ this.state.typeAction }
+                
                 modal={this.formCtrl}
 
                 status={this.state.status}

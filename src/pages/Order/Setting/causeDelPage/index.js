@@ -77,6 +77,12 @@ class CategoryPage extends Component{
       name:'listAll',
       params:'all'
     });
+
+    // SET TYPE OF TABLE MUST LOAD
+    this.model.set('paginate',{
+      type:'order'
+    });
+
     
     this.modal = new formCtrl(this.model,this.props.dispatch);
     
@@ -151,7 +157,7 @@ class CategoryPage extends Component{
 
     
     return(
-      <div hidden={  this.props.onTab === this.state.tab ? false : true } >
+      <div hidden={  this.props.onTab === this.state.tab ? false : true }  style={{padding:10}} >
 
           <MyForm
             name={ MODE_NAME }
@@ -162,7 +168,7 @@ class CategoryPage extends Component{
           <BenGrid
              
              rowSelection='single'
-             height='79.9vh'
+             height='78vh'
              gridID='id'
              onBtnEdit={ this._doOpenModalUpdate }
              onBtnAdd={ this.onBtnNew }
