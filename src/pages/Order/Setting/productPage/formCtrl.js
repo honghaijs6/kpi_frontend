@@ -46,7 +46,7 @@ class formController {
       /* HOOKED detectForm before save data*/
       // -->
       const fields = [
-        'code','name','categories_id','supplier_codes','price_1','price_2','price_3','price_4','unit'
+        'code','name','categories_id','supplier_codes','unit'
       ];
 
       

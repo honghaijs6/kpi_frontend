@@ -47,6 +47,13 @@ class Model {
   setup(){
 
     this.jwt = localStorage.getItem('feathers-jwt');
+
+    // SETUP MAC DINH 
+    this.set('method',{
+      name:'listAll',
+      params:'all'
+    });
+
     // database
     this.configDB();
 
@@ -144,7 +151,7 @@ class Model {
 
       const id = list[0].id;
       this.delete(id,(res)=>{
-        if(res.name==='success'){
+        if(res.name==='success' || res.name ==='ok' ){
           let newlist = list.filter((item) => { return parseInt(item.id) !== parseInt(id) })
           this.deleteMulti(newlist);
         }
@@ -201,6 +208,28 @@ class Model {
     this.status = data ;
 
     const url = server.base() + '/' + this.model + '?id='+id;
+
+    preLoad('put');
+
+
+    axios.put(url,data,this.db.config)
+          .then((res)=>{
+            this.listenDataChange(res);
+            onSuccess(res.data)
+          },(error)=>{
+
+            this.onError(error)
+
+    })
+
+  }
+
+  putCustom(method,data,onSuccess){
+
+    this.db.type = 'PUT';
+    this.status = data ;
+
+    const url = server.base() + '/' + this.model + '/'+method;
 
     preLoad('put');
 
@@ -371,7 +400,6 @@ class Model {
 
     this.db.type = 'GET';
     const {url, config} = this.db ;
-
       
     axios.get(url,config)
             .then((res) => {
@@ -450,7 +478,7 @@ class Model {
       let { total } =  this.db;
 
 
-      if(idata.name==='success'){
+      if(idata.name==='success' || idata.name==='ok'){
         switch (this.db.type) {
 
           case 'CALL':

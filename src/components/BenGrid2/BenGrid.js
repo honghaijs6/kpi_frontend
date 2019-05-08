@@ -111,9 +111,10 @@ class BenGrid extends Component{
       }else if(newProps.model.db.total === this.state.count){
         
         
-        this.gridApi.setRowData(newProps.rowData);
+        if(newProps.formStatus==='closed'){
+          this.gridApi.setRowData(newProps.rowData)
+        }
         
-
       }
       
     }
@@ -123,6 +124,10 @@ class BenGrid extends Component{
       count:newProps.model.db.total
     });
 
+  }
+
+  error(msg){
+    console.log(msg); 
   }
 
 
@@ -204,16 +209,18 @@ class BenGrid extends Component{
   } 
 
   onSelectionChanged(){
+
+    
     const selectedNodes = this.gridApi.getSelectedNodes()
     const selectedData = selectedNodes.map( node => node.data );
 
     this.setState({
       selectedData:selectedData
     });
-
+    
     // alway call back data on selected ;
     if(this.props.onCellSelected){
-      this.props.onCellSelected(selectedData[0]) 
+      this.props.onCellSelected(selectedData.length > 0 ? selectedData[0] : {}); 
     }
     
   }

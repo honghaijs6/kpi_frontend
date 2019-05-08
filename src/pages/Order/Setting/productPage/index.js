@@ -5,16 +5,11 @@ import {PRODUCT_TYPE_DECO,LIST_PRODUCT_TYPE} from '../../../../config/product.co
 import Model from '../../../../model/model';
 
 /*  HOOKS */
-import doLoadAll from '../../../../hook/ultil/doLoadAll';
 import { doGetModelInfo } from '../../../../hook/ultil'
-
-
-
 import React, { Component } from 'react';
+import {ButtonGroup, FormGroup} from 'reactstrap'
+
 import { connect } from 'react-redux';
-
-import { FormGroup } from 'reactstrap';
-
 
 
 import moment from 'moment';
@@ -25,6 +20,9 @@ import numeral from 'numeral';
 /* MODAL FORM & CTRL */
 import MyForm from './Form';
 import formCtrl from './formCtrl';
+
+import FormFollow from './FormFollow'; 
+
 
 
 /*INCLUDE OTHER COMPONENT*/
@@ -40,6 +38,8 @@ const MODE_NAME = 'Sản phẩm';
 const MODE_TAB = 'productPage';
 
 
+
+
 class ProductPage extends Component{
 
   constructor(props){
@@ -49,14 +49,14 @@ class ProductPage extends Component{
       typeAction:'', // post - put - delete ...
       onAction:'', // string method
       status:'', // status
+      
+      selectedData:{},
 
       tab:MODE_TAB
     }
 
     this.data = {
-      [MODE]:[],
-      'categories':[],
-      'units':[]
+      [MODE]:[]
     }
 
     this.grid = {
@@ -139,9 +139,9 @@ class ProductPage extends Component{
   resetGrid(){
 
       this.grid.rowData = this.data[MODE];
-
-
+      
       this._whereStateChange({
+        selectedData: this.state.status === 'closed' ? {} : this.state.selectedData,  // update current selected data on close form
         onAction:'resetGrid'
       });
 
@@ -188,6 +188,13 @@ class ProductPage extends Component{
 
     // revice redux data
     this.data[MODE] = newProps[MODE]['list'] || [] ;
+    
+    // UPDATE CURRRENT STATE 
+    Object.assign(this.state,newProps[MODE]['state']);
+    
+
+
+
     this.resetGrid(); // HAD INSIDE setSatte 
     
 
@@ -200,7 +207,6 @@ class ProductPage extends Component{
   }
 
   _doFilter(name,value){
-
     
 
     if(value!==''){
@@ -223,38 +229,50 @@ class ProductPage extends Component{
 
           <MyForm
             name={ MODE_NAME }
-            typeAction={ this.state.typeAction }
+            
             modal={this.modal}
             width='70%'
             
           />
           <BenGrid
-
+             
              height='78vh'
              rowSelection="single"
              gridID="id"
              onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
              onBtnAdd={this.onBtnNew} 
- 
+
+             formStatus={ this.state.status }
+
              isRightTool={ true }
              nextColums={ this.grid.colums }
              rowData={this.grid.rowData}
              model={ this.model }
 
-             customButton={
-                  <ButtonExpand>
-                    <FormGroup>
-                          <label> Danh mục </label>
-                          <SelectListModel onChange={(e)=>{ this._doFilter('categories_id',e.target.value) }} name="Tất cả" strModel='categories' />
-                    </FormGroup>
-                    <FormGroup>
-                          <label> Loại hình</label>
-                          <SelectList onChange={(e)=>{ this._doFilter('type',e.target.value) }} name="Tất cả" style={{borderRadius:0}} rows={ LIST_PRODUCT_TYPE } />
+             onCellSelected={(json)=>{  this.setState({selectedData:json})  }}
+             
 
-                    </FormGroup>
-                    
-                </ButtonExpand>     
-                
+             customButton={
+                  <ButtonGroup>
+              
+                      <ButtonExpand width={720} icon="fa-tags">
+                          <FormFollow data={this.state.selectedData} />
+                      </ButtonExpand>
+                      <ButtonExpand icon="fa-filter">
+                          <FormGroup>
+                                <label> Danh mục </label>
+                                <SelectListModel onChange={(e)=>{ this._doFilter('categories_id',e.target.value) }} name="Tất cả" strModel='categories' />
+                          </FormGroup>
+                          <FormGroup>
+                                <label> Loại hình</label>
+                                <SelectList onChange={(e)=>{ this._doFilter('type',e.target.value) }} name="Tất cả" style={{borderRadius:0}} rows={ LIST_PRODUCT_TYPE } />
+
+                          </FormGroup>
+                          
+                      </ButtonExpand>     
+                      
+                  </ButtonGroup>
+                  
              }
           />
       </div>
