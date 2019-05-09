@@ -5,7 +5,7 @@ import Model from '../../../../model/model' ;
 
 //import liraries
 import React, { Component } from 'react';
-import {  Button, Input, FormGroup, Label, Table } from 'reactstrap' ; 
+import {   Input, FormGroup, Label, Table } from 'reactstrap' ; 
 
 // create a component
 class FormFollow extends Component {

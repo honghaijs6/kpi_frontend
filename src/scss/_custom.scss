@@ -188,6 +188,14 @@ table.vk-table thead,table.vk-table tbody tr {
     table-layout:fixed;/* even columns width , fix width of table too*/
 }
 
+table.vk-table thead{
+  background-color: #222D32;
+  color:#fff;
+  border: 0px;
+
+}
+
+
 .vk-table tbody tr:hover{ background:rgba(66,103,178,0.3) !important;}
 
 .vk-table > tbody > tr:nth-child(2n+2)  {

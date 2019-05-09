@@ -1,5 +1,6 @@
 
-import doFindAll from '../hook/ultil/doFindAll' ; 
+
+import Model from '../model/model';
 
 import React, { Component } from 'react';
 import { Input } from 'reactstrap';
@@ -17,23 +18,38 @@ export default class InputSuggest extends Component{
             value:props.defaultValue || '',
             rows:[],
             selectedIndex:null,
-            strModel:props.strModel || 'suppliers',
-            code:props.code || 'code'
+            code:'code',
+            type:props.type || 'root'
         }
 
         this._keyHandling = this._keyHandling.bind(this); 
     }
+
+    componentDidMount(){
+        this.model = new Model('products');
+        this.model.set('paginate',{
+            max:6,
+            type:this.state.type
+        })
+    }
     async _onChange(key){
 
-        const resSup = await doFindAll(this.state.strModel,key);
-        this.setState({
-            display:'block',
-            value:key,
-            time:0,
-            selectedIndex:0,
-            rows: resSup.name === 'success' ? resSup.rows : [] 
-        }); 
+        
+        this.model.set('paginate',{
+            key:key
+        });
+        this.model.fetch((res)=>{
 
+            const data = res.data ;
+
+            this.setState({
+                display:'block',
+                value:key,
+                time:0,
+                selectedIndex:0,
+                rows: data.name === 'success' ? data.rows : [] 
+            });
+        });
         
     }
     

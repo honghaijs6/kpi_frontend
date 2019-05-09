@@ -1,56 +1,78 @@
-import { isExisted } from '../../../hook/before'; 
+
+import Model from '../../../model/model';
+
+import { isExisted, detectForm } from '../../../hook/before'; 
 
 import React from 'react';
-import {  Row, Col, Label,  Form, FormGroup,FormText, Input, Table, Button, ButtonGroup  } from 'reactstrap';
-import BenModal from '../../../components/BenModal';
+import { connect } from 'react-redux';
+
+import {  Row, Col, FormGroup,Label, Input, Table, Button, ButtonGroup  } from 'reactstrap';
 
 import numeral from 'numeral';
 
 import InputNumeral from '../../../components/InputNumeral'; 
-import InputSuggest from '../../../components/InputSuggest'; 
-import SelectListModel from '../../../components/SelectListModel'; 
- 
+import InputSuggest from '../../../components/InputSuggest';   
+import InputSuggestProduct from '../../../components/InputSuggestProduct' ; 
+
+import SelectListModelCode from '../../../components/SelectListModelCode';
+import ButtonExpand from '../../../components/ButtonExpand'; 
+
+
+import FormAddOn from './FormAddOn'; 
+
+
+const MODE = 'orders';
 
 
 function FrmLeft(props){
 
-    return(
+    const cusInfo = props.customer_info ; 
+
+    return( 
       <div>
-          <h5 className="txt-green text-uppercase font-14 mb-20"><i className="fa fa-user mr-5"></i> Thông tin Khách hàng </h5>
-  
+          <h5 className="txt-green text-uppercase font-14 mb-20">
+            <Label style={{color:props.customer_info['color_code']}}>
+             <i className="fa fa-user mr-5"></i> 
+              Thông tin Khách hàng 
+            </Label>
+
+          
+          </h5>
+
           <FormGroup>
             <Label> Mã KH </Label>
-            <InputSuggest onSelected={(json)=>{ props.onSelectedCustomer(json) }} strModel='customers' id="customer_id"  />
+            <InputSuggest defaultValue={ cusInfo.code } onSelected={(json)=>{ props.onSelectedCustomer(json) }} strModel='customers' id="customer_code"  />
           </FormGroup>
   
           <FormGroup>
             <Label> Công ty </Label>
-            <Input type="text" defaultValue={props.customer_info.name} disabled   />
+            <Input type="text" defaultValue={cusInfo.name} disabled   />
           </FormGroup>
   
           <FormGroup>
             <Row>
               <Col md="6">
                 <Label> MST </Label>
-                <Input disabled defaultValue={props.customer_info.tax_no} type="text"   />
+                <Input disabled defaultValue={cusInfo.tax_no} type="text"   />
               </Col>
               <Col>
                 <Label> Thuế VAT </Label>
-                <Input type="number" min={0} max={50} defaultValue={10} onChange={(e)=>{ props.onChange('vat',e.target.value) }} id="vat"  />
+                <Input type="number" min={0} max={50} defaultValue={ props.vat } onChange={(e)=>{ props.onChange('vat',e.target.value) }} id="vat"  />
               </Col>
             </Row>
           </FormGroup>
   
           <FormGroup>
             <Label>Hạn mức thanh toán </Label>
-            <SelectListModel strModel='payments' name="Vui Lòng Chọn" />
-
+            <SelectListModelCode 
+                strModel='payments' onChange={(e)=>{  props.onChange('payment_code',e.target.value)  }} 
+                defaultValue={props.payment_code} name="Vui Lòng Chọn" id="payment_code" />
             
             </FormGroup>
   
           <FormGroup>
             <Label> Ghi chú  </Label>
-            <Input type="textarea" style={{height:100}} id="note" />
+            <Input type="textarea" defaultValue={ props.note } onChange={(e)=>{  props.onChange('note',e.target.value)  }} style={{height:100}} id="note" />
           </FormGroup>
   
   
@@ -61,36 +83,69 @@ function FrmLeft(props){
   }
   
   function FrmRight(props){
-  
+    
+    const grid = props.grid ; 
+    
+    let SUM = 0 
+    let SUM_VAT = 0 ;
+
+
     return(
       <div>
-        <h5 className="txt-green text-uppercase font-14 mb-20"> <i className="fa fa-file-text mr-5"></i> Báo giá cho : { props.customer_info.name } </h5>
+        <h5 className="txt-green text-uppercase font-14 mb-20"> 
+
+          <Label style={{color:props.customer_info['color_code']}}>
+            <i className="fa fa-file-text mr-5"></i> Báo giá cho : { props.customer_info.name } 
+          </Label>
+
+          <Label style={{color:props.customer_info['color_code']}} className="float-right"> { props.customer_info.type_name } </Label>
+          
+        </h5>
         <FormGroup>
           <Row>
             <Col md="4">
               <Label> Sản phẩm chính </Label>
-              <InputSuggest strModel='products' onSelected={(json)=>{ props.onSelectedProduct(json) }}   />
+              <InputSuggestProduct  type="root" onSelected={(json)=>{ props.onSelectedProduct(json) }} defaultValue={props.main_code}   />
             </Col>
             <Col md="2">
+              
               <Label> Sản phẩm phụ </Label>
-              <div>
-                <a style={{width:'100%'}} className="btn btn-ubuntu bg-grey"> <i className="fa fa-plus"></i> Thêm</a>
+                <div>
+                  <ButtonGroup>
+                    <ButtonExpand style={{width:150, borderRadius:0}} width={720} name="Thêm" icon="fa-plus">
+                        <FormAddOn onSelected={(json)=>{ props.onSelectedProduct(json) }} main_code={props.main_code} type='none-root' />
+                    </ButtonExpand>
+                  </ButtonGroup>
               </div>
+
+              
+              
             </Col>
-  
-            <Col md="2">
-              <Label> Dịch vụ </Label>
-              <div>
-                <a style={{width:'100%'}} className="btn btn-ubuntu bg-grey"> <i className="fa fa-plus"></i> Thêm</a>
-              </div>
-            </Col>
-  
+
             <Col md="2">
               <Label> Phần mềm </Label>
               <div>
-                <a style={{width:'100%'}} className="btn btn-ubuntu bg-grey"> <i className="fa fa-plus"></i> Thêm</a>
+                <ButtonGroup>
+                  <ButtonExpand style={{width:150, borderRadius:0}} width={720} name="Thêm" icon="fa-plus">
+                      <FormAddOn onSelected={(json)=>{ props.onSelectedProduct(json) }} main_code={props.main_code} type='root-software' />
+                  </ButtonExpand>
+                </ButtonGroup>
+                
               </div>
             </Col>
+
+            <Col md="2">
+              <Label> Dịch vụ </Label>
+              <div>
+                <ButtonGroup>
+                  <ButtonExpand style={{width:150, borderRadius:0}} width={720} name="Thêm" icon="fa-plus">
+                    <FormAddOn onSelected={(json)=>{ props.onSelectedProduct(json) }} main_code={props.main_code} type='root-service' />
+                  </ButtonExpand>
+                </ButtonGroup>
+              </div>
+            </Col>
+  
+            
   
             <Col md="2">
               <Label> Áp dụng khuyến mãi </Label>
@@ -102,79 +157,87 @@ function FrmLeft(props){
   
           </Row>
   
-          <Row className="mt-20" style={{height:'55vh',overflow:'auto'}}>
+          <Row className="mt-20">
             <Col md={12}>
   
-              <Table striped className="product-board">
-                <thead style={{ border:0, background:'#222D32', color:'#fff' }} >
+              <Table className="product-board table vk-table">
+                <thead>
                   <tr>
-                    <th style={{width:60}}>STT</th>
-                    <th style={{ width:150 }}> Mã </th>
-                    <th style={{width:410}}> Sản phẩm </th>
-                    <th style={{ width:150 }}> Ảnh </th>
-                    <th tyle={{ width:90 }}> ĐVT </th>
-                    <th style={{width:90}}> SL  </th>
-                    <th style={{width:120}}> Đơn giá  </th>
-                    <th style={{width:120}}> T.T  </th>
-                    <th style={{width:120}}> +VAT  </th>
-                    <th style={{width:90}}>   </th>
-  
+                    { 
+                      grid.colums.map((item,index)=>{
+                        return(
+                          <th key={index} style={{width:item.width}}>{ item.headerName } </th> 
+                        )
+                      })
+                    }
                   </tr>
                 </thead>
   
-                <tbody>
+                <tbody style={{height:420}}>
 
                   {
                     props.cart.map((item)=>{
                       
-                      const amount = 1 ; 
-                      const price = item.price_1;
-                      const total = parseInt(price) * amount ; 
-                      const totalWithVat = 0 ;
+                      const amount = parseInt(item.amount) ; 
+                      const price = item.price;
+                      const total = parseInt(price) * amount ;  
+                      SUM += total;
+
+                      const totalWithVat = (total * (parseInt(props.vat) / 100)) + total ;
+                      SUM_VAT += totalWithVat ; 
 
                       return(
                         <tr key={item.id}>
-                          <td style={{width:60}}>1</td>
-                          <td style={{ width:100 }}> { item.code } </td>
-                          <td style={{width:330}}> {item.name} </td>
-                          <td style={{ width:150 }}>
+
+                          <td style={{ width: grid['colums'][0]['width'] }}> { item.code } </td>
+                          <td style={{width:grid['colums'][1]['width']}}> {item.name} </td>
+                          
+                          <td style={{ width:grid['colums'][2]['width'] }}>
                             <img style={{height:90,border:'1px solid #ddd'}} src={ item.images }  />
                           </td>
-                          <td tyle={{ width:90 }}> Cái </td>
-                          <td style={{width:120}}>
-                              <Input type="number" min={1} max={1000} defaultValue={1} />
+
+                          <td tyle={{ width:grid['colums'][3]['width'] }}> Cái </td>
+
+                          <td style={{width:grid['colums'][4]['width']}}>
+                              <Input type="number" 
+                                onChange={(e)=>{ props.onCardChange({row_id:item.id,field:'amount',value:e.target.value}) }} 
+                                min={1} max={1000000} 
+                                defaultValue={ amount } 
+                              />
                           </td>
-                          <td style={{width:150}}> 
+
+                          <td style={{width:grid['colums'][5]['width']}}> 
                             <InputNumeral onChange={(value)=>{ props.onCardChange({row_id:item.id,field:'price',value:value}) }} defaultValue={price} />
                           </td>
-                          <td style={{width:150}}> { numeral(total).format('0,0') }  </td>
-                          <td style={{width:130}}> { totalWithVat }  </td>
-                          <td style={{width:130}}>
+
+                          <td style={{width:grid['colums'][6]['width']}} className="text-green"> { numeral(total).format('0,0') }  </td>
+                          <td style={{width:grid['colums'][7]['width']}} className="text-danger" > { numeral(totalWithVat).format('0,0') }  </td>
+
+                          <td style={{width:grid['colums'][8]['width']}}>
                             <Button onClick={()=>{ props.onRemoveCard(item.id) }}  className="btn-trio"><i className="fa fa-trash"></i></Button>
                           </td>
                         </tr>
                       )
                     })
                   }
-                  
-  
+                 
                 </tbody>
-  
+                
                 <tfoot>
                   <tr>
-                    <td></td>
-                    <td>  </td>
-                    <td>  </td>
-                    <td>  </td>
-                    <td>  </td>
-                    <td>   </td>
-                    <td>  Tổng tiền  </td>
-                    <td> 200.000  </td>
-                    <td>   </td>
-                    <td>   </td>
+                    <td style={{ width: grid['colums'][0]['width'] }}> </td>
+                    <td style={{ width: grid['colums'][1]['width'] }}>  </td>
+                    <td style={{ width: grid['colums'][2]['width'] }}>  </td>
+                    <td style={{ width: grid['colums'][3]['width'] }}>  </td>
+                    <td style={{ width: grid['colums'][4]['width'] }}> </td>
+                    <td style={{ width: grid['colums'][5]['width'] }}> <label> Tổng cộng </label>  </td>
+                    <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> <label> { numeral(SUM).format('0,0')+' đ' } </label>  </td>
+                    <td style={{ width: grid['colums'][7]['width'] }} className="text-danger"> <label> { numeral(SUM_VAT).format('0,0')+' đ' } </label> </td>
+                    <td style={{ width: grid['colums'][8]['width'] }}>  </td>
                   </tr>
                 </tfoot>
-  
+
+
               </Table>
             </Col>
           </Row>
@@ -184,6 +247,22 @@ function FrmLeft(props){
   }
 
 
+
+/* 
+cart : [] 
+- id 
+- code 
+- name
+- unit
+- is_serial
+- guran_month
+- images
+- content 
+- type
+- amount
+- price
+
+*/
 class AddQuotation extends React.Component {
 
 
@@ -191,33 +270,112 @@ class AddQuotation extends React.Component {
       super(props);
 
       this.state = {
+        customer_code:'',
         customer_info:{},
-        cart:[],
+        cart:[], 
         vat:10,
         payment_code:'',
-        note:''
+        note:'',
+        main_code:''
+      }
+
+      this.grid = {
+        colums:[
+          {headerName: "Mã",width:120},
+          {headerName: "Sản phẩm", width:240},
+          {headerName: "Hình Ảnh",width:140},
+          {headerName: "ĐVT", width:140},
+          {headerName: "SL", width:90},
+          {headerName: "Đơn giá", width:140},
+          {headerName: "Thành tiền", width:140},
+          {headerName: "+VAT", width:140},
+          {headerName: "Actions", width:140}
+        ]
       }
 
       this._calculateCart = this._calculateCart.bind(this) ; 
       this._addCard = this._addCard.bind(this);
       this._onChange = this._onChange.bind(this);
       this._onSelectedCustomer = this._onSelectedCustomer.bind(this) ; 
+      
+      this._onSubmit = this._onSubmit.bind(this);
+
 
     }
 
+    _onSubmit(){
+      
+      const fields = [
+        'customer_code','vat','payment_code',
+      ];
+      
+      if(detectForm(fields,this.state)===''){
+         if(this.state.cart.length>0){
+            /// ok submit post data ;
+
+            const data = this.state ; 
+            const cusInfo = data.customer_info; 
+
+            delete data.main_code; 
+            data.customer_info = {
+              id:cusInfo.id,
+              code:cusInfo.code,
+              name:cusInfo.name,
+              level_code:cusInfo.level_code,
+              customer_original:cusInfo.customer_original,
+              customer_status:cusInfo.customer_status,
+              ref_price:cusInfo.ref_price,
+              type_name:cusInfo.type_name,
+              tax_no:cusInfo.tax_no,
+              city:cusInfo.city
+            }
+            
+            this.model.axios('post',data,(res)=>{ 
+            
+              if(res.name==='success' || res.name ==='ok'){
+                alert(' thành công ');
+
+              }
+              
+           })
+           
+         }else{
+            let el = document.querySelector("#form-err");
+            el.innerHTML = '<span class="text-danger"><i class="fa fa-exclamation-triangle"></i>  Vui lòng chọn sản phẩm </span>';
+
+         }
+      }
+
+
+      
+
+    }
     _onSelectedCustomer(json){
       this.setState({
+        customer_code:json.code,
         customer_info:json
       });
     }
 
     _calculateCart(json){
-      //console.log()
-      //alert(JSON.stringify(json));
-      console.log(this.state.cart);
+      
+      this._updateCard(json)
       
     }
-    _updateCard(){
+    _updateCard(json){ // row_id - field - value
+
+      let cart = this.state.cart; 
+
+      cart.map((item)=>{
+        if(parseInt(json.row_id) === parseInt(item.id)){
+          item[json.field] = json.value
+        }
+      });
+
+      this.setState({
+        cart:cart
+      })
+
 
     }
     _removeCard(id){
@@ -230,18 +388,37 @@ class AddQuotation extends React.Component {
       
 
     }
+    
     _addCard(json){
 
       
       if(!isExisted(this.state.cart,json.id)){
-
+  
         let cart = this.state.cart;
-        cart.push(json); 
+        // LẤY GIÁ TỪ THÔNG TIN KHÁCHNG HÀNG 
+        const price =  json['price_'+this.state.customer_info['ref_price']] || 0 ;   
+        const main_code = json.type ==='root' ? json.code : this.state.main_code 
+        
+        cart.push({
+          id:json.id,
+          code:json.code,
+          name:json.name,
+          unit:json.unit_name,
+          is_serial:json.is_serial,
+          guran_month:json.guran_month,
+          images:json.images,
+          content:json.content,
+          type:json.type,
+          amount:1,
+          price:price
+        }); 
 
         this.setState({
-          cart:cart
+          cart:cart,
+          main_code:main_code
         });
-        
+
+                
       }
       
       
@@ -252,6 +429,18 @@ class AddQuotation extends React.Component {
          [name]:value
        });
        
+    } 
+
+    componentWillReceiveProps(newProps){
+      console.log(newProps); 
+    }
+
+    componentDidMount(){
+
+      // INIT ORDERS MODEL
+      this.model = new Model(MODE);
+        
+
     }
 
     render() {
@@ -267,12 +456,15 @@ class AddQuotation extends React.Component {
 
                             <FrmRight 
                                 {...this.state} 
+                                grid={this.grid}
+                                
                                 onCardChange={ this._calculateCart } 
                                 onRemoveCard={(id)=>{ this._removeCard(id) }}  
                                 onSelectedProduct={(json)=>{  this._addCard(json)  }} 
                             />
                             
-                            <Button style={{width:120}} onClick={()=>{ alert(this.state.vat) }} className="btn btn-lg btn-ubuntu "> Đồng Ý </Button>
+                            <Button style={{width:120}} onClick={ this._onSubmit } className="btn btn-lg btn-ubuntu "> Đồng Ý </Button>
+                            <span className="ml-10 form-err" id="form-err"></span>
                         </Col>
                     </Row>
                     
@@ -282,5 +474,10 @@ class AddQuotation extends React.Component {
     }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    orders: state[MODE]
+  }
+}
 
 export default AddQuotation;

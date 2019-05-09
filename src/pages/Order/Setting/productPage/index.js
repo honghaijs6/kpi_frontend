@@ -99,7 +99,7 @@ class ProductPage extends Component{
             return `<span class="text-green"> ${price_4} </span>`
           }
         },
-        {headerName: "ĐVT", field: "unit",width:100},
+        {headerName: "ĐVT", field: "unit_name",width:100},
         {headerName: "BH", field: "guran_month",width:100},
         {headerName: "Serial", field: "is_serial",width:100},
         {headerName: "Người tạo", field: "creator",width:140},
@@ -258,6 +258,7 @@ class ProductPage extends Component{
                       <ButtonExpand width={720} icon="fa-tags">
                           <FormFollow data={this.state.selectedData} />
                       </ButtonExpand>
+                      
                       <ButtonExpand icon="fa-filter">
                           <FormGroup>
                                 <label> Danh mục </label>

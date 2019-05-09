@@ -43,7 +43,7 @@ const allReducers = combineReducers({
   purchase:reducerPurchase,
 
   customers:reducerCustomer,
-  order:reducerOrder,
+  orders:reducerOrder,
   products:reducerProduct,
   categories:reducerCategory,
   suppliers:reducerSupplier,

@@ -46,8 +46,8 @@ export default class ButtonExpand extends Component {
 
     return (
         <ButtonGroup className="div-holder-filter">
-            <Button onClick={ this._onClick } style={{marginRight:10, borderRadius:0}} className="btn btn-ubuntu btn-open-expand"> 
-            <i className={'fa '+icon }></i> </Button>        
+            <Button onClick={ this._onClick } style={this.props.style} className="btn btn-ubuntu btn-open-expand"> 
+            <i className={'fa '+icon }></i> { this.props.name || '' }  </Button>        
             <div className="filter-holder" style={{display:display,width:this.props.width || 300, left:-this.props.width || -300}}>
                 { this.props.children }
             </div>
