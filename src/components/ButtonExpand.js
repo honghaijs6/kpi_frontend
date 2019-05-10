@@ -31,7 +31,7 @@ export default class ButtonExpand extends Component {
   }
   componentWillUnmount(){
       window.removeEventListener('click',()=>{},false);
-  }
+  } 
 
   _onClick(){
     this.setState({
@@ -46,7 +46,7 @@ export default class ButtonExpand extends Component {
 
     return (
         <ButtonGroup className="div-holder-filter">
-            <Button onClick={ this._onClick } style={this.props.style} className="btn btn-ubuntu btn-open-expand"> 
+            <Button onClick={ this._onClick } style={this.props.style} className="btn btn-normal btn-open-expand"> 
             <i className={'fa '+icon }></i> { this.props.name || '' }  </Button>        
             <div className="filter-holder" style={{display:display,width:this.props.width || 300, left:-this.props.width || -300}}>
                 { this.props.children }

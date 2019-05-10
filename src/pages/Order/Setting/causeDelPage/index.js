@@ -141,6 +141,11 @@ class CategoryPage extends Component{
     }
 
     this.data[MODE] = newProps[MODE]['list'] || [] ;
+    // UPDATE CURRRENT STATE 
+    Object.assign(this.state,newProps[MODE]['state']);
+    
+
+
     this.resetGrid();
 
 
@@ -166,7 +171,8 @@ class CategoryPage extends Component{
             
           />
           <BenGrid
-             
+            
+             formStatus={ this.state.status }
              rowSelection='single'
              height='78vh'
              gridID='id'

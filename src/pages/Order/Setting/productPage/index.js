@@ -188,9 +188,9 @@ class ProductPage extends Component{
 
     // revice redux data
     this.data[MODE] = newProps[MODE]['list'] || [] ;
-    
     // UPDATE CURRRENT STATE 
     Object.assign(this.state,newProps[MODE]['state']);
+
     
 
 
@@ -223,7 +223,8 @@ class ProductPage extends Component{
 
   render(){
 
-    
+    console.log(this.state.status);
+
     return(
       <div hidden={  this.props.onTab === this.state.tab ? false : true } style={{padding:10}} >
 

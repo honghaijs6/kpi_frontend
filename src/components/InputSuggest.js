@@ -118,7 +118,7 @@ export default class InputSuggest extends Component{
                     onKeyUp={ this._keyHandling } 
                     id={this.props.id || 0 } 
                     placeholder="nhập từ khoá..." 
-                    
+                    style={this.props.style}
                     value={this.state.value} 
                     onChange={(e)=>{ this._onChange(e.target.value) }}  
                     

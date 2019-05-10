@@ -111,8 +111,8 @@ class BenGrid extends Component{
       }else if(newProps.model.db.total === this.state.count){
         
         
-        if(newProps.formStatus==='closed'){
-          this.gridApi.setRowData(newProps.rowData)
+        if(newProps.formStatus==='success' || newProps.formStatus==='ok'){
+          this.gridApi.setRowData(newProps.rowData);
         }
         
       }

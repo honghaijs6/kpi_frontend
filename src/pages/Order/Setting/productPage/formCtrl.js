@@ -61,7 +61,7 @@ class formController {
             });
 
             // on success 
-            res.name === 'success' ? this.toggle() : error(this.model.model) ;  
+            //res.name === 'success' ? this.toggle() : error(this.model.model) ;  
             
           })
       }
@@ -115,25 +115,20 @@ class formController {
 
     /* START : WHERE */
     _whereStateChange(newState={}){
-
-      switch(newState){
-        case 'onSubmit' :
-          this.toggle() ; 
-        break ;
-
-        default:
-
-          Object.assign(this.state,newState);
-          if(this.dispatcher!==null){
-            this.dispatcher({
+      
+      // passing form state to index 
+      Object.assign(this.state,newState);
+      if(this.dispatcher!==null){
+          this.dispatcher({
               type:'STATE-'+this.model.model,
               state:this.state
-            })
-          }
-
-        break ;
+          })
       }
 
+      window.setTimeout(()=>{
+        newState.status === 'success' ? this.toggle() : error(this.model.model) ;
+      },1000)
+          
 
     }
 

@@ -196,7 +196,9 @@ class SupplierPage extends Component{
              height='78vh'
              gridID='id'
              rowSelection='single'
-             
+
+             formStatus={ this.state.status }
+
              onBtnEdit={ this._doOpenModalUpdate }
              onBtnAdd={this.onBtnNew}
 

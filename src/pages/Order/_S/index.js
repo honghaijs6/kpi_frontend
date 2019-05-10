@@ -1,4 +1,8 @@
 
+import { ORDER_STATUS } from '../../../config/app.config'; 
+import { PAYMENT_TYPES_DECO } from '../../../config/payment.type'; 
+
+ 
 /* OBJECT - PLUGIN*/
 import Model from '../../../model/model';
 
@@ -9,8 +13,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 
-
-
 /* MODAL FORM & CTRL */
 import MyForm from './Form';
 import formCtrl from './formCtrl';
@@ -19,7 +21,7 @@ import formCtrl from './formCtrl';
 /*INCLUDE OTHER COMPONENT*/
 import { BenGrid } from '../../../components/BenGrid2';
 
-const MODE = 'transporters';
+const MODE = 'orders';
 const MODE_NAME = 'Báo giá';
 
 
@@ -40,20 +42,101 @@ class OrderView extends Component{
 
     this.grid = {
       colums:[
-        {headerName: "Mã KH", field: "type"},
-        {headerName: "Mã Đơn hàng", field: "type"},
-        {headerName: "Trạng thái", field: "type"},
-        {headerName: "HT Thanh toán", field: "date_created"},
-        {headerName: "Ngày tạo báo giá", field: "note"},
-        {headerName: "Ngày xuất kho", field: "code"},
-        {headerName: "Chưa VAT", field: "inventory_id"},
-        {headerName: "Thành tiền", field: "action_type"},
-        {headerName: "Có VAT", field: "group_code"},
-        {headerName: "Ngày kết thúc", field: "creator_id"},
-        {headerName: "Đã thanh toán", field: "status"},
-        {headerName: "Phụ trách", field: "note"},
+        {headerName: "Mã KH", field: "customer_code",width:150,
+          cellRenderer(params){
+
+            return `<span class="badge bg-green"> <i class="fa fa-user mr-5"></i> ${params.value} </span>`;
+          }
+        },
+        {headerName: "Mã Đơn hàng", field: "code",width:150,
+          cellRenderer(params){
+            return `<span  style="background:${ ORDER_STATUS[params.data.status]['color'] }; color:#fff "class="badge text-uppercase"> ${ params.value } </span>`
+          }
+        },
+        {headerName: "Trạng thái", field: "status",width:140,
+          cellRenderer(params){
+            return `
+              <span style="background:${ ORDER_STATUS[params.value]['color'] }; color:#fff " class="badge"> ${ORDER_STATUS[params.value]['name']} </span>
+            `
+          }
+        },
+        {headerName: "Hạn mức", field: "payment_code",width:120,
+          cellRenderer(params){
+            //params.data.payment_type
+            
+            return ` ${ PAYMENT_TYPES_DECO[params.data.payment_type] }  <span class="text-uppercase ml-5"> ${ params.value } </span>` 
+          }
+        },
+        {headerName: "Ngày tạo ", field: "date_created",width:120,  
+          
+          cellRenderer(params){
+            const humanDate = moment(params.value).format('YYYY-MM-DD')
+            return `
+            ${ humanDate }
+          `
+          }
+        },
+        {headerName: "Ngày xuất kho", field: "date_out",width:155,
+
+          cellRenderer(params){
+            const humanDate =   params.value ===null ? '<i class="fa fa-clock-o"></i>': moment(params.value).format('YYYY-MM-DD') ; 
+
+            return `
+            ${ humanDate }
+          `
+          }
+        },
+
+        {headerName: "Ngày kết thúc", field: "date_finish",width:155,
+
+          cellRenderer(params){
+            const humanDate =   params.value ===null ? '<i class="fa fa-clock-o"></i>': moment(params.value).format('YYYY-MM-DD') ; 
+
+            return `
+            ${ humanDate }
+          `
+          }
+        },  
+
+        
+        {headerName: "Tiền đơn hàng", field: "total_sum_vat",width:150,
+
+          cellRenderer(params){
+
+              return params.value;
+          }
+        },
+
+        {
+          headerName:"+VAT", field:"vat",width:90
+        },
+
+
+        {headerName: "Tiền sau thuế", field: "total_sum_vat",width:171,
+
+          cellRenderer(params){
+
+              return params.value;
+          }
+        },
+
+        {headerName: "Đã thanh toán", field: "total_sum_vat",width:171,
+
+          cellRenderer(params){
+
+              return params.value;
+          }
+        },
+        {
+          headerName:"Phụ trách",field:"creator",width:100
+        }
         
 
+        
+        
+
+
+      
       ],
       rowData: []
     }
@@ -76,14 +159,21 @@ class OrderView extends Component{
 
     this.formCtrl = new formCtrl(this.model,this.props.dispatch);
     
-    
+  }
 
+  componentDidMount(){
+    this.model.initData(); 
+  }
+
+  componentWillReceiveProps(newProps){
+    
+    this.grid.rowData = newProps[MODE]['list'];
+    this._whereStateChange(newProps[MODE]['state']);
+    
   }
 
   /* HOW */
-  resetGrid(){
-      
-  }
+  
 
   _doOpenModalPost(){
 
@@ -120,13 +210,14 @@ class OrderView extends Component{
     this.setState(Object.assign(this.state,newState));
   }
 
+  
 
-  render(){
+  render(){ 
 
     
     return (
       <div className="animated fadeIn">
-        <div className="ubuntu-app " style={{border:0, marginTop: 20}}>
+        <div className="ubuntu-app " style={{border:0, marginTop: 20,padding:10}}>
             <main>
 
               <MyForm
@@ -146,7 +237,7 @@ class OrderView extends Component{
                  rowSelection='single'
 
                  isRightTool={ true }
-                 height="79.9vh"
+                 height="78vh"
 
                  nextColums={ this.grid.colums }
                  rowData={this.grid.rowData}

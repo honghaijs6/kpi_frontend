@@ -63,11 +63,22 @@ class CusLevelPage extends Component{
         },
         {headerName: "Khách Hàng ", field: "total_customer",width:140},
         {headerName: "Người tạo", field: "creator",width:200},
-        {headerName: "Ngày tạo", field: "date_created",width:200,
+        {headerName: "Ngày tạo", field: "date_created",width:140,
           
           cellRenderer(params){
 
             const humanDate = moment(params.value).format('YYYY-MM-DD')
+            return `
+             ${ humanDate }
+           `
+          }
+          
+        },
+        {headerName: "Điều chỉnh", field: "date_modified",width:140,
+          
+          cellRenderer(params){
+
+            const humanDate = params.value !== null ? moment(params.value).format('YYYY-MM-DD') : '';
             return `
              ${ humanDate }
            `
@@ -143,8 +154,11 @@ class CusLevelPage extends Component{
         this.model.initData(); 
         this._isData = true  ; 
     }
-
+ 
     this.data[MODE] = newProps[MODE]['list'] || [] ;
+    Object.assign(this.state,newProps[MODE]['state']); 
+    
+
     this.resetGrid();
     
   }
@@ -173,7 +187,8 @@ class CusLevelPage extends Component{
              onBtnEdit={ this._doOpenModalUpdate }
              onBtnAdd={ this.onBtnNew }
              isRightTool={ true }
-
+             rowSelection='single'
+             formStatus={this.state.status}
              nextColums={ this.grid.colums }
              rowData={this.grid.rowData}
              model={ this.model }

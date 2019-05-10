@@ -19,6 +19,7 @@ import ButtonExpand from '../../../components/ButtonExpand';
 
 
 import FormAddOn from './FormAddOn'; 
+import { MAIN_COLOR } from '../../../config/app.config';
 
 
 const MODE = 'orders';
@@ -29,50 +30,83 @@ function FrmLeft(props){
     const cusInfo = props.customer_info ; 
 
     return( 
-      <div>
-          <h5 className="txt-green text-uppercase font-14 mb-20">
-            <Label style={{color:props.customer_info['color_code']}}>
+      <div style={{padding:20, background:MAIN_COLOR,borderRadius:4}}>
+          <h5 style={{color:'#fff'}} className="text-uppercase font-14">
+
+            <Label >
              <i className="fa fa-user mr-5"></i> 
               Thông tin Khách hàng 
             </Label>
-
-          
+                        
           </h5>
 
           <FormGroup>
             <Label> Mã KH </Label>
-            <InputSuggest defaultValue={ cusInfo.code } onSelected={(json)=>{ props.onSelectedCustomer(json) }} strModel='customers' id="customer_code"  />
+            <InputSuggest style={{border:0}} defaultValue={ cusInfo.code } onSelected={(json)=>{ props.onSelectedCustomer(json) }} strModel='customers' id="customer_code"  />
           </FormGroup>
   
           <FormGroup>
             <Label> Công ty </Label>
-            <Input type="text" defaultValue={cusInfo.name} disabled   />
+            <Input style={{border:0}} type="text" defaultValue={cusInfo.name} disabled   />
           </FormGroup>
   
           <FormGroup>
             <Row>
               <Col md="6">
                 <Label> MST </Label>
-                <Input disabled defaultValue={cusInfo.tax_no} type="text"   />
+                <Input style={{border:0}} disabled defaultValue={cusInfo.tax_no} type="text"   />
               </Col>
               <Col>
                 <Label> Thuế VAT </Label>
-                <Input type="number" min={0} max={50} defaultValue={ props.vat } onChange={(e)=>{ props.onChange('vat',e.target.value) }} id="vat"  />
+                <Input style={{border:0}} type="number" min={0} max={50} defaultValue={ props.vat } onChange={(e)=>{ props.onChange('vat',e.target.value) }} id="vat"  />
               </Col>
             </Row>
           </FormGroup>
-  
+
+          <h5 className='text-uppercase' style={{marginTop:20,color:'#fff'}}>
+            <label> <i className="fa fa-truck mr-5"></i>  Giao hàng  </label>
+          </h5>
           <FormGroup>
-            <Label>Hạn mức thanh toán </Label>
+            <label> 
+                Địa chỉ giao hàng  
+            </label>
+            <Input style={{border:0}} type="text" defaultValue={ cusInfo.address_delivery}  />
+
+          </FormGroup>
+
+          <h5 className='text-uppercase' style={{marginTop:20,color:'#fff'}}>
+            <label> <i className="fa fa-shield mr-5"></i>  Thanh toán  </label>
+            <label className="float-right"> { cusInfo.level_code } </label>
+
+          </h5>
+
+          <FormGroup> 
+            <Label> Hạn mức thanh toán </Label>
             <SelectListModelCode 
+                style={{border:0}}
                 strModel='payments' onChange={(e)=>{  props.onChange('payment_code',e.target.value)  }} 
                 defaultValue={props.payment_code} name="Vui Lòng Chọn" id="payment_code" />
             
-            </FormGroup>
-  
+          </FormGroup>
+          
+          <FormGroup>
+            <Row>
+              <Col md={6}> 
+                <Label> Khuyến mãi </Label>
+                <Input type="select">
+                    <option> Không chọn </option>
+                </Input>
+              </Col>
+              <Col md={6}>
+                <Label> Được giảm % </Label>
+                <Input style={{border:0}} type='text' defaultValue={ cusInfo.benefit_discount } disabled />
+              </Col>
+            </Row>
+          </FormGroup>
+
           <FormGroup>
             <Label> Ghi chú  </Label>
-            <Input type="textarea" defaultValue={ props.note } onChange={(e)=>{  props.onChange('note',e.target.value)  }} style={{height:100}} id="note" />
+            <Input type="textarea"  defaultValue={ props.note } onChange={(e)=>{  props.onChange('note',e.target.value)  }} style={{height:100,border:0}} id="note" />
           </FormGroup>
   
   
@@ -89,71 +123,30 @@ function FrmLeft(props){
     let SUM = 0 
     let SUM_VAT = 0 ;
 
+    const cusInfo = props.customer_info;
 
     return(
-      <div>
-        <h5 className="txt-green text-uppercase font-14 mb-20"> 
-
-          <Label style={{color:props.customer_info['color_code']}}>
-            <i className="fa fa-file-text mr-5"></i> Báo giá cho : { props.customer_info.name } 
-          </Label>
-
-          <Label style={{color:props.customer_info['color_code']}} className="float-right"> { props.customer_info.type_name } </Label>
-          
-        </h5>
+      <div style={{paddingRight:20}}>
+        
         <FormGroup>
           <Row>
             <Col md="4">
-              <Label> Sản phẩm chính </Label>
               <InputSuggestProduct  type="root" onSelected={(json)=>{ props.onSelectedProduct(json) }} defaultValue={props.main_code}   />
             </Col>
-            <Col md="2">
-              
-              <Label> Sản phẩm phụ </Label>
-                <div>
-                  <ButtonGroup>
-                    <ButtonExpand style={{width:150, borderRadius:0}} width={720} name="Thêm" icon="fa-plus">
-                        <FormAddOn onSelected={(json)=>{ props.onSelectedProduct(json) }} main_code={props.main_code} type='none-root' />
-                    </ButtonExpand>
-                  </ButtonGroup>
-              </div>
-
-              
-              
-            </Col>
-
-            <Col md="2">
-              <Label> Phần mềm </Label>
-              <div>
-                <ButtonGroup>
-                  <ButtonExpand style={{width:150, borderRadius:0}} width={720} name="Thêm" icon="fa-plus">
+            <Col md="6">
+              <ButtonGroup>
+                <ButtonExpand width={720} name="SP Phụ" icon="fa-tags">
+                    <FormAddOn onSelected={(json)=>{ props.onSelectedProduct(json) }} main_code={props.main_code} type='none-root' />
+                </ButtonExpand>
+                <ButtonExpand width={720} name="Phần mềm" icon="fa-desktop">
                       <FormAddOn onSelected={(json)=>{ props.onSelectedProduct(json) }} main_code={props.main_code} type='root-software' />
-                  </ButtonExpand>
-                </ButtonGroup>
-                
-              </div>
-            </Col>
-
-            <Col md="2">
-              <Label> Dịch vụ </Label>
-              <div>
-                <ButtonGroup>
-                  <ButtonExpand style={{width:150, borderRadius:0}} width={720} name="Thêm" icon="fa-plus">
+                </ButtonExpand>
+                <ButtonExpand width={720} name="Dịch vụ" icon="fa-plus">
                     <FormAddOn onSelected={(json)=>{ props.onSelectedProduct(json) }} main_code={props.main_code} type='root-service' />
-                  </ButtonExpand>
-                </ButtonGroup>
-              </div>
+                </ButtonExpand>
+              </ButtonGroup>
             </Col>
-  
             
-  
-            <Col md="2">
-              <Label> Áp dụng khuyến mãi </Label>
-              <Input type="select">
-                  <option> Không chọn </option>
-              </Input>
-            </Col>
-  
   
           </Row>
   
@@ -224,6 +217,32 @@ function FrmLeft(props){
                 </tbody>
                 
                 <tfoot>
+
+                  
+                  <tr>
+                    <td style={{ width: grid['colums'][0]['width'] }}> </td>
+                    <td style={{ width: grid['colums'][1]['width'] }}> { cusInfo.level_name } </td>
+                    <td style={{ width: grid['colums'][2]['width'] }}>  </td>
+                    <td style={{ width: grid['colums'][3]['width'] }}>  </td>
+                    <td style={{ width: grid['colums'][4]['width'] }}> </td>
+                    <td style={{ width: grid['colums'][5]['width'] }}> <label> Giảm giá </label>  </td>
+                    <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> <label> 0</label>  </td>
+                    <td style={{ width: grid['colums'][7]['width'] }} className="text-danger">  </td>
+                    <td style={{ width: grid['colums'][8]['width'] }}>  </td>
+                  </tr>
+                  
+                  <tr>
+                    <td style={{ width: grid['colums'][0]['width'] }}> </td>
+                    <td style={{ width: grid['colums'][1]['width'] }}> Áp dụng khuyến mãi </td>
+                    <td style={{ width: grid['colums'][2]['width'] }}>  </td>
+                    <td style={{ width: grid['colums'][3]['width'] }}>  </td>
+                    <td style={{ width: grid['colums'][4]['width'] }}> </td>
+                    <td style={{ width: grid['colums'][5]['width'] }}> <label> khuyển mãi giảm </label>  </td>
+                    <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> <label> 0</label>  </td>
+                    <td style={{ width: grid['colums'][7]['width'] }} className="text-danger">  </td>
+                    <td style={{ width: grid['colums'][8]['width'] }}>  </td>
+                  </tr>
+
                   <tr>
                     <td style={{ width: grid['colums'][0]['width'] }}> </td>
                     <td style={{ width: grid['colums'][1]['width'] }}>  </td>
@@ -281,15 +300,15 @@ class AddQuotation extends React.Component {
 
       this.grid = {
         colums:[
-          {headerName: "Mã",width:120},
-          {headerName: "Sản phẩm", width:240},
+          {headerName: "Mã",width:100},
+          {headerName: "Sản phẩm", width:250},
           {headerName: "Hình Ảnh",width:140},
-          {headerName: "ĐVT", width:140},
-          {headerName: "SL", width:90},
-          {headerName: "Đơn giá", width:140},
-          {headerName: "Thành tiền", width:140},
-          {headerName: "+VAT", width:140},
-          {headerName: "Actions", width:140}
+          {headerName: "ĐVT", width:100},
+          {headerName: "SL", width:100},
+          {headerName: "Đơn giá", width:150},
+          {headerName: "Thành tiền", width:150},
+          {headerName: "+VAT", width:150},
+          {headerName: "Actions", width:90}
         ]
       }
 
@@ -375,7 +394,7 @@ class AddQuotation extends React.Component {
       this.setState({
         cart:cart
       })
-
+  
 
     }
     _removeCard(id){
@@ -448,7 +467,7 @@ class AddQuotation extends React.Component {
             <div className="animated fadeIn">
                 <div className="ubuntu-app " style={{border:0, marginTop: 20}}>
 
-                    <Row style={{padding:40}}>
+                    <Row style={{padding:20}}>
                         <Col md={3}>
                             <FrmLeft {...this.state} onChange={this._onChange}  onSelectedCustomer={ this._onSelectedCustomer }  />
                         </Col>
@@ -463,7 +482,9 @@ class AddQuotation extends React.Component {
                                 onSelectedProduct={(json)=>{  this._addCard(json)  }} 
                             />
                             
-                            <Button style={{width:120}} onClick={ this._onSubmit } className="btn btn-lg btn-ubuntu "> Đồng Ý </Button>
+                            <Button style={{width:120}} onClick={ this._onSubmit } className="btn btn-lg btn-ubuntu-ok ">
+                              <i className="fa  fa-chevron-circle-right mr-5"></i> Đồng Ý 
+                            </Button>
                             <span className="ml-10 form-err" id="form-err"></span>
                         </Col>
                     </Row>

@@ -96,11 +96,21 @@ class OrderView extends Component{
              return params.value || 'system' 
           }
         },
-        {headerName: "Ngày tạo", field: "date_created",
+        {headerName: "Ngày tạo", field: "date_created",width:140,
           
           cellRenderer(params){
 
               const humanDate = moment(params.value).format('YYYY-MM-DD')
+              return `
+                ${ humanDate }
+              `;
+          }
+        },
+        {headerName: "Điều chỉnh", field: "date_modified",width:140,
+          
+          cellRenderer(params){
+
+              const humanDate = params.value !== null ? moment(params.value).format('YYYY-MM-DD') : ''
               return `
                 ${ humanDate }
               `;
@@ -215,7 +225,7 @@ class OrderView extends Component{
   /* WHERE*/
   _whereStateChange(newState){
     this.setState(Object.assign(this.state,newState));
-  }
+  }  
 
 
   render(){
@@ -247,6 +257,8 @@ class OrderView extends Component{
 
                  isRightTool={ true }
                  height="78vh"
+
+                 formStatus={ this.state.status }
 
                  nextColums={ this.grid.colums }
                  rowData={this.grid.rowData}

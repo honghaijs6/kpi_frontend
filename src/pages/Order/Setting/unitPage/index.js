@@ -134,6 +134,10 @@ class UnitPage extends Component{
     }
 
     this.data[MODE] = newProps[MODE]['list'] || [] ;
+    // UPDATE CURRRENT STATE 
+    Object.assign(this.state,newProps[MODE]['state']);
+    
+
     this.resetGrid();
 
 
@@ -164,7 +168,7 @@ class UnitPage extends Component{
              onBtnEdit={ this._doOpenModalUpdate }
              onBtnAdd={ this.onBtnNew }
              isRightTool={ true }
-
+             formStatus={this.state.status}
              nextColums={ this.grid.colums }
              rowData={this.grid.rowData}
              model={ this.model }

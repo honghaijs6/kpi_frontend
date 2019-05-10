@@ -55,7 +55,7 @@ class CategoryPage extends Component{
           }
         },
         
-        {headerName: "Tên ", field: "name",width:320},
+        {headerName: "Tên ", field: "name",width:270},
         {headerName:"Giá tham chiếu", field:"ref_price", width:180,
 
           cellRenderer(params){
@@ -65,7 +65,7 @@ class CategoryPage extends Component{
         },
         {headerName: "Khách Hàng ", field: "total_customer",width:140},
         {headerName: "Người tạo", field: "creator",width:200},
-        {headerName: "Ngày tạo", field: "date_created",width:200,
+        {headerName: "Ngày tạo", field: "date_created",width:140,
           
           cellRenderer(params){
 
@@ -75,7 +75,19 @@ class CategoryPage extends Component{
            `
           }
           
-        }
+        },
+        {headerName: "Điều chỉnh", field: "date_modified",width:140,
+          
+          cellRenderer(params){
+
+            const humanDate = params.value !== null ? moment(params.value).format('YYYY-MM-DD') : ''
+            return `
+             ${ humanDate }
+           `
+          }
+          
+        },
+        
 
       ],
       rowData: []
@@ -146,6 +158,8 @@ class CategoryPage extends Component{
   componentWillReceiveProps(newProps){
     
     this.data[MODE] = newProps[MODE]['list'] || [] ;
+    Object.assign(this.state,newProps[MODE]['state']); 
+
     this.resetGrid();
     
   }
@@ -174,7 +188,9 @@ class CategoryPage extends Component{
              onBtnEdit={ this._doOpenModalUpdate }
              onBtnAdd={ this.onBtnNew }
              isRightTool={ true }
-
+             formStatus={ this.state.status }
+             rowSelection='single'
+      
              nextColums={ this.grid.colums }
              rowData={this.grid.rowData}
              model={ this.model }

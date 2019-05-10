@@ -9,6 +9,6 @@ export const PAYMENT_TYPES = [
 
 export const PAYMENT_TYPES_DECO = {
   tm:'<span class="badge bg-green"> TM </span>',
-  ck:'<span class="badge bg-danger"> CK </span>'
+  ck:'<span class="badge" style="background:#F39C12; color:#fff"> CK </span>'
 }
   

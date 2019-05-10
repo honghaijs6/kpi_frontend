@@ -135,6 +135,9 @@ class Transporter extends Component{
     }
 
     this.data[MODE] = newProps[MODE]['list'] || [] ;
+    Object.assign(this.state,newProps[MODE]['state']) ; 
+    
+
     this.resetGrid();
 
 
@@ -170,7 +173,7 @@ class Transporter extends Component{
                  onBtnAdd={this.onBtnNew}
                  gridID='id'
                  rowSelection='single'
-
+                 formStatus={this.state.status}  
                  isRightTool={ true }
                  height="79.9vh"
 

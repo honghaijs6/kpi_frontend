@@ -165,10 +165,14 @@ tr th{ font-size: 15px !important; font-weight: 500}
 .product-board tr td{ font-size: 12px !important; vertical-align: middle;}
 
 table.vk-table{
+  
   display: grid;
-
   overflow-x: auto !important;
   /*overflow-y: auto !important;*/
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  
 
 }
 
@@ -176,22 +180,28 @@ table.vk-table tbody {
     /*display:block;
 
     overflow-x: auto !important;*/
-
-    overflow-x: hidden !important;
+    //display: grid;
+    overflow-x: auto !important;
     overflow-y: auto !important;
+    border-left: 0px solid #ddd;
+    border-right: 0px solid #ddd;
+    border-bottom: 0px;
+
 
 }
 
 table.vk-table thead,table.vk-table tbody tr {
     display:table;
     width:100%;
+    
     table-layout:fixed;/* even columns width , fix width of table too*/
 }
 
 table.vk-table thead{
-  background-color: #222D32;
+  background-color: #455361;
   color:#fff;
   border: 0px;
+  
 
 }
 
@@ -213,7 +223,14 @@ table.vk-table thead{
 
 }
 .vk-table > tbody > tr >td:last-of-type{ border-right: 0px solid #ddd !important; }
-.vk-table > tbody{ border-bottom: 1px solid #ddd}
+
+.vk-table > tfoot{
+  background-color: #F0F3F5; 
+}
+.vk-table >tfoot > tr >td{
+  border-top: 1px solid rgba(1,1,1,0.1) !important;
+}
+
 
 /* SPIN LOADING*/
 

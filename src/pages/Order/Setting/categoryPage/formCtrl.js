@@ -45,12 +45,7 @@ class formController {
               onAction:'onSubmit',
               status:res.name
             });
-
-            // on success 
-            res.name === 'success' ? this.toggle() : error(this.model.model) ;  
-
-
-
+            
           })
       }
 
@@ -93,71 +88,32 @@ class formController {
     toggle(){
 
       this.active = !this.active;
-      this.popover.active =  false;
-
       // -->
       this._whereStateChange({
         onAction:'toggle_modal'
       })
-
-
+    
     }
 
     /* START : WHERE */
     _whereStateChange(newState={}){
-
-      switch(newState){
-        case 'onSubmit' :
-          this.toggle() ; 
-        break ;
-
-        default:
-
-          Object.assign(this.state,newState);
-          if(this.dispatcher!==null){
-            this.dispatcher({
-              type:'STATE-'+this.model.model,
-              state:this.state
-            })
-          }
-
-        break ;
+      
+      Object.assign(this.state,newState);
+      if(this.dispatcher!==null){
+        this.dispatcher({
+          type:'STATE-'+this.model.model,
+          state:this.state
+        })
       }
-
+      
+      window.setTimeout(()=>{
+        newState.status === 'success' ? this.toggle() : error(this.model.model)
+      },1000)
 
     }
 
 
-    popover = {
-        active:false,
-
-        parent:this,
-        btnYes(){
-
-
-          const id = this.parent.data.id;
-
-          this.parent.model.delete(id,(res)=>{
-
-              this.parent._whereStateChange({
-                onAction:'btnYes',
-                typeAction:'delete',
-                status:res.name
-              });
-
-          })
-
-        },
-
-        toggle(){
-
-           this.active = !this.active;
-           this.parent._whereStateChange({
-             onAction:'toggle_popover'
-           })
-
-        }
-    }
+    
 
 
 }

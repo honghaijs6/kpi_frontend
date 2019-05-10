@@ -151,6 +151,9 @@ class CategoryPage extends Component{
     }
 
     this.data[MODE] = newProps[MODE]['list'] || [] ;
+    Object.assign(this.state,newProps[MODE]['state']); 
+    
+
     this.resetGrid();
 
 
@@ -181,7 +184,7 @@ class CategoryPage extends Component{
              onBtnEdit={ this._doOpenModalUpdate }
              onBtnAdd={this.onBtnNew}   
              rowSelection='single'
-
+             formStatus={this.state.status}
              isRightTool={ true }
 
              nextColums={ this.grid.colums }
