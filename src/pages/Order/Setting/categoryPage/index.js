@@ -52,7 +52,9 @@ class CategoryPage extends Component{
         {headerName: "Tên ", field: "name",width:400},
         {headerName: "Thứ tự", field: "sort",width:120},
         {headerName: "Người tạo", field: "creator",width:200},
-        {headerName: "Ngày tạo", field: "date_created",width:200,
+        {headerName: "Sản phẩm", field: "total_product",width:200},
+
+        {headerName: "Ngày tạo", field: "date_created",width:140,
           
           cellRenderer(params){
 
@@ -62,7 +64,20 @@ class CategoryPage extends Component{
            `
           }
           
-        }
+        },
+        {headerName: "Hiệu chỉnh", field: "date_modified",width:140,
+          
+          cellRenderer(params){
+
+            const humanDate = params.value !== null ? moment(params.value).format('YYYY-MM-DD') : '';
+            return `
+             ${ humanDate }
+           `
+          }
+          
+        },
+        
+
 
       ],
       rowData: []

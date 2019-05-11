@@ -47,15 +47,17 @@ class SupplierPage extends Component{
 
     this.grid = {
       colums:[
-        {headerName: "Mã", field: "code",width:200},
+        {headerName: "Mã", field: "code",width:150},
         {headerName: "Tên công ty", field: "name",width:300},
         {headerName: "Loại hình", field: "type",width:140},
-
+        {headerName: "Cho công nợ", field: "dept",width:150},
+        
+        {headerName: "Sản phẩm", field: "total_product",width:150},
+        
         {headerName: "Người liên hệ", field: "contact_name",width:200},
         {headerName: "Số ĐT", field: "phone",width:150},
         {headerName: "Email", field: "email",width:200},
         
-        {headerName: "Cho công nợ", field: "dept",width:150},
         {headerName: "Người tạo", field: "creator",width:200},
         {headerName: "Ngày tạo", field: "date_created",width:150,
 
@@ -67,7 +69,19 @@ class SupplierPage extends Component{
            `
           }
 
-        }
+        },
+        {headerName: "Hiệu chỉnh", field: "date_modified",width:150,
+
+          cellRenderer(params){
+
+            const humanDate = params.value !== null ? moment(params.value).format('YYYY-MM-DD') :''
+            return `
+             ${ humanDate }
+           `
+          }
+
+        },
+        
 
       ],
       rowData: []

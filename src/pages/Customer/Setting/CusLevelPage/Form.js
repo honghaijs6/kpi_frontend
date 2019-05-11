@@ -1,6 +1,7 @@
 'use strict'
 
 import { REF_PRICES } from '../../../../config/price.conf';  
+import { PRODUCT_TYPE } from '../../../../config/product.conf' ; 
 
 import React, { Component } from 'react';
 import {  Row, Col, Label,  Form, FormGroup,FormText, Input } from 'reactstrap';
@@ -41,7 +42,7 @@ class CusTypeForm extends Component {
 
       }
     }
-    
+     
     
      return(
        <BenModal {...this.props}  >
@@ -58,16 +59,37 @@ class CusTypeForm extends Component {
                   <Input type="text" id="name" onChange={(e)=>{ modal.onChange('name',e.target.value) }}  defaultValue={ data.name } />
                 </FormGroup>
              </Col>
-             <Col md={3}>
+            
+             <Col md={2}>
+                <BenColor color={COLOR} onChange={(data)=>{   modal.onChange('color_code', `rgba(${data.r},${data.g},${data.b},${data.a})` )  }} />
+             </Col>
+           </Row>
+
+           <Row>
+              <Col md={3}>
                 <FormGroup>
                     <Label> Ưu đãi giảm giá </Label>
                     <Input type="number" id="benefit_discount" min="0" max="100" defaultValue={ data.benefit_discount } onChange={(e)=>{  modal.onChange('benefit_discount',e.target.value) }} />
 
                 </FormGroup>
-             </Col>
-             <Col md={2}>
-                <BenColor color={COLOR} onChange={(data)=>{   modal.onChange('color_code', `rgba(${data.r},${data.g},${data.b},${data.a})` )  }} />
-             </Col>
+              </Col>
+              <Col md={4}>
+                <FormGroup>
+                    <label> Cho Dòng Sản Phẩm </label>
+                    <Input id="type" type="select" onChange={(e)=>{ modal.onChange('type',e.target.value) }} defaultValue={ data.type } >
+                    {
+
+                      Object.keys(PRODUCT_TYPE).map((item)=>{
+                        return(
+                          <option key={item} value={ item }> { PRODUCT_TYPE[item] } </option>
+                        )
+                      })
+
+                    }
+                        <option key="5" value="5"> Tất cả </option>
+                    </Input>
+                </FormGroup>
+              </Col>
            </Row>
 
            <Row>

@@ -121,7 +121,8 @@ function FrmLeft(props){
     const grid = props.grid ; 
     
     let SUM = 0 
-    let SUM_VAT = 0 ;
+    
+    
 
     const cusInfo = props.customer_info;
 
@@ -175,10 +176,9 @@ function FrmLeft(props){
                       const price = item.price;
                       const total = parseInt(price) * amount ;  
                       SUM += total;
-
+                      
                       const totalWithVat = (total * (parseInt(props.vat) / 100)) + total ;
-                      SUM_VAT += totalWithVat ; 
-
+                      
                       return(
                         <tr key={item.id}>
 
@@ -251,7 +251,7 @@ function FrmLeft(props){
                     <td style={{ width: grid['colums'][4]['width'] }}> </td>
                     <td style={{ width: grid['colums'][5]['width'] }}> <label> Tổng cộng </label>  </td>
                     <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> <label> { numeral(SUM).format('0,0')+' đ' } </label>  </td>
-                    <td style={{ width: grid['colums'][7]['width'] }} className="text-danger"> <label> { numeral(SUM_VAT).format('0,0')+' đ' } </label> </td>
+                    <td style={{ width: grid['colums'][7]['width'] }} className="text-danger"> <label> { numeral(props.total_sum_vat).format('0,0')+' đ' } </label> </td>
                     <td style={{ width: grid['colums'][8]['width'] }}>  </td>
                   </tr>
                 </tfoot>
@@ -295,7 +295,8 @@ class AddQuotation extends React.Component {
         vat:10,
         payment_code:'',
         note:'',
-        main_code:''
+        main_code:'',
+        total_sum_vat:0
       }
 
       this.grid = {
@@ -312,7 +313,7 @@ class AddQuotation extends React.Component {
         ]
       }
 
-      this._calculateCart = this._calculateCart.bind(this) ; 
+      
       this._addCard = this._addCard.bind(this);
       this._onChange = this._onChange.bind(this);
       this._onSelectedCustomer = this._onSelectedCustomer.bind(this) ; 
@@ -376,25 +377,36 @@ class AddQuotation extends React.Component {
       });
     }
 
-    _calculateCart(json){
-      
-      this._updateCard(json)
-      
-    }
+    
     _updateCard(json){ // row_id - field - value
 
       let cart = this.state.cart; 
 
+      let SUM_VAT = 0 
+      
       cart.map((item)=>{
         if(parseInt(json.row_id) === parseInt(item.id)){
-          item[json.field] = json.value
+          item[json.field] = json.value; 
+
+          // calculate
+          const amount = parseInt(item.amount) ; 
+          const price = item.price;
+          const total = parseInt(price) * amount ;  
+          const totalWithVat = (total * (parseInt(this.state.vat) / 100)) + total ;
+          SUM_VAT += totalWithVat ;             
+
+          // end calculate
+
         }
       });
 
+      
+
       this.setState({
-        cart:cart
-      })
-  
+        cart:cart,
+        total_sum_vat:SUM_VAT
+      });
+      
 
     }
     _removeCard(id){
@@ -477,7 +489,7 @@ class AddQuotation extends React.Component {
                                 {...this.state} 
                                 grid={this.grid}
                                 
-                                onCardChange={ this._calculateCart } 
+                                onCardChange={ (json)=>this._updateCard(json) } 
                                 onRemoveCard={(id)=>{ this._removeCard(id) }}  
                                 onSelectedProduct={(json)=>{  this._addCard(json)  }} 
                             />

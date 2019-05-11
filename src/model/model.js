@@ -409,7 +409,7 @@ class Model {
 
             },
             (error) => {
-                var status = error.response.status;
+                //var status = error.response.status;
                 this.onError(error)
 
               }

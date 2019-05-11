@@ -47,7 +47,7 @@ class UnitPage extends Component{
       colums:[
         {headerName: "Tên ", field: "name",width:400},
         {headerName: "Người tạo", field: "creator",width:200},
-        {headerName: "Ngày tạo", field: "date_created",width:200,
+        {headerName: "Ngày tạo", field: "date_created",width:140,
           
           cellRenderer(params){
 
@@ -57,7 +57,19 @@ class UnitPage extends Component{
            `
           }
           
-        }
+        },
+        {headerName: "Hiệu chỉnh", field: "date_modified",width:140,
+          
+          cellRenderer(params){
+
+            const humanDate = params.value !== null ? moment(params.value).format('YYYY-MM-DD') : '';
+            return `
+             ${ humanDate }
+           `
+          }
+          
+        },
+        
 
       ],
       rowData: []
