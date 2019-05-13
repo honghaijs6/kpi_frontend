@@ -7,6 +7,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import {  Row, Col, FormGroup,Label, Input, Table, Button, ButtonGroup  } from 'reactstrap';
+import { Redirect  } from 'react-router-dom'; 
 
 import numeral from 'numeral';
 
@@ -28,20 +29,22 @@ const MODE = 'orders';
 function FrmLeft(props){
 
     const cusInfo = props.customer_info ; 
-
+    
     return( 
       <div style={{padding:20, background:MAIN_COLOR,borderRadius:4}}>
           <h5 style={{color:'#fff'}} className="text-uppercase font-14">
 
             <Label >
              <i className="fa fa-user mr-5"></i> 
-              Thông tin Khách hàng 
+              KHÁCH HÀNG 
             </Label>
+            <span className="float-right"> { cusInfo.type_name } </span>
                         
           </h5>
 
           <FormGroup>
             <Label> Mã KH </Label>
+            
             <InputSuggest style={{border:0}} defaultValue={ cusInfo.code } onSelected={(json)=>{ props.onSelectedCustomer(json) }} strModel='customers' id="customer_code"  />
           </FormGroup>
   
@@ -81,29 +84,23 @@ function FrmLeft(props){
           </h5>
 
           <FormGroup> 
-            <Label> Hạn mức thanh toán </Label>
-            <SelectListModelCode 
-                style={{border:0}}
-                strModel='payments' onChange={(e)=>{  props.onChange('payment_code',e.target.value)  }} 
-                defaultValue={props.payment_code} name="Vui Lòng Chọn" id="payment_code" />
-            
-          </FormGroup>
-          
-          <FormGroup>
             <Row>
-              <Col md={6}> 
-                <Label> Khuyến mãi </Label>
-                <Input type="select">
-                    <option> Không chọn </option>
-                </Input>
+              <Col md={6}>
+                <Label> Hạn mức thanh toán </Label>
+                <SelectListModelCode 
+                    style={{border:0}}
+                    strModel='payments' onChange={(e)=>{  props.onChange('payment_code',e.target.value)  }} 
+                    defaultValue={props.payment_code} name="Vui Lòng Chọn" id="payment_code" />
               </Col>
               <Col md={6}>
                 <Label> Được giảm % </Label>
-                <Input style={{border:0}} type='text' defaultValue={ cusInfo.benefit_discount } disabled />
+                <Input style={{border:0}} type='text' defaultValue={ cusInfo.benefit_discount === null ? 0 : cusInfo.benefit_discount } disabled />
               </Col>
             </Row>
+           
+            
           </FormGroup>
-
+          
           <FormGroup>
             <Label> Ghi chú  </Label>
             <Input type="textarea"  defaultValue={ props.note } onChange={(e)=>{  props.onChange('note',e.target.value)  }} style={{height:100,border:0}} id="note" />
@@ -120,10 +117,7 @@ function FrmLeft(props){
     
     const grid = props.grid ; 
     
-    let SUM = 0 
     
-    
-
     const cusInfo = props.customer_info;
 
     return(
@@ -175,10 +169,9 @@ function FrmLeft(props){
                       const amount = parseInt(item.amount) ; 
                       const price = item.price;
                       const total = parseInt(price) * amount ;  
-                      SUM += total;
-                      
                       const totalWithVat = (total * (parseInt(props.vat) / 100)) + total ;
                       
+
                       return(
                         <tr key={item.id}>
 
@@ -225,21 +218,21 @@ function FrmLeft(props){
                     <td style={{ width: grid['colums'][2]['width'] }}>  </td>
                     <td style={{ width: grid['colums'][3]['width'] }}>  </td>
                     <td style={{ width: grid['colums'][4]['width'] }}> </td>
-                    <td style={{ width: grid['colums'][5]['width'] }}> <label> Giảm giá </label>  </td>
-                    <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> <label> 0</label>  </td>
+                    <td style={{ width: grid['colums'][5]['width'] }}> <label> Giảm </label>  </td>
+                    <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> <label>  { numeral(props.level_discount).format('0,0')+' đ' } </label>  </td>
                     <td style={{ width: grid['colums'][7]['width'] }} className="text-danger">  </td>
                     <td style={{ width: grid['colums'][8]['width'] }}>  </td>
                   </tr>
                   
                   <tr>
                     <td style={{ width: grid['colums'][0]['width'] }}> </td>
-                    <td style={{ width: grid['colums'][1]['width'] }}> Áp dụng khuyến mãi </td>
+                    <td style={{ width: grid['colums'][1]['width'] }}>  </td>
                     <td style={{ width: grid['colums'][2]['width'] }}>  </td>
                     <td style={{ width: grid['colums'][3]['width'] }}>  </td>
                     <td style={{ width: grid['colums'][4]['width'] }}> </td>
-                    <td style={{ width: grid['colums'][5]['width'] }}> <label> khuyển mãi giảm </label>  </td>
-                    <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> <label> 0</label>  </td>
-                    <td style={{ width: grid['colums'][7]['width'] }} className="text-danger">  </td>
+                    <td style={{ width: grid['colums'][5]['width'] }}> <label> Tổng cộng </label>  </td>
+                    <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> <label> { numeral(props.total_sum).format('0,0')+' đ' } </label>  </td>
+                    <td style={{ width: grid['colums'][7]['width'] }} className="text-danger"> <label>  </label> </td>
                     <td style={{ width: grid['colums'][8]['width'] }}>  </td>
                   </tr>
 
@@ -249,11 +242,26 @@ function FrmLeft(props){
                     <td style={{ width: grid['colums'][2]['width'] }}>  </td>
                     <td style={{ width: grid['colums'][3]['width'] }}>  </td>
                     <td style={{ width: grid['colums'][4]['width'] }}> </td>
-                    <td style={{ width: grid['colums'][5]['width'] }}> <label> Tổng cộng </label>  </td>
-                    <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> <label> { numeral(SUM).format('0,0')+' đ' } </label>  </td>
-                    <td style={{ width: grid['colums'][7]['width'] }} className="text-danger"> <label> { numeral(props.total_sum_vat).format('0,0')+' đ' } </label> </td>
+                    <td style={{ width: grid['colums'][5]['width'] }}> <label className="text-danger"> Thuế { props.vat+'%' } </label>  </td>
+                    <td style={{ width: grid['colums'][6]['width'] }} className="text-danger"> <label> { numeral(props.total_vat).format('0,0')+' đ' } </label>  </td>
+                    <td style={{ width: grid['colums'][7]['width'] }} className="text-danger"> <label>  </label> </td>
                     <td style={{ width: grid['colums'][8]['width'] }}>  </td>
                   </tr>
+
+                  <tr>
+                    <td style={{ width: grid['colums'][0]['width'] }}> </td>
+                    <td style={{ width: grid['colums'][1]['width'] }}> </td>
+                    <td style={{ width: grid['colums'][2]['width'] }}>  </td>
+                    <td style={{ width: grid['colums'][3]['width'] }}>  </td>
+                    <td style={{ width: grid['colums'][4]['width'] }}> </td>
+                    <td style={{ width: grid['colums'][5]['width'] }}> <label> Thành tiền </label>  </td>
+                    <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> <label> { numeral(props.total_sum_vat).format('0,0')+' đ' } </label>  </td>
+                    <td style={{ width: grid['colums'][7]['width'] }} className="text-danger">  </td>
+                    <td style={{ width: grid['colums'][8]['width'] }}>  </td>
+                  </tr>
+
+
+                  
                 </tfoot>
 
 
@@ -287,7 +295,7 @@ class AddQuotation extends React.Component {
 
     constructor(props){
       super(props);
-
+      
       this.state = {
         customer_code:'',
         customer_info:{},
@@ -296,7 +304,13 @@ class AddQuotation extends React.Component {
         payment_code:'',
         note:'',
         main_code:'',
-        total_sum_vat:0
+        total_sum:0,
+        total_vat:0,
+        total_sum_vat:0,
+        belong_user:'',
+        level_discount:0,
+        promotion_discount:0,
+        onSuccess:false
       }
 
       this.grid = {
@@ -314,6 +328,8 @@ class AddQuotation extends React.Component {
       }
 
       
+
+      
       this._addCard = this._addCard.bind(this);
       this._onChange = this._onChange.bind(this);
       this._onSelectedCustomer = this._onSelectedCustomer.bind(this) ; 
@@ -324,6 +340,7 @@ class AddQuotation extends React.Component {
     }
 
     _onSubmit(){
+
       
       const fields = [
         'customer_code','vat','payment_code',
@@ -341,23 +358,23 @@ class AddQuotation extends React.Component {
               id:cusInfo.id,
               code:cusInfo.code,
               name:cusInfo.name,
+              contact_name:cusInfo.contact_name,
+              phone:cusInfo.phone,
               level_code:cusInfo.level_code,
               customer_original:cusInfo.customer_original,
               customer_status:cusInfo.customer_status,
               ref_price:cusInfo.ref_price,
               type_name:cusInfo.type_name,
               tax_no:cusInfo.tax_no,
-              city:cusInfo.city
+              city:cusInfo.city,
+              belong_user:cusInfo.belong_user,
+              benefit_discount:cusInfo.benefit_discount,
+              discount_for:cusInfo.discount_for
             }
             
             this.model.axios('post',data,(res)=>{ 
-            
-              if(res.name==='success' || res.name ==='ok'){
-                alert(' thành công ');
-
-              }
-              
-           })
+              this._whereStateChange(res);               
+            });
            
          }else{
             let el = document.querySelector("#form-err");
@@ -371,40 +388,90 @@ class AddQuotation extends React.Component {
 
     }
     _onSelectedCustomer(json){
+
+      
       this.setState({
         customer_code:json.code,
-        customer_info:json
+        belong_user:json.belong_user,
+        customer_info:json,
+        cart:[],
+        total_sum:0,
+        total_vat:0,
+        total_sum_vat:0,
+        level_discount:0
       });
+      
+      
     }
 
-    
+
+    _calculateSUM(cart){
+
+      let ret = {
+        total_sum:0,
+        total_sum_vat:0,
+        total_vat:0,
+        level_discount:0 ,
+        promotion_discount:0
+      };
+
+      const benefit_discount = this.state.customer_info.benefit_discount === null ? 0 : parseInt(this.state.customer_info.benefit_discount) ;
+      const discount_for = this.state.customer_info['discount_for'];
+
+      let TOTAL_SUM_1 = 0 ;
+
+      
+      cart.map((item)=>{
+        // calculate
+        const amount = parseInt(item.amount) ; 
+        const price = item.price;
+        const total = parseInt(price) * amount ;  
+        ret.total_sum += total;
+
+        const totalWithVat = (total * (parseInt(this.state.vat) / 100)) + total ;
+        ret.total_sum_vat += totalWithVat ;             
+        // end calculate
+
+        // PRODUCT TYPE 
+        if(discount_for!=='all'){
+          if(item.type===discount_for){
+            const total_1 = parseInt(price) * amount ; 
+            TOTAL_SUM_1 += total_1; 
+            ret.level_discount = TOTAL_SUM_1 * ( benefit_discount / 100 );
+            
+          }
+        }
+        // END PRODUCT TYPE
+      }) ;
+
+      // SUMARY 
+      ret.total_sum = ret.total_sum - ret.level_discount ; 
+      ret.total_vat = ret.total_sum * ( parseInt(this.state.vat)/100 );
+
+      ret.total_sum_vat = ret.total_sum + ret.total_vat;
+      
+      return ret;
+
+    }
+
+
+   
     _updateCard(json){ // row_id - field - value
 
       let cart = this.state.cart; 
-
-      let SUM_VAT = 0 
       
       cart.map((item)=>{
         if(parseInt(json.row_id) === parseInt(item.id)){
           item[json.field] = json.value; 
-
-          // calculate
-          const amount = parseInt(item.amount) ; 
-          const price = item.price;
-          const total = parseInt(price) * amount ;  
-          const totalWithVat = (total * (parseInt(this.state.vat) / 100)) + total ;
-          SUM_VAT += totalWithVat ;             
-
-          // end calculate
-
         }
       });
-
+      
+      const retSUM = this._calculateSUM(cart);
       
 
       this.setState({
         cart:cart,
-        total_sum_vat:SUM_VAT
+        ...retSUM
       });
       
 
@@ -413,8 +480,11 @@ class AddQuotation extends React.Component {
       let cart = this.state.cart ; 
       const newCart2 = cart.filter(item=>item.id !== id) ;
 
+      const retSUM = this._calculateSUM(newCart2);
+
       this.setState({
-        cart:newCart2
+        cart:newCart2,
+        ...retSUM
       });
       
 
@@ -444,9 +514,12 @@ class AddQuotation extends React.Component {
           price:price
         }); 
 
+        const retSUM = this._calculateSUM(cart);
+
         this.setState({
           cart:cart,
-          main_code:main_code
+          main_code:main_code,
+          ...retSUM
         });
 
                 
@@ -469,13 +542,24 @@ class AddQuotation extends React.Component {
     componentDidMount(){
 
       // INIT ORDERS MODEL
-      this.model = new Model(MODE);
-        
-
+      this.model = new Model(MODE,this.props.dispatch);
+      
     }
 
+    _whereStateChange(res){
+
+      if(res.name==='success' || res.name ==='ok'){
+        this.setState({
+          onSuccess:true
+        });
+      }
+      
+    }
+
+    
     render() {
-        return (
+        
+        return this.state.onSuccess === false ?  (
             <div className="animated fadeIn">
                 <div className="ubuntu-app " style={{border:0, marginTop: 20}}>
 
@@ -503,7 +587,7 @@ class AddQuotation extends React.Component {
                     
                 </div>
             </div>
-        );
+        ): <Redirect to="/order/_s"/>
     }
 }
 
@@ -513,4 +597,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default AddQuotation;
+export default connect(mapStateToProps)(AddQuotation);

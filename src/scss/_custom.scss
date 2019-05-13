@@ -65,6 +65,15 @@ body{
 .row-form{ margin-bottom: 20px !important }
 /* END FORM*/
 
+.input-datepicker-start,.input-datepicker-end{
+  padding: 8px; border: 1px solid #E4E7EA;
+  border-right: 0px;
+  width: 120px; color:#666;
+}
+.input-datepicker-end{
+  border: 1px solid #E4E7EA;
+  margin-right: 10px;
+}
 
 
 .btn-trio{

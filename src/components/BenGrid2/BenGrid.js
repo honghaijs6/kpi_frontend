@@ -242,7 +242,7 @@ class BenGrid extends Component{
       <div>
           <div className="toolbar">
             <Row>
-              <Col md={6}>
+              <Col md={3}>
                 <ButtonGroup>
                   {
                     this.state.displayBtn.map((item,index)=>{
@@ -255,7 +255,7 @@ class BenGrid extends Component{
 
                   { this.props.leftButton }
               </Col>
-              <Col md={6} className={'text-right '+ clnRightTool}>
+              <Col md={9} className={'text-right '+ clnRightTool}>
 
                 { this.props.customButton }
                 <ButtonGroup style={{marginRight:6}}>

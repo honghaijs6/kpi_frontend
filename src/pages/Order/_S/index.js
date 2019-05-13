@@ -3,14 +3,23 @@ import { ORDER_STATUS } from '../../../config/app.config';
 import { PAYMENT_TYPES_DECO } from '../../../config/payment.type'; 
 
  
-/* OBJECT - PLUGIN*/
+/* OBJECT - PLUGIN*/ 
 import Model from '../../../model/model';
 
 // HOOK ULTI 
 import moment from 'moment';
 
+
 import React, { Component } from 'react';
+import { ButtonGroup, FormGroup, Input, Label, Button } from 'reactstrap'; 
+
+
+
 import { connect } from 'react-redux';
+
+import { Link } from 'react-router-dom' ; 
+
+import numeral from 'numeral' ; 
 
 
 /* MODAL FORM & CTRL */
@@ -20,6 +29,11 @@ import formCtrl from './formCtrl';
 
 /*INCLUDE OTHER COMPONENT*/
 import { BenGrid } from '../../../components/BenGrid2';
+import ButtonExpand from '../../../components/ButtonExpand';
+import SelectList from '../../../components/SelectList'; 
+import SelectListModelCode from '../../../components/SelectListModelCode';
+import RankDatePicker from '../../../components/RankDatePicker' ; 
+
 
 const MODE = 'orders';
 const MODE_NAME = 'Báo giá';
@@ -35,6 +49,10 @@ class OrderView extends Component{
       typeAction:'',
       onAction:'',
       status:'',
+
+      startDate: '2019-05-13',
+      endDate:'2019-06-13'
+        
 
     }
 
@@ -99,11 +117,11 @@ class OrderView extends Component{
         },  
 
         
-        {headerName: "Tiền đơn hàng", field: "total_sum_vat",width:150,
+        {headerName: "Tiền đơn hàng", field: "total_sum",width:150,
 
           cellRenderer(params){
 
-              return params.value;
+              return numeral(params.value).format('0,0')+' đ';
           }
         },
 
@@ -116,11 +134,11 @@ class OrderView extends Component{
 
           cellRenderer(params){
 
-              return params.value;
+            return numeral(params.value).format('0,0')+' đ';
           }
         },
 
-        {headerName: "Đã thanh toán", field: "total_sum_vat",width:171,
+        {headerName: "Đã thanh toán", field: "total_bill",width:171,
 
           cellRenderer(params){
 
@@ -128,7 +146,10 @@ class OrderView extends Component{
           }
         },
         {
-          headerName:"Phụ trách",field:"creator",width:100
+          headerName:"Phụ trách",field:"belong_user",width:140,
+            cellRenderer(params){
+              return `<span class="badge bg-green"> <i class="fa fa-user mr-5"></i> ${ params.value } </span>`
+            }
         }
         
 
@@ -192,7 +213,7 @@ class OrderView extends Component{
   _doOpenForm(){
 
     this.formCtrl.open('post');
-
+  
     this._whereStateChange({
       typeAction:'post',
       onAction:'open_modal'
@@ -224,7 +245,6 @@ class OrderView extends Component{
 
                 width='90%'
                 name={ MODE_NAME }
-                typeAction={ this.state.typeAction }
                 modal={this.formCtrl}
 
               />
@@ -242,6 +262,38 @@ class OrderView extends Component{
                  nextColums={ this.grid.colums }
                  rowData={this.grid.rowData}
                  model={ this.model }
+                 formStatus={ this.state.status }
+                 
+                 customButton={
+                   <ButtonGroup>
+                      <Link className="btn btn-normal" style={{borderRadius:0,marginRight:20}} to="/order/add"> <i className="fa fa-plus-circle"></i> Tạo báo giá </Link>
+
+                      <Input style={{marginRight:10, borderRadius:0, backgroundColor:'#F5F6F7'}} type="select">
+                          <option> Quản lý báo giá </option>
+                          <option> Quản lý đơn Hàng </option>
+                      </Input>
+
+                      <RankDatePicker onChange={(state)=>{ console.log(state) }} />
+                      
+
+                      <ButtonExpand style={{borderRight:0}}  icon="fa-filter">
+                          <FormGroup>
+                            <Label> Trạng thái </Label>
+                            <SelectList name="Tất Cả" rows={ ORDER_STATUS } />
+                          </FormGroup>
+                          <FormGroup>
+                            <Label> Hạn mức  </Label>
+                            <SelectListModelCode name="Tất Cả" strModel='payments' />
+                          </FormGroup>
+                          
+
+                      </ButtonExpand>
+                      
+                   </ButtonGroup>
+                   
+                 }
+
+                 /*displayBtn = {['edit','remove']}*/
 
                  
               />

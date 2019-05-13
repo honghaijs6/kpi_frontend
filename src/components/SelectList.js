@@ -11,7 +11,7 @@ class SelectList extends React.Component {
     render() {
         return (
             <Input onChange={(e)=>{ this.props.onChange(e) }} style={this.props.style} type="select">  
-                <option key="0" value="" > { this.props.name } : Tất cả </option>
+                <option key="" value="" > { this.props.name || 'Tất cả'  } </option>
                 {
                     this.props.rows.map((item)=>{
                         return(

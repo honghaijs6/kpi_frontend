@@ -86,7 +86,7 @@ class CusTypeForm extends Component {
                       })
 
                     }
-                        <option key="5" value="5"> Tất cả </option>
+                        <option key="all" value="all"> Tất cả </option>
                     </Input>
                 </FormGroup>
               </Col>
