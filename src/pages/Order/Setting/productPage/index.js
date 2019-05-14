@@ -151,10 +151,7 @@ class ProductPage extends Component{
   _doOpenModalPost(){
 
     this.modal.open('post');
-    this._whereStateChange({
-      typeAction:'post',
-      onAction:'open_modal'
-    })
+    
 
   }
   async _doOpenModalUpdate(data){
@@ -162,11 +159,7 @@ class ProductPage extends Component{
       const info =  await doGetModelInfo('products',data.id);
       Object.assign(data,info.data); 
       this.modal.open('put',data);
-
-      this._whereStateChange({
-        typeAction:'put',
-        onAction:'open_modal'
-      });
+      
 
   }
   /* END HOW*/
@@ -190,11 +183,7 @@ class ProductPage extends Component{
     this.data[MODE] = newProps[MODE]['list'] || [] ;
     // UPDATE CURRRENT STATE 
     Object.assign(this.state,newProps[MODE]['state']);
-
     
-
-
-
     this.resetGrid(); // HAD INSIDE setSatte 
     
 
@@ -208,7 +197,6 @@ class ProductPage extends Component{
 
   _doFilter(name,value){
     
-
     if(value!==''){
       this.model.set('paginate',{
         [name]:value

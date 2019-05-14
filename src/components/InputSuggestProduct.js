@@ -3,7 +3,7 @@
 import Model from '../model/model';
 
 import React, { Component } from 'react';
-import { Input } from 'reactstrap';
+import { Input, ButtonGroup, Button } from 'reactstrap';
 
 
 export default class InputSuggest extends Component{
@@ -130,15 +130,31 @@ export default class InputSuggest extends Component{
 
         return(
             <div>
-                <Input 
-                    onKeyUp={ this._keyHandling } 
-                    id={this.props.id || 0 } 
-                    placeholder="nhập từ khoá..." 
-                    
-                    value={this.state.value} 
-                    onChange={(e)=>{ this._onChange(e.target.value) }}  
-                    
-                    type="text" />
+                <ButtonGroup>
+                    <Input 
+                        onKeyUp={ this._keyHandling } 
+                        id={this.props.id || 0 } 
+                        placeholder="nhập từ khoá..." 
+                        
+                        value={this.state.value} 
+                        onChange={(e)=>{ this._onChange(e.target.value) }}  
+                        
+                        type="text" 
+                        style={{
+                            width:410,
+                            borderRight:0,
+                            borderTopRightRadius:0,
+                            borderBottomRightRadius:0
+                        }}
+                            
+                    />
+                    <Button disabled style={{
+                        background:'#fff',
+                        color:'#999',
+                        
+                    }}> <i className="fa fa-search"></i> </Button>
+                </ButtonGroup>
+                
                     
                 <ul className="suggest-holder" style={{display:this.state.display}} >
                     {

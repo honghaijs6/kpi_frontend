@@ -134,11 +134,7 @@ class SupplierPage extends Component{
 
   _doOpenModalPost(){
 
-    this._whereStateChange({
-      typeAction:'post',
-      onAction:'_doOpenModalPost'
-    });
-
+    
     this.modal.open('post');
   }
   _doOpenModalUpdate(data){

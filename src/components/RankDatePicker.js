@@ -30,19 +30,28 @@ class RankDatePicker extends Component{
     }
 
     handleChangeStart(date){
+
+        this.props.onChange({
+            start:date,
+            end:this.state.endDate
+        });
+
         this.setState({
             startDate:date
         });
-
-        this.props.onChange(this.state);
-
-
+        
     }
     handleChangeEnd(date){
+        
+        this.props.onChange({
+            start:this.state.startDate,
+            end:date
+        });
+        
         this.setState({
             endDate:date
         });
-        this.props.onChange(this.state);
+        
 
     }
     render(){
@@ -50,6 +59,8 @@ class RankDatePicker extends Component{
             <ButtonGroup>
                 <Button style={{background:'#fff', borderRight:0}} disabled> <i className="fa fa-calendar"></i> </Button>
                 <DatePicker
+                    dateFormat="yyyy-MM-dd"
+
                     selected={this.state.startDate}
                     selectsStart
                     startDate={this.state.startDate}
@@ -58,12 +69,14 @@ class RankDatePicker extends Component{
                     className="input-datepicker-start"
                 />
                 <DatePicker
-                          selected={this.state.endDate}
-                          selectsEnd
-                          startDate={this.state.startDate}
-                          endDate={this.state.endDate}
-                          onChange={this.handleChangeEnd}
-                          className="input-datepicker-end"
+                    dateFormat="yyyy-MM-dd"
+
+                    selected={this.state.endDate}
+                    selectsEnd
+                    startDate={this.state.startDate}
+                    endDate={this.state.endDate}
+                    onChange={this.handleChangeEnd}
+                    className="input-datepicker-end"
                       />
             </ButtonGroup>
 

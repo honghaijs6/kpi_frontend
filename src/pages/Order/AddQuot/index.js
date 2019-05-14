@@ -1,9 +1,10 @@
-
+ 
 import Model from '../../../model/model';
-
 import { isExisted, detectForm } from '../../../hook/before'; 
 
+
 import React from 'react';
+
 import { connect } from 'react-redux';
 
 import {  Row, Col, FormGroup,Label, Input, Table, Button, ButtonGroup  } from 'reactstrap';
@@ -20,19 +21,21 @@ import ButtonExpand from '../../../components/ButtonExpand';
 
 
 import FormAddOn from './FormAddOn'; 
-import { MAIN_COLOR } from '../../../config/app.config';
+
+
 
 
 const MODE = 'orders';
 
 
-function FrmLeft(props){
+
+function CustomerInfo(props){
 
     const cusInfo = props.customer_info ; 
     
     return( 
-      <div style={{padding:20, background:MAIN_COLOR,borderRadius:4}}>
-          <h5 style={{color:'#fff'}} className="text-uppercase font-14">
+      <div style={{padding:10}}>
+          <h5 className="text-uppercase font-14 text-green">
 
             <Label >
              <i className="fa fa-user mr-5"></i> 
@@ -45,39 +48,39 @@ function FrmLeft(props){
           <FormGroup>
             <Label> Mã KH </Label>
             
-            <InputSuggest style={{border:0}} defaultValue={ cusInfo.code } onSelected={(json)=>{ props.onSelectedCustomer(json) }} strModel='customers' id="customer_code"  />
+            <InputSuggest  defaultValue={ cusInfo.code } onSelected={(json)=>{ props.onSelectedCustomer(json) }} strModel='customers' id="customer_code"  />
           </FormGroup>
   
           <FormGroup>
             <Label> Công ty </Label>
-            <Input style={{border:0}} type="text" defaultValue={cusInfo.name} disabled   />
+            <Input  type="text" defaultValue={cusInfo.name}    />
           </FormGroup>
   
           <FormGroup>
             <Row>
               <Col md="6">
                 <Label> MST </Label>
-                <Input style={{border:0}} disabled defaultValue={cusInfo.tax_no} type="text"   />
+                <Input  defaultValue={cusInfo.tax_no} type="text"   />
               </Col>
               <Col>
                 <Label> Thuế VAT </Label>
-                <Input style={{border:0}} type="number" min={0} max={50} defaultValue={ props.vat } onChange={(e)=>{ props.onChange('vat',e.target.value) }} id="vat"  />
+                <Input  type="number" min={0} max={50} defaultValue={ props.vat } onChange={(e)=>{ props.onChange('vat',e.target.value) }} id="vat"  />
               </Col>
             </Row>
           </FormGroup>
 
-          <h5 className='text-uppercase' style={{marginTop:20,color:'#fff'}}>
+          <h5 className='text-uppercase text-green' style={{marginTop:20}}>
             <label> <i className="fa fa-truck mr-5"></i>  Giao hàng  </label>
           </h5>
           <FormGroup>
             <label> 
                 Địa chỉ giao hàng  
             </label>
-            <Input style={{border:0}} type="text" defaultValue={ cusInfo.address_delivery}  />
+            <Input  type="text" onChange={(e)=>{ props.onChangeCusInfo('address_delivery',e.target.value) }} defaultValue={ cusInfo.address_delivery}  />
 
           </FormGroup>
 
-          <h5 className='text-uppercase' style={{marginTop:20,color:'#fff'}}>
+          <h5 className='text-uppercase text-green' style={{marginTop:20}}>
             <label> <i className="fa fa-shield mr-5"></i>  Thanh toán  </label>
             <label className="float-right"> { cusInfo.level_code } </label>
 
@@ -88,13 +91,13 @@ function FrmLeft(props){
               <Col md={6}>
                 <Label> Hạn mức thanh toán </Label>
                 <SelectListModelCode 
-                    style={{border:0}}
+                    
                     strModel='payments' onChange={(e)=>{  props.onChange('payment_code',e.target.value)  }} 
                     defaultValue={props.payment_code} name="Vui Lòng Chọn" id="payment_code" />
               </Col>
               <Col md={6}>
                 <Label> Được giảm % </Label>
-                <Input style={{border:0}} type='text' defaultValue={ cusInfo.benefit_discount === null ? 0 : cusInfo.benefit_discount } disabled />
+                <Input  type='text' defaultValue={ cusInfo.benefit_discount === null ? 0 : cusInfo.benefit_discount }  />
               </Col>
             </Row>
            
@@ -103,7 +106,7 @@ function FrmLeft(props){
           
           <FormGroup>
             <Label> Ghi chú  </Label>
-            <Input type="textarea"  defaultValue={ props.note } onChange={(e)=>{  props.onChange('note',e.target.value)  }} style={{height:100,border:0}} id="note" />
+            <Input type="textarea"  defaultValue={ props.note } onChange={(e)=>{  props.onChange('note',e.target.value)  }} style={{height:100}} id="note" />
           </FormGroup>
   
   
@@ -111,9 +114,9 @@ function FrmLeft(props){
   
     )
   
-  }
+}
   
-  function FrmRight(props){
+function TableInfo(props){
     
     const grid = props.grid ; 
     
@@ -121,14 +124,15 @@ function FrmLeft(props){
     const cusInfo = props.customer_info;
 
     return(
-      <div style={{paddingRight:20}}>
+      <div style={{padding:10}}>
         
         <FormGroup>
+          
           <Row>
-            <Col md="4">
+            <Col md="9">
               <InputSuggestProduct  type="root" onSelected={(json)=>{ props.onSelectedProduct(json) }} defaultValue={props.main_code}   />
             </Col>
-            <Col md="6">
+            <Col md="3">
               <ButtonGroup>
                 <ButtonExpand width={720} name="SP Phụ" icon="fa-tags">
                     <FormAddOn onSelected={(json)=>{ props.onSelectedProduct(json) }} main_code={props.main_code} type='none-root' />
@@ -141,8 +145,6 @@ function FrmLeft(props){
                 </ButtonExpand>
               </ButtonGroup>
             </Col>
-            
-  
           </Row>
   
           <Row className="mt-20">
@@ -218,8 +220,12 @@ function FrmLeft(props){
                     <td style={{ width: grid['colums'][2]['width'] }}>  </td>
                     <td style={{ width: grid['colums'][3]['width'] }}>  </td>
                     <td style={{ width: grid['colums'][4]['width'] }}> </td>
-                    <td style={{ width: grid['colums'][5]['width'] }}> <label> Giảm </label>  </td>
-                    <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> <label>  { numeral(props.level_discount).format('0,0')+' đ' } </label>  </td>
+                    <td style={{ width: grid['colums'][5]['width'] }}> 
+                      <span className="txt-bold font-14" > Giảm </span>  
+                    </td>
+                    <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> 
+                      <span className="txt-bold font-14" >  { numeral(props.level_discount).format('0,0')+' đ' } </span>  
+                    </td>
                     <td style={{ width: grid['colums'][7]['width'] }} className="text-danger">  </td>
                     <td style={{ width: grid['colums'][8]['width'] }}>  </td>
                   </tr>
@@ -230,8 +236,12 @@ function FrmLeft(props){
                     <td style={{ width: grid['colums'][2]['width'] }}>  </td>
                     <td style={{ width: grid['colums'][3]['width'] }}>  </td>
                     <td style={{ width: grid['colums'][4]['width'] }}> </td>
-                    <td style={{ width: grid['colums'][5]['width'] }}> <label> Tổng cộng </label>  </td>
-                    <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> <label> { numeral(props.total_sum).format('0,0')+' đ' } </label>  </td>
+                    <td style={{ width: grid['colums'][5]['width'] }}> 
+                      <span className="txt-bold font-14" > Tổng cộng </span>  
+                    </td>
+                    <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> 
+                      <span className="txt-bold font-14"> { numeral(props.total_sum).format('0,0')+' đ' } </span>  
+                    </td>
                     <td style={{ width: grid['colums'][7]['width'] }} className="text-danger"> <label>  </label> </td>
                     <td style={{ width: grid['colums'][8]['width'] }}>  </td>
                   </tr>
@@ -242,9 +252,13 @@ function FrmLeft(props){
                     <td style={{ width: grid['colums'][2]['width'] }}>  </td>
                     <td style={{ width: grid['colums'][3]['width'] }}>  </td>
                     <td style={{ width: grid['colums'][4]['width'] }}> </td>
-                    <td style={{ width: grid['colums'][5]['width'] }}> <label className="text-danger"> Thuế { props.vat+'%' } </label>  </td>
-                    <td style={{ width: grid['colums'][6]['width'] }} className="text-danger"> <label> { numeral(props.total_vat).format('0,0')+' đ' } </label>  </td>
-                    <td style={{ width: grid['colums'][7]['width'] }} className="text-danger"> <label>  </label> </td>
+                    <td style={{ width: grid['colums'][5]['width'] }}> 
+                      <span className="text-danger font-14 txt-bold"> Thuế { props.vat+'%' } </span>  
+                    </td>
+                    <td style={{ width: grid['colums'][6]['width'] }} className="text-danger"> 
+                      <span className="txt-bold font-14"> { numeral(props.total_vat).format('0,0')+' đ' } </span>  
+                    </td>
+                    <td style={{ width: grid['colums'][7]['width'] }} className="text-danger"></td>
                     <td style={{ width: grid['colums'][8]['width'] }}>  </td>
                   </tr>
 
@@ -254,8 +268,12 @@ function FrmLeft(props){
                     <td style={{ width: grid['colums'][2]['width'] }}>  </td>
                     <td style={{ width: grid['colums'][3]['width'] }}>  </td>
                     <td style={{ width: grid['colums'][4]['width'] }}> </td>
-                    <td style={{ width: grid['colums'][5]['width'] }}> <label> Thành tiền </label>  </td>
-                    <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> <label> { numeral(props.total_sum_vat).format('0,0')+' đ' } </label>  </td>
+                    <td style={{ width: grid['colums'][5]['width'] }}> 
+                      <span className="txt-bold font-14"> Thành tiền </span>  
+                    </td>
+                    <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> 
+                      <span className="txt-bold font-14"> { numeral(props.total_sum_vat).format('0,0')+' đ' } </span>  
+                    </td>
                     <td style={{ width: grid['colums'][7]['width'] }} className="text-danger">  </td>
                     <td style={{ width: grid['colums'][8]['width'] }}>  </td>
                   </tr>
@@ -271,7 +289,7 @@ function FrmLeft(props){
         </FormGroup>
       </div>
     )
-  }
+}
 
 
 
@@ -297,6 +315,7 @@ class AddQuotation extends React.Component {
       super(props);
       
       this.state = {
+
         customer_code:'',
         customer_info:{},
         cart:[], 
@@ -318,12 +337,12 @@ class AddQuotation extends React.Component {
           {headerName: "Mã",width:100},
           {headerName: "Sản phẩm", width:250},
           {headerName: "Hình Ảnh",width:140},
-          {headerName: "ĐVT", width:100},
+          {headerName: "ĐVT", width:120},
           {headerName: "SL", width:100},
           {headerName: "Đơn giá", width:150},
           {headerName: "Thành tiền", width:150},
           {headerName: "+VAT", width:150},
-          {headerName: "Actions", width:90}
+          {headerName: "", width:70}
         ]
       }
 
@@ -360,6 +379,7 @@ class AddQuotation extends React.Component {
               name:cusInfo.name,
               contact_name:cusInfo.contact_name,
               phone:cusInfo.phone,
+              address_delivery:cusInfo.address_delivery,
               level_code:cusInfo.level_code,
               customer_original:cusInfo.customer_original,
               customer_status:cusInfo.customer_status,
@@ -477,6 +497,7 @@ class AddQuotation extends React.Component {
 
     }
     _removeCard(id){
+
       let cart = this.state.cart ; 
       const newCart2 = cart.filter(item=>item.id !== id) ;
 
@@ -528,6 +549,20 @@ class AddQuotation extends React.Component {
       
     }
 
+    _onChangeCusInfo(field,value){
+
+      let cusInfo = this.state.customer_info;
+      Object.assign(cusInfo,{
+         [field]:value
+      });
+
+      this.setState({
+        customer_info:cusInfo
+      });
+       
+
+    }
+
     _onChange(name,value){
        this.setState({
          [name]:value
@@ -564,12 +599,10 @@ class AddQuotation extends React.Component {
                 <div className="ubuntu-app " style={{border:0, marginTop: 20}}>
 
                     <Row style={{padding:20}}>
-                        <Col md={3}>
-                            <FrmLeft {...this.state} onChange={this._onChange}  onSelectedCustomer={ this._onSelectedCustomer }  />
-                        </Col>
+                        
                         <Col md={9}>
 
-                            <FrmRight 
+                            <TableInfo 
                                 {...this.state} 
                                 grid={this.grid}
                                 
@@ -578,10 +611,17 @@ class AddQuotation extends React.Component {
                                 onSelectedProduct={(json)=>{  this._addCard(json)  }} 
                             />
                             
-                            <Button style={{width:120}} onClick={ this._onSubmit } className="btn btn-lg btn-ubuntu-ok ">
+                            <Button style={{width:120}} onClick={ this._onSubmit } className="btn btn-ubuntu-ok bg-green ">
                               <i className="fa  fa-chevron-circle-right mr-5"></i> Đồng Ý 
                             </Button>
                             <span className="ml-10 form-err" id="form-err"></span>
+                        </Col>
+                        <Col md={3}>
+                            <CustomerInfo {...this.state} 
+                              onChange={this._onChange}  
+                              onSelectedCustomer={ this._onSelectedCustomer }  
+                              onChangeCusInfo={(field,value)=>{  this._onChangeCusInfo(field,value)  }}  
+                            />
                         </Col>
                     </Row>
                     

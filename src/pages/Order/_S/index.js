@@ -2,8 +2,7 @@
 import { ORDER_STATUS } from '../../../config/app.config'; 
 import { PAYMENT_TYPES_DECO } from '../../../config/payment.type'; 
 
- 
-/* OBJECT - PLUGIN*/ 
+ /* OBJECT - PLUGIN*/ 
 import Model from '../../../model/model';
 
 // HOOK ULTI 
@@ -11,12 +10,11 @@ import moment from 'moment';
 
 
 import React, { Component } from 'react';
-import { ButtonGroup, FormGroup, Input, Label, Button } from 'reactstrap'; 
+import { ButtonGroup, FormGroup, Input, Label } from 'reactstrap'; 
 
 
 
 import { connect } from 'react-redux';
-
 import { Link } from 'react-router-dom' ; 
 
 import numeral from 'numeral' ; 
@@ -41,6 +39,7 @@ const MODE_NAME = 'Báo giá';
 
 class OrderView extends Component{
 
+  _curInfo = {}
   constructor(props){
     super(props);
 
@@ -49,11 +48,9 @@ class OrderView extends Component{
       typeAction:'',
       onAction:'',
       status:'',
-
-      startDate: '2019-05-13',
-      endDate:'2019-06-13'
-        
-
+      
+      defaultStatusType:0,
+      
     }
 
     this.data = {}
@@ -165,25 +162,40 @@ class OrderView extends Component{
     this._setup();
 
     this.onBtnNew = this.onBtnNew.bind(this);
-
-
-
+    
   }
 
   _setup(){
 
     this.model = new Model(MODE,this.props.dispatch);
-    this.model.set('method',{
-      name:'listAll',
-      params:'all'
-    });
-
     this.formCtrl = new formCtrl(this.model,this.props.dispatch);
     
   }
 
+
+  _load(status_type=0){
+    this.model.set('paginate',{
+      status_type:status_type
+    });
+    this.model.load();
+  }
+
+  _loadWithDate(jsonDate){
+
+    const formatDate = {
+      start: moment(jsonDate.start).format('YYYY-MM-DD'),
+      end:moment(jsonDate.end).format('YYYY-MM-DD')
+    }
+    this.model.set('paginate',{
+      ...formatDate
+    });
+
+    this._load();
+  }
+  
+
   componentDidMount(){
-    this.model.initData(); 
+    this._load(this.state.defaultStatusType);
   }
 
   componentWillReceiveProps(newProps){
@@ -207,17 +219,19 @@ class OrderView extends Component{
   }
 
   _doOpenModalUpdate(data){
+    
+    this._curInfo = data ;
+    this.formCtrl.open('put',data);
+    
 
   }
 
   _doOpenForm(){
 
     this.formCtrl.open('post');
-  
-    this._whereStateChange({
-      typeAction:'post',
-      onAction:'open_modal'
-    })
+    
+
+
   }
 
   /* WHEN*/
@@ -232,6 +246,16 @@ class OrderView extends Component{
   }
 
   
+  _onChange(field,value){
+    
+    if(value!==''){
+      this.model.set('paginate',{
+        [field]:value
+      });
+    }else{ this.model.remove(field) }
+
+    this.model.load(); 
+  }
 
   render(){ 
 
@@ -245,6 +269,7 @@ class OrderView extends Component{
 
                 width='90%'
                 name={ MODE_NAME }
+                data={ this._curInfo }
                 modal={this.formCtrl}
 
               />
@@ -268,22 +293,25 @@ class OrderView extends Component{
                    <ButtonGroup>
                       <Link className="btn btn-normal" style={{borderRadius:0,marginRight:20}} to="/order/add"> <i className="fa fa-plus-circle"></i> Tạo báo giá </Link>
 
-                      <Input style={{marginRight:10, borderRadius:0, backgroundColor:'#F5F6F7'}} type="select">
-                          <option> Quản lý báo giá </option>
-                          <option> Quản lý đơn Hàng </option>
+                      <Input 
+                          defaultValue={ this.state.defaultStatusType } 
+                          onChange={(e)=>{ this._load(e.target.value) }} style={{marginRight:10, borderRadius:0, backgroundColor:'#F5F6F7'}} type="select">
+
+                          <option value="0"> Quản lý báo giá </option>
+                          <option value="1"> Quản lý đơn Hàng </option>
                       </Input>
 
-                      <RankDatePicker onChange={(state)=>{ console.log(state) }} />
+                      <RankDatePicker onChange={(state)=>{ this._loadWithDate(state) }} />
                       
 
                       <ButtonExpand style={{borderRight:0}}  icon="fa-filter">
                           <FormGroup>
                             <Label> Trạng thái </Label>
-                            <SelectList name="Tất Cả" rows={ ORDER_STATUS } />
+                            <SelectList name="Tất Cả" onChange={(e)=>{ this._onChange('status',e.target.value) }}  rows={ ORDER_STATUS } />
                           </FormGroup>
                           <FormGroup>
                             <Label> Hạn mức  </Label>
-                            <SelectListModelCode name="Tất Cả" strModel='payments' />
+                            <SelectListModelCode onChange={(e)=>{ this._onChange( 'payment_code',e.target.value)  }}  name="Tất Cả" strModel='payments' />
                           </FormGroup>
                           
 
@@ -294,6 +322,7 @@ class OrderView extends Component{
                  }
 
                  /*displayBtn = {['edit','remove']}*/
+
 
                  
               />

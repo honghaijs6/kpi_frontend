@@ -52,8 +52,7 @@ class CategoryPage extends Component{
         {headerName: "Tên ", field: "name",width:400},
         {headerName: "Thứ tự", field: "sort",width:120},
         {headerName: "Người tạo", field: "creator",width:200},
-        {headerName: "Sản phẩm", field: "total_product",width:200},
-
+        
         {headerName: "Ngày tạo", field: "date_created",width:140,
           
           cellRenderer(params){
@@ -84,7 +83,8 @@ class CategoryPage extends Component{
     }
 
     this._setup();
-    this.onBtnNew = this.onBtnNew.bind(this)
+    
+    this._doOpenModalPost = this._doOpenModalPost.bind(this);
     this._doOpenModalUpdate = this._doOpenModalUpdate.bind(this);
 
 
@@ -117,28 +117,14 @@ class CategoryPage extends Component{
   _doOpenModalPost(){
 
     this.modal.open('post');
-    this._whereStateChange({
-      typeAction:'post',
-      onAction:'_doOpenModalPost'
-    })
-
+    
   }
   _doOpenModalUpdate(data){
     this.modal.open('put',data);
-    this._whereStateChange({
-      typeAction:'put',
-      onAction:'_doOpenModalUpdate'
-    })
-
   }
   /* END HOW*/
 
   /* WHEN*/
-
-  onBtnNew(){
-    this._doOpenModalPost();
-  }
-  
   
   componentWillUnmount(){
     this._isData = false; 
@@ -186,7 +172,7 @@ class CategoryPage extends Component{
              height='78vh'
              gridID="id"
              onBtnEdit={ this._doOpenModalUpdate }
-             onBtnAdd={this.onBtnNew}   
+             onBtnAdd={this._doOpenModalPost}   
              rowSelection='single'
              formStatus={ this.state.status }
              isRightTool={ true }

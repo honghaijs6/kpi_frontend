@@ -28,6 +28,12 @@ body{
 .bg-grey{ background: #F4F4F4 !important}
 
 
+/* TEXT */
+.txt-bold{ font-weight: 500}
+
+/* END TEXT*/
+
+
 /* END COLOR */
 
 .myBadge{ padding: 4px 7px !important; border-radius: 9px !important;}
@@ -178,9 +184,8 @@ table.vk-table{
   display: grid;
   overflow-x: auto !important;
   /*overflow-y: auto !important;*/
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
+  
+  border-bottom: 0px solid #eeeeee;
   
 
 }
@@ -202,42 +207,50 @@ table.vk-table tbody {
 table.vk-table thead,table.vk-table tbody tr {
     display:table;
     width:100%;
-    
     table-layout:fixed;/* even columns width , fix width of table too*/
 }
 
 table.vk-table thead{
-  background-color: #455361;
-  color:#fff;
-  border: 0px;
-  
+  /*background-color: #455361;
+  color:#fff; 
+  border: 0px;*/
+  border-bottom: 1px solid #dddddd;
+  border-top: 1px solid #dddddd;
 
 }
 
+table.vk-table thead tr th{
+  text-transform: uppercase;
+  font-size: 12px !important;
+  color: #18A689 !important
+}
 
-.vk-table tbody tr:hover{ background:rgba(66,103,178,0.3) !important;}
+
+
+.vk-table tbody tr:hover{ background:#F5F6F7 !important;}
 
 .vk-table > tbody > tr:nth-child(2n+2)  {
    background-color: #eee;
 }
 /*.vk-table > tbody{ border: 1px solid #ddd !important}*/
 .vk-table > tbody > tr >td{
-    border-left: 0px solid #ddd !important;
+    border-left: 0px solid #eee !important;
     /*border-top: 1px solid #ddd !important;*/
     vertical-align: middle;
-    border-top: 0px solid #ddd !important;
+    border-top: 0px solid #eee !important; 
 
-    border-bottom: 1px solid #ddd !important;
+    border-bottom: 1px solid #dddddd !important;
 
 
 }
 .vk-table > tbody > tr >td:last-of-type{ border-right: 0px solid #ddd !important; }
 
 .vk-table > tfoot{
-  background-color: #F0F3F5; 
+  background-color: #fff; 
 }
 .vk-table >tfoot > tr >td{
-  border-top: 1px solid rgba(1,1,1,0.1) !important;
+  border-top: 1px solid #dddddd !important;
+  
 }
 
 
@@ -373,7 +386,9 @@ a.btn-delete:hover{ color:#DC3545 !important}
   border-top: 1px solid rgba(0,0,0,0.1);
   border-bottom-right-radius: 9px !important;
   border-bottom-left-radius: 9px !important;
-
+}
+.modal-body{
+  padding: 30px;  
 }
 
 
@@ -447,7 +462,7 @@ a.btn-delete:hover{ color:#DC3545 !important}
 
 .ag-row-hover {
     /* putting in !important so it overrides the theme's styling as it hovers the row also */
-    background-color: #dfdfff !important;
+    background-color: #F5F6F7 !important;
 }
 
 /*.ag-column-hover {

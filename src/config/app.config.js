@@ -9,3 +9,5 @@ export const ORDER_STATUS = [
     { code:5,color:'#643BAD',name:'Đã Kết Thúc' }       
 
 ];
+
+export const DATE_FORMAT = 'yyyy-MM-dd';
