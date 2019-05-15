@@ -1,10 +1,6 @@
 'use strict'
 
-
-import Model from '../../../model/model';
 import { isExisted, detectForm } from '../../../hook/before'; 
-
-
 import React, { Component } from 'react';
 
 
@@ -14,7 +10,6 @@ import {  Row, Col, FormGroup,Label, Input, Table, Button, ButtonGroup  } from '
 import numeral from 'numeral';
 
 import InputNumeral from '../../../components/InputNumeral'; 
-import InputSuggest from '../../../components/InputSuggest';   
 import InputSuggestProduct from '../../../components/InputSuggestProduct' ; 
 
 import SelectListModelCode from '../../../components/SelectListModelCode';
@@ -22,9 +17,9 @@ import ButtonExpand from '../../../components/ButtonExpand';
 
 
 import FormAddOn from './FormAddOn'; 
+import ViewModal from '../../../components/ViewModal';
 
 
-import BenModal from '../../../components/BenModal';
 
 
 const MODE = 'orders';
@@ -33,7 +28,7 @@ function CustomerInfo(props){
   const cusInfo = props.customer_info ; 
   
   return( 
-    <div style={{padding:10}}>
+    <div style={{padding:'30px 6px',paddingBottom:0}}>
         <h5 className="text-uppercase font-14 text-green">
 
           <Label >
@@ -46,8 +41,8 @@ function CustomerInfo(props){
 
         <FormGroup>
           <Label> Mã KH </Label>
+          <Input type="text" disabled style={{background:'#fff'}} defaultValue={cusInfo.code} />
           
-          <InputSuggest  defaultValue={ cusInfo.code } onSelected={(json)=>{ props.onSelectedCustomer(json) }} strModel='customers' id="customer_code"  />
         </FormGroup>
 
         <FormGroup>
@@ -88,16 +83,16 @@ function CustomerInfo(props){
 
         <FormGroup> 
           <Row>
-            <Col md={6}>
+            <Col md={8}>
               <Label> Hạn mức thanh toán </Label>
               <SelectListModelCode 
                   
                   strModel='payments' onChange={(e)=>{  props.onChange('payment_code',e.target.value)  }} 
                   defaultValue={props.payment_code} name="Vui Lòng Chọn" id="payment_code" />
             </Col>
-            <Col md={6}>
-              <Label> Được giảm % </Label>
-              <Input  type='text' defaultValue={ cusInfo.benefit_discount === null ? 0 : cusInfo.benefit_discount }  />
+            <Col md={4}>
+              <Label> Giảm % </Label>
+              <Input disabled  style={{background:'#fff'}}  type='text' defaultValue={ cusInfo.benefit_discount === null ? 0 : cusInfo.benefit_discount }  />
             </Col>
           </Row>
          
@@ -125,8 +120,9 @@ function TableInfo(props){
   const cusInfo = props.customer_info;
 
   return(
-    <div style={{padding:10}}>
-      
+
+    <div style={{padding:'30px 10px',paddingBottom:0}}>
+
       <FormGroup>
         
         <Row>
@@ -181,13 +177,9 @@ function TableInfo(props){
                         <td style={{ width: grid['colums'][0]['width'] }}> { item.code } </td>
                         <td style={{width:grid['colums'][1]['width']}}> {item.name} </td>
                         
-                        <td style={{ width:grid['colums'][2]['width'] }}>
-                          <img style={{height:90,border:'1px solid #ddd'}} src={ item.images }  />
-                        </td>
+                        <td tyle={{ width:grid['colums'][2]['width'] }}> Cái </td>
 
-                        <td tyle={{ width:grid['colums'][3]['width'] }}> Cái </td>
-
-                        <td style={{width:grid['colums'][4]['width']}}>
+                        <td style={{width:grid['colums'][3]['width']}}>
                             <Input type="number" 
                               onChange={(e)=>{ props.onCardChange({row_id:item.id,field:'amount',value:e.target.value}) }} 
                               min={1} max={1000000} 
@@ -195,15 +187,15 @@ function TableInfo(props){
                             />
                         </td>
 
-                        <td style={{width:grid['colums'][5]['width']}}> 
+                        <td style={{width:grid['colums'][4]['width']}}> 
                           <InputNumeral onChange={(value)=>{ props.onCardChange({row_id:item.id,field:'price',value:value}) }} defaultValue={price} />
                         </td>
 
-                        <td style={{width:grid['colums'][6]['width']}} className="text-green"> { numeral(total).format('0,0') }  </td>
-                        <td style={{width:grid['colums'][7]['width']}} className="text-danger" > { numeral(totalWithVat).format('0,0') }  </td>
+                        <td style={{width:grid['colums'][5]['width']}} className="text-green"> { numeral(total).format('0,0') }  </td>
+                        <td style={{width:grid['colums'][6]['width']}} className="text-danger" > { numeral(totalWithVat).format('0,0') }  </td>
 
-                        <td style={{width:grid['colums'][8]['width']}}>
-                          <Button onClick={()=>{ props.onRemoveCard(item.id) }}  className="btn-trio"><i className="fa fa-trash"></i></Button>
+                        <td style={{width:grid['colums'][7]['width']}}>
+                          <button className="bg-green " style={{color:'#fff', border:0, width:24, height:24, borderRadius:'50%'}} onClick={()=>{ props.onRemoveCard(item.id) }} ><i className="fa fa-trash"></i></button>
                         </td>
                       </tr>
                     )
@@ -218,65 +210,65 @@ function TableInfo(props){
                 <tr>
                   <td style={{ width: grid['colums'][0]['width'] }}> </td>
                   <td style={{ width: grid['colums'][1]['width'] }}> { cusInfo.level_name } </td>
+
                   <td style={{ width: grid['colums'][2]['width'] }}>  </td>
-                  <td style={{ width: grid['colums'][3]['width'] }}>  </td>
-                  <td style={{ width: grid['colums'][4]['width'] }}> </td>
-                  <td style={{ width: grid['colums'][5]['width'] }}> 
+                  <td style={{ width: grid['colums'][3]['width'] }}> </td>
+                  <td style={{ width: grid['colums'][4]['width'] }}> 
                     <span className="txt-bold font-14" > Giảm </span>  
                   </td>
-                  <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> 
+                  <td style={{ width: grid['colums'][5]['width'] }} className="text-green"> 
                     <span className="txt-bold font-14" >  { numeral(props.level_discount).format('0,0')+' đ' } </span>  
                   </td>
-                  <td style={{ width: grid['colums'][7]['width'] }} className="text-danger">  </td>
-                  <td style={{ width: grid['colums'][8]['width'] }}>  </td>
+                  <td style={{ width: grid['colums'][6]['width'] }} className="text-danger">  </td>
+                  <td style={{ width: grid['colums'][7]['width'] }}>  </td>
                 </tr>
                 
                 <tr>
                   <td style={{ width: grid['colums'][0]['width'] }}> </td>
                   <td style={{ width: grid['colums'][1]['width'] }}>  </td>
+                  
                   <td style={{ width: grid['colums'][2]['width'] }}>  </td>
-                  <td style={{ width: grid['colums'][3]['width'] }}>  </td>
-                  <td style={{ width: grid['colums'][4]['width'] }}> </td>
-                  <td style={{ width: grid['colums'][5]['width'] }}> 
+                  <td style={{ width: grid['colums'][3]['width'] }}> </td>
+                  <td style={{ width: grid['colums'][4]['width'] }}> 
                     <span className="txt-bold font-14" > Tổng cộng </span>  
                   </td>
-                  <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> 
+                  <td style={{ width: grid['colums'][5]['width'] }} className="text-green"> 
                     <span className="txt-bold font-14"> { numeral(props.total_sum).format('0,0')+' đ' } </span>  
                   </td>
-                  <td style={{ width: grid['colums'][7]['width'] }} className="text-danger"> <label>  </label> </td>
-                  <td style={{ width: grid['colums'][8]['width'] }}>  </td>
+                  <td style={{ width: grid['colums'][6]['width'] }} className="text-danger"> <label>  </label> </td>
+                  <td style={{ width: grid['colums'][7]['width'] }}>  </td>
                 </tr>
 
                 <tr>
                   <td style={{ width: grid['colums'][0]['width'] }}> </td>
                   <td style={{ width: grid['colums'][1]['width'] }}>  </td>
+
                   <td style={{ width: grid['colums'][2]['width'] }}>  </td>
-                  <td style={{ width: grid['colums'][3]['width'] }}>  </td>
-                  <td style={{ width: grid['colums'][4]['width'] }}> </td>
-                  <td style={{ width: grid['colums'][5]['width'] }}> 
+                  <td style={{ width: grid['colums'][3]['width'] }}> </td>
+                  <td style={{ width: grid['colums'][4]['width'] }}> 
                     <span className="text-danger font-14 txt-bold"> Thuế { props.vat+'%' } </span>  
                   </td>
-                  <td style={{ width: grid['colums'][6]['width'] }} className="text-danger"> 
+                  <td style={{ width: grid['colums'][5]['width'] }} className="text-danger"> 
                     <span className="txt-bold font-14"> { numeral(props.total_vat).format('0,0')+' đ' } </span>  
                   </td>
-                  <td style={{ width: grid['colums'][7]['width'] }} className="text-danger"></td>
-                  <td style={{ width: grid['colums'][8]['width'] }}>  </td>
+                  <td style={{ width: grid['colums'][6]['width'] }} className="text-danger"></td>
+                  <td style={{ width: grid['colums'][7]['width'] }}>  </td>
                 </tr>
 
                 <tr>
                   <td style={{ width: grid['colums'][0]['width'] }}> </td>
                   <td style={{ width: grid['colums'][1]['width'] }}> </td>
+
                   <td style={{ width: grid['colums'][2]['width'] }}>  </td>
-                  <td style={{ width: grid['colums'][3]['width'] }}>  </td>
-                  <td style={{ width: grid['colums'][4]['width'] }}> </td>
-                  <td style={{ width: grid['colums'][5]['width'] }}> 
+                  <td style={{ width: grid['colums'][3]['width'] }}> </td>
+                  <td style={{ width: grid['colums'][4]['width'] }}> 
                     <span className="txt-bold font-14"> Thành tiền </span>  
                   </td>
-                  <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> 
+                  <td style={{ width: grid['colums'][5]['width'] }} className="text-green"> 
                     <span className="txt-bold font-14"> { numeral(props.total_sum_vat).format('0,0')+' đ' } </span>  
                   </td>
-                  <td style={{ width: grid['colums'][7]['width'] }} className="text-danger">  </td>
-                  <td style={{ width: grid['colums'][8]['width'] }}>  </td>
+                  <td style={{ width: grid['colums'][6]['width'] }} className="text-danger">  </td>
+                  <td style={{ width: grid['colums'][7]['width'] }}>  </td>
                 </tr>
 
 
@@ -300,7 +292,7 @@ export default class MyForm extends Component {
     super(props);
     
     this.state = {
-      
+      id:0,
       customer_code:'',
       customer_info:{},
       cart:[], 
@@ -318,20 +310,19 @@ export default class MyForm extends Component {
     
     }
 
-    
+    this.model = props.model ; 
 
 
     this.grid = {
       colums:[
         {headerName: "Mã",width:100},
-        {headerName: "Sản phẩm", width:250},
-        {headerName: "Hình Ảnh",width:140},
+        {headerName: "Sản phẩm", width:450},
         {headerName: "ĐVT", width:100},  
         {headerName: "SL", width:100},
         {headerName: "Đơn giá", width:140},
         {headerName: "Thành tiền", width:150},
         {headerName: "+VAT", width:150},
-        {headerName: "", width:70}
+        {headerName: "", width:50}
       ]
     }
 
@@ -381,7 +372,7 @@ export default class MyForm extends Component {
             discount_for:cusInfo.discount_for
           }
           
-          this.model.axios('post',data,(res)=>{ 
+          this.model.axios('put',data,(res)=>{ 
             this._whereStateChange(res);               
           });
          
@@ -554,36 +545,31 @@ export default class MyForm extends Component {
     });
     
   } 
-
-  componentWillReceiveProps(newProps){
-   console.log(newProps); 
-  }
-
-  componentDidMount(){
-
-    // INIT ORDERS MODEL
-    this.model = new Model(MODE,this.props.dispatch);
-   
-  }
+  
 
   _whereStateChange(res){
 
    if(res.name==='success' || res.name ==='ok'){
-     this.setState({
-       onSuccess:true
-     });
+
+      // pass back to parent
+      this.props.onSubmit(res.name);
+      
    }
    
   }
 
   componentWillReceiveProps(newProps){
 
+
    if(JSON.stringify(newProps.data) !=='{}'){
 
       const data = newProps.data;
-      this.setState({
+      const cusInfo = JSON.parse(data.customer_info);
+      this.setState({ 
         
-        customer_info:JSON.parse(data.customer_info),
+        id:data.id,
+        customer_code:cusInfo.code,
+        customer_info:cusInfo,
         cart:JSON.parse(data.cart),
         vat:data.vat,
         payment_code:data.payment_code,
@@ -595,28 +581,19 @@ export default class MyForm extends Component {
         level_discount:data.level_discount,
         promotion_discount:data.promotion_discount
       });
-
       
-      //this.setState(data);
-
-      //window.setTimeout(()=>{
-      //  console.log(this.state)
-      //},3000)
    }
 
   }
   
 
   render(){
-
     
-  
      return(
-       <BenModal {...this.props}  >
+       <ViewModal {...this.props} onToggle={(isOpen)=>{  this.props.onToggle(isOpen)}}  >
           <Row>
-              <Col md={9}>
-
-                  <TableInfo 
+              <Col md={9} >
+                <TableInfo 
                       {...this.state} 
                       grid={this.grid}
                       
@@ -624,22 +601,27 @@ export default class MyForm extends Component {
                       onRemoveCard={(id)=>{ this._removeCard(id) }}  
                       onSelectedProduct={(json)=>{  this._addCard(json)  }} 
                   />
-                  
-                  <Button style={{width:120}} onClick={ this._onSubmit } className="btn btn-ubuntu-ok bg-green ">
-                    <i className="fa  fa-chevron-circle-right mr-5"></i> Đồng Ý 
-                  </Button>
-                  <span className="ml-10 form-err" id="form-err"></span>
               </Col>
-              <Col md={3}>
-                  <CustomerInfo {...this.state} 
+              <Col md={3} style={{background:'#f0f0f0',borderLeft:'1px solid #ddd'}}>
+                <CustomerInfo {...this.state} 
                       onChange={this._onChange}  
                       onSelectedCustomer={ this._onSelectedCustomer }  
                       onChangeCusInfo={(field,value)=>{  this._onChangeCusInfo(field,value)  }}  
                   />
               </Col>
           </Row>
-       </BenModal>
+          <div style={{borderTop:'1px solid #ddd',padding:20}}>
+              <Button style={{width:120}} onClick={ this._onSubmit } className="btn btn-ubuntu-ok bg-green ">
+              <i className="fa  fa-chevron-circle-right mr-5"></i> Đồng Ý 
+            </Button>
+            <span className="ml-10 form-err" id="form-err"></span>             
+          </div>
+       </ViewModal>
      )
   }
 
+ }
+
+ MyForm.defaultValue = {
+   onToggle:()=>{}
  }

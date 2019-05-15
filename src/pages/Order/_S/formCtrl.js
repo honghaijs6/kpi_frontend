@@ -1,6 +1,7 @@
 
 
 import { detectForm } from '../../../hook/before';
+import error from '../../../hook/after/error';
 
 
 class formController {
@@ -88,8 +89,6 @@ class formController {
     toggle(){
 
       this.active = !this.active;
-      
-
       // -->
       this._whereStateChange({
         onAction:'toggle_modal'
@@ -102,20 +101,17 @@ class formController {
     _whereStateChange(newState={}){
 
       Object.assign(this.state,newState);
-
-      if(newState.status ==='success'){
-        this.toggle()
-      }else{
-        //alert('FORM-'+this.model.model);
-
-        if(this.dispatcher!==null){
-          this.dispatcher({
-            type:'STATE-'+this.model.model,
-            state:this.state
-          })
-        }
-
+      if(this.dispatcher!==null){
+        this.dispatcher({
+          type:'STATE-'+this.model.model,
+          state:this.state
+        })
       }
+      
+      window.setTimeout(()=>{
+        newState.status === 'success' ? this.toggle() : error(this.model.model)
+      },1000)
+
 
     }
 

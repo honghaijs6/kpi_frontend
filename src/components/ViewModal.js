@@ -26,10 +26,15 @@ export default class ViewModal extends Component{
   }
 
   toggle(){
-
+    
+    const isOpen = !this.state.isOpen; 
     this.setState({
-        isOpen:false
-    })
+        isOpen:isOpen
+    });
+
+    this.props.onToggle(isOpen);
+    
+
   }
   
   componentWillReceiveProps(newProps){
@@ -38,7 +43,7 @@ export default class ViewModal extends Component{
 
   render(){
 
-
+ 
     
     return(
       <Modal  style={{
@@ -46,10 +51,13 @@ export default class ViewModal extends Component{
            
         }}  isOpen={ this.state.isOpen } fade={false}   toggle={ this.toggle } >
         
+        <ModalHeader toggle={ this.toggle }> { this.props.name }  </ModalHeader>
+
         <ModalBody style={{
             fontFamily:'Roboto',
             padding:0,
-            position:'relative'
+            paddingLeft:15,paddingRight:15
+            
           }}>
             { this.props.children }
           
@@ -59,4 +67,8 @@ export default class ViewModal extends Component{
       </Modal>
     )
   }
+}
+
+ViewModal.defaultProps = {
+  onToggle:()=>{}
 }

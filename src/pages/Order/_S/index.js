@@ -22,12 +22,18 @@ import numeral from 'numeral' ;
 
 /* MODAL FORM & CTRL */
 import MyForm from './Form';
-import formCtrl from './formCtrl';
+import ProgressForm from './ProgressForm' ; 
+
 
 
 /*INCLUDE OTHER COMPONENT*/
 import { BenGrid } from '../../../components/BenGrid2';
 import ButtonExpand from '../../../components/ButtonExpand';
+import ButtonExpandList from '../../../components/ButtonExpandList'; 
+import BenConfirm from '../../../components/BenConfirm' ;
+import BenMessage from '../../../components/BenMessage' ; 
+
+
 import SelectList from '../../../components/SelectList'; 
 import SelectListModelCode from '../../../components/SelectListModelCode';
 import RankDatePicker from '../../../components/RankDatePicker' ; 
@@ -48,12 +54,24 @@ class OrderView extends Component{
       typeAction:'',
       onAction:'',
       status:'',
-      
+      isOpenForm:false,
+      isOpenProgressForm:false,
       defaultStatusType:0,
       
+      actions:[
+        {code:'update',icon:'fa-pencil',name:'Cập nhật báo giá'},
+        {code:'remove',icon:'fa-trash',name:'Huỷ báo giá'},
+        {code:'progress',icon:'fa-play-circle',name:'Tiến trình xử lý'},
+        
+        {code:'out_stock', icon:'fa-truck',name:'Tạo phiếu xuất kho'},
+        {code:'income',icon:'fa-heart',name:'Tạo phiếu thu'},
+        {code:'pdf',icon:'fa-file-pdf-o',name:'Xuất File PDF'},
+        {code:'print',icon:'fa-print',name:'In Đơn hàng'},
+        
+      ]
     }
 
-    this.data = {}
+    
 
     this.grid = {
       colums:[
@@ -160,15 +178,15 @@ class OrderView extends Component{
     }
 
     this._setup();
+    this._onFormSubmit = this._onFormSubmit.bind(this);
 
-    this.onBtnNew = this.onBtnNew.bind(this);
     
   }
 
   _setup(){
 
     this.model = new Model(MODE,this.props.dispatch);
-    this.formCtrl = new formCtrl(this.model,this.props.dispatch);
+    
     
   }
 
@@ -180,7 +198,7 @@ class OrderView extends Component{
     this.model.load();
   }
 
-  _loadWithDate(jsonDate){
+  _loadWithDate(jsonDate){  
 
     const formatDate = {
       start: moment(jsonDate.start).format('YYYY-MM-DD'),
@@ -206,7 +224,48 @@ class OrderView extends Component{
   }
 
   /* HOW */
+    
+  async _callAction(item){
+    
+    //const eventClick = new Event('click');
+    document.querySelector('body').click();
+    
+    
+    if(JSON.stringify(this._curInfo)!=='{}'){
+      switch(item.code){
+
+        case 'update':
+          this._doOpenModalUpdate() ; 
+        break;
+
+        case 'remove':
+          
+          let result = await BenConfirm({
+            title: 'Cảnh báo',
+            message: "Bạn có chắc là muốn xoá dữ liệu này ?"
+          });
+
+          if(result){
+             this.model.delete(this._curInfo.id,(res)=>{
+
+             })
+          }
+        break ;
+
+        case 'progress':
+           this.setState({
+             isOpenProgressForm:true
+           }); 
+        break ;
   
+      }
+    }else{ 
+        BenMessage({
+          title:'Thông báo',
+          message:'Vui lòng chọn chọn dữ liệu cần xử lý '
+        }) ;
+    }
+  }
 
   _doOpenModalPost(){
 
@@ -219,30 +278,30 @@ class OrderView extends Component{
   }
 
   _doOpenModalUpdate(data){
-    
-    this._curInfo = data ;
-    this.formCtrl.open('put',data);
-    
-
+    //this._curInfo = data ;
+    this.setState({
+      isOpenForm:true
+    });
+   
   }
 
-  _doOpenForm(){
-
-    this.formCtrl.open('post');
-    
-
-
-  }
+ 
 
   /* WHEN*/
-
-  onBtnNew(){
-    this._doOpenForm();
-  }
   
   /* WHERE*/
   _whereStateChange(newState){
     this.setState(Object.assign(this.state,newState));
+  }
+
+  _onFormSubmit(status){
+
+    const isOpen = status === 'success' || status ==='ok' ? false : true;
+    this.setState({
+      status:status,
+      isOpenForm:isOpen
+    });
+
   }
 
   
@@ -259,25 +318,48 @@ class OrderView extends Component{
 
   render(){ 
 
+    const FORM_NAME  = this._curInfo.status_type === 0 ?  
+          <span> Báo giá : <span className='text-uppercase'> { this._curInfo.code } </span> </span> 
+        : <span> Đơn hàng : <span className='text-uppercase'> { this._curInfo.code_pi } </span> </span> 
     
     return (
       <div className="animated fadeIn">
         <div className="ubuntu-app " style={{border:0, marginTop: 20,padding:10}}>
             <main>
 
+              <ProgressForm 
+
+                name="Tiến trình" 
+                isOpen={ this.state.isOpenProgressForm } 
+                onToggle={(isOpen)=>{ this.setState({isOpenProgressForm:isOpen}) }}
+                model={this.model}
+                data={ this._curInfo }
+                width='40%'
+
+              />
               <MyForm
 
                 width='90%'
-                name={ MODE_NAME }
+                name={ FORM_NAME }
                 data={ this._curInfo }
-                modal={this.formCtrl}
+                
+                isOpen={this.state.isOpenForm}
 
+                onToggle={(isOpen)=>{ this.setState({isOpenForm:isOpen}) }}
+
+                model={this.model}
+
+                onSubmit={ this._onFormSubmit }
+                
               />
 
               <BenGrid
 
                  onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
-                 onBtnAdd={this.onBtnNew}
+                 
+
+                 onCellSelected={(json)=>{ this._curInfo = json  }}
+
                  gridID='id'
                  rowSelection='single'
 
@@ -291,7 +373,12 @@ class OrderView extends Component{
                  
                  customButton={
                    <ButtonGroup>
-                      <Link className="btn btn-normal" style={{borderRadius:0,marginRight:20}} to="/order/add"> <i className="fa fa-plus-circle"></i> Tạo báo giá </Link>
+
+                      
+                      <Link className="btn btn-normal" style={{borderRadius:0}} to="/order/add"> <i className="fa fa-plus-circle"></i> Tạo báo giá </Link>
+                      
+                      <ButtonExpandList onSelected={(item)=>{  this._callAction(item) }} data={ this.state.actions } />
+                      
 
                       <Input 
                           defaultValue={ this.state.defaultStatusType } 
@@ -321,7 +408,7 @@ class OrderView extends Component{
                    
                  }
 
-                 /*displayBtn = {['edit','remove']}*/
+                 displayBtn = {[]}
 
 
                  

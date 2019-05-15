@@ -156,9 +156,8 @@ class BenGrid extends Component{
     const records = this.state.selectedData.length;
 
     let result = await BenConfirm({
-      title: 'Warning',
-      message: "Are you sure you want to delete "+ records+' records ?',
-      
+      title: 'Cảnh báo',
+      message: "Bạn có chắc là muốn xoá "+ records+' dữ liệu này ?',
     });
 
     if(result){
@@ -219,9 +218,9 @@ class BenGrid extends Component{
     });
     
     // alway call back data on selected ;
-    if(this.props.onCellSelected){
-      this.props.onCellSelected(selectedData.length > 0 ? selectedData[0] : {}); 
-    }
+    this.props.onCellSelected(selectedData.length > 0 ? selectedData[0] : {}); 
+      
+    
     
   }
 
@@ -290,6 +289,10 @@ class BenGrid extends Component{
 
     )
   }
+}
+
+BenGrid.defaultProps = {
+  onCellSelected:()=>{}
 }
 
 export default BenGrid;

@@ -34,7 +34,7 @@ function CustomerInfo(props){
     const cusInfo = props.customer_info ; 
     
     return( 
-      <div style={{padding:10}}>
+      <div style={{padding:30,paddingRight:10}}>
           <h5 className="text-uppercase font-14 text-green">
 
             <Label >
@@ -124,7 +124,7 @@ function TableInfo(props){
     const cusInfo = props.customer_info;
 
     return(
-      <div style={{padding:10}}>
+      <div style={{padding:30,paddingLeft:10}}>
         
         <FormGroup>
           
@@ -337,6 +337,7 @@ class AddQuotation extends React.Component {
           {headerName: "Mã",width:100},
           {headerName: "Sản phẩm", width:250},
           {headerName: "Hình Ảnh",width:140},
+          
           {headerName: "ĐVT", width:120},
           {headerName: "SL", width:100},
           {headerName: "Đơn giá", width:150},
@@ -598,8 +599,14 @@ class AddQuotation extends React.Component {
             <div className="animated fadeIn">
                 <div className="ubuntu-app " style={{border:0, marginTop: 20}}>
 
-                    <Row style={{padding:20}}>
-                        
+                    <Row>
+                        <Col md={3} style={{background:'#f0f0f0',borderRight:'1px solid rgba(0,0,0,0.1)'}}>
+                            <CustomerInfo {...this.state} 
+                              onChange={this._onChange}  
+                              onSelectedCustomer={ this._onSelectedCustomer }  
+                              onChangeCusInfo={(field,value)=>{  this._onChangeCusInfo(field,value)  }}  
+                            />
+                        </Col>
                         <Col md={9}>
 
                             <TableInfo 
@@ -615,13 +622,6 @@ class AddQuotation extends React.Component {
                               <i className="fa  fa-chevron-circle-right mr-5"></i> Đồng Ý 
                             </Button>
                             <span className="ml-10 form-err" id="form-err"></span>
-                        </Col>
-                        <Col md={3}>
-                            <CustomerInfo {...this.state} 
-                              onChange={this._onChange}  
-                              onSelectedCustomer={ this._onSelectedCustomer }  
-                              onChangeCusInfo={(field,value)=>{  this._onChangeCusInfo(field,value)  }}  
-                            />
                         </Col>
                     </Row>
                     
