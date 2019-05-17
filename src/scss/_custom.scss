@@ -108,6 +108,14 @@ label{ font-weight: 500 !important; font-size: 14px;}
 .form-general .row p{ font-weight: 500}
 
 
+/*DIV CROLL*/
+.div-croll{
+  height: 83vh + 6.4 ;
+  overflow-y:hidden;
+  border-bottom: 0px;
+  overflow-x: hidden;
+  
+}
 
 /* WYSIWYD */
 .rdw-storybook-root {

@@ -60,7 +60,7 @@ class Model {
   }
 
   configDB(){
-    const _this = this ;
+    
     let  url = this.db.base +   Object.keys(this.paginate).map((key)=>{
         return key +'='+ this.paginate[key]
     }).join('&');

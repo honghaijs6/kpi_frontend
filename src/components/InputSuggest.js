@@ -2,7 +2,8 @@
 import doFindAll from '../hook/ultil/doFindAll' ; 
 
 import React, { Component } from 'react';
-import { Input } from 'reactstrap';
+import { Input, ButtonGroup, Button } from 'reactstrap';
+
 
 
 export default class InputSuggest extends Component{
@@ -110,19 +111,36 @@ export default class InputSuggest extends Component{
     }
 
 
-    render(){
-
+    render(){ 
+  
         return(
             <div>
-                <Input 
-                    onKeyUp={ this._keyHandling } 
-                    id={this.props.id || 0 } 
-                    placeholder="nhập từ khoá..." 
-                    style={this.props.style}
-                    value={this.state.value} 
-                    onChange={(e)=>{ this._onChange(e.target.value) }}  
-                    
-                    type="text" />
+                <ButtonGroup style={{width:'100%'}}>
+                    <Input 
+                        onKeyUp={ this._keyHandling } 
+                        id={this.props.id || 0 } 
+                        placeholder="Tìm kiếm..." 
+                        style={{
+                            borderRight:0,
+                            borderTopRightRadius:0,
+                            borderBottomRightRadius:0,
+                            width:'100%'
+                        }}
+                        value={this.state.value} 
+                        onChange={(e)=>{ this._onChange(e.target.value) }}  
+                            
+                        type="text" />
+
+                    <Button disabled style={{
+                        background:'#fff',
+                        color:'#999',
+                        
+                    }}> <i className="fa fa-search"></i> </Button>
+
+                </ButtonGroup>
+                
+                
+
                     
                 <ul className="suggest-holder" style={{display:this.state.display}} >
                     {

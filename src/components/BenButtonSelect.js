@@ -10,17 +10,15 @@ class BenButtonSelect extends Component{
     super(props);
 
     this.state = {
-      onTab:'',
-      onAction:'',
-      status:'',
       data:props.data
     }
+    
   }
 
   _onSelect(key){
-
     // clear all active item
-    this.state.data.map((item,index)=>{
+    let data = this.state.data ; 
+    data.map((item,index)=>{
        delete item.active ; 
        if(parseInt(key)===index){
          item.active = true;
@@ -28,41 +26,43 @@ class BenButtonSelect extends Component{
     });
 
     this.setState({
-      data:this.state.data
+      data:data
     });
-
+    
     this.props.onSelectItem(key);
 
   }
   render(){
 
-    const listBtn = this.state.data;
     
     return(
-      <div className="clearfix">
+      <div className="clearfix" style={ this.props.style }>
         <ButtonGroup >
             {
-              Object.keys(listBtn).map((item,key)=>{
+              this.state.data.map((item,index)=>{
 
-
-                let active =  listBtn[key].active === true ? 'active' :'';
-
-                return(
-                    <Button key={key} 
-                      onClick={ ()=>{ this._onSelect(key) } }  
+                let active =  item.active === true ? 'active' :'';
+                
+                return (
+                  <Button key={index} 
+                      onClick={()=>{ this._onSelect(index) }}  
                       className={ 'btn-ubuntu-select btn-ubuntu-select-'+active} >
-                        <i className={'fa '+listBtn[key].icon}></i> { listBtn[key].name} 
-                    </Button>
+                        <i className={'fa '+item.icon}></i> { item.name} 
+                  </Button>
                 )
               })
             }
-
-
+            
         </ButtonGroup>
       </div>
     )
   }
 
+}
+
+BenButtonSelect.defaultProps = {
+  data:[],
+  onSelectItem:()=>{}
 }
 
 export default BenButtonSelect;

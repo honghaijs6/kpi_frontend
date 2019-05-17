@@ -39,8 +39,7 @@ const allReducers = combineReducers({
   subregions:reducerSubregion,
   store:reducerStore,
   
-  
-  purchase:reducerPurchase,
+  purchases:reducerPurchase,
 
   customers:reducerCustomer,
   orders:reducerOrder,

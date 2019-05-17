@@ -130,27 +130,31 @@ export default class InputSuggest extends Component{
 
         return(
             <div>
-                <ButtonGroup>
+                <ButtonGroup style={{width:'100%'}}>
                     <Input 
                         onKeyUp={ this._keyHandling } 
                         id={this.props.id || 0 } 
-                        placeholder="nhập từ khoá..." 
+                        placeholder="Tìm kiếm..." 
                         
                         value={this.state.value} 
                         onChange={(e)=>{ this._onChange(e.target.value) }}  
                         
                         type="text" 
                         style={{
-                            width:410,
                             borderRight:0,
                             borderTopRightRadius:0,
-                            borderBottomRightRadius:0
+                            borderBottomRightRadius:0,
+                            border:'2px solid #6AC5B3',
+                            borderRight:0,
+                            height:42
                         }}
                             
                     />
                     <Button disabled style={{
                         background:'#fff',
-                        color:'#999',
+                        color:'#666',
+                        border:'2px solid #18A689',
+                        borderLeft:0,
                         
                     }}> <i className="fa fa-search"></i> </Button>
                 </ButtonGroup>

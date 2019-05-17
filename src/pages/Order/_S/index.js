@@ -60,8 +60,8 @@ class OrderView extends Component{
       
       actions:[
         {code:'update',icon:'fa-pencil',name:'Cập nhật báo giá'},
-        {code:'remove',icon:'fa-trash',name:'Huỷ báo giá'},
-        {code:'progress',icon:'fa-play-circle',name:'Tiến trình xử lý'},
+        {code:'remove',icon:'fa-trash',name:'Huỷ báo giá',active:true},
+        {code:'progress',icon:'icon icon-fire',name:'Xử lý tiến trình'},
         
         {code:'out_stock', icon:'fa-truck',name:'Tạo phiếu xuất kho'},
         {code:'income',icon:'fa-heart',name:'Tạo phiếu thu'},
@@ -81,9 +81,11 @@ class OrderView extends Component{
             return `<span class="badge bg-green"> <i class="fa fa-user mr-5"></i> ${params.value} </span>`;
           }
         },
-        {headerName: "Mã Đơn hàng", field: "code",width:150,
+        {headerName: "Mã", field: "code",width:150,
           cellRenderer(params){
-            return `<span  style="background:${ ORDER_STATUS[params.data.status]['color'] }; color:#fff "class="badge text-uppercase"> ${ params.value } </span>`
+
+            const code = params.data.code_pi !== null ? params.data.code_pi : params.value;
+            return `<span  style="background:${ ORDER_STATUS[params.data.status]['color'] }; color:#fff "class="badge text-uppercase"> ${ code } </span>`
           }
         },
         {headerName: "Trạng thái", field: "status",width:140,
@@ -179,6 +181,8 @@ class OrderView extends Component{
 
     this._setup();
     this._onFormSubmit = this._onFormSubmit.bind(this);
+    this._onProgressFormSubmit = this._onProgressFormSubmit.bind(this); 
+
 
     
   }
@@ -294,6 +298,17 @@ class OrderView extends Component{
     this.setState(Object.assign(this.state,newState));
   }
 
+  _onProgressFormSubmit(res){
+    
+    // update curent info
+    this._curInfo = res.data; 
+    
+    this.setState({
+      status:res.name
+    });
+
+
+  }
   _onFormSubmit(status){
 
     const isOpen = status === 'success' || status ==='ok' ? false : true;
@@ -332,6 +347,8 @@ class OrderView extends Component{
                 name="Tiến trình" 
                 isOpen={ this.state.isOpenProgressForm } 
                 onToggle={(isOpen)=>{ this.setState({isOpenProgressForm:isOpen}) }}
+                onSubmit={ this._onProgressFormSubmit }
+
                 model={this.model}
                 data={ this._curInfo }
                 width='40%'

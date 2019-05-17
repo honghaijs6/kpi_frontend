@@ -39,6 +39,12 @@ const Po = Loadable({
   loading:Loading
 });
 
+const CreatePo = Loadable({
+  loader:()=> import('./pages/Inventory/AddPo'),
+  loading:Loading
+})
+
+
 const InventorySetting = Loadable({
   loader:()=> import('./pages/Inventory/Setting'),
   loading:Loading
@@ -169,7 +175,10 @@ const routes = [
   { path: '/inventory/receipt', exact:true , name:'Nhập - Xuất Kho', component:Receipt},
   { path: '/inventory/productnew', exact:true , name:'Xem Tồn Kho', component:Productnew},
   { path: '/inventory/po', exact:true , name:'Mua Hàng PO', component:Po},
-  { path: '/inventory/setting', exact:true , name:'Thiết Lập Kho', component:InventorySetting},
+  { path:'/inventory/po/add', Name:'Tạo PO', component:CreatePo },
+    
+  { path: '/inventory/setting', name:'Thiết Lập Kho', component:InventorySetting},
+  
 
   { path: '/cashflow/view', exact:true , name:'Phiều thu - Phiếu chi', component:CashflowView},
   { path: '/cashflow/summary', exact:true , name:'Tổng Quan Thu - Chi ', component:CashflowSummary},
