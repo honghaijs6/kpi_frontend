@@ -4,7 +4,7 @@ import { detectForm } from '../../../../hook/before' ;
 import doUpdateModelInfo from '../../../../hook/ultil/doUpdateModelInfo' ; 
 
 import React, { Component } from 'react';
-import {  Row, Col, Label, Button, FormGroup, Input, ButtonGroup } from 'reactstrap';
+import {  Row, Col, Label, Button, FormGroup, ButtonGroup } from 'reactstrap';
 
 
 
@@ -48,6 +48,7 @@ export default class CusPointRulePage extends Component{
     const fields = ['min_total','max_total','formula'] ;
 
     if(detectForm(fields,this.data)===''){
+      
        //  CHECK VALUE FORMULA ; 
        const res =  await doUpdateModelInfo('companies',{
          id:window.USERINFO.company_id, 

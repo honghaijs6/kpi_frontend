@@ -19,7 +19,8 @@ export default class InputSuggest extends Component{
             rows:[],
             selectedIndex:null,
             code:'code',
-            type:props.type || 'root'
+            type:props.type || 'root',
+            supplier_codes: props.supplier_codes || ''
         }
 
         this._keyHandling = this._keyHandling.bind(this); 
@@ -27,10 +28,18 @@ export default class InputSuggest extends Component{
 
     componentDidMount(){
         this.model = new Model('products');
-        this.model.set('paginate',{
-            max:6,
-            type:this.state.type
-        })
+
+        const set = this.state.type === 'all' ? { max:6, supplier_codes:this.state.supplier_codes } :{ max:6,type:this.state.type };
+        this.model.set('paginate',set);
+
+
+    }
+
+    componentWillReceiveProps(newProps){
+        const set = newProps.type === 'all' ? { max:6, supplier_codes:newProps.supplier_codes } :{ max:6,type:newProps.type };
+        this.model.set('paginate',set);
+        
+
     }
     async _onChange(key){
 
@@ -175,4 +184,8 @@ export default class InputSuggest extends Component{
             </div>
         )
     }
+}
+
+InputSuggest.defaultProps = {
+
 }

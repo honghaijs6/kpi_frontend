@@ -2,6 +2,7 @@
 import Model from '../../../model/model';
 // HOOKS
 import { isExisted, detectForm } from '../../../hook/before'; 
+import doGetModelInfo from '../../../hook/ultil/doGetModelInfo'; 
 
 // LIBS 
 import numeral from 'numeral';
@@ -28,43 +29,30 @@ const MODE = 'purchases';
 function SupplierInfo(props){
 
     const supInfo = props.supplier_info || {} ; 
+    const receiverInfo = props.receiver_info || {}; 
     
     return( 
       <div style={{padding:24,paddingTop:30,paddingRight:10}}>
-          <h5 className="text-uppercase font-14 text-green">
-
+          
+          <h5 className="text-uppercase font-14 txt-green">
             <Label >
              <i className="fa fa-user mr-5"></i> 
               NHÀ CUNG CẤP
             </Label>
-            <span className="float-right"> { supInfo.type_name } </span>
-                        
+            <span className="pull-right"> { supInfo.roots } </span>
           </h5>
 
           <FormGroup>
-            <Label> Mã NCC </Label>
-            
-            <InputSuggest  defaultValue={ supInfo.code } onSelected={(json)=>{ props.onSelectedCustomer(json) }} strModel='customers' id="customer_code"  />
+            <Label> Mã NCC  <span className="text-red">*</span></Label>
+            <InputSuggest  defaultValue={ supInfo.code } onSelected={(json)=>{ props.onSelectedSupplier(json) }} strModel='suppliers' id="supplier_code"  />
           </FormGroup>
   
           <FormGroup>
             <Label> Công ty </Label>
-            <Input  type="text" defaultValue={supInfo.name}    />
+            <Input disabled style={{background:'#fff'}} type="text" defaultValue={supInfo.name}    />
           </FormGroup>
-  
-          <FormGroup>
-            <Row>
-              <Col md="12">
-                <Label> Nguồn </Label>
-                <Input type="select"> 
-                    <option value="loc"> Trong nước </option>
-                    <option value="ovs"> Quốc tế </option>
-                </Input>
-              </Col>
-            </Row>
-          </FormGroup>
-
-          <h5 className='text-uppercase text-green' style={{marginTop:20}}>
+          
+          <h5 className='text-uppercase txt-green' style={{marginTop:20}}>
             <label> <i className="fa fa-truck mr-5"></i>  Thông tin nhận hàng  </label>
           </h5>
 
@@ -72,11 +60,11 @@ function SupplierInfo(props){
             <Row>
                 <Col md={6}>
                     <Label> Người nhận </Label>
-                    <Input  type="text" />
+                    <Input onChange={(e)=>{ props.onChangeReceiInfo('user_name',e.target.value) }} defaultValue={ receiverInfo.user_name } type="text" />
                 </Col>
                 <Col md={6}>
                     <Label> SĐT </Label>
-                    <Input type="text" />
+                    <Input onChange={(e)=>{  props.onChangeReceiInfo('user_phone',e.target.value) }} defaultValue={receiverInfo.user_phone} type="text" />
                 </Col>
 
             </Row>
@@ -85,11 +73,11 @@ function SupplierInfo(props){
             <label> 
                 Địa chỉ 
             </label>
-            <Input  type="text" onChange={(e)=>{ props.onChangeCusInfo('address_delivery',e.target.value) }} defaultValue={ supInfo.address_delivery}  />
+            <Input  type="text"  onChange={(e)=>{ props.onChangeReceiInfo('address',e.target.value) }} defaultValue={ receiverInfo.address}  />
 
           </FormGroup>
 
-          <h5 className='text-uppercase text-green' style={{marginTop:20}}>
+          <h5 className='text-uppercase txt-green' style={{marginTop:20}}>
             <label> <i className="fa fa-shield mr-5"></i>  Thanh toán  </label>
             <label className="float-right"> { supInfo.level_code } </label>
 
@@ -97,12 +85,16 @@ function SupplierInfo(props){
 
           <FormGroup> 
             <Row>
-              <Col md={12}>
-                <Label> Hạn mức thanh toán </Label>
+              <Col md={6}>
+                <Label> Hạn mức <span className="text-red">*</span> </Label>
                 <SelectListModelCode 
                     
                     strModel='payments' onChange={(e)=>{  props.onChange('payment_code',e.target.value)  }} 
                     defaultValue={props.payment_code} name="Vui Lòng Chọn" id="payment_code" />
+              </Col>
+              <Col>
+                <Label> Thuế %  </Label>
+                <Input defaultValue={ props.vat } onChange={(e)=>{ props.onChange('vat',e.target.value) }} min={0} max={50} type='number'    />
               </Col>
             </Row>
           </FormGroup>
@@ -124,6 +116,7 @@ function TableInfo(props){
     const grid = props.grid ; 
     const supInfo = props.supplier_info || {};
 
+    
     return(
 
       <div style={{paddingRight:20}}>
@@ -132,7 +125,9 @@ function TableInfo(props){
           
           <Row>
             <Col md="9">
-              <InputSuggestProduct  type="root" onSelected={(json)=>{ props.onSelectedProduct(json) }} defaultValue={props.main_code}   />
+              <InputSuggestProduct supplier_codes={ supInfo.code }  type="all" onSelected={(json)=>{ props.onSelectedProduct(json) }}    />
+            
+
             </Col>
             <Col md="3">
               
@@ -190,7 +185,7 @@ function TableInfo(props){
                             <InputNumeral onChange={(value)=>{ props.onCardChange({row_id:item.id,field:'price',value:value}) }} defaultValue={price} />
                           </td>
 
-                          <td style={{width:grid['colums'][6]['width']}} className="text-green"> { numeral(total).format('0,0') }  </td>
+                          <td style={{width:grid['colums'][6]['width']}} className="txt-green"> { numeral(total).format('0,0') }  </td>
                           <td style={{width:grid['colums'][7]['width']}} className="text-danger" > { numeral(totalWithVat).format('0,0') }  </td>
 
                           <td style={{width:grid['colums'][8]['width']}}>
@@ -215,7 +210,7 @@ function TableInfo(props){
                     <td style={{ width: grid['colums'][5]['width'] }}> 
                       <span className="txt-bold font-14" > Giảm </span>  
                     </td>
-                    <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> 
+                    <td style={{ width: grid['colums'][6]['width'] }} className="txt-green"> 
                       <span className="txt-bold font-14" >  { numeral(props.level_discount).format('0,0')+' đ' } </span>  
                     </td>
                     <td style={{ width: grid['colums'][7]['width'] }} className="text-danger">  </td>
@@ -231,7 +226,7 @@ function TableInfo(props){
                     <td style={{ width: grid['colums'][5]['width'] }}> 
                       <span className="txt-bold font-14" > Tổng cộng </span>  
                     </td>
-                    <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> 
+                    <td style={{ width: grid['colums'][6]['width'] }} className="txt-green"> 
                       <span className="txt-bold font-14"> { numeral(props.total_sum).format('0,0')+' đ' } </span>  
                     </td>
                     <td style={{ width: grid['colums'][7]['width'] }} className="text-danger"> <label>  </label> </td>
@@ -263,7 +258,7 @@ function TableInfo(props){
                     <td style={{ width: grid['colums'][5]['width'] }}> 
                       <span className="txt-bold font-14"> Thành tiền </span>  
                     </td>
-                    <td style={{ width: grid['colums'][6]['width'] }} className="text-green"> 
+                    <td style={{ width: grid['colums'][6]['width'] }} className="txt-green"> 
                       <span className="txt-bold font-14"> { numeral(props.total_sum_vat).format('0,0')+' đ' } </span>  
                     </td>
                     <td style={{ width: grid['colums'][7]['width'] }} className="text-danger">  </td>
@@ -287,12 +282,15 @@ function TableInfo(props){
 class CreatePO extends Component {
 
     constructor(props){
+
         super(props);
         
         this.state = {
 
+            
             supplier_code:'',
             supplier_info:{},
+            receiver_info:{},
             cart:[], 
             vat:10,
             payment_code:'',
@@ -319,6 +317,13 @@ class CreatePO extends Component {
             ]
         }
 
+        this._onSelectedSupplier = this._onSelectedSupplier.bind(this);
+        this._onChangeReceiInfo = this._onChangeReceiInfo.bind(this);
+        
+        this._onChange = this._onChange.bind(this); 
+        this._onSubmit = this._onSubmit.bind(this);
+
+
     }
 
     _onSubmit(){
@@ -329,12 +334,13 @@ class CreatePO extends Component {
         ];
         
         if(detectForm(fields,this.state)===''){
+          
            if(this.state.cart.length>0){
               /// ok submit post data ;
   
               const data = this.state ; 
               const supInfo = data.supplier_info; 
-
+              
               data.supplier_info = {
                 id:supInfo.id,
                 code:supInfo.code,
@@ -473,15 +479,15 @@ class CreatePO extends Component {
         
     }
 
-    _onChangeSupInfo(field,value){
+    _onChangeReceiInfo(field,value){
 
-        let supInfo = this.state.supplier_info;
-        Object.assign(supInfo,{
+        let info = this.state.receiver_info;
+        Object.assign(info,{
            [field]:value
         });
   
         this.setState({
-            supplier_info:supInfo
+            receiver_info:info
         });
          
   
@@ -492,11 +498,24 @@ class CreatePO extends Component {
           [name]:value
         });
         
-     } 
+    } 
 
-    componentDidMount(){
+    async componentDidMount(){
         // INIT ORDERS MODEL
-        this.model = new Model(MODE,this.props.dispatch);
+        this.model = new Model(MODE,this.props.dispatch); 
+
+        // GET COMPANY INFO
+        const res = await doGetModelInfo('companies',window.USERINFO.company_id); 
+        if(res.name==='success'){
+           let receiver_info = res.data.warehouse_setting ; 
+           receiver_info = receiver_info !== null ? JSON.parse(receiver_info) : {}
+
+           this.setState({
+             receiver_info:receiver_info
+           });
+          
+        }
+        
         
     }
 
@@ -520,8 +539,8 @@ class CreatePO extends Component {
                         <Col md={3} style={{background:'#f0f0f0',borderRight:'1px solid rgba(0,0,0,0.1)'}}>
                             <SupplierInfo {...this.state} 
                                 onChange={this._onChange}  
-                                onSelectedCustomer={ this._onSelectedSupplier }  
-                                onChangeCusInfo={(field,value)=>{  this._onChangeSupInfo(field,value)  }}  
+                                onSelectedSupplier={ this._onSelectedSupplier }  
+                                onChangeReceiInfo={(field,value)=>{ this._onChangeReceiInfo(field,value) }}
                             />
                             
                         </Col>
