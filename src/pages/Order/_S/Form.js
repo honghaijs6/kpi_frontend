@@ -565,6 +565,11 @@ export default class MyForm extends Component {
 
       const data = newProps.data;
       const cusInfo = JSON.parse(data.customer_info);
+
+      const total_vat = parseFloat(data.total_sum) * ( data.vat / 100 );
+      
+    
+
       this.setState({ 
         
         id:data.id,
@@ -576,6 +581,7 @@ export default class MyForm extends Component {
         note:data.note,
         main_code:'',
         total_sum:data.total_sum,
+        total_vat:total_vat,
         total_sum_vat:data.total_sum_vat,
         belong_user:data.belong_user,
         level_discount:data.level_discount,

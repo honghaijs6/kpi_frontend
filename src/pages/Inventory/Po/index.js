@@ -1,198 +1,407 @@
 
-import React, { Component } from 'react';
+import { PURCHASE_STATUS } from '../../../config/app.config';
+import { PAYMENT_TYPES_DECO } from '../../../config/payment.type';
 
-import {ButtonGroup, Button} from 'reactstrap';
-
-/* OBJECT - PLUGIN*/
-import Store from '../../../redux/store';
 import Model from '../../../model/model';
 
-
-/* HOOKED*/
-/*............*/
-
-/* NAMED*/
-import { PURCHASE } from '../../../model/model-mode';
-import { PURCHASE_NAME } from '../../../model/model-name';
-import { POST, SEARCH } from '../../../model/action-mode';
-/*------------*/
+// HOOK ULTI 
+import moment from 'moment';
+import numeral from 'numeral' ; 
 
 
-/* MODAL FORM & CTRL */
-import PoForm from './Form';
-import formCtrl from './formCtrl';
+import React, { Component } from 'react';
+import { ButtonGroup, FormGroup, Input, Label } from 'reactstrap'; 
+
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+
+import MyForm from './Form';
+import ProgressForm from './ProgressForm' ; 
+import DeleteForm from './DeleteForm'; 
 
 
-/*INCLUDE OTHER COMPONENT*/
 import { BenGrid } from '../../../components/BenGrid2';
+import ButtonExpand from '../../../components/ButtonExpand';
+import ButtonExpandList from '../../../components/ButtonExpandList'; 
+import BenConfirm from '../../../components/BenConfirm' ;
+import BenMessage from '../../../components/BenMessage' ; 
+import SelectList from '../../../components/SelectList'; 
+import SelectListModelCode from '../../../components/SelectListModelCode';
 
-class Po extends Component{
+import RankDatePicker from '../../../components/RankDatePicker'; 
 
-  constructor(props){
-    super(props);
+const MODE = 'purchases';
+const MODE_NAME = 'Đơn mua hàng';
 
-    this.state = {
+class Po extends Component {
 
-      typeAction:'',
-      onAction:'',
-      status:'',
+    
+    _curInfo = {}
+
+    constructor(props){
+        super(props);
+
+        this.state = {
+            typeAction:'',
+            onAction:'',
+            status:'', 
+            isFormOpen:false,
+            isOpenProgressForm:false,
+            isOpenDeleteForm:false,
+            actions:[
+                {code:'update',icon:'fa-pencil',name:'Cập nhật PO'},
+                {code:'remove',icon:'fa-trash',name:'Huỷ PO',active:true},
+                {code:'progress',icon:'icon icon-fire',name:'Xử lý tiến trình'},
+
+                {code:'out_stock', icon:'fa-truck',name:'Tạo phiếu nhập kho'},
+                {code:'income',icon:'fa-heartbeat',name:'Tạo phiếu chi'},
+                {code:'pdf',icon:'fa-file-pdf-o',name:'Xuất File PDF'},
+                {code:'print',icon:'fa-print',name:'In Đơn hàng'}
+            ]
+        }
+
+        this.grid = {
+            colums:[
+              {headerName: "Mã ĐH", field: "code", width:140,
+                cellRenderer(params){
+                    return `<span class="badge bg-green text-uppercase"> ${ params.value } </span>` ;
+                }
+              },
+              {headerName:"NCC",field:"supplier_code", width:140,
+                 cellRenderer(params){
+                     return `<span class="badge bg-blue text-uppercase"> ${params.value} </span>`
+                 }
+              },
+
+              {
+                  headerName:"Nguồn", field:"supplier_info", width:100,
+                  cellRenderer(params){
+                      const supInfo = JSON.parse(params.value);
+                      return `<span class="text-uppercase"> ${supInfo.roots} </span>`
+                  }
+              },
+              
+              {headerName: "Trạng thái", field: "status",width:140,
+                cellRenderer(params){
+                    return `<span style="background: ${PURCHASE_STATUS[params.value]['color']}; color:#fff " class="badge"> <i class="fa mr-5 ${ PURCHASE_STATUS[params.value]['icon'] }"></i> ${PURCHASE_STATUS[params.value]['name']} </span>`;
+                }
+              },
+
+              {
+                  headerName:"Hạn mức", field:"payment_code", width:140,
+                  cellRenderer(params){
+                      return `
+                        <span class="text-uppercase">
+                           ${ PAYMENT_TYPES_DECO[params.data.payment_type] } 
+                           <span class="ml-5"> ${params.value} </span>
+                           <span class="ml-5 text-red"> [${params.data.payment_debt}] </span>
+                        </span>
+                      `;
+                  }
+              },
+
+              {headerName: "Ngày tạo", field: "date_created",width:140,
+                cellRenderer(params){
+                    const humanDate =   params.value ===null ? '<i class="fa fa-clock-o"></i>': moment(params.value).format('YYYY-MM-DD') ; 
+                    return `
+                    ${ humanDate }
+                `
+                }
+              },
+
+              {headerName: "Ngày Duyệt", field: "date_approved",width:140,
+                cellRenderer(params){
+                    const humanDate =   params.value ===null ? '<i class="fa fa-clock-o"></i>': moment(params.value).format('YYYY-MM-DD') ; 
+                    return `
+                    ${ humanDate }
+                `
+                }
+              },
+
+              {headerName: "Ngày mua", field: "date_in", width:140,
+                cellRenderer(params){
+                    const humanDate =   params.value ===null ? '<i class="fa fa-clock-o"></i>': moment(params.value).format('YYYY-MM-DD') ; 
+                    return `
+                    ${ humanDate }
+                `
+                }
+              },
+              
+              {headerName: "Ngày chi", field: "date_paid", width:140,
+                cellRenderer(params){
+                    const humanDate =   params.value ===null ? '<i class="fa fa-clock-o"></i>': moment(params.value).format('YYYY-MM-DD') ; 
+                    return `
+                    ${ humanDate }
+                `
+                }
+              },
+              
+              { headerName:"VAT", field:"vat", width:100 },
+
+              {headerName:"Tổng tiền +VAT", field:"total_sum_vat",width:180,
+                 cellRenderer(params){
+                     return numeral(params.value).format('0,0')+' đ'
+                 }
+              },
+              { headerName:"Kho", field:'code', width:140 },
+              { headerName:"Phụ trách", field:"creator", width:140 }
+              
+            ],
+            rowData: []
+        }
+        
+        this._setup();
+
+        this._onFormSubmit = this._onFormSubmit.bind(this);
+        this._onProgressFormSubmit = this._onProgressFormSubmit.bind(this); 
+        this._onDeleteFormSubmit = this._onDeleteFormSubmit.bind(this); 
+        
 
     }
 
-    this.data = {
-      purchases:[]
+    _setup(){
+        this.model = new Model(MODE,this.props.dispatch) ;
     }
 
-    this.grid = {
-      colums:[
-        {headerName: "Mã ĐH", field: "type"},
-        {headerName: "Nguồn", field: "date_created"},
-        {headerName: "Trạng thái", field: "date_created"},
-        {headerName: "Gắn thẻ", field: "code"},
-        {headerName: "Kho", field: "inventory_id"},
-        {headerName: "Phiếu chi", field: "action_type"},
-        {headerName: "NCC", field: "group_code"},
-        {headerName: "Người tạo", field: "creator_id"},
-        {headerName: "Ngày tạo", field: "status"}
-      ],
-      rowData: []
+    _load(){
+
+        this.model.load(); 
+    }
+    _doOpenModalUpdate(data){
+        //this._curInfo = data ;
+        this.setState({
+            isOpenForm:true
+        });
     }
 
-    this._setup();
+    async _callAction(item){
+        //const eventClick = new Event('click');
+        document.querySelector('body').click();
+        if(JSON.stringify(this._curInfo)!=='{}'){
+            switch(item.code){
 
-  }
+                case 'update':
+                    this._doOpenModalUpdate() ; 
+                break;
 
-  _setup(){
+                case 'remove':
+                    this.setState({
+                        isOpenDeleteForm:true
+                    });
 
-    this.model = new Model(PURCHASE);
-    this.model.set('paginate',{
-      offset:0,
-      p:0,
-      max:20,
-      is_deleted:0,
-      key:''
-    });
+                    /*let result = await BenConfirm({
+                        title: 'Cảnh báo',
+                        message: "Bạn có chắc là muốn xoá dữ liệu này ?"
+                    });
 
-    this.formCtrl = new formCtrl(this.model);
+                    if(result){
+                        this.model.delete(this._curInfo.id,(res)=>{
 
-    this._listenStore();
+                        })
+                    }*/
+                break ;
 
-    //this.onBtnNewReceIn = this.onBtnNewReceIn.bind(this);
-    //this.onBtnNewReceOut = this.onBtnNewReceOut.bind(this);
+                case 'progress':
+                this.setState({
+                    isOpenProgressForm:true
+                }); 
+                break ;
+        
+            }
+        }else{ 
+                BenMessage({
+                title:'Thông báo',
+                message:'Vui lòng chọn chọn dữ liệu cần xử lý '
+                }) ;
+        }
+    }
 
-    this.onBtnNew = this.onBtnNew.bind(this);
-    this.onBtnUpdate = this.onBtnUpdate.bind(this);
+    _loadWithDate(jsonDate){
 
+        const formatDate = {
+            start: moment(jsonDate.start).format('YYYY-MM-DD'),
+            end:moment(jsonDate.end).format('YYYY-MM-DD')
+         }
+          this.model.set('paginate',{
+            ...formatDate
+          });
+      
+        this._load();
+    }   
 
-  }
+    _onDeleteFormSubmit(res){
+        // remove record
 
-  /* HOW */
-  resetGrid(){
-      /*let list = this.data.users || []  ;
+        this._curInfo = res.data; 
+        const isOpen = res.name === 'success' || res.name ==='ok' ? false : true;    
+        
+        this.setState({
+          status:res.name,
+          isOpenDeleteForm:isOpen
+        });
 
-      list.filter((item)=>{
-        item['str_job_level'] = userConf.job_level[item['job_level']];
-        item['str_job_type'] = userConf.job_type[item['job_type']];
-        item['str_phone'] = item['phone'] === null ? 'n/a' : item['phone'];
-        item['str_date_created'] = moment(item['date_created']).format('YYYY-MM-DD');
-      });
+    }
+    _onProgressFormSubmit(res){
+    
+        // update curent info
+        this._curInfo = res.data; 
+        const isOpen = res.name === 'success' || res.name ==='ok' ? false : true;    
 
-      //alert('resetGrid');
-      this.grid.rowData = list ;*/
-
-  }
-
-  _doOpenModalPost(){
-
-
-    this.formCtrl.open('post');
-    this._whereStateChange({
-      typeAction:'post',
-      onAction:'open_modal'
-    })
-
-  }
-
-  _doOpenModalUpdate(data){
-
-  }
-
-  /* WHEN */
-
-  onBtnUpdate(data){
-    this._doOpenModalUpdate(data);
-  }
-  onBtnNew(){
-    this._doOpenModalPost();
-  }
-  componentDidMount(){
-    //this._isMounted = true;
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-  _listenStore(){
-
-    this.unsubscribe = Store.subscribe(()=>{
+        this.setState({
+          status:res.name,
+          isOpenProgressForm:isOpen
+        });
+    
+    
+    }
 
 
-      this.data.purchases = Store.getState().purchase.list || []  ;
+    // SUBMIT UPDATE 
+    _onFormSubmit(status){
 
-      this._whereStateChange({
-        onAction:'_listenStore'
-      });
+        const isOpen = status === 'success' || status ==='ok' ? false : true;
+        this.setState({
+          status:status,
+          isOpenForm:isOpen
+        });
+    
+    }
+    
+    _onChange(field,value){
+        
+        if(value!==''){
+            this.model.set('paginate',{
+              [field]:value
+            });
+        }else{ this.model.remove(field) }
+          
+        this.model.load(); 
 
-    })
-  }
+    }
 
-  /* WHERE */
-  _whereStateChange(newState){
-    this.setState(Object.assign(this.state,newState));
-  }
-  render(){
+    /* WHERE*/
+    _whereStateChange(newState){
+        this.setState(Object.assign(this.state,newState));
+    }
 
-    const formTitle = this.state.typeAction === POST ? 'Tạo '+ PURCHASE_NAME : 'Chỉnh sửa '+ PURCHASE_NAME
+    
+    componentDidMount(){  
+        this._load();
+      }
+    
+    componentWillReceiveProps(newProps){
+        
+        this.grid.rowData = newProps[MODE]['list'];
 
-    return (
-      <div className="animated fadeIn">
-        <div className="ubuntu-app " style={{border:0, marginTop:20}}>
-            <main>
+        console.log(this.grid.rowData);
+        
+        
+        // CONNECT REDUX STATE 
+        this._whereStateChange(newProps[MODE]['state']);
+        
+    }
 
-              <PoForm
+    
+    render(){
+        return(
+            <div className="animated fadeIn">
+                <div className="ubuntu-app" style={{marginTop:20,padding:10}}>
+                    <main>
 
-                width='90%'
-                name={ formTitle }
-                typeAction={ this.state.typeAction }
-                modal={this.formCtrl}
+                        <MyForm
 
-              />
-                <BenGrid
+                            width='90%'
+                            data={ this._curInfo }
+                                
+                            isOpen={this.state.isOpenForm}
+            
+                            onToggle={(isOpen)=>{ this.setState({isOpenForm:isOpen}) }}
+            
+                            model={this.model}
+            
+                            onSubmit={ this._onFormSubmit }
+                            
+                        />
+                        
+                        <DeleteForm 
+                            name="Cảnh báo"
+                            isOpen={ this.state.isOpenDeleteForm }
+                            onToggle={(isOpen)=>{ this.setState({isOpenDeleteForm:isOpen}) }}
+                            onSubmit={ this._onDeleteFormSubmit }    
+                            model={this.model}
+                            data={ this._curInfo }
 
-                   onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
-                   isRightTool={ true }
-                   height={'79.9vh'}
-                   nextColums={ this.grid.colums }
-                   rowData={this.grid.rowData}
-                   model={ this.model }
-                   customButton={
-                     <ButtonGroup>
+                        />
+                        <ProgressForm 
 
-                        <Button
-                            style={{ marginRight:10, borderRadius:0}} onClick={ this.onBtnNew }  className="btn-ubuntu"  >
-                            <i className="fa fa-plus-circle mr-5"></i> Đề xuất mua
+                            name="Tiến trình" 
+                            isOpen={ this.state.isOpenProgressForm } 
+                            onToggle={(isOpen)=>{ this.setState({isOpenProgressForm:isOpen}) }}
+                            onSubmit={ this._onProgressFormSubmit }
+            
+                            model={this.model}
+                            data={ this._curInfo }
+                            width='40%'
+            
+                        />
+                        
+                        <BenGrid
 
-                        </Button>
+                            onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
+                            onCellSelected={(json)=>{ this._curInfo = json  }}
 
-                     </ButtonGroup>
+                            gridID='id'
+                            rowSelection='single'
 
-                   }
-                />
-            </main>
-        </div>
-      </div>
-    )
-  }
+                            isRightTool={ true }
+                            height="78vh"
+
+                            nextColums={ this.grid.colums }
+                            rowData={this.grid.rowData}
+                            model={ this.model }
+                            formStatus={ this.state.status }
+                            
+                            customButton={
+                                <ButtonGroup>
+                                    
+                                    <Link className="btn btn-normal" style={{borderRadius:0}} to="/inventory/po/add"> <i className="fa fa-plus-circle"></i> Tạo PO </Link>
+                                    <ButtonExpandList onSelected={(item)=>{  this._callAction(item) }} data={ this.state.actions } />
+                                    
+                                    <RankDatePicker onChange={(rank)=>{ this._loadWithDate(rank) }} />
+                                    
+                                    <ButtonExpand style={{borderRight:0}}  icon="fa-filter">
+                                        <FormGroup>
+                                        <Label> Trạng thái </Label>
+                                        <SelectList name="Tất Cả" onChange={(e)=>{ this._onChange('status',e.target.value) }}  rows={ PURCHASE_STATUS } />
+                                        </FormGroup>
+                                        <FormGroup>
+                                        <Label> Hạn mức  </Label>
+                                        <SelectListModelCode onChange={(e)=>{ this._onChange( 'payment_code',e.target.value)  }}  name="Tất Cả" strModel='payments' />
+                                        </FormGroup>
+                                        
+
+                                    </ButtonExpand>
+                                    
+                                </ButtonGroup>
+                            
+                            }
+
+                            displayBtn = {[]}
+
+
+                            
+                        />
+                    </main>    
+                </div>
+            </div>
+        )
+    }
 }
 
-export default Po;
+const mapStateToProps = (state) => {
+    return {
+        [MODE]: state[MODE]
+    }
+}
+
+export default connect(mapStateToProps)(Po);

@@ -7,6 +7,7 @@ import doGetModelInfo from '../../../hook/ultil/doGetModelInfo';
 // LIBS 
 import numeral from 'numeral';
 
+
 import React, { Component } from 'react';
 import { connect  } from 'react-redux';
 
@@ -16,6 +17,7 @@ import {  Row, Col, FormGroup,Label, Input, Table, Button, ButtonGroup  } from '
 import { Redirect  } from 'react-router-dom'; 
 
 
+
 import InputNumeral from '../../../components/InputNumeral'; 
 import InputSuggest from '../../../components/InputSuggest';   
 import InputSuggestProduct from '../../../components/InputSuggestProduct' ; 
@@ -23,7 +25,9 @@ import InputSuggestProduct from '../../../components/InputSuggestProduct' ;
 import SelectListModelCode from '../../../components/SelectListModelCode';
 
 
+
 const MODE = 'purchases';
+
 
 
 function SupplierInfo(props){
@@ -286,7 +290,6 @@ class CreatePO extends Component {
         super(props);
         
         this.state = {
-
             
             supplier_code:'',
             supplier_info:{},
@@ -297,7 +300,7 @@ class CreatePO extends Component {
             note:'',
             total_sum:0,
             total_vat:0,
-            total_sum_vat:0,
+            total_sum_vat:0, 
             belong_user:'',
             promotion_discount:0,
             onSuccess:false
@@ -345,7 +348,8 @@ class CreatePO extends Component {
                 id:supInfo.id,
                 code:supInfo.code,
                 name:supInfo.name,
-                phone:supInfo.phone
+                phone:supInfo.phone,
+                roots:supInfo.roots
               }
               
               this.model.axios('post',data,(res)=>{ 
@@ -366,7 +370,6 @@ class CreatePO extends Component {
 
     _onSelectedSupplier(json){
 
-      
         this.setState({
           supplier_code:json.code,
           supplier_info:json,
@@ -568,7 +571,7 @@ class CreatePO extends Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
        [MODE] : state.purchases
     }

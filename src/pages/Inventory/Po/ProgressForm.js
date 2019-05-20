@@ -1,11 +1,10 @@
-import { ORDER_STATUS } from '../../../config/app.config'
+import { PURCHASE_STATUS } from '../../../config/app.config'
 
 import React, { Component } from 'react';
 import { Button } from 'reactstrap'; 
 
 
 import ViewModal from '../../../components/ViewModal';
-import BenButtonSelect from '../../../components/BenButtonSelect';
 import BenProcess from '../../../components/BenProcess'; 
 
 
@@ -17,9 +16,9 @@ class ProgressForm extends Component {
         super(props);
 
         this.state = {
-            orderStatus:0,
+            status:0,
             originStatus:0,
-            ORDER_STATUS:ORDER_STATUS,
+            PURCHASE_STATUS:PURCHASE_STATUS,
             actionName:''
         };
 
@@ -31,7 +30,7 @@ class ProgressForm extends Component {
 
     getOrderStatus(status){
         
-        this.state.ORDER_STATUS.map((item,index)=>{
+        this.state.PURCHASE_STATUS.map((item,index)=>{
             if(index===status){
                 item['active'] = true 
             }else{
@@ -49,8 +48,8 @@ class ProgressForm extends Component {
 
         this.setState({
             originStatus:status,
-            orderStatus:status,
-            actionName: ORDER_STATUS[status]['action']
+            status:status,
+            actionName: PURCHASE_STATUS[status]['action']
         });
 
     }
@@ -91,20 +90,16 @@ class ProgressForm extends Component {
                 }}>
                     <label> Trạng thái tiến trình </label>
                     
-                    <BenProcess status={ this.state.orderStatus } />      
+                    <BenProcess status={ this.state.status } />      
                     
-
                 </div>
                 
                 <div style={{borderTop:'1px solid #eee',padding:'20px 0px',margin:'0px 20px'}}>
-                    <Button onClick={this._onSubmit} className="btn btn-ubuntu" style={{ background: ORDER_STATUS[this.state.orderStatus]['color'] }}  > 
-                        <i className={'fa mr-5 '+ORDER_STATUS[this.state.orderStatus]['icon']}></i> { ORDER_STATUS[this.state.orderStatus]['action'] } 
+                    <Button onClick={this._onSubmit} className="btn btn-ubuntu" style={{ background: PURCHASE_STATUS[this.state.status]['color'] }}  > 
+                        <i className={'fa mr-5 '+PURCHASE_STATUS[this.state.status]['icon']}></i> { PURCHASE_STATUS[this.state.status]['action'] } 
                     </Button>
                 </div>
-
-
-
-
+                
             </ViewModal>
         );
     }

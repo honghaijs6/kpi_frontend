@@ -23,6 +23,7 @@ import numeral from 'numeral' ;
 /* MODAL FORM & CTRL */
 import MyForm from './Form';
 import ProgressForm from './ProgressForm' ; 
+import DeleteForm from './DeleteForm'; 
 
 
 
@@ -40,8 +41,6 @@ import RankDatePicker from '../../../components/RankDatePicker' ;
 
 
 const MODE = 'orders';
-const MODE_NAME = 'Báo giá';
-
 
 class OrderView extends Component{
 
@@ -56,6 +55,7 @@ class OrderView extends Component{
       status:'',
       isOpenForm:false,
       isOpenProgressForm:false,
+      isOpenDeleteForm:false,
       defaultStatusType:0,
       
       actions:[
@@ -182,6 +182,8 @@ class OrderView extends Component{
     this._setup();
     this._onFormSubmit = this._onFormSubmit.bind(this);
     this._onProgressFormSubmit = this._onProgressFormSubmit.bind(this); 
+    this._onDeleteFormSubmit = this._onDeleteFormSubmit.bind(this);
+
 
 
     
@@ -243,17 +245,10 @@ class OrderView extends Component{
         break;
 
         case 'remove':
-          
-          let result = await BenConfirm({
-            title: 'Cảnh báo',
-            message: "Bạn có chắc là muốn xoá dữ liệu này ?"
-          });
-
-          if(result){
-             this.model.delete(this._curInfo.id,(res)=>{
-
-             })
-          }
+           this.setState({
+             isOpenDeleteForm:true
+           });
+           
         break ;
 
         case 'progress':
@@ -270,17 +265,7 @@ class OrderView extends Component{
         }) ;
     }
   }
-
-  _doOpenModalPost(){
-
-    //this.modal.open('post');
-    this._whereStateChange({
-      typeAction:'post',
-      onAction:'open_modal'
-    })
-
-  }
-
+  
   _doOpenModalUpdate(data){
     //this._curInfo = data ;
     this.setState({
@@ -298,13 +283,24 @@ class OrderView extends Component{
     this.setState(Object.assign(this.state,newState));
   }
 
+  _onDeleteFormSubmit(res){
+    this._curInfo = res.data; 
+    const isOpen = res.name === 'success' || res.name === 'ok' ? false : true ;
+    
+    this.setState({
+      status:res.name,
+      isOpenDeleteForm:isOpen
+    });
+  }
   _onProgressFormSubmit(res){
     
     // update curent info
     this._curInfo = res.data; 
+    const isOpen = res.name === 'success' || res.name === 'ok' ? false : true ;
     
     this.setState({
-      status:res.name
+      status:res.name,
+      isOpenDeleteForm:isOpen
     });
 
 
@@ -352,6 +348,17 @@ class OrderView extends Component{
                 model={this.model}
                 data={ this._curInfo }
                 width='40%'
+
+              />
+              <DeleteForm  
+                name="Cảnh báo"
+                isOpen={ this.state.isOpenDeleteForm }
+                onToggle={(isOpen)=>{ this.setState({isOpenDeleteForm:isOpen}) }}
+                onSubmit={ this._onDeleteFormSubmit }
+
+                model={this.model}
+                data={this._curInfo}
+
 
               />
               <MyForm

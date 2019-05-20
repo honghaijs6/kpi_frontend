@@ -226,7 +226,7 @@ class Model {
 
   putCustom(method,data,onSuccess){
 
-    this.db.type = 'PUT';
+    this.db.type = method === 'cancel' || method ==='delete' || method ==='remove' ? 'DELETE' :  'PUT';
     this.status = data ;
 
     const url = server.base() + '/' + this.model + '/'+method;
@@ -549,8 +549,7 @@ class Model {
 
             total -= 1;
             this.resetConfigDB("total",total);
-
-
+            
             this.restResp({
               list:list
             }); 
@@ -606,6 +605,10 @@ class Model {
 
 
     Object.assign(this.state,newState);
+    
+    this.data = newState.list; 
+    
+
     if(this.dispatcher!==null){
       this.dispatcher(newState);
     }
