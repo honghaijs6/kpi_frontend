@@ -28,6 +28,8 @@ import reducerCusType from './reducer-customer-type' ;
 import reducerLevel from './reducer-level'; 
 import reducerCusStatus from './reducer-customer-status'; 
 import reducerCusOriginal from './reducer-customer-original'; 
+import reducerWarehouses from './reducer-warehouse'; 
+import reducerWarehouseReceipt from './reducer-warehouse-receipt';
 
 
 
@@ -54,7 +56,9 @@ const allReducers = combineReducers({
   customer_types:reducerCusType,
   levels:reducerLevel,
   customer_status:reducerCusStatus,
-  customer_originals:reducerCusOriginal
+  customer_originals:reducerCusOriginal,
+  warehouses:reducerWarehouses,
+  warehouse_receipts:reducerWarehouseReceipt
 
 });
 

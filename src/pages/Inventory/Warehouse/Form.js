@@ -1,63 +1,107 @@
+
+// HOOKS 
+import detectForm from '../../../hook/before/detectform'; 
+
 import React, { Component } from 'react';
-import {  Row, Col, Label,  Form, FormGroup,FormText, Input } from 'reactstrap';
+import { Row, Col, FormGroup, Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
 
-import BenModal from '../../../components/BenModal';
+} from 'reactstrap'; 
 
-function FrmR1(props){
+import ViewModal from '../../../components/ViewModal' ; 
+ 
+export default class MyForm extends Component {
 
-  const modal = props.modal;
-  const data = modal.data ;
+  constructor(props){
+    super(props);
 
-  return (
-    <Row>
-      <Col md={4}>
-        <FormGroup>
-          <Label for="code"> Mã <span className="text-danger">*</span></Label>
-          <Input type="text" id="code" defaultValue={ data.code }   placeholder="nhập mã kho" />
-        </FormGroup>
-      </Col>
-      <Col md={8}>
-        <FormGroup>
-          <Label for="code"> Tên <span className="text-danger">*</span></Label>
-          <Input type="text" id="name"  defaultValue={ data.name }  placeholder="nhập tên nhà kho" />
-        </FormGroup>
-      </Col>
-    </Row>
-  )
+    this.state = {}
+
+    this._onSubmit = this._onSubmit.bind(this);
+
+  }
+
+  _resetForm(){
+    return {
+      code:'',
+      name:'',
+      address:''
+    }
+  }
+
+  _onSubmit(){
+    
+    const fields = ['code','name','address'];
+    if(detectForm(fields,this.state)===''){
+       
+      this.props.model.axios(this.props.typeAction,this.state,(res)=>{
+        if(res.name==='success' || res.name==='ok'){
+          this.props.onSubmitForm(res);
+        }
+      })
+    }
+
+  }
+  
+  componentWillReceiveProps(newProps){
+    
+    const state = newProps.typeAction === 'post' ? this._resetForm() : newProps.data; 
+    this.setState(state);
+
+  }
+
+
+  render() {
+    return (
+      <ViewModal isFooter={true} onSubmit={ this._onSubmit } {...this.props} onToggle={(isOPen)=>{ this.props.onToggle(isOPen) }} >
+        <div className="view-modal-body">
+            <FormGroup>
+               <Row>
+                  <Col md={4}>
+                    <label> Mã Kho </label>
+                    <InputGroup>
+                      <InputGroupAddon addonType="prepend"><InputGroupText>#</InputGroupText></InputGroupAddon>
+                      <Input id="code" onChange={(e)=>{ this.setState({code:e.target.value}) }} defaultValue={ this.state.code }  />
+                    </InputGroup>
+                  </Col>
+                  <Col md={6}>
+                    <label> Kho </label>
+                    <InputGroup>
+                      <InputGroupAddon addonType="prepend"><InputGroupText>@</InputGroupText></InputGroupAddon>
+                      <Input id="name" onChange={(e)=>{ this.setState({name:e.target.value}) }} defaultValue={ this.state.name } />
+                    </InputGroup>
+                  </Col>
+               </Row>
+            </FormGroup>
+            
+            <FormGroup>
+               <Row>
+                  <Col md={10}>
+                    <label> Địa chỉ </label>
+                    <InputGroup>
+                      <InputGroupAddon addonType="prepend"><InputGroupText><i className="fa fa-map-marker"></i></InputGroupText></InputGroupAddon>
+                      <Input id="address" onChange={(e)=>{ this.setState({address:e.target.value}) }} defaultValue={ this.state.address } />
+                    </InputGroup>
+
+                  </Col>
+               </Row>
+            </FormGroup>
+            
+        </div>     
+      </ViewModal>
+    );
+  }
 }
 
-function FrmR2(props){
-
-  const modal = props.modal;
-  const data = modal.data ;
-
-  return (
-    <Row>
-      <Col md={12}>
-        <FormGroup>
-          <Label for="code"> Địa chỉ <span className="text-danger">*</span></Label>
-          <Input type="text" id="address" defaultValue={ data.address }   placeholder="nhập địa chỉ" />
-        </FormGroup>
-      </Col>
-
-    </Row>
-  )
+MyForm.defaultProps = {
+  onToggle:()=>{},
+  onSubmitForm:()=>{},
+  typeAction:'post',
+  data:{
+    code:'',
+    name:'',
+    address:''
+  }
 }
-
-class WareHouseForm extends Component {
-
-
-
-   render(){
-
-
-     return(
-       <BenModal name={ this.props.name } typeAction={ this.props.typeAction } modal={ this.props.modal }  >
-          <FrmR1 modal={this.props.modal} />
-          <FrmR2 modal={ this.props.modal } />
-       </BenModal>
-     )
-   }
- }
-
- export default WareHouseForm;

@@ -1,177 +1,183 @@
 
-import React, { Component } from 'react';
-import { Button } from 'reactstrap';
+import moment from 'moment';
 
-/* OBJECT - PLUGIN*/
-import Store from '../../../redux/store';
+import React, { Component } from 'react';
+import { connect } from 'react-redux'; 
+
+import { BenGrid } from '../../../components/BenGrid2';
 import Model from '../../../model/model';
 
-/* HOOKED*/
-/*............*/
+import MyForm from './Form';
 
-/* NAMED*/
-import { INVENTORIES } from '../../../model/model-mode';
-import { INVENTORIES_NAME } from '../../../model/model-name';
-import { POST, SEARCH } from '../../../model/action-mode';
-/*------------*/
+const MODE = 'warehouses';
+const MODE_NAME = 'Nhà kho'; 
 
-/* MODAL FORM & CTRL*/
-import WarehouseForm from './Form';
-import formController from './formCtrl';
+class Warehouse extends Component {
 
 
-/*INCLUDE OTHER COMPONENT*/
-import { BenGrid } from '../../../components/BenGrid2';
-
-
-
-
-
-class Warehouse extends Component{
-
+  _curInfo = {}
 
   constructor(props){
     super(props);
 
     this.state = {
-
-      typeAction:'',
+      typeAction :'',
       onAction:'',
-      status:''
-    }
+      status:'',
 
-    this.data = {
-      inventories:[]
+      isFormOpen:false
     }
 
     this.grid = {
-      colums:[
-        {headerName: "Mã Kho", field: "code"},
-        {headerName: "Kho", field: "name", width:320},
-        {headerName: "Địa chỉ", field: "address", width:410},
-        {headerName: "Người tạo", field: "creator_id"},
-        {headerName: "Ngày tạo", field: "date_created"}
-      ],
-      rowData: []
+        colums:[
+          {headerName: "Mã Kho", field: "code", width:150,
+            cellRenderer(params){
+                return `<span class="badge bg-green text-uppercase"> ${ params.value } </span>` ;
+            }
+          },
+          {
+            headerName:"Kho Hàng",field:"name", width:270},
+          {
+              headerName:"Địa chỉ", field:"address", width:600
+          },
+          
+          {
+            headerName:"Người tạo", field:"creator",width:180
+          },
+          
+
+          {headerName: "Ngày tạo", field: "date_created",width:140,
+            cellRenderer(params){
+                const humanDate =   params.value ===null ? '<i class="fa fa-clock-o"></i>': moment(params.value).format('YYYY-MM-DD') ; 
+                return `
+                ${ humanDate }
+            `
+            }
+          },
+          {headerName: "Điều chỉnh", field: "date_modified",width:140,
+            cellRenderer(params){
+                const humanDate =   params.value ===null ? '<i class="fa fa-clock-o"></i>': moment(params.value).format('YYYY-MM-DD') ; 
+                return `
+                ${ humanDate }
+            `
+            }
+          },
+          
+
+          
+          
+        ],
+        rowData: []
     }
+
 
     this._setup();
 
-    this.onBtnNew = this.onBtnNew.bind(this)
-
+    this._doOpenModal = this._doOpenModal.bind(this); 
   }
 
   _setup(){
-    this.model = new Model(INVENTORIES);
-    this.model.set('paginate',{
-      offset:0,
-      p:0,
-      max:20,
-      is_deleted:0,
-      key:''
-    });
+    this.model = new Model(MODE,this.props.dispatch); 
 
-    this.modal = new formController(this.model);
-
-
-    this._listenStore();
-  }
-
-  /* HOW */
-  resetGrid(){
-      /*let list = this.data.users || []  ;
-
-      list.filter((item)=>{
-        item['str_job_level'] = userConf.job_level[item['job_level']];
-        item['str_job_type'] = userConf.job_type[item['job_type']];
-        item['str_phone'] = item['phone'] === null ? 'n/a' : item['phone'];
-        item['str_date_created'] = moment(item['date_created']).format('YYYY-MM-DD');
-      });
-
-      //alert('resetGrid');
-      this.grid.rowData = list ;*/
-
-  }
-
-
-  _doOpenModalPost(){
-
-    this.modal.open('post');
-    this._whereStateChange({
-      typeAction:'post',
-      onAction:'open_modal'
-    })
 
   }
   _doOpenModalUpdate(data){
+    this._curInfo = data ; 
+    this._whereStateChange({
+      typeAction:'put',
+      isFormOpen:true
+    });
+  }
+
+  _doOpenModal(){
+    
+    this._whereStateChange({
+      typeAction:'post',
+      isFormOpen:true
+    });
 
   }
 
-  /* END HOW*/
+  _onSubmitForm(res){
+    
+    const isOpen = res.name === 'success' || res.name === 'ok' ? false : true ;
+    this.setState({
+      isFormOpen:isOpen,
+      typeAction:'',
+      status:res.name
+    });
 
-
-  /* WHEN*/
-
-  onBtnNew(){
-    this._doOpenModalPost();
   }
 
   componentDidMount(){
-    //this._isMounted = true;
+    // LOAD DATA HERE 
+    this.model.load();
   }
 
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-  _listenStore(){
-
-    this.unsubscribe = Store.subscribe(()=>{
-      this.data.inventories = Store.getState().inventory.list || []  ;
-
-      this._whereStateChange({
-        onAction:'_listenStore'
-      });
-
-    })
+  componentWillReceiveProps(newProps){
+    this.grid.rowData = newProps[MODE]['list'];
+    // CONNECT REDUX STATE 
+    this._whereStateChange(newProps[MODE]['state']);
+    
   }
 
-  /*WHERE*/
   _whereStateChange(newState){
     this.setState(Object.assign(this.state,newState));
   }
-  render(){
+  render() {
 
-    const formTitle = "Tạo "+ INVENTORIES_NAME;
-
+    
     return (
       <div className="animated fadeIn">
-        <div className="ubuntu-app " style={{border:0, marginTop:20}}>
-            <main>
-              <WarehouseForm
-                name={ formTitle }
-                typeAction={ this.state.typeAction }
-                modal={this.modal}
+        <div className="ubuntu-app" style={{marginTop:20, padding:10}}>
+          <main>
+
+              <MyForm 
+                 name={ MODE_NAME }
+                 width='41%'
+                 
+                 typeAction={this.state.typeAction}
+                 isOpen={this.state.isFormOpen}
+                 onToggle={(isOpen)=>{ this.setState({isFormOpen:isOpen,typeAction:''}) }}
+                 model={ this.model }
+                 data={ this._curInfo }
+
+                 onSubmitForm={(res)=>{ this._onSubmitForm(res) }}
 
               />
               <BenGrid
 
-                 onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
-                 isRightTool={ true }
-                 height="79.9vh"  
-                 nextColums={ this.grid.colums }
-                 rowData={this.grid.rowData}
-                 model={ this.model }
+                  onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
+                  onBtnAdd={ this._doOpenModal }
+                  onCellSelected={(json)=>{ this._curInfo = json  }}
 
-                 customButton={
-                   <Button onClick={this.onBtnNew}  style={{ marginRight:10, borderRadius:0}}  className="btn-ubuntu"  > <i className="fa fa-plus"></i> Tạo nhà kho  </Button>
+                  gridID='id'
+                  rowSelection='single'
 
-                 }
+                  isRightTool={ true }
+                  height="77.5vh"
+
+                  nextColums={ this.grid.colums }
+                  rowData={this.grid.rowData}
+                  model={ this.model }
+                  formStatus={ this.state.status }
+                  
+                  
               />
-            </main>
+          </main>  
         </div>
       </div>
-    )
+
+    ); 
   }
 }
 
-export default Warehouse;
+const mapStateToProps = (state) => {
+  return {
+    [MODE]: state[MODE]
+  }
+}
+
+export default connect(mapStateToProps)(Warehouse);
+
+

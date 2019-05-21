@@ -1,224 +1,289 @@
-
-import React, { Component } from 'react';
-
-import { Button, ButtonGroup } from 'reactstrap';
-
-/* OBJECT - PLUGIN*/
-import Store from '../../../redux/store';
+import { WAREHOUSE_RECEIPT, WAREHOUSE_TYPES, WAREHOUSE_TRACKS } from '../../../config/app.config';
 import Model from '../../../model/model';
 
+// LIBS 
+import moment from 'moment';
 
-/* HOOKED*/
-/*............*/
-
-/* NAMED*/
-import { INVENTORY_TRACKS } from '../../../model/model-mode';
-import { INVENTORY_TRACK_NAME } from '../../../model/model-name';
-import { POST, SEARCH } from '../../../model/action-mode';
-/*------------*/
-
-
-/* MODAL FORM & CTRL */
-import RecForm from './Form';
-import formCtrl from './formCtrl';
-
-
-/*INCLUDE OTHER COMPONENT*/
-import { BenGrid } from '../../../components/BenGrid2';
+import React, { Component } from 'react';
+import { connect } from 'react-redux' ; 
+import { Button, ButtonGroup, FormGroup, Input, Label } from 'reactstrap'; 
 
 
 
-class Receipt extends Component{
+import { BenGrid } from '../../../components/BenGrid2' ; 
+
+import ButtonExpand from '../../../components/ButtonExpand';
+import ButtonExpandList from '../../../components/ButtonExpandList'; 
+
+import SelectList from '../../../components/SelectList'; 
+import RankDatePicker from '../../../components/RankDatePicker'; 
+
+import ReceiptForm from './Form'; 
 
 
-  constructor(props){
-    super(props);
+const MODE = 'warehouse_receipts';
 
-    this.state = {
 
-      typeAction:'',
-      onAction:'',
-      status:'',
+class ReceiptWarehouse extends Component {
 
-      recType:'in' // LOẠI PHIẾU
+    _curInfo = {} 
+    constructor(props){
+        super(props);
+
+        this.state = {
+            typeAction:'',
+            onAction:'',
+            status:'',
+            isOpenForm:false,
+
+            receiptType:'',
+            actions:[
+                {code:'update',icon:'fa-pencil',name:'Cập nhật phiếu'},
+                {code:'remove',icon:'fa-trash',name:'Huỷ phiếu',active:true},
+                {code:'progress',icon:'icon icon-fire',name:'Xử lý tiến trình'},
+                {code:'print',icon:'fa-print',name:'In phiếu'}
+            ]
+        }
+
+        this.grid = {
+            colums:[
+              {headerName: "Phiếu", field: "type",width:120,
+                cellRenderer(params){
+
+                    
+                    return `
+                        <span class="badge ${WAREHOUSE_TYPES[params.value]['code']} "> 
+                            <i class="${WAREHOUSE_TYPES[params.value]['icon']} mr-5"></i> ${ WAREHOUSE_TYPES[params.value]['name'] } 
+                        </span>
+                    `
+                }
+              },
+              {headerName: "Mã phiếu", field: "code_in",width:150,
+                cellRenderer(params){
+
+                    return `
+                        <span class="text-uppercase"> ${ params.value } </span>
+                    `
+                }
+              },
+              
+              {headerName: "Trạng thái", field: "status",width:180,
+                cellRenderer(params){
+                    return `
+                        <span style="color:${ WAREHOUSE_RECEIPT[params.value]['color'] }"> 
+                            <i class="mr-5 fa ${ WAREHOUSE_RECEIPT[params.value]['icon'] } "></i> ${ WAREHOUSE_RECEIPT[params.value]['name'] } 
+                        </span>
+                    `
+                }
+              },
+              {
+                headerName:"Số lượng", field:"total", width:120
+
+              },
+
+              {headerName: "Kho", field: "warehouse_code",width:140,
+
+                cellRenderer(params){
+                    return `
+                        <span class="text-uppercase"> <i class="fa fa-home"></i> ${params.value} </span>
+                    `
+                }
+
+              },
+              {headerName: "Loại", field: "track_code",width:160,
+
+                cellRenderer(params){
+
+                    let name = '';
+                    WAREHOUSE_TRACKS[ params.data.type ].map((item)=>{
+                        if( params.value ===item['code']){
+                            name = item['name']
+                        }
+                    });
+                    
+                    return `
+                        ${ name }
+                    `
+                }
+              },
+              {headerName: "Mã PO", field: "order_code",width:180,
+                cellRenderer(params){
+                    return `<span class="text-uppercase"> ${ params.value || 'n/a' } </span>`
+                }
+              },
+              {headerName: "Người tạo", field: "creator",width:200},
+              {
+                headerName: "Ngày Tạo", field: "date_created",width:140,
+                cellRenderer(params){
+                    const humanDate =   params.value ===null ? '<i class="fa fa-clock-o"></i>': moment(params.value).format('YYYY-MM-DD') ; 
+                    return `
+                        ${ humanDate }
+                    `
+                }
+              },
+              {
+                  headerName:"Điều chỉnh", field:"date_modified", width:140,
+                  cellRenderer(params){
+                    const humanDate =   params.value === null ? '<i class="fa fa-clock-o"></i>': moment(params.value).format('YYYY-MM-DD') ; 
+                    return `
+                        ${ humanDate }
+                    `
+                  }
+              }
+            ],
+            rowData: []
+        }
+        
+        this._setup(); 
+        
+    }
+    
+    _setup(){
+        this.model = new Model(MODE,this.props.dispatch);
     }
 
-    this.data = {
-      inventory_tracks:[]
+    _doOpenModalUpdate(data){
+        this._curInfo = data ; 
+        this.setState({
+            isOpenForm:true,
+            typeAction:'put'
+        });
+    }
+    _doOpenModal(receiptType){
+
+        this.setState({
+            receiptType:receiptType,
+            isOpenForm:true,
+            typeAction:'post'
+        });
+
+        
+
+
+    }
+    _callAction(item){
+
+    }
+    _loadWithDate(jsonDate){
+        const formatDate = {
+            start: moment(jsonDate.start).format('YYYY-MM-DD'),
+            end:moment(jsonDate.end).format('YYYY-MM-DD')
+         }
+        this.model.set('paginate',{
+            ...formatDate
+        });
+
+        this.model.load();
+        
+    }
+    _onChange(field,value){
+
+        if(value!==''){
+            this.model.set('paginate',{
+              [field]:value
+            });
+        }else{ this.model.remove(field) }
+          
+        this.model.load(); 
     }
 
-    this.grid = {
-      colums:[
-        {headerName: "Phiếu", field: "type"},
-        {headerName: "Ngày", field: "date_created"},
-        {headerName: "Mã", field: "code"},
-        {headerName: "Kho", field: "inventory_id"},
-        {headerName: "Loại", field: "action_type"},
-        {headerName: "Mã đơn hàng", field: "group_code"},
-        {headerName: "Người tạo", field: "creator_id"},
-        {headerName: "Trạng thái", field: "status"},
-        {headerName: "Ghi chú", field: "note"}
-
-      ],
-      rowData: []
+    /* WHERE*/
+    _whereStateChange(newState){
+        this.setState(Object.assign(this.state,newState));
     }
 
-    this._setup();
 
-    this.onBtnNewReceIn = this.onBtnNewReceIn.bind(this);
-    this.onBtnNewReceOut = this.onBtnNewReceOut.bind(this);
+    componentDidMount(){
+        this.model.load();
+    }
+    componentWillReceiveProps(newProps){
+        this.grid.rowData = newProps[MODE]['list'];
+        // CONNECT REDUX STATE 
+        this._whereStateChange(newProps[MODE]['state']);
+    }
+    render() {
 
-  }
+        const FORM_NAME = this.state.receiptType === 'in' ? 'Phiếu nhập' : 'Phiếu xuất'
+        return (
+            <div className="animated fadeIn">
+                <div className="ubuntu-app " style={{marginTop:20, padding:10}}>
+                    <main>
 
-  _setup(){
+                        <ReceiptForm 
+                            name={ FORM_NAME }
+                            width="72%"
+                            isOpen={ this.state.isOpenForm }
+                            onToggle={(isOpen)=>{this.setState({isOpenForm:isOpen}) }}
+                            receiptType={ this.state.receiptType }
+                            typeAction={ this.state.typeAction }
 
-    this.model = new Model(INVENTORY_TRACKS);
-    this.model.set('paginate',{
-      offset:0,
-      p:0,
-      max:20,
-      is_deleted:0,
-      key:''
-    });
+                            data={this._curInfo}
 
-    this.formCtrl = new formCtrl(this.model);
-    //this.modal = new formController(this.model);
+                            model={this.model}
+                        />
 
-    this._listenStore();
+                        <BenGrid
 
+                            onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
+                            onBtnAdd={ this._doOpenModal }
+                            onCellSelected={(json)=>{ this._curInfo = json  }}
+        
+                            gridID='id'
+                            rowSelection='single'
+        
+                            isRightTool={ true }
+                            height="77.5vh"
+        
+                            nextColums={ this.grid.colums }
+                            rowData={this.grid.rowData}
+                            model={ this.model }
+                            formStatus={ this.state.status }
+                            displayBtn={[]}
 
+                            customButton={
+                                <ButtonGroup>
+                                    
+                                    <Button onClick={()=>{ this._doOpenModal('in') }} className="btn btn-normal"><i className="fa fa-plus-circle mr-5"></i> Tạo phiếu nhập </Button>
+                                    <Button onClick={()=>{ this._doOpenModal('out') }} className="btn btn-normal"><i className="fa fa-plus-circle mr-5"></i> Tạo phiếu xuất </Button>
+                                    
+                                    <ButtonExpandList onSelected={(item)=>{  this._callAction(item) }} data={ this.state.actions } />
+                                    
+                                    
+                                    <RankDatePicker onChange={(rank)=>{ this._loadWithDate(rank) }} />
+                                    
+                                    <ButtonExpand style={{borderRight:0}}  icon="fa-filter">
+                                        <FormGroup>
+                                            <Label> Trạng thái </Label>
+                                            <SelectList name="Tất Cả" onChange={(e)=>{ this._onChange('status',e.target.value) }}  rows={ WAREHOUSE_RECEIPT } />
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <Label> Loại phiếu  </Label>
+                                            <Input type="select" onChange={(e)=>{ this._onChange('type',e.target.value) }}>
+                                                <option value=""> Tất cả </option>
+                                                <option value="in"> Phiếu nhập </option>
+                                                <option value="out"> Phiếu xuất </option>
+                                            </Input>
+                                        </FormGroup>
+                                        
 
-  }
-
-  /* HOW */
-  resetGrid(){
-      /*let list = this.data.users || []  ;
-
-      list.filter((item)=>{
-        item['str_job_level'] = userConf.job_level[item['job_level']];
-        item['str_job_type'] = userConf.job_type[item['job_type']];
-        item['str_phone'] = item['phone'] === null ? 'n/a' : item['phone'];
-        item['str_date_created'] = moment(item['date_created']).format('YYYY-MM-DD');
-      });
-
-      //alert('resetGrid');
-      this.grid.rowData = list ;*/
-
-  }
-
-
-  _doOpenModalPost(){
-
-    //this.modal.open('post');
-    this._whereStateChange({
-      typeAction:'post',
-      onAction:'open_modal'
-    })
-
-  }
-
-  _doOpenModalUpdate(data){
-
-  }
-
-  _doOpenForm(type){
-
-    this.formCtrl.open('post');
-
-    this._whereStateChange({
-      recType:type,
-      typeAction:'post',
-      onAction:'open_modal'
-    })
-  }
-  /* END HOW*/
-
-
-  /* WHEN*/
-  /* onbtn Create phiếu xuất*/
-  onBtnNewReceOut(){
-    //this._doOpenModalPost();
-    this._doOpenForm('out')
-  }
-
-  /* onbtn Create phiếu xuất*/
-  onBtnNewReceIn(){
-    //this._doOpenModalPost();
-    this._doOpenForm('in')
-  }
-
-
-
-  componentDidMount(){
-    //this._isMounted = true;
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-  _listenStore(){
-
-    this.unsubscribe = Store.subscribe(()=>{
-
-      this.data.inventory_tracks = Store.getState().inventory_track.list || []  ;
-
-      this._whereStateChange({
-        onAction:'_listenStore'
-      });
-
-    })
-  }
-
-  /* WHERE*/
-
-  _whereStateChange(newState){
-    this.setState(Object.assign(this.state,newState));
-  }
-
-
-  render(){
-
-    const formTitle = this.state.recType === 'in' ? 'Phiếu nhập' : 'Phiếu xuất' ;
-    const strTypeAction = this.state.typeAction === POST ? 'Tạo ' : 'Chỉnh sửa ';
-
-
-    return (
-      <div className="animated fadeIn">
-        <div className="ubuntu-app " style={{border:0, marginTop:20}}>
-            <main>
-
-
-              <RecForm
-                recType={ this.state.recType }
-                width='90%'
-                name={ strTypeAction+ formTitle }
-                typeAction={ this.state.typeAction }
-                modal={this.formCtrl}
-
-              />
-              <BenGrid
-
-                 onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
-                 isRightTool={ true }
-                 height={'79.9vh'}
-                 nextColums={ this.grid.colums }
-                 rowData={this.grid.rowData}
-                 model={ this.model }
-                 customButton={
-                   <ButtonGroup>
-
-                      <Button style={{ marginRight:10, borderRadius:0}} onClick={ this.onBtnNewReceOut }  className="btn-ubuntu"  > <i className="fa fa-plus"></i> Tạo phiếu xuất  </Button>
-                      <Button style={{ marginRight:10, borderRadius:0}} onClick={ this.onBtnNewReceIn}  className="btn-ubuntu"  > <i className="fa fa-plus"></i> Tạo phiếu nhập  </Button>
-
-                   </ButtonGroup>
-
-                 }
-              />
-            </main>
-        </div>
-      </div>
-    )
-  }
+                                    </ButtonExpand>
+                                    
+                                </ButtonGroup>
+                            
+                            }
+                            
+                        />
+                    </main>
+                </div>
+            </div>
+        );
+    }
 }
 
-export default Receipt;
+const mapStateToProps = (state) => {
+    return {
+        [MODE]: state[MODE]
+    }
+}
+
+export default connect(mapStateToProps)(ReceiptWarehouse); 

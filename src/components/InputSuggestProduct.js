@@ -187,5 +187,5 @@ export default class InputSuggest extends Component{
 }
 
 InputSuggest.defaultProps = {
-
-}
+    supplier_codes:''
+}   

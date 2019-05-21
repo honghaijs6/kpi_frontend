@@ -53,10 +53,10 @@ class OrderView extends Component{
       typeAction:'',
       onAction:'',
       status:'',
-      isOpenForm:false,
+      isOpenForm:false, 
       isOpenProgressForm:false,
       isOpenDeleteForm:false,
-      defaultStatusType:0,
+      defaultStatusType:1,
       
       actions:[
         {code:'update',icon:'fa-pencil',name:'Cập nhật báo giá'},
@@ -214,7 +214,7 @@ class OrderView extends Component{
       ...formatDate
     });
 
-    this._load();
+    this._load(this.state.defaultStatusType);
   }
   
 

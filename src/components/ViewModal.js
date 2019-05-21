@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import { Button, Modal, ModalHeader, ModalBody, Form} from 'reactstrap';
+import {Button, ButtonGroup, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 
 
 /*
@@ -22,6 +22,9 @@ export default class ViewModal extends Component{
     this.state = {}
 
     this.toggle = this.toggle.bind(this);
+    this._cancel = this._cancel.bind(this);
+    this._onSubmit = this._onSubmit.bind(this);
+
     
   }
 
@@ -41,9 +44,28 @@ export default class ViewModal extends Component{
       this.setState(newProps)
   }
 
+  _cancel(){
+    document.querySelector('.close').click();
+  }
+  _onSubmit(){
+    this.props.onSubmit();
+  }
   render(){
 
- 
+    const FormFooter = this.props.isFooter ? (
+      <ModalFooter>
+            
+            <div className="float-left mr-10">
+                <div className="form-err text-red" id="form-err"></div>
+            </div>
+
+            <ButtonGroup className="float-right">
+              <Button className="btn-ubuntu bg-dark" onClick={ this._cancel }> <i className="fa fa fa-reply"></i> Từ Chối  </Button>
+              <Button  className="btn-ubuntu-ok bg-green" onClick={  this._onSubmit }> <i className="fa fa-chevron-circle-right"></i> Đồng Ý </Button>
+            </ButtonGroup>
+
+      </ModalFooter>
+    ) : <div></div>
     
     return(
       <Modal  style={{
@@ -60,9 +82,10 @@ export default class ViewModal extends Component{
             
           }}>
             { this.props.children }
-          
+            
         </ModalBody>
         
+        { FormFooter }
 
       </Modal>
     )
@@ -70,5 +93,6 @@ export default class ViewModal extends Component{
 }
 
 ViewModal.defaultProps = {
-  onToggle:()=>{}
+  onToggle:()=>{},
+  onSubmit:()=>{}
 }

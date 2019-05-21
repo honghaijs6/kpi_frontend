@@ -401,6 +401,8 @@ class Model {
     this.db.type = 'GET';
     const {url, config} = this.db ;
     
+    console.log(url);
+    
       
     axios.get(url,config)
             .then((res) => {

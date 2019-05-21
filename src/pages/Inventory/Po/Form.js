@@ -15,6 +15,7 @@ import InputSuggestProduct from '../../../components/InputSuggestProduct' ;
 import SelectListModelCode from '../../../components/SelectListModelCode';
 
 
+
 function SupplierInfo(props){
 
   const supInfo = props.supplier_info || {} ; 
@@ -159,7 +160,7 @@ function TableInfo(props){
                           <img style={{height:90,border:'1px solid #ddd'}} src={ item.images }  />
                         </td>
 
-                        <td tyle={{ width:grid['colums'][3]['width'] }}> Cái </td>
+                        <td tyle={{ width:grid['colums'][3]['width'] }}> { item.unit } </td>
 
                         <td style={{width:grid['colums'][4]['width']}}>
                             <Input type="number" 
@@ -249,6 +250,7 @@ function TableInfo(props){
     </div>
   )
 }
+
 
 export default class MyForm extends Component {
 

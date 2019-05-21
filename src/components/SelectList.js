@@ -1,36 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-
 import { Input  } from 'reactstrap';
 
 
-class SelectList extends React.Component {
 
-    
-    render() {
-        return (
-            <Input onChange={(e)=>{ this.props.onChange(e) }} style={this.props.style} type="select">  
-                <option key="" value="" > { this.props.name || 'Tất cả'  } </option>
-                {
-                    this.props.rows.map((item)=>{
-                        return(
-                            <option key={item.code} value={ item.code }> { item.name } </option>
-                        )
-                    })
-                }
-            </Input>
-        );
-    }
+const SelectList = (props)=>{
+
+    return (
+        <Input onChange={(e)=>{ props.onChange(e) }} { ...props} type="select">  
+            <option key="" value="" > { props.name || 'Tất cả'  } </option>
+            {
+                props.rows.map((item)=>{
+                    return(
+                        <option key={item.code} value={ item.code }> { item.name } </option>
+                    )
+                })
+            }
+        </Input>
+    );
 }
 
+
 SelectList.propTypes = {
+    id:PropTypes.string,
     name:PropTypes.string,
     rows:PropTypes.array,
     style:PropTypes.object,
     onChange:PropTypes.func
 };
 SelectList.defaultProps = {
+    id:'none',
     name:'Loại',
     rows:[],
     style:{},

@@ -12,6 +12,7 @@ import numeral from 'numeral' ;
 import React, { Component } from 'react';
 import { ButtonGroup, FormGroup, Input, Label } from 'reactstrap'; 
 
+
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -21,9 +22,10 @@ import DeleteForm from './DeleteForm';
 
 
 import { BenGrid } from '../../../components/BenGrid2';
+
 import ButtonExpand from '../../../components/ButtonExpand';
 import ButtonExpandList from '../../../components/ButtonExpandList'; 
-import BenConfirm from '../../../components/BenConfirm' ;
+
 import BenMessage from '../../../components/BenMessage' ; 
 import SelectList from '../../../components/SelectList'; 
 import SelectListModelCode from '../../../components/SelectListModelCode';
@@ -292,10 +294,6 @@ class Po extends Component {
     componentWillReceiveProps(newProps){
         
         this.grid.rowData = newProps[MODE]['list'];
-
-        console.log(this.grid.rowData);
-        
-        
         // CONNECT REDUX STATE 
         this._whereStateChange(newProps[MODE]['state']);
         
@@ -354,7 +352,7 @@ class Po extends Component {
                             rowSelection='single'
 
                             isRightTool={ true }
-                            height="78vh"
+                            height="77.5vh"
 
                             nextColums={ this.grid.colums }
                             rowData={this.grid.rowData}

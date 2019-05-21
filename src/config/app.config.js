@@ -17,3 +17,42 @@ export const PURCHASE_STATUS = [
     { code:3,icon:'fa-truck',color:'#16957B',name:'Đã chi', action:'' }
 
 ];
+
+export const WAREHOUSE_RECEIPT = [
+    { code:0, icon:'fa-clock-o',color:'#C64333' ,name:'Đang xử lý', action:'Duyệt' },
+    { code:1,icon:'fa-shopping-cart',color:'#00ACD7',name:'Hoàn thành', action:'Nhập hàng' },
+];
+
+
+export const WAREHOUSE_TYPES = {
+    in:{
+        icon:'fa fa-reply',
+        code:'bg-green',
+        name:'Nhập'
+    },
+    out:{
+        icon:'fa fa-share',
+        code:'bg-red',
+        name:'Xuất'
+    }
+}
+
+export const WAREHOUSE_TRACKS = {
+    in:[
+        { code:'muahang',name:'Mua hàng'},
+        {code:'nhaptra',name:'Nhập trả'},
+        {code:'dieuchuyen',name:'Điểu chuyển kho'},
+        {code:'canbang',name:'Cân bằng kho'},
+        {code:'khac',name:'Khác'}   
+    ],
+    out:[
+        {code:'banle',name:'Bán lẻ'},
+        {code:'bansi',name:'Bán sỉ'},
+        {code:'xuattra',name:'Xuất trả'},
+        {code:'xuatdomat',name:'Xuất do mất'},
+        {code:'xuatdohu',name:'Xuất do hư'},
+        {code:'dieuchuyen',name:'Điều chuyển kho'},
+        {code:'canbang',name:'Cần bằng kho'},
+        {code:'khac',name:'Khác'}
+    ]
+}  
