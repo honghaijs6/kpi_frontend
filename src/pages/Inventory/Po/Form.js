@@ -492,33 +492,33 @@ export default class MyForm extends Component {
   componentWillReceiveProps(newProps){
 
 
-   if(JSON.stringify(newProps.data) !=='{}'){
+    if(JSON.stringify(newProps.data) !=='{}'){
 
-      const data = newProps.data;
-      const supInfo = JSON.parse(data.supplier_info);
-      const receiverInfo = JSON.parse(data.receiver_info);
-      
-
-      const total_vat = parseFloat(data.total_sum) * ( data.vat / 100 );
-
-
-      this.setState({ 
+        const data = newProps.data;
+        const supInfo = JSON.parse(data.supplier_info);
+        const receiverInfo = JSON.parse(data.receiver_info);
         
-        id:data.id,
-        receiver_info:receiverInfo,
-        supplier_code:supInfo.code,
-        supplier_info:supInfo,
-        cart:JSON.parse(data.cart),
-        vat:data.vat,
-        payment_code:data.payment_code,
-        note:data.note,
-        total_sum:data.total_sum,
-        total_vat:total_vat,
-        total_sum_vat:data.total_sum_vat,
-        promotion_discount:data.promotion_discount
-      });
-      
-   }
+
+        const total_vat = parseFloat(data.total_sum) * ( data.vat / 100 );
+
+
+        this.setState({ 
+          
+          id:data.id,
+          receiver_info:receiverInfo,
+          supplier_code:supInfo.code,
+          supplier_info:supInfo,
+          cart:JSON.parse(data.cart),
+          vat:data.vat,
+          payment_code:data.payment_code,
+          note:data.note,
+          total_sum:data.total_sum,
+          total_vat:total_vat,
+          total_sum_vat:data.total_sum_vat,
+          promotion_discount:data.promotion_discount
+        });
+        
+    }
 
   }
   

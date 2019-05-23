@@ -12,6 +12,7 @@ import { Button, ButtonGroup, FormGroup, Input, Label } from 'reactstrap';
 
 import { BenGrid } from '../../../components/BenGrid2' ; 
 
+import BenMessage from '../../../components/BenMessage'; 
 import ButtonExpand from '../../../components/ButtonExpand';
 import ButtonExpandList from '../../../components/ButtonExpandList'; 
 
@@ -19,6 +20,7 @@ import SelectList from '../../../components/SelectList';
 import RankDatePicker from '../../../components/RankDatePicker'; 
 
 import ReceiptForm from './Form'; 
+import DeleteForm from './DeleteForm'; 
 
 
 const MODE = 'warehouse_receipts';
@@ -35,12 +37,12 @@ class ReceiptWarehouse extends Component {
             onAction:'',
             status:'',
             isOpenForm:false,
+            isOpenDeleteForm:false,
 
             receiptType:'',
             actions:[
                 {code:'update',icon:'fa-pencil',name:'Cập nhật phiếu'},
                 {code:'remove',icon:'fa-trash',name:'Huỷ phiếu',active:true},
-                {code:'progress',icon:'icon icon-fire',name:'Xử lý tiến trình'},
                 {code:'print',icon:'fa-print',name:'In phiếu'}
             ]
         }
@@ -61,8 +63,9 @@ class ReceiptWarehouse extends Component {
               {headerName: "Mã phiếu", field: "code_in",width:150,
                 cellRenderer(params){
 
+                    const code = params.data.type === 'in' ? params.value : params.data.code_out;
                     return `
-                        <span class="text-uppercase"> ${ params.value } </span>
+                        <span class="text-uppercase"> ${ code } </span>
                     `
                 }
               },
@@ -106,9 +109,11 @@ class ReceiptWarehouse extends Component {
                     `
                 }
               },
-              {headerName: "Mã PO", field: "order_code",width:180,
+              {headerName: "Mã đơn hàng", field: "order_code",width:180,
                 cellRenderer(params){
-                    return `<span class="text-uppercase"> ${ params.value || 'n/a' } </span>`
+
+                    const code = params.data.type === 'in' ?  params.data.purchase_code  : params.value ;
+                    return `<span class="text-uppercase"> ${ code || 'n/a' } </span>`
                 }
               },
               {headerName: "Người tạo", field: "creator",width:200},
@@ -122,7 +127,7 @@ class ReceiptWarehouse extends Component {
                 }
               },
               {
-                  headerName:"Điều chỉnh", field:"date_modified", width:140,
+                  headerName:"Ngày cập nhật", field:"date_modified", width:155,
                   cellRenderer(params){
                     const humanDate =   params.value === null ? '<i class="fa fa-clock-o"></i>': moment(params.value).format('YYYY-MM-DD') ; 
                     return `
@@ -142,9 +147,10 @@ class ReceiptWarehouse extends Component {
         this.model = new Model(MODE,this.props.dispatch);
     }
 
-    _doOpenModalUpdate(data){
-        this._curInfo = data ; 
+    _doOpenModalUpdate(){
+        
         this.setState({
+            receiptType:this.state.receiptType,
             isOpenForm:true,
             typeAction:'put'
         });
@@ -161,8 +167,50 @@ class ReceiptWarehouse extends Component {
 
 
     }
-    _callAction(item){
+    _onSubmitForm(res){
+        if(res.name==='success' || res.name==='ok'){
+           this._curInfo = {}
 
+           this.setState({
+               isOpenForm:false,
+               isOpenDeleteForm:false,
+               typeAction:'',
+               receiptType:'',
+               status:res.name
+           });
+
+        }
+    }
+    _callAction(item){
+        document.querySelector('body').click();
+        
+        if(JSON.stringify(this._curInfo)!=='{}'){
+            switch(item.code){
+
+                case 'update':
+                    this._doOpenModalUpdate() ; 
+                break;
+
+                case 'remove':
+                    this.setState({
+                        isOpenDeleteForm:true
+                    });
+                
+                break ;
+
+                case 'progress':
+                    this.setState({
+                        isOpenProgressForm:true
+                    }); 
+                break ;
+        
+            }
+        }else{ 
+            BenMessage({
+            title:'Thông báo',
+            message:'Vui lòng chọn chọn dữ liệu cần xử lý '
+            }) ;
+        }
     }
     _loadWithDate(jsonDate){
         const formatDate = {
@@ -198,6 +246,7 @@ class ReceiptWarehouse extends Component {
     }
     componentWillReceiveProps(newProps){
         this.grid.rowData = newProps[MODE]['list'];
+
         // CONNECT REDUX STATE 
         this._whereStateChange(newProps[MODE]['state']);
     }
@@ -209,8 +258,17 @@ class ReceiptWarehouse extends Component {
                 <div className="ubuntu-app " style={{marginTop:20, padding:10}}>
                     <main>
 
+                        <DeleteForm  
+                            data={this._curInfo}
+                            isOpen={ this.state.isOpenDeleteForm }
+                            onToggle={(isOpen)=>{ this.setState({isOpenDeleteForm:isOpen}) }}
+                            model={this.model}
+                            onSubmitForm={(res)=>{ this._onSubmitForm(res) }}
+
+                        />
                         <ReceiptForm 
-                            name={ FORM_NAME }
+
+                            
                             width="72%"
                             isOpen={ this.state.isOpenForm }
                             onToggle={(isOpen)=>{this.setState({isOpenForm:isOpen}) }}
@@ -218,13 +276,13 @@ class ReceiptWarehouse extends Component {
                             typeAction={ this.state.typeAction }
 
                             data={this._curInfo}
-
+                            onSubmitForm={ (res)=>{ this._onSubmitForm(res) }}
                             model={this.model}
                         />
 
                         <BenGrid
 
-                            onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
+                            onBtnEdit={(data)=>{ this._doOpenModalUpdate()  }}
                             onBtnAdd={ this._doOpenModal }
                             onCellSelected={(json)=>{ this._curInfo = json  }}
         
@@ -257,14 +315,18 @@ class ReceiptWarehouse extends Component {
                                             <SelectList name="Tất Cả" onChange={(e)=>{ this._onChange('status',e.target.value) }}  rows={ WAREHOUSE_RECEIPT } />
                                         </FormGroup>
                                         <FormGroup>
-                                            <Label> Loại phiếu  </Label>
+                                            <Label> Phiếu  </Label>
                                             <Input type="select" onChange={(e)=>{ this._onChange('type',e.target.value) }}>
                                                 <option value=""> Tất cả </option>
                                                 <option value="in"> Phiếu nhập </option>
                                                 <option value="out"> Phiếu xuất </option>
                                             </Input>
                                         </FormGroup>
-                                        
+                                        <FormGroup>
+                                            <Label> Loại </Label>
+                                            <Input />
+
+                                        </FormGroup>
 
                                     </ButtonExpand>
                                     

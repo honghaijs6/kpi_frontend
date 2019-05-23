@@ -20,6 +20,8 @@ import MyForm from './Form';
 import ProgressForm from './ProgressForm' ; 
 import DeleteForm from './DeleteForm'; 
 
+import ReceiptForm from './ReceiptForm';
+
 
 import { BenGrid } from '../../../components/BenGrid2';
 
@@ -33,12 +35,15 @@ import SelectListModelCode from '../../../components/SelectListModelCode';
 import RankDatePicker from '../../../components/RankDatePicker'; 
 
 const MODE = 'purchases';
+const WAREHOUSE_RECEIPT = 'warehouse_receipts';
+
 const MODE_NAME = 'Đơn mua hàng';
 
 class Po extends Component {
 
     
     _curInfo = {}
+    _receiptInfo = {}
 
     constructor(props){
         super(props);
@@ -50,12 +55,13 @@ class Po extends Component {
             isFormOpen:false,
             isOpenProgressForm:false,
             isOpenDeleteForm:false,
+            isOpenReceiptForm:false,
             actions:[
                 {code:'update',icon:'fa-pencil',name:'Cập nhật PO'},
                 {code:'remove',icon:'fa-trash',name:'Huỷ PO',active:true},
                 {code:'progress',icon:'icon icon-fire',name:'Xử lý tiến trình'},
 
-                {code:'out_stock', icon:'fa-truck',name:'Tạo phiếu nhập kho'},
+                {code:'in_stock', icon:'fa-truck',name:'Tạo phiếu nhập kho'},
                 {code:'income',icon:'fa-heartbeat',name:'Tạo phiếu chi'},
                 {code:'pdf',icon:'fa-file-pdf-o',name:'Xuất File PDF'},
                 {code:'print',icon:'fa-print',name:'In Đơn hàng'}
@@ -163,6 +169,8 @@ class Po extends Component {
 
     _setup(){
         this.model = new Model(MODE,this.props.dispatch) ;
+        this.mWarehousrReceipt = new Model(WAREHOUSE_RECEIPT,this.props.dispatch); 
+
     }
 
     _load(){
@@ -191,22 +199,20 @@ class Po extends Component {
                         isOpenDeleteForm:true
                     });
 
-                    /*let result = await BenConfirm({
-                        title: 'Cảnh báo',
-                        message: "Bạn có chắc là muốn xoá dữ liệu này ?"
-                    });
-
-                    if(result){
-                        this.model.delete(this._curInfo.id,(res)=>{
-
-                        })
-                    }*/
                 break ;
 
                 case 'progress':
-                this.setState({
-                    isOpenProgressForm:true
-                }); 
+                    
+                    this.setState({
+                        isOpenProgressForm:true
+                    });
+
+                break ;
+
+                case 'in_stock':
+                     this.setState({
+                         isOpenReceiptForm:true
+                     })   
                 break ;
         
             }
@@ -298,7 +304,7 @@ class Po extends Component {
         this._whereStateChange(newProps[MODE]['state']);
         
     }
-
+ 
     
     render(){
         return(
@@ -306,6 +312,22 @@ class Po extends Component {
                 <div className="ubuntu-app" style={{marginTop:20,padding:10}}>
                     <main>
 
+                        <ReceiptForm 
+
+                                    
+                            width="72%"
+                            isOpen={ this.state.isOpenReceiptForm }
+                            onToggle={(isOpen)=>{this.setState({isOpenReceiptForm:isOpen}) }}
+                            receiptType='in'
+                            typeAction='post'
+
+                            data={this._curInfo}
+
+                            onSubmitForm={ (res)=>{ alert(JSON.stringify(res)) }}
+
+                            model={this.mWarehousrReceipt}
+                        />
+                        
                         <MyForm
 
                             width='90%'

@@ -176,10 +176,10 @@ export default class ReceiptForm extends Component {
 
   _resetForm(){
     return {
-      code:'',
+      purchase_code:'',
       warehouse_code:'',
-      type:this.props.receiptType || 'in', 
-      track_code:'',
+      type: 'in', 
+      track_code:'muahang',
       status:0,
       cart:[],
       total:0,
@@ -226,10 +226,6 @@ export default class ReceiptForm extends Component {
 
         let ret = {
             total:0,
-            total_sum:0,
-            total_sum_vat:0,
-            total_vat:0,
-            promotion_discount:0
         };
         
         cart.map((item)=>{
@@ -350,48 +346,38 @@ export default class ReceiptForm extends Component {
 
   componentWillReceiveProps(newProps){
       
-      if(newProps.typeAction==='put'){
-
-        const data = newProps.data; 
-        const code  = data['code_'+data.type];
-        const state = {
-          id:data.id,
-          code:code,
-          warehouse_code:data.warehouse_code,
-          type: data.type , 
-          track_code:data.track_code,
-          status:data.status,
-          cart:JSON.parse(data.cart),
-          total:data.total,
-          note:data.note,
-        }
+    const data = newProps.data;
+    
+    if(JSON.stringify(data)!=='{}'){
         
-        this.setState(state);
-
-      }else{
-
-
+        
         let state = this._resetForm();
-        state.type = newProps.receiptType;
-        this.setState(state)
-      
-      }
+        const cart = JSON.parse(newProps.data.cart);
 
-      
+        const ret = this._calculateSUM(cart) ; 
+        Object.assign(state,{
+            cart:cart,
+            purchase_code:data.code,
+            total:ret.total
+        });
+
+        this.setState(state);
+        
+    }  
 
   }
 
   
   _getTitle(){
     const arrs = {
-      in:'Phiếu nhập',
+      in:'Phiếu nhập từ đơn hàng ',
       out:'Phiếu xuất'
     }
 
     return (
        <div>
           <span> {  arrs[this.state.type]  } </span>
-          <span className="text-uppercase"> { this.state.code } </span>
+          <span className="text-uppercase"> { this.state.purchase_code } </span>
        </div>
     );
   }
