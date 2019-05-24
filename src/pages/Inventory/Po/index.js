@@ -10,7 +10,7 @@ import numeral from 'numeral' ;
 
 
 import React, { Component } from 'react';
-import { ButtonGroup, FormGroup, Input, Label } from 'reactstrap'; 
+import { ButtonGroup, FormGroup, Label } from 'reactstrap'; 
 
 
 import { connect } from 'react-redux';
@@ -36,6 +36,7 @@ import RankDatePicker from '../../../components/RankDatePicker';
 
 const MODE = 'purchases';
 const WAREHOUSE_RECEIPT = 'warehouse_receipts';
+
 
 const MODE_NAME = 'Đơn mua hàng';
 
@@ -170,6 +171,7 @@ class Po extends Component {
     _setup(){
         this.model = new Model(MODE,this.props.dispatch) ;
         this.mWarehousrReceipt = new Model(WAREHOUSE_RECEIPT,this.props.dispatch); 
+        
 
     }
 
@@ -210,9 +212,20 @@ class Po extends Component {
                 break ;
 
                 case 'in_stock':
-                     this.setState({
-                         isOpenReceiptForm:true
-                     })   
+                    
+                    if(parseInt(this._curInfo['status'])===1){
+                        this.setState({
+                            isOpenReceiptForm:true
+                        });
+                    }else{ 
+                        BenMessage({
+                            title:'Thông báo',
+                            message:'Tiến trình không phù hợp, để có thể tạo phiếu nhập kho '
+                        })
+                    }
+                
+                     
+
                 break ;
         
             }
@@ -237,6 +250,33 @@ class Po extends Component {
         this._load();
     }   
 
+    _onSubmitReceiptForm(res){
+        
+        //this._curInfo = res.data;
+        const isOpen = res.name === 'success' || res.name ==='ok' ? false : true;
+        
+        this.setState({
+            status:res.name,
+            isOpenReceiptForm:isOpen,
+        });
+
+        const data = {
+            id:this._curInfo.id,
+            status:2
+        }
+
+        this.model.putCustom('progress',data,(res2)=>{
+            
+            if(res.name === 'success' || res.name==='ok'){
+                this._onProgressFormSubmit(res2);
+            }
+
+        });
+
+        
+
+          
+    }
     _onDeleteFormSubmit(res){
         // remove record
 
@@ -323,7 +363,7 @@ class Po extends Component {
 
                             data={this._curInfo}
 
-                            onSubmitForm={ (res)=>{ alert(JSON.stringify(res)) }}
+                            onSubmitForm={ (res)=>{  this._onSubmitReceiptForm(res) }}
 
                             model={this.mWarehousrReceipt}
                         />

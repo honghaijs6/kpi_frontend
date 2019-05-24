@@ -24,14 +24,13 @@ import numeral from 'numeral' ;
 import MyForm from './Form';
 import ProgressForm from './ProgressForm' ; 
 import DeleteForm from './DeleteForm'; 
-
+import ReceiptForm from './ReceiptForm' ; 
 
 
 /*INCLUDE OTHER COMPONENT*/
 import { BenGrid } from '../../../components/BenGrid2';
 import ButtonExpand from '../../../components/ButtonExpand';
 import ButtonExpandList from '../../../components/ButtonExpandList'; 
-import BenConfirm from '../../../components/BenConfirm' ;
 import BenMessage from '../../../components/BenMessage' ; 
 
 
@@ -41,6 +40,8 @@ import RankDatePicker from '../../../components/RankDatePicker' ;
 
 
 const MODE = 'orders';
+const WAREHOUSE_RECEIPT = 'warehouse_receipts';
+
 
 class OrderView extends Component{
 
@@ -56,6 +57,7 @@ class OrderView extends Component{
       isOpenForm:false, 
       isOpenProgressForm:false,
       isOpenDeleteForm:false,
+      isOpenReceiptForm:false,
       defaultStatusType:1,
       
       actions:[
@@ -183,15 +185,15 @@ class OrderView extends Component{
     this._onFormSubmit = this._onFormSubmit.bind(this);
     this._onProgressFormSubmit = this._onProgressFormSubmit.bind(this); 
     this._onDeleteFormSubmit = this._onDeleteFormSubmit.bind(this);
-
-
-
+    
     
   }
 
   _setup(){
 
     this.model = new Model(MODE,this.props.dispatch);
+    this.mWarehousrReceipt = new Model(WAREHOUSE_RECEIPT,this.props.dispatch); 
+        
     
     
   }
@@ -238,6 +240,8 @@ class OrderView extends Component{
     
     
     if(JSON.stringify(this._curInfo)!=='{}'){
+
+      
       switch(item.code){
 
         case 'update':
@@ -256,6 +260,12 @@ class OrderView extends Component{
              isOpenProgressForm:true
            }); 
         break ;
+
+        case 'out_stock':
+           this.setState({
+             isOpenReceiptForm:true
+           });
+        break ; 
   
       }
     }else{ 
@@ -313,8 +323,35 @@ class OrderView extends Component{
       isOpenForm:isOpen
     });
 
-  }
+  }  
 
+  _onSubmitReceiptForm(res){
+        
+      //this._curInfo = res.data;
+      const isOpen = res.name === 'success' || res.name ==='ok' ? false : true;
+      
+      this.setState({
+          status:res.name,
+          isOpenReceiptForm:isOpen,
+      });
+
+      const data = {
+          id:this._curInfo.id,
+          status: parseInt(this._curInfo.status) + 1
+      }
+
+      this.model.putCustom('progress',data,(res2)=>{
+          
+          if(res.name === 'success' || res.name==='ok'){
+              this._onProgressFormSubmit(res2);
+          }
+
+      });
+
+      
+
+        
+  }
   
   _onChange(field,value){
     
@@ -326,7 +363,7 @@ class OrderView extends Component{
 
     this.model.load(); 
   }
-
+  
   render(){ 
 
     const FORM_NAME  = this._curInfo.status_type === 0 ?  
@@ -338,6 +375,19 @@ class OrderView extends Component{
         <div className="ubuntu-app " style={{border:0, marginTop: 20,padding:10}}>
             <main>
 
+              <ReceiptForm 
+                 width="72%"
+                 isOpen={this.state.isOpenReceiptForm}
+                 onToggle={(isOpen)=>{ this.setState({isOpenReceiptForm:isOpen}) }}
+                 model={this.mWarehousrReceipt}
+                 data={this._curInfo}
+                 receiptType='out'
+                 typeAction='post'
+
+                 onSubmitForm={ (res)=>{  this._onSubmitReceiptForm(res) }}
+
+
+              />
               <ProgressForm 
 
                 name="Tiến trình" 

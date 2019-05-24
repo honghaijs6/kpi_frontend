@@ -90,7 +90,7 @@ class ProgressForm extends Component {
                 }}>
                     <label> Trạng thái tiến trình </label>
                     
-                    <BenProcess status={ this.state.status } />      
+                    <BenProcess type="po" status={ this.state.status } />      
                     
                 </div>
                 

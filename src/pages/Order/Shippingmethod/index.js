@@ -157,7 +157,7 @@ class Transporter extends Component{
     
     return (
       <div className="animated fadeIn">
-        <div className="ubuntu-app " style={{border:0, marginTop: 20}}>
+        <div className="ubuntu-app " style={{border:0, marginTop: 20,padding:10}}>
             <main>
 
               <MyForm
@@ -175,7 +175,7 @@ class Transporter extends Component{
                  rowSelection='single'
                  formStatus={this.state.status}  
                  isRightTool={ true }
-                 height="79.9vh"
+                 height="78vh"
 
                  nextColums={ this.grid.colums }
                  rowData={this.grid.rowData}

@@ -1,14 +1,18 @@
 
-import { ORDER_STATUS } from '../config/app.config'
+import { ORDER_STATUS, PURCHASE_STATUS } from '../config/app.config'
 import React, { Component } from 'react';
 
 
 const BenProcess = (props)=>{
 
-    const status = parseInt(props.status) + 1
-    const percent = status * 16.66; 
+    const status = parseInt(props.status) + 1 
+    const percent = status *  (props.type === 'inv' ? 16.66 : 25) ;   
 
-
+    const PROCESS = {
+        inv:ORDER_STATUS,  
+        po:PURCHASE_STATUS
+    };
+    
 
     return (
         <div style={{
@@ -25,7 +29,7 @@ const BenProcess = (props)=>{
                 fontSize:11,
                 textAlign:'center'   
             }}>
-                { ORDER_STATUS[props.status]['name'] }
+                { PROCESS[props.type][props.status]['name'] }
             </div>
         </div>
     )
@@ -33,7 +37,8 @@ const BenProcess = (props)=>{
 }
 
 BenProcess.defaultProps = {
-    status : 0
+    status : 0,
+    type:'inv'
 }
 
 

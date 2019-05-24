@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 import {  Row, Col, FormGroup,Label, Input, Table  } from 'reactstrap';
 
 import ViewModal from '../../../components/ViewModal'; 
-import InputSuggestProduct from '../../../components/InputSuggestProduct' ; 
+
 
 import SelectListModelCode from '../../../components/SelectListModelCode';
 import SelectList from '../../../components/SelectList'; 
@@ -167,10 +167,10 @@ export default class ReceiptForm extends Component {
 
   _resetForm(){
     return {
-      purchase_code:'',
+      order_code:'',
       warehouse_code:'',
-      type: 'in', 
-      track_code:'muahang',
+      type: 'out', 
+      track_code:'banhang',
       status:1, // TRANG THAI HOÀN THÀNH
       cart:[],
       total:0,
@@ -338,6 +338,9 @@ export default class ReceiptForm extends Component {
   componentWillReceiveProps(newProps){
       
     const data = newProps.data;
+
+    console.log(newProps);
+
     
     if(JSON.stringify(data)!=='{}'){
         
@@ -347,8 +350,9 @@ export default class ReceiptForm extends Component {
 
         const ret = this._calculateSUM(cart) ; 
         Object.assign(state,{
+            type:newProps.receiptType,
             cart:cart,
-            purchase_code:data.code,
+            order_code:data.code_pi,
             total:ret.total
         });
 
@@ -362,24 +366,21 @@ export default class ReceiptForm extends Component {
   _getTitle(){
     const arrs = {
       in:'Phiếu nhập từ đơn hàng ',
-      out:'Phiếu xuất'
+      out:'Phiếu xuất từ đơn hàng '
     }
 
     return (
        <div>
           <span> {  arrs[this.state.type]  } </span>
-          <span className="text-uppercase"> { this.state.purchase_code } </span>
+          <span className="text-uppercase"> { this.state.order_code } </span>
        </div>
     );
   }
   render() {
 
     
-    
-    
     let FORM_NAME = this._getTitle();
     
-
     return (
       <ViewModal name={ FORM_NAME } isFooter={true} onSubmit={ this._onSubmit } {...this.props}  onToggle={(isOpen)=>{this.props.onToggle(isOpen)  }} >
           <Row>

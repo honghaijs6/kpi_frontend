@@ -46,8 +46,7 @@ export const WAREHOUSE_TRACKS = {
         {code:'khac',name:'Khác'}   
     ],
     out:[
-        {code:'banle',name:'Bán lẻ'},
-        {code:'bansi',name:'Bán sỉ'},
+        {code:'banhang',name:'Bán hàng'},
         {code:'xuattra',name:'Xuất trả'},
         {code:'xuatdomat',name:'Xuất do mất'},
         {code:'xuatdohu',name:'Xuất do hư'},
