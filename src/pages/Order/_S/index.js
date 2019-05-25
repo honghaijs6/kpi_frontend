@@ -25,6 +25,7 @@ import MyForm from './Form';
 import ProgressForm from './ProgressForm' ; 
 import DeleteForm from './DeleteForm'; 
 import ReceiptForm from './ReceiptForm' ; 
+import PrintForm from './PrintForm'; 
 
 
 /*INCLUDE OTHER COMPONENT*/
@@ -58,7 +59,8 @@ class OrderView extends Component{
       isOpenProgressForm:false,
       isOpenDeleteForm:false,
       isOpenReceiptForm:false,
-      defaultStatusType:1,
+      isOpenPrintForm:false,
+      defaultStatusType:2, // 0 : BAO GIA - 1 DON HANG - 2 : TAT CA
       
       actions:[
         {code:'update',icon:'fa-pencil',name:'Cập nhật báo giá'},
@@ -67,8 +69,10 @@ class OrderView extends Component{
         
         {code:'out_stock', icon:'fa-truck',name:'Tạo phiếu xuất kho'},
         {code:'income',icon:'fa-heart',name:'Tạo phiếu thu'},
+
+        {code:'view',icon:'fa-print',name:'Xem Đơn hàng'},
         {code:'pdf',icon:'fa-file-pdf-o',name:'Xuất File PDF'},
-        {code:'print',icon:'fa-print',name:'In Đơn hàng'},
+       
         
       ]
     }
@@ -172,10 +176,6 @@ class OrderView extends Component{
         }
         
 
-        
-        
-
-
       
       ],
       rowData: []
@@ -266,6 +266,12 @@ class OrderView extends Component{
              isOpenReceiptForm:true
            });
         break ; 
+
+        case 'view':
+           this.setState({
+             isOpenPrintForm:true
+           }); 
+        break ;
   
       }
     }else{ 
@@ -375,6 +381,12 @@ class OrderView extends Component{
         <div className="ubuntu-app " style={{border:0, marginTop: 20,padding:10}}>
             <main>
 
+              <PrintForm width="81%" 
+                isOpen={ this.state.isOpenPrintForm }
+                onToggle={(isOpen)=>{ this.setState({isOpenPrintForm:isOpen}) }}
+                data={this._curInfo}
+              />
+              
               <ReceiptForm 
                  width="72%"
                  isOpen={this.state.isOpenReceiptForm}
@@ -457,7 +469,7 @@ class OrderView extends Component{
                       <Input 
                           defaultValue={ this.state.defaultStatusType } 
                           onChange={(e)=>{ this._load(e.target.value) }} style={{marginRight:10, borderRadius:0, backgroundColor:'#F5F6F7'}} type="select">
-
+                          <option value="2"> Tất cả </option>
                           <option value="0"> Quản lý báo giá </option>
                           <option value="1"> Quản lý đơn Hàng </option>
                       </Input>

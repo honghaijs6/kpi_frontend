@@ -102,7 +102,7 @@ function TableInfo(props){
                         <td style={{width:grid['colums'][2]['width']}}> { item.unit } </td>
 
                         <td style={{width:grid['colums'][3]['width']}}>
-                            <Input disabled type="number" 
+                            <Input  type="number" 
                               onChange={(e)=>{ props.onCardChange({row_id:item.id,field:'amount',value:e.target.value}) }} 
                               min={1} max={1000000} 
                               defaultValue={ amount } 
@@ -339,7 +339,7 @@ export default class ReceiptForm extends Component {
       
     const data = newProps.data;
 
-    console.log(newProps);
+    
 
     
     if(JSON.stringify(data)!=='{}'){
@@ -353,6 +353,9 @@ export default class ReceiptForm extends Component {
             type:newProps.receiptType,
             cart:cart,
             order_code:data.code_pi,
+            customer_code:data.customer_code,
+            customer_info:data.customer_info,
+
             total:ret.total
         });
 

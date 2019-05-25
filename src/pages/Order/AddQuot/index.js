@@ -374,6 +374,7 @@ class AddQuotation extends React.Component {
             const cusInfo = data.customer_info; 
 
             delete data.main_code; 
+
             data.customer_info = {
               id:cusInfo.id,
               code:cusInfo.code,
@@ -583,9 +584,13 @@ class AddQuotation extends React.Component {
     _whereStateChange(res){
 
       if(res.name==='success' || res.name ==='ok'){
-        this.setState({
-          onSuccess:true
-        });
+
+        window.setTimeout(()=>{
+          this.setState({
+            onSuccess:true
+          });
+        },2000)
+        
       }
       
     }

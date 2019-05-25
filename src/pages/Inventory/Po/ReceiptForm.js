@@ -339,6 +339,7 @@ export default class ReceiptForm extends Component {
       
     const data = newProps.data;
     
+    
     if(JSON.stringify(data)!=='{}'){
         
         
@@ -349,6 +350,8 @@ export default class ReceiptForm extends Component {
         Object.assign(state,{
             cart:cart,
             purchase_code:data.code,
+            supplier_code:data.supplier_code,
+            supplier_info:data.supplier_info,
             total:ret.total
         });
 
