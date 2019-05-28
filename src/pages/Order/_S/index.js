@@ -70,9 +70,8 @@ class OrderView extends Component{
         {code:'out_stock', icon:'fa-truck',name:'Tạo phiếu xuất kho'},
         {code:'income',icon:'fa-heart',name:'Tạo phiếu thu'},
 
-        {code:'view',icon:'fa-print',name:'Xem Đơn hàng'},
-        {code:'pdf',icon:'fa-file-pdf-o',name:'Xuất File PDF'},
-       
+        {code:'view',icon:'fa-search',name:'Xem Đơn hàng'}
+        
         
       ]
     }

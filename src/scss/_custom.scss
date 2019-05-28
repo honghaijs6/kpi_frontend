@@ -51,6 +51,11 @@ body{
 
 /* END SUGGEST HOLDER */
 
+.N2T::first-letter{
+  text-transform: capitalize;
+  font-style: italic;
+}
+
 
 /* filter div holder*/
 .filter-holder{

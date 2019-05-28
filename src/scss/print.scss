@@ -10,7 +10,7 @@ and open the template in the editor.
 */
 
 
-.vendorListHeading th{ background: #ddd; font-size: 10px !important;  border: 0px solid #111 !important; border-right: 1px solid #000 !important;}
+.vendorListHeading th{ background: #ddd; font-size: 12px !important;  border: 0px solid #111 !important; border-right: 1px solid #000 !important;}
 
 p.N2T{ text-transform:lowercase;}
 p.N2T:first-child:first-letter {
@@ -19,31 +19,39 @@ p.N2T:first-child:first-letter {
 
 }
 
+
+@page {
+    size:'A4';
+    margin: 0;
+    margin-top: 1cm;
+}
+
 @media print {
+
+    
+    
     .vendorListHeading th,.bg-black {
-
-
-            border: 1px solid #111;
-            -webkit-print-color-adjust: exact;
+        border: 1px solid #111;
+        -webkit-print-color-adjust: exact;
     }
 
+    .vendorListHeading th {
+        color: #111 !important;
+        vertical-align:middle;
+        font-weight: bold;
+    }
+    
 
-}
-@media print {.vendorListHeading th {
-    color: #111 !important;
-    vertical-align:middle;
-    font-weight: bold;
-}}
-
-@media print {
-     body {
-         margin:0; padding:0;
+    body {
+         
+         padding:0;
          line-height: 1.4em;
          word-spacing:1px;
          letter-spacing:0.2px;
          font: 12px Arial;
          color: #000; -webkit-print-color-adjust: exact;
          background: #fff !important;
+
      }
      .vendorListHeading {
 
@@ -62,6 +70,10 @@ p.N2T:first-child:first-letter {
             -webkit-print-color-adjust: exact;
      }
 
+     @page:top{
+        margin-top: 2cm !important;
+    }
+
 
 }
 
@@ -79,7 +91,7 @@ td.company-info p{
 }
 .row-page-name{ font-size: 14px; font-weight: bold; line-height: 12px; margin-top: 30px;}
 
-.table-page-header td{ font-size: 10px; color: #121212 !important; }
+.table-page-header td{ font-size: 12px; color: #121212 !important; }
 .table-page-header td.left-left{width: 180px; text-align: right;}
 .table-page-header td.left-left span{ padding: 0px 10px 0px 10px;}
 
@@ -92,7 +104,7 @@ td.company-info p{
 .table-page-header td.right-right-wh{ text-align: left; border: 1px solid #333; width: 160px}
 
 
-.print-table{ border: 1px solid #333; font-size: 10px;}
+.print-table{ border: 1px solid #333; font-size: 12px;}
 .print-table .record-item td.item{ border: 0.5px solid #333;}
 .print-table .record-item td.item-footer{ border-bottom: 0.5px solid #333;}
 
@@ -100,12 +112,24 @@ td.company-info p{
 .print-table .record-border td{ border-top: 1px solid #333;}
 .print-table .record-last td{ border-top: 1px solid #333; }
 
-.print-table th{ font-size: 12px; font-weight: normal;}
+.print-table th{ font-size: 14px; font-weight: normal;}
 .print-table td{ font-size: 12px;}
 
-.bold{ font-weight: bold; }
-.conditions{font-size: 8px; margin-top: -10px;}
-.conditions p{ line-height: 5px; }
 
-.signature{ font-size: 8px; margin-top: 10px;}
+
+
+
+.conditions{font-size: 12px; margin-top: 30px;}
+.conditions p{ line-height: 5px;  margin-bottom: 10px; }
+.conditions label{
+    font-size: 12px; 
+    margin: 0px; padding: 0px; font-weight: normal !important;
+    line-height: 18px;
+}
+
+.table-term{margin-top: 20px}
+.table-term tr td{ padding: 3px 0px; font-size: 12px; }
+
+
+.signature{ font-size: 12px; margin-top: 20px;}
 .signature p.cus{ line-height: 5px;}

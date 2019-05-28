@@ -78,7 +78,7 @@ export default class ViewModal extends Component{
         <ModalBody style={{
             fontFamily:'Roboto',
             padding:0,
-            //paddingLeft:15,paddingRight:15
+            paddingLeft:15,paddingRight:15
             
           }}>
             { this.props.children }

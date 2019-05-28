@@ -31,12 +31,17 @@ export default {
       icon: 'icon-screen-desktop',
       children:[
         {
-          name:'DS đơn hàng',
+          name:'B.Giá / Đơn hàng',
           url:'/order/_s',
           icon:''
         },
         {
-          name:'QL Khuyến Mãi',
+          name:'Q.L Hoá đơn VAT',
+          url:'order/invoice',
+          icon:''
+        },
+        {
+          name:'Q.L Khuyến Mãi',
           url:'/order/promotion',
           icon:''
         },

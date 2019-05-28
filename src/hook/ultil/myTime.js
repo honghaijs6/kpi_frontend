@@ -1,9 +1,9 @@
 
-import moment from 'moment';
-
+//import moment from 'moment';
+ 
 export const myTime = {
 
-        moment:moment,
+        //moment:moment,
 
         timestamp:function(strDate){
             strDate = strDate.replace(/-/g,'/');

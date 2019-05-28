@@ -338,16 +338,18 @@ export default class ReceiptForm extends Component {
   componentWillReceiveProps(newProps){
       
     const data = newProps.data;
-
-    
-
     
     if(JSON.stringify(data)!=='{}'){
         
         
         let state = this._resetForm();
-        const cart = JSON.parse(newProps.data.cart);
+        let cart = JSON.parse(newProps.data.cart);
 
+        // REMOVE CONTENT 
+        cart.filter((item)=>{
+          return delete item.content
+        });
+        
         const ret = this._calculateSUM(cart) ; 
         Object.assign(state,{
             type:newProps.receiptType,

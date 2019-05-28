@@ -8,8 +8,8 @@ import React, { Component } from 'react';
 import {  Row, Col, FormGroup,Label, Input, Table  } from 'reactstrap';
 
 import ViewModal from '../../../components/ViewModal'; 
-import InputSuggestProduct from '../../../components/InputSuggestProduct' ; 
 
+import ButtonExpand from '../../../components/ButtonExpand';
 import SelectListModelCode from '../../../components/SelectListModelCode';
 import SelectList from '../../../components/SelectList'; 
 
@@ -110,7 +110,10 @@ function TableInfo(props){
                         </td>
 
                         <td style={{width:grid['colums'][4]['width']}}>
-                          
+                            <ButtonExpand style={{borderRadius:0}} icon="fa-get-pocket">
+                              asdas
+                            </ButtonExpand>
+                            
                         </td>
                       </tr>
                     )
@@ -345,7 +348,7 @@ export default class ReceiptForm extends Component {
         
         let state = this._resetForm();
         const cart = JSON.parse(newProps.data.cart);
-
+        
         const ret = this._calculateSUM(cart) ; 
         Object.assign(state,{
             cart:cart,

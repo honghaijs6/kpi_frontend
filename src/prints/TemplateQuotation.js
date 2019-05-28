@@ -14,7 +14,7 @@ import numeral from 'numeral';
 
 
 
-class TemplateOrder extends Component {
+class TemplateQuotation extends Component {
 
     constructor(props){  
         super(props);
@@ -28,8 +28,9 @@ class TemplateOrder extends Component {
             colums:[
                 { headerName:'No STT', width:41 },
                 { headerName:'Model / Mã hàng', width:120 },
-                { headerName:'Name / Tên hàng hoá', width:290 },
+                { headerName:'Description / Chi tiết hàng hoá', width:290 },
                 { headerName:'Unit / ĐVT', width:41 },
+                { headerName:'Photo / Hình ảnh', width:90 },
                 { headerName:'Q.ty / S.lượng', width:41 },
                 { headerName:'Unit Price / Đơn giá', width:90 },
                 { headerName:'Amount / Thành tiền', width:90 },
@@ -73,8 +74,8 @@ class TemplateOrder extends Component {
                                 <p style={{fontSize:14, margin:0, padding:'5px 0', fontWeight:'500'}}> { comInfo['name'] } </p>
                                 <p style={{fontSize:12, margin:0, padding:'5px 0'}}> { comInfo['address'] } </p>
                                 <p style={{fontSize:12, margin:0, padding:'5px 0'}}> MST : { comInfo['tax_no'] || 'n/a' } </p>
-                                <p style={{fontSize:12, margin:0, padding:'5px 0'}}> Tel : { comInfo['phone'] || 'n/a' } </p>
-                                <p style={{fontSize:12, margin:0, padding:'5px 0'}}> Website : { comInfo['website'] || 'n/a' } - E-mail : { comInfo['email'] || 'n/a' } </p>
+                                <p style={{fontSize:12, margin:0, padding:'5px 0'}}> Tel: { comInfo['phone'] || 'n/a' } </p>
+                                <p style={{fontSize:12, margin:0, padding:'5px 0'}}> Website: { comInfo['website'] || 'n/a' } - E-mail: { comInfo['email'] || 'n/a' } </p>
                             </div>
                             <div style={{float:'left', width:'10%', textAlign:'right'}}>
                                 <img src="http://kpi.vikhang.com:9000/js/app/cpanel/img/brand.jpg" style={{height:127}} />
@@ -86,8 +87,8 @@ class TemplateOrder extends Component {
                         <div style={{marginTop:30, position:'relative'}}>
                             <div>
                                 <div style={{textAlign:'center'}}>
-                                    <p style={{margin:0, padding:'5px 0px', fontSize:16, fontWeight:'500'}}> HOÁ ĐƠN BÁN HÀNG </p>
-                                    <p style={{margin:0, padding:'5px 0px', fontSize:16, fontWeight:'500'}}> SALES INVOICE </p>
+                                    <p style={{margin:0, padding:'5px 0px', fontSize:16, fontWeight:'500'}}> QUOTATION </p>
+                                    <p style={{margin:0, padding:'5px 0px', fontSize:16, fontWeight:'500'}}> BẢNG BÁO GIÁ </p>
                                 </div>
                                 <div style={{position:'absolute',right:0, top:-10}}>
                                     <Barcode 
@@ -171,26 +172,26 @@ class TemplateOrder extends Component {
                                         <tbody>
                                             <tr>
                                                 <td style={{width:'55%', fontSize:12, textAlign:'right', padding:'3px 10px'}}>  
-                                                Số Bill/PI No <span style={{padding:'0px 10px'}}> : </span>  
+                                                Number <span style={{padding:'0px 10px'}}> : </span>  
                                                 </td>
                                                 <td className="text-uppercase" style={{border:'1px solid #000', width:'100%', padding:3,fontSize:12}}>
-                                                    { orderInfo['code_pi'] }
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style={{width:'55%', fontSize:12, textAlign:'right', padding:'3px 10px'}}>  
-                                                    Ngày/Date  <span style={{padding:'0px 10px'}}> : </span>  
-                                                </td>
-                                                <td style={{border:'1px solid #000', width:'100%',padding:3,fontSize:12}}>
-                                                    { moment(orderInfo['date_confirmed']).format('YYYY-MM-DD') }
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style={{width:'55%', fontSize:12, textAlign:'right', padding:'3px 10px'}}>  
-                                                    Báo giá số/Quo. No  <span style={{padding:'0px 10px'}}> : </span>  
-                                                </td>
-                                                <td style={{border:'1px solid #000', width:'100%',padding:3,fontSize:12}}>
                                                     { orderInfo['code'] }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style={{width:'55%', fontSize:12, textAlign:'right', padding:'3px 10px'}}>  
+                                                    Date  <span style={{padding:'0px 10px'}}> : </span>  
+                                                </td>
+                                                <td style={{border:'1px solid #000', width:'100%',padding:3,fontSize:12}}>
+                                                    { moment(orderInfo['date_created']).format('YYYY-MM-DD') }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style={{width:'55%', fontSize:12, textAlign:'right', padding:'3px 10px'}}>  
+                                                    Old Ref(Tài liệu TK Cũ)  <span style={{padding:'0px 10px'}}> : </span>  
+                                                </td>
+                                                <td style={{border:'1px solid #000', width:'100%',padding:3,fontSize:12}}>
+                                                    
                                                 </td>
                                             </tr>
                                             <tr>
@@ -268,17 +269,24 @@ class TemplateOrder extends Component {
                                                     <td className="text-center item" style={{
                                                         verticalAlign:'middle'
                                                     }}>
-                                                        { item.code }
+                                                        { item.name }
                                                     </td>
                                                     <td className="item-pro-desc item">
-                                                        { item.name }
+                                                        <div 
+                                                            style={{wordWrap:'break-word', width: this.grid.colums[2]['width'] }} 
+                                                            dangerouslySetInnerHTML={{ __html: item.content }} 
+                                                        />
                                                     </td>
                                                     <td className="text-center item" style={{
                                                         verticalAlign:'middle'
                                                     }}>
                                                         { item.unit }
                                                     </td>
-                                                    
+                                                    <td className="text-center item" style={{
+                                                        verticalAlign:'middle'
+                                                    }}>
+                                                        <img style={{maxHeight:72}} className="img-responsive" src={ item.images } />
+                                                    </td>
                                                     <td className="text-center item" style={{
                                                         verticalAlign:'middle'
                                                     }}>
@@ -303,26 +311,26 @@ class TemplateOrder extends Component {
                                 <tfoot>
                                     <tr className="record-item">
                                         <td className="item"  colSpan="4" style={{borderRight:0}}  > { cusInfo['level_name'] } </td>
-                                        <td className="item" style={{textAlign:"right", borderLeft:0}} colSpan="2"> Giảm </td>
+                                        <td className="item" style={{textAlign:"right", borderLeft:0}} colSpan="3"> Giảm </td>
                                         <td className="item" colSpan="1"> { numeral(orderInfo['level_discount']).format('0,0') } </td>
                                     </tr>
                                     <tr className="record-item">
-                                        <td className="item"  colSpan="3" style={{borderRight:0}}  >  </td>
+                                        <td className="item"  colSpan="4" style={{borderRight:0}}  >  </td>
                                         <td className="item" style={{textAlign:"right", borderLeft:0}} colSpan="3">Amount/ Cộng tiền hàng</td>
                                         <td className="item" colSpan="1"> { numeral(orderInfo['total_sum']).format('0,0') } </td>
                                     </tr>
                                     <tr className="record-item">
-                                        <td className="item"  colSpan="3" style={{borderRight:0}} >  </td>
+                                        <td className="item"  colSpan="4" style={{borderRight:0}} >  </td>
                                         <td className="item" style={{textAlign:"right", borderLeft:0}} colSpan="3">VAT Tax/ Tiền thuế GTGT ({ orderInfo['vat']+'%' })</td>
                                         <td className="item" colSpan="1"> {numeral(TOTAL_VAT).format('0,0')  } </td>
                                     </tr>
                                     <tr className="record-item">
-                                        <td className="item" style={{textAlign:"right", borderLeft:0}} colSpan="6"> Total Payment/Tổng cộng tiền thanh toán </td>
+                                        <td className="item" style={{textAlign:"right", borderLeft:0}} colSpan="7"> Total Payment/Tổng cộng tiền thanh toán </td>
                                         <td className="item" colSpan="1"> { numeral(orderInfo['total_sum_vat']).format('0,0') } </td>
                                     </tr>
                                     <tr>
                                         <td className="item" colSpan="2"> Số tiền bằng chữ </td>
-                                        <td  className="item N2T" style={{fontStyle:'italic'}} colSpan="5"> " { N2T(orderInfo['total_sum_vat'])+' đồng' } " </td>
+                                        <td  className="item N2T" style={{fontStyle:'italic'}} colSpan="6"> " { N2T(orderInfo['total_sum_vat'])+' đồng' } " </td>
                                     </tr>
                                 </tfoot>
                             
@@ -333,41 +341,55 @@ class TemplateOrder extends Component {
 
                         {/* CONDITION */}
                         <div className="conditions ">
-                            <p className="font-12"> Ghi chú / <i>Noted</i> : </p>             
-                            <label> - Thông tin ngân hàng <i>(Bank Information)</i>: </label> <br></br>
-                            <label> - Số tài khoản <i>(A/C NO.Beneficiary)</i>: </label> <br></br>
-                            <label> - Thụ hưởng bởi <i>(Beneficiary)</i>:  </label> <br></br>
-                            <label> - Địa chỉ ngân hàng <i>(Bank Address)</i>:  </label> <br></br> 
-                            <label> - Terms (Thời hạn thanh toán) :  </label> <br></br> <br></br>
-                            <label> 
-                                Đơn đặt hàng đặc biệt không thể bị hủy bỏ  trong quá trình sản xuất. Không chấp nhận trả lại cho đơn đặt hàng đặc biệt.Tất cả các đơn đặt hàng cho dự án (Như là: sản phẩm OEM, dự án) đều được coi là đơn hàng đặc biệt. Không trả lại mà không có sự cho phép trước hoặc không có số RMA phải được phê duyệt từ nhà cung cấp.
-                                <i>(Notes: Special order cannot be cancelled once in production.No return allowned on special orders. All Project orders (Ex: OEM Products, project) are considered special orders. No return without prior authorization and without RMA number and subject to an approval from supplier)</i>
-                            </label>
-                        
-                        </div>
+                            <p className="font-12"> Term & Conditions / Thời hạn và các điều khoản khác : </p>             
+                            <p className="font-12"> Lưu ý : Giá trên không bao gồm phụ phí, chi phí phát sinh vào ngày thứ 7, CN và các ngày lễ </p>
 
-                        {/* SIGNATURE */}
-                        <div className="signature">
-                            <div style={{float:'left',width:'33%',border:'1px solid #000',padding:5}}>
-                               <label> Accepted by : </label> 
-                               <br></br>
-                               <br></br>
-                               <br></br>
-                               Customer's chops & Signature  <br></br>
-                               Date :     
-                            </div>  
-                            <div style={{float:'left',width:'33%', color:'#fff'}}>
-                                    _
-                            </div>
-                            <div style={{float:'left',width:'33%', border:'1px solid #000',padding:5}}>
-                                 <label>{ comInfo['name'] } </label>   
-                                 <br></br>
-                                 <br></br>
-                                 <br></br>
-                                 Verified by (Được xác nhận bởi) <br></br>
-                                 Date :     
-                            </div>          
-                            <div style={{clear:'both'}}></div>
+                            <table className="table-term">
+                                <tbody>
+                                    <tr>
+                                        <td style={{width:220}}> Delivery (Thời hạn giao hàng) </td>
+                                        <td> 
+                                            Within 15-45 days from the date of completing the first payment (Trong vòng 15-45 ngày kể từ ngày nhận thanh toán đợt 1) 
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style={{width:220}}> 
+                                            Terms (Thời hạn thanh toán)
+                                        </td>
+                                        <td> 
+                                            { orderInfo['payment_name'] } 
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style={{width:220}}> 
+                                            Validity (Giá trị báo giá)
+                                        </td>
+                                        <td> 
+                                            30 days form the date of quotation (Có giá trị trong 30 ngày từ ngày báo giá) 
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style={{width:220}}> 
+                                            Varranty (Bảo hành)
+                                        </td>
+                                        <td > 
+                                            12 months for the device & 06 months for Accessories (Bảo hành 12 tháng cho thiết bị & 06 tháng cho phụ kiện kèm theo máy)
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style={{width:220}}> 
+                                            Prepared by (Được chuẩn bị bởi)
+                                        </td>
+                                        <td> 
+                                            { orderInfo['username'] }
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         {/* END CONDITION */}
 
@@ -378,7 +400,7 @@ class TemplateOrder extends Component {
 }
 
 
-TemplateOrder.defaultProps = {
+TemplateQuotation.defaultProps = {
     id:'doc-pdf'
 }
-export default TemplateOrder ; 
+export default TemplateQuotation ; 
