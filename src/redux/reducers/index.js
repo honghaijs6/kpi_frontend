@@ -22,6 +22,7 @@ import reducerDeleteReason from './reducer-delete-reason';
 import reducerTransporter from './reducer-transporter';
 
 import reducerBillAccount from './reducer-bill-account';
+import reducerBill from './reducer-bill';
 import reducerPayment from './reducer-payment';
 
 import reducerCusType from './reducer-customer-type' ;
@@ -52,6 +53,7 @@ const allReducers = combineReducers({
   delete_reasons:reducerDeleteReason,
   transporters:reducerTransporter,
   bill_accounts:reducerBillAccount,
+  bills:reducerBill,
   payments:reducerPayment,
   customer_types:reducerCusType,
   levels:reducerLevel,

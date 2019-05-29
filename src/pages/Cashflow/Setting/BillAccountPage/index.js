@@ -1,38 +1,26 @@
-/* 
-DANH MUC : categories 
-TAB  : categoryPage
-*/
-
 /* OBJECT - PLUGIN*/
 import Model from '../../../../model/model';
-
 // HOOK ULTI 
 import moment from 'moment';
-
 
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-
-import { Button } from 'reactstrap';
-
-
-/* MODAL FORM & CTRL */
-import MyForm from './Form';
-import formCtrl from './formCtrl';
-
 /*INCLUDE OTHER COMPONENT*/
 import { BenGrid } from '../../../../components/BenGrid2';
+import MyForm from './Form';
 
 const MODE = 'bill_accounts';
 const MODE_TAB = 'BillAccountPage';
-const MODE_NAME = 'Tài Khoản Thanh Toán';
+const MODE_NAME = 'Tài khoản thu - chi';
 
 
 class BillAccountPage extends Component{
 
   _isData = false;
+  _curInfo = {};
+
   constructor(props){
     super(props);
 
@@ -41,102 +29,91 @@ class BillAccountPage extends Component{
       onAction:'', // string method
       status:'', // status
 
-      tab:MODE_TAB
+      tab:MODE_TAB,
+      isFormOpen:false
       
     }
-
-    this.data = {}
-
+    
     this.grid = {
       colums:[
-        {headerName: "Tên", field: "code"},
-        {headerName: "Loại", field: "name", width:320},
-        {headerName: "Số TK", field: "address", width:410},
-        {headerName: "Phiếu thu", field: "creator_id"},
-        {headerName: "Phiếu Chi", field: "date_created"},
-        {headerName: "Người tạo", field: "date_created"},
-        {headerName: "Ngày tạo", field: "date_created"},
+        {headerName: "Tên", field: "name", width:270},
+        {headerName: "Loại", field: "type", width:100,
+          cellRenderer(params){
+            return `<span class="text-uppercase"> ${params.value} </span>`
+          }
+        },
+        {headerName: "Số TK", field: "bank_no", width:200},
+        {headerName:"Ngân hàng",field:"bank_name",width:240},
+        {headerName: "Người tạo", field: "creator",width:180},
+        {headerName: "Ngày tạo", field: "date_created",width:140,
+          cellRenderer(params){
+            const humanDate =   params.value ===null ? '<i class="fa fa-clock-o"></i>': moment(params.value).format('YYYY-MM-DD') ; 
+                return `
+                ${ humanDate }
+            `
+          }
+        },
 
       ],
       rowData: []
     }
 
     this._setup();
-    this.onBtnNew = this.onBtnNew.bind(this)
-    this._doOpenModalUpdate = this._doOpenModalUpdate.bind(this);
+    this._doOpenModal = this._doOpenModal.bind(this); 
+    this._doOpenModalUpdate = this._doOpenModalUpdate.bind(this); 
 
-
+    
   }
 
   _setup(){
-
     this.model = new Model(MODE,this.props.dispatch);
-    this.model.set('method',{
-      name:'listAll',
-      params:'all'
-    });
     
-    this.modal = new formCtrl(this.model,this.props.dispatch);
-    
-
   }
 
-  /* HOW */
-  resetGrid(){
-      
-      this.grid.rowData = this.data[MODE];
-      this._whereStateChange({
-        onAction:'resetGrid'
-      });
-
-
-  }
-
-  _doOpenModalPost(){
-
-    this.modal.open('post');
-    this._whereStateChange({
-      typeAction:'post',
-      onAction:'_doOpenModalPost'
-    })
-
-  }
   _doOpenModalUpdate(data){
-    this.modal.open('put',data);
+    this._curInfo = data ; 
     this._whereStateChange({
       typeAction:'put',
-      onAction:'_doOpenModalUpdate'
-    })
+      isFormOpen:true
+    });
+  }
+
+  _doOpenModal(){
+    
+    this._whereStateChange({
+      typeAction:'post',
+      isFormOpen:true
+    });
 
   }
+
+  _onSubmitForm(res){
+    
+    this._curInfo = res.data; 
+
+    const isOpen = res.name === 'success' || res.name === 'ok' ? false : true ;
+    this.setState({
+      isFormOpen:isOpen,
+      typeAction:'',
+      status:res.name
+    });
+
+  }
+
+
+  /* HOW */
   /* END HOW*/
 
   /* WHEN*/
-
-  onBtnNew(){
-    this._doOpenModalPost();
-  }
-  
-  
-
-  
-  componentWillUnmount(){
-    console.log('unmoutn from catepage');
-    this._isData = false; 
-
+  componentDidMount(){
+    this.model.initData() ; 
   }
   componentWillReceiveProps(newProps){
     
-    if(!this._isData){
-      this.model.initData() ; 
-      this._isData = true ; 
-      
-    }
-
-    this.data[MODE] = newProps[MODE]['list'] || [] ;
-    this.resetGrid();
-
-
+    this.grid.rowData = newProps[MODE]['list'];
+    // CONNECT REDUX STATE 
+    this._whereStateChange(newProps[MODE]['state']);
+    
   }
   
 
@@ -144,25 +121,32 @@ class BillAccountPage extends Component{
   _whereStateChange(newState){
     this.setState(Object.assign(this.state,newState));
   }
-
+  
 
   render(){
     
     return(
-      <div hidden={  this.props.onTab === this.state.tab ? false : true } >
+      <div hidden={  this.props.onTab === this.state.tab ? false : true } style={{padding:10}} >
 
+          
           <MyForm
             name={ MODE_NAME }
-            typeAction={ this.state.typeAction }
-            modal={this.modal} 
+            width="36%"
 
+            model={this.model}
+            data={this._curInfo}
+            isOpen={this.state.isFormOpen}
+            typeAction={ this.state.typeAction }
+            onToggle={(isOpen)=>{ this.setState({isFormOpen:isOpen}) }}
+            onSubmitForm={(res)=>{  this._onSubmitForm(res) }}
           />
           <BenGrid
 
-             height='79.9vh'
+             height='77.5vh'
              gridID="id"
              onBtnEdit={ this._doOpenModalUpdate }
-             onBtnAdd={this.onBtnNew}   
+             onBtnAdd={this._doOpenModal}   
+             onCellSelected={(json)=>{ this._curInfo = json  }}
              rowSelection='single'
 
              isRightTool={ true }
@@ -170,6 +154,7 @@ class BillAccountPage extends Component{
              nextColums={ this.grid.colums }
              rowData={this.grid.rowData}
              model={ this.model }
+             formStatus={this.state.status}
 
              
           />

@@ -10,6 +10,7 @@ import { Row, Col, FormGroup, Input,
 
 } from 'reactstrap'; 
 
+
 import ViewModal from '../../../components/ViewModal' ; 
  
 export default class MyForm extends Component {

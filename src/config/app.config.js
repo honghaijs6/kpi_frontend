@@ -55,3 +55,12 @@ export const WAREHOUSE_TRACKS = {
         {code:'khac',name:'Khác'}
     ]
 }  
+
+export const BILL_ACC_TYPES = [
+    { code:'tm',name:'Tiền mặt' },
+    { code:'ck',name:'Ngân hàng' },
+    { code:'voucher',name:'Voucher/ Giftcard' },
+    { code:'point',name:'Điểm tích luỹ' },
+    { code:'debit',name:'Debit/ Credit card' },
+    { code:'cod',name:'COD' }   
+];
