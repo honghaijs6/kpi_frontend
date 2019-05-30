@@ -25,6 +25,9 @@ import MyForm from './Form';
 import ProgressForm from './ProgressForm' ; 
 import DeleteForm from './DeleteForm'; 
 import ReceiptForm from './ReceiptForm' ; 
+import CashFlowForm from './CashflowForm';
+
+
 import PrintForm from './PrintForm'; 
 
 
@@ -42,6 +45,9 @@ import RankDatePicker from '../../../components/RankDatePicker' ;
 
 const MODE = 'orders';
 const WAREHOUSE_RECEIPT = 'warehouse_receipts';
+const BILLS = 'bills';
+
+
 
 
 class OrderView extends Component{
@@ -60,6 +66,8 @@ class OrderView extends Component{
       isOpenDeleteForm:false,
       isOpenReceiptForm:false,
       isOpenPrintForm:false,
+      isOpenCashflowForm: false,
+
       defaultStatusType:2, // 0 : BAO GIA - 1 DON HANG - 2 : TAT CA
       
       actions:[
@@ -192,6 +200,7 @@ class OrderView extends Component{
 
     this.model = new Model(MODE,this.props.dispatch);
     this.mWarehousrReceipt = new Model(WAREHOUSE_RECEIPT,this.props.dispatch); 
+    this.mBills = new Model(BILLS,this.props.dispatch); 
         
     
     
@@ -271,6 +280,13 @@ class OrderView extends Component{
              isOpenPrintForm:true
            }); 
         break ;
+
+        case 'income':
+           this.setState({
+             isOpenCashflowForm:true
+           });
+
+        break; 
   
       }
     }else{ 
@@ -330,6 +346,41 @@ class OrderView extends Component{
 
   }  
 
+  _onSubmitCashFlowForm(res){
+
+      if(res.name==='success' || res.name === 'ok'){
+
+        const isOpen = res.name === 'success' || res.name ==='ok' ? false : true;
+
+        const is_finish_bill = res.data.is_finish_bill ; 
+        
+        this.setState({
+            status:false,
+            isOpenCashflowForm:isOpen
+        });
+
+        // UPDATE STATUS PROCESS 
+        if(is_finish_bill==='yes'){
+          
+          const data = {
+            id:this._curInfo.id,
+            status: parseInt(this._curInfo.status) + 1
+          }
+  
+          this.model.putCustom('progress',data,(res2)=>{
+              
+              if(res.name === 'success' || res.name==='ok'){
+                  this._onProgressFormSubmit(res2);
+              }
+  
+          });
+        }
+
+
+
+      }
+      
+  }
   _onSubmitReceiptForm(res){
         
       //this._curInfo = res.data;
@@ -386,6 +437,18 @@ class OrderView extends Component{
                 data={this._curInfo}
               />
               
+
+              <CashFlowForm  
+                width="45%"
+                isOpen={this.state.isOpenCashflowForm}
+                onToggle={(isOpen)=>{ this.setState({isOpenCashflowForm:isOpen}) }}
+                model={ this.mBills }
+                data={ this._curInfo }
+                receiptType="pt"
+                typeAction="post"
+                onSubmitForm={(res)=>{   this._onSubmitCashFlowForm(res) }}
+
+              />
               <ReceiptForm 
                  width="72%"
                  isOpen={this.state.isOpenReceiptForm}

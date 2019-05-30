@@ -1,9 +1,11 @@
+import { BILL_ACC_TYPES } from '../../../config/app.config';
 
 // MODEL
 import Model from '../../../model/model';
 
 // LIBS 
 import moment from 'moment';
+import numeral from 'numeral' ; 
 
 
 import React, { Component } from 'react';
@@ -20,6 +22,9 @@ import ButtonExpandList from '../../../components/ButtonExpandList';
 import SelectList from '../../../components/SelectList'; 
 import RankDatePicker from '../../../components/RankDatePicker'; 
 
+
+import MyForm from './Form'; 
+import DeleteForm from './DeleteForm';
 
 
 
@@ -46,22 +51,44 @@ class CashFlowView extends Component {
                 {code:'remove',icon:'fa-trash',name:'Huỷ phiếu',active:true},
                 {code:'print',icon:'fa-print',name:'In phiếu'}
             ]
-
+  
         }
 
         this.grid = {
             colums:[
-              {headerName: "Phiếu", field: "type"},
-              {headerName: "Kỳ Thanh toán", field: "date_created"},
-              {headerName: "Đôi tượng", field: "code"},
-              {headerName: "Tên phiếu", field: "inventory_id"},
-              {headerName: "Giá trị", field: "action_type"},
-              {headerName: "Tại", field: "group_code"},
-              {headerName: "PTTT", field: "creator_id"},
-              {headerName: "Tài khoản", field: "status"},
-              {headerName: "Trạng thái", field: "note"},
-              {headerName: "Người tạo", field: "note"},
-              {headerName: "Ngày", field: "note"}
+              {headerName: "Phiếu", field: "code",width:140, 
+                cellRenderer(params){
+                    return `<span class=" finalcial-${params.data.type} text-uppercase"> ${params.value} </span>`
+                }
+              },
+              {headerName: "PTTT", field: "bill_acc_type",width:100,
+                cellRenderer(params){
+                    return `<span class=" finalcial-${params.value} text-uppercase"> ${params.value}  </span>`
+                }
+              },
+              {headerName: "Chứng từ", field: "ref_code", width:180,
+                 cellRenderer(params){
+                     return `<span class="text-uppercase"> ${params.value} </span>`
+                 }
+              },
+              {headerName: "Đối tượng", field: "person_name",width:300},
+              {headerName: "Số tiền", field: "total",width:140, cellRenderer(params){ return numeral(params.value).format('0,0')+' đ' } },
+              {headerName: "Giá trị", field:"total_before",width:140,cellRenderer(params){ return numeral(params.value).format('0,0')+' đ' }},  
+              {headerName: "Tài khoản", field: "bill_acc_name",width:240},
+              {headerName: "Người tạo", field: "creator",width:160},
+              {headerName: "Ngày", field: "date_created",width:140,
+                  cellRenderer(params){
+                      const humanDate = moment(params.value).format('YYYY-MM-DD');
+                      return humanDate;
+                  }
+              },
+              {
+                  headerName:"Điều chỉnh",field:"date_modified",width:140,
+                  cellRenderer(params){
+                    const humanDate =  params.value !== null ? moment(params.value).format('YYYY-MM-DD') : '' ;
+                    return humanDate;
+                  }
+              }
       
             ],
             rowData: []
@@ -79,8 +106,10 @@ class CashFlowView extends Component {
 
     _doOpenModalUpdate(){
         
+
+
         this.setState({
-            receiptType:this.state.receiptType,
+            receiptType:this._curInfo.type,
             isOpenForm:true,
             typeAction:'put'
         });
@@ -189,6 +218,24 @@ class CashFlowView extends Component {
                 <div className="ubuntu-app " style={{marginTop:20, padding:10}}>
                     <main>
 
+
+                        <DeleteForm  
+                            data={this._curInfo}
+                            isOpen={ this.state.isOpenDeleteForm }
+                            onToggle={(isOpen)=>{ this.setState({isOpenDeleteForm:isOpen}) }}
+                            model={this.model}
+                            onSubmitForm={(res)=>{ this._onSubmitForm(res) }}
+                        />
+                        <MyForm 
+                            width="45%"
+                            model={this.model}
+                            isOpen={ this.state.isOpenForm }
+                            onToggle={ (isOpen)=>{  this.setState({isOpenForm:isOpen}) }}
+                            data={ this._curInfo }
+                            receiptType={this.state.receiptType}
+                            typeAction={this.state.typeAction}
+                            onSubmitForm={ (res)=>{ this._onSubmitForm(res) }}
+                        />
                         <BenGrid
 
                             onBtnEdit={(data)=>{ this._doOpenModalUpdate()  }}
@@ -211,8 +258,8 @@ class CashFlowView extends Component {
                             customButton={
                                 <ButtonGroup>
                                     
-                                    <Button onClick={()=>{ this._doOpenModal('in') }} className="btn btn-normal"><i className="fa fa-plus-circle mr-5"></i> Tạo phiếu nhập </Button>
-                                    <Button onClick={()=>{ this._doOpenModal('out') }} className="btn btn-normal"><i className="fa fa-plus-circle mr-5"></i> Tạo phiếu xuất </Button>
+                                    <Button onClick={()=>{ this._doOpenModal('pt') }} className="btn btn-normal"><i className="fa fa-plus-circle mr-5"></i> Tạo phiếu thu </Button>
+                                    <Button onClick={()=>{ this._doOpenModal('pc') }} className="btn btn-normal"><i className="fa fa-plus-circle mr-5"></i> Tạo phiếu chi </Button>
                                     
                                     <ButtonExpandList onSelected={(item)=>{  this._callAction(item) }} data={ this.state.actions } />
                                     
@@ -222,16 +269,16 @@ class CashFlowView extends Component {
                                     <ButtonExpand style={{borderRight:0}}  icon="fa-filter">
                                         
                                         <FormGroup>
-                                            <Label> Phiếu  </Label>
+                                            <Label> Loại Phiếu  </Label>
                                             <Input type="select" onChange={(e)=>{ this._onChange('type',e.target.value) }}>
                                                 <option value=""> Tất cả </option>
-                                                <option value="in"> Phiếu nhập </option>
-                                                <option value="out"> Phiếu xuất </option>
+                                                <option value="pt"> Phiếu thu </option>
+                                                <option value="pc"> Phiếu chi </option>
                                             </Input>
                                         </FormGroup>
                                         <FormGroup>
-                                            <Label> Loại </Label>
-                                            <Input />
+                                            <Label> Hình thức T.T </Label>
+                                            <SelectList onChange={(e)=>{ this._onChange('acc_type',e.target.value) }} name="Tất cả" rows={ BILL_ACC_TYPES } />
 
                                         </FormGroup>
 

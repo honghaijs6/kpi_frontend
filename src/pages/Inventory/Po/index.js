@@ -21,6 +21,8 @@ import ProgressForm from './ProgressForm' ;
 import DeleteForm from './DeleteForm'; 
 
 import ReceiptForm from './ReceiptForm';
+import CashFlowForm from './CashflowForm' ; 
+
 
 
 import { BenGrid } from '../../../components/BenGrid2';
@@ -36,6 +38,8 @@ import RankDatePicker from '../../../components/RankDatePicker';
 
 const MODE = 'purchases';
 const WAREHOUSE_RECEIPT = 'warehouse_receipts';
+const BILL = 'bills'; 
+
 
 
 const MODE_NAME = 'Đơn mua hàng';
@@ -57,13 +61,14 @@ class Po extends Component {
             isOpenProgressForm:false,
             isOpenDeleteForm:false,
             isOpenReceiptForm:false,
+            isOpenCashflowForm:false,
             actions:[
                 {code:'update',icon:'fa-pencil',name:'Cập nhật PO'},
                 {code:'remove',icon:'fa-trash',name:'Huỷ PO',active:true},
                 {code:'progress',icon:'icon icon-fire',name:'Xử lý tiến trình'},
 
                 {code:'in_stock', icon:'fa-truck',name:'Tạo phiếu nhập kho'},
-                {code:'income',icon:'fa-heartbeat',name:'Tạo phiếu chi'},
+                {code:'outcome',icon:'fa-heartbeat',name:'Tạo phiếu chi'},
                 {code:'pdf',icon:'fa-file-pdf-o',name:'Xuất File PDF'},
                 {code:'print',icon:'fa-print',name:'In Đơn hàng'}
             ]
@@ -171,6 +176,8 @@ class Po extends Component {
     _setup(){
         this.model = new Model(MODE,this.props.dispatch) ;
         this.mWarehousrReceipt = new Model(WAREHOUSE_RECEIPT,this.props.dispatch); 
+        this.mBill = new Model(BILL, this.props.dispatch); 
+
         
 
     }
@@ -227,6 +234,14 @@ class Po extends Component {
                      
 
                 break ;
+
+                case 'outcome':
+                    
+                    this.setState({
+                        isOpenCashflowForm:true
+                    });
+
+                break;
         
             }
         }else{ 
@@ -250,6 +265,39 @@ class Po extends Component {
         this._load();
     }   
 
+    _onSubmitCashFlowForm(res){
+
+        if(res.name==='success' || res.name === 'ok'){
+        
+            const isOpen = res.name === 'success' || res.name ==='ok' ? false : true;
+    
+            const is_finish_bill = res.data.is_finish_bill ; 
+            
+            this.setState({
+                status:false,
+                isOpenCashflowForm:isOpen
+            });
+    
+            // UPDATE STATUS PROCESS 
+            if(is_finish_bill==='yes'){
+                const data = {
+                    id:this._curInfo.id,
+                    status: parseInt(this._curInfo.status) + 1
+                  }
+          
+                  this.model.putCustom('progress',data,(res2)=>{
+                      
+                      if(res.name === 'success' || res.name==='ok'){
+                          this._onProgressFormSubmit(res2);
+                      }
+          
+                  });
+            }
+                
+    
+    
+        }
+    }
     _onSubmitReceiptForm(res){
         
         //this._curInfo = res.data;
@@ -352,6 +400,19 @@ class Po extends Component {
                 <div className="ubuntu-app" style={{marginTop:20,padding:10}}>
                     <main>
 
+
+                        <CashFlowForm  
+                            width="45%"
+                            isOpen={this.state.isOpenCashflowForm}
+                            onToggle={(isOpen)=>{ this.setState({isOpenCashflowForm:isOpen}) }}
+                            model={ this.mBill }
+                            data={ this._curInfo }
+                            receiptType="pc"
+                            typeAction="post"
+                            onSubmitForm={(res)=>{   this._onSubmitCashFlowForm(res) }}
+            
+                        />
+                        
                         <ReceiptForm 
 
                                     

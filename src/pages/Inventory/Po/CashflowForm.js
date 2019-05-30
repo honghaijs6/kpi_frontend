@@ -52,7 +52,7 @@ export default class MyForm extends Component {
         }
     }
       
-    _onSubmit(){
+    _onSubmit(){  
         const fields = [
             'from_type','ref_code','person_name','person_address','total','bill_account_id','reason'
         ];
@@ -89,41 +89,31 @@ export default class MyForm extends Component {
         
     }
     componentWillReceiveProps(newProps){
-      
-        if(newProps.typeAction==='put'){
-  
-          const data = newProps.data; 
-            
-          const state = {
-            
-            id:data.id,
-            code:data.code,
-            from_type:data.from_type,
-            ref_code:data.ref_code,
-            person_name:data.person_name,
-            person_address:data.person_address,
-            total:data.total,
-            total_before:data.total_before,
-            bill_account_id:data.bill_account_id,
-            bank_ref:data.bank_ref,
-            reason:data.reason,
-            type:data.type, 
-            note:data.note
-            
-          }
-          
-          this.setState(state);
-  
-        }else{
-  
-  
-          let state = this._resetForm();
-          state.type = newProps.receiptType;
-          state.code = '';
-          this.setState(state)
         
+        
+        if(JSON.stringify(newProps.data)!=='{}'){
+            const data = newProps.data;
+
+            console.log(data);
+            const supInfo = JSON.parse(data.supplier_info);
+
+            let state = this._resetForm();
+
+            Object.assign(state,{
+                from_type:'po_code',
+                ref_code:data.code,
+                person_name:supInfo.name,
+                person_address:supInfo.address,
+                total:0,
+                total_before:data.total_sum_vat
+            });
+
+            
+            this.setState(state);
+
+
+
         }
-  
         
   
     }
@@ -135,7 +125,7 @@ export default class MyForm extends Component {
             pc:'Phiếu chi'
         }
         
-        return arrTitle[this.props.receiptType] +' '+ this.state.code ;
+        return arrTitle[this.props.receiptType];
     }
     render() {
 
@@ -150,6 +140,9 @@ export default class MyForm extends Component {
                             <Col md={4}> 
                                 <label> Đối tượng </label>
                                 <SelectList 
+                                    
+                                    disabled
+
                                     onChange={(e)=>{ this._onChange('from_type',e.target.value) }} 
                                     defaultValue={ this.state.from_type } id="from_type" name="Vui lòng chọn"
                                     
@@ -164,7 +157,7 @@ export default class MyForm extends Component {
 
                             <Col md={4}>
                                 <label> Đơn hàng </label>
-                                <Input onChange={(e)=>{  this._onChange('ref_code',e.target.value) }} defaultValue={this.state.ref_code} type="text" id="ref_code" />
+                                <Input disabled onChange={(e)=>{  this._onChange('ref_code',e.target.value) }} defaultValue={this.state.ref_code} type="text" id="ref_code" />
                             </Col>
                             
                         </Row>
@@ -173,11 +166,12 @@ export default class MyForm extends Component {
                         <Row>
                             <Col md={4}>
                                 <label> Tên đơn vị </label>
-                                <Input defaultValue={this.state.person_name} onChange={(e)=>{  this._onChange('person_name',e.target.value) }} id="person_name" type="text" />
+                                <Input disabled defaultValue={this.state.person_name} onChange={(e)=>{  this._onChange('person_name',e.target.value) }} id="person_name" type="text" />
                             </Col>
                             <Col md={8}>
                                 <label> Địa chỉ </label>
                                 <Input 
+                                    disabled
                                     defaultValue={this.state.person_address} 
                                     onChange={(e)=>{  this._onChange('person_address',e.target.value) }} id="person_address" type="text" 
                                 />
@@ -208,6 +202,10 @@ export default class MyForm extends Component {
                             <Col md={8}>
                                 <label> Lý do  </label>
                                 <Input defaultValue={this.state.reason} onChange={(e)=>{  this._onChange('reason',e.target.value) }} id="reason" type="text" />
+                            </Col>
+                            <Col md={4}>
+                                <label  className="text-red"> Giá trị đơn hàng </label>
+                                <InputNumeral style={{color:'#DD4B59'}} defaultValue={ this.state.total_before } disabled />
                             </Col>
                         </Row>
                         <Row style={{marginTop:20}}>

@@ -1,13 +1,15 @@
 
-
 import Model from '../model/model';
 
+
+import doFindAll from '../hook/ultil/doFindAll' ; 
 
 import React, { Component } from 'react';
 import { Input, ButtonGroup, Button } from 'reactstrap';
 
 
-export default class InputSuggest extends Component{
+
+export default class InputSuggestOrder extends Component{
 
     
     constructor(props){
@@ -18,33 +20,24 @@ export default class InputSuggest extends Component{
             display:'none',
             value:props.defaultValue || '',
             rows:[],
-            selectedIndex:null,
-            code:'code',
-            type:props.type || 'root',
-            supplier_codes: props.supplier_codes || ''
+            selectedIndex:null,  
+            strModel:'orders',
+            code:props.code || 'code_pi' // field mặc định
         }
 
         this._keyHandling = this._keyHandling.bind(this); 
     }
 
     componentDidMount(){
-        this.model = new Model('products');
 
-        const set = this.state.type === 'all' ? { max:6, supplier_codes:this.state.supplier_codes } :{ max:6,type:this.state.type };
-        this.model.set('paginate',set);
-
-
-    }
-
-    componentWillReceiveProps(newProps){
-        const set = newProps.type === 'all' ? { max:6, supplier_codes:newProps.supplier_codes } :{ max:6,type:newProps.type };
-        this.model.set('paginate',set);
+        this.model = new Model('orders');
+        this.model.set('paginate',{
+            status_type:1
+        });
         
-
     }
     async _onChange(key){
 
-        
         this.model.set('paginate',{
             key:key
         });
@@ -136,8 +129,8 @@ export default class InputSuggest extends Component{
     }
 
 
-    render(){
-
+    render(){ 
+  
         return(
             <div>
                 <ButtonGroup style={{width:'100%'}}>
@@ -145,30 +138,27 @@ export default class InputSuggest extends Component{
                         onKeyUp={ this._keyHandling } 
                         id={this.props.id || 0 } 
                         placeholder="Tìm kiếm..." 
-                        
-                        value={this.state.value} 
-                        onChange={(e)=>{ this._onChange(e.target.value) }}  
-                        
-                        type="text" 
                         style={{
                             borderRight:0,
                             borderTopRightRadius:0,
                             borderBottomRightRadius:0,
-                            border:'2px solid #6AC5B3',
-                            borderRight:0,
-                            height:42
+                            width:'100%'
                         }}
+                        value={this.state.value} 
+                        onChange={(e)=>{ this._onChange(e.target.value) }}  
                             
-                    />
+                        type="text" />
+
                     <Button disabled style={{
                         background:'#fff',
-                        color:'#666',
-                        border:'2px solid #18A689',
-                        borderLeft:0,
+                        color:'#999',
                         
                     }}> <i className="fa fa-search"></i> </Button>
+
                 </ButtonGroup>
                 
+                
+
                     
                 <ul className="suggest-holder" style={{display:this.state.display}} >
                     {
@@ -176,7 +166,7 @@ export default class InputSuggest extends Component{
 
                             const markSlected = index === this.state.selectedIndex ? 'active' : '' ; 
                             return( 
-                                <li className={markSlected} onClick={ ()=>{ this._onSelected(item) } } key={item.id}> { item.name } </li>
+                                <li className={markSlected} onClick={ ()=>{ this._onSelected(item) } } key={item.id}> { item.code_pi } </li>
                             )
                         })
                     }
@@ -186,7 +176,3 @@ export default class InputSuggest extends Component{
         )
     }
 }
-
-InputSuggest.defaultProps = {
-    supplier_codes:''
-}   

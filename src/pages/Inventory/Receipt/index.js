@@ -4,9 +4,11 @@ import Model from '../../../model/model';
 // LIBS 
 import moment from 'moment';
 
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux' ; 
 import { Button, ButtonGroup, FormGroup, Input, Label } from 'reactstrap'; 
+
 
 
 
@@ -19,8 +21,10 @@ import ButtonExpandList from '../../../components/ButtonExpandList';
 import SelectList from '../../../components/SelectList'; 
 import RankDatePicker from '../../../components/RankDatePicker'; 
 
+
 import ReceiptForm from './Form'; 
 import DeleteForm from './DeleteForm'; 
+
 
 
 const MODE = 'warehouse_receipts';
@@ -36,6 +40,7 @@ class ReceiptWarehouse extends Component {
             typeAction:'',
             onAction:'',
             status:'',
+            
             isOpenForm:false,
             isOpenDeleteForm:false,
 
