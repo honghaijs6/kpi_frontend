@@ -64,3 +64,11 @@ export const BILL_ACC_TYPES = [
     { code:'debit',name:'Debit/ Credit card' },
     { code:'cod',name:'COD' }   
 ];
+
+
+export const ISERVICE_TYPES = {
+    outdoor:'Phiếu dịch vụ',
+    issue:'Phiếu tiếp nhận',
+    online:'Online',
+    delivery:'Giao hàng'
+}

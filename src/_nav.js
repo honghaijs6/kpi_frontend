@@ -152,7 +152,28 @@ export default {
 
       ]
     },
-
+    {
+      name:'Dịch vụ & Hỗ trợ',
+      url:'/services',
+      icon:'icon-support',
+      children:[
+        {
+          name:'Tickets',
+          url:'/services/tickets',
+          icon:'fa fa-ticket'
+        }, 
+        {
+          name:'Giao hàng',
+          url:'/services/delivery',
+          icon:'fa fa-truck'
+        },
+        {
+          name:'Báo cáo',
+          url:'/services/report',
+          icon:'fa fa-pie-chart'
+        }
+      ]
+    },
     {
       name: 'Marketting',
       url: '/crm',
@@ -203,12 +224,8 @@ export default {
       name: 'Thiết lập & Cấu hình',
       url: '/setting/general',
       icon: 'icon-wrench'
-    },
-    {
-      name: 'Trợ giúp',
-      url: '/setting/devices',
-      icon: 'icon-puzzle'
     }
+
 
   ],
 };

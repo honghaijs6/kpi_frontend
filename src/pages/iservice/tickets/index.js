@@ -1,17 +1,15 @@
-import { BILL_ACC_TYPES } from '../../../config/app.config';
 
-// MODEL
+// DATA
 import Model from '../../../model/model';
 
 // LIBS 
 import moment from 'moment';
-import numeral from 'numeral' ; 
+
 
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, ButtonGroup, FormGroup, Input, Label } from 'reactstrap'; 
-
 
 import { BenGrid } from '../../../components/BenGrid2' ; 
 
@@ -24,15 +22,13 @@ import RankDatePicker from '../../../components/RankDatePicker';
 
 
 import MyForm from './Form'; 
-import DeleteForm from './DeleteForm';
 
 
+const MODE = 'iservices';
+ 
+class Tickets extends Component {
 
-
-const MODE = 'bills';
-class CashFlowView extends Component {
-
-    _curInfo = {}
+    _curInfo={};
 
     constructor(props){
         super(props);
@@ -45,38 +41,39 @@ class CashFlowView extends Component {
             isOpenForm:false,
             isOpenDeleteForm:false,
 
-            receiptType:'',
+            receiptType:'outdoor', // MAC DINH LA DỊCH VỤ TẬN NƠI
             actions:[
                 {code:'update',icon:'fa-pencil',name:'Cập nhật phiếu'},
                 {code:'remove',icon:'fa-trash',name:'Huỷ phiếu',active:true},
                 {code:'print',icon:'fa-print',name:'In phiếu'}
             ]
-  
+
+
+
         }
 
         this.grid = {
             colums:[
-              {headerName: "Phiếu", field: "code",width:140, 
+              {headerName: "Mã", field: "code",width:140, 
                 cellRenderer(params){
                     return `<span class=" finalcial-${params.data.type} text-uppercase"> ${params.value} </span>`
                 }
               },
-              {headerName: "PTTT", field: "bill_acc_type",width:100,
-                cellRenderer(params){
-                    return `<span class=" finalcial-${params.value} text-uppercase"> ${params.value}  </span>`
-                }
-              },
+              {headerName: "Loại", field: "bill_acc_type",width:100},
               {headerName: "Chứng từ", field: "ref_code", width:180,
                  cellRenderer(params){
                      return `<span class="text-uppercase"> ${params.value} </span>`
                  }
               },
-              {headerName: "Đối tượng", field: "person_name",width:300},
-              {headerName: "Số tiền", field: "total",width:140, cellRenderer(params){ return numeral(params.value).format('0,0')+' đ' } },
-              {headerName: "Giá trị", field:"total_before",width:140,cellRenderer(params){ return numeral(params.value).format('0,0')+' đ' }},  
-              {headerName: "Tài khoản", field: "bill_acc_name",width:240},
+              
+              {headerName: "Vấn đề", field: "content_issue",width:410 },
+              {
+                  headerName:"Trạng thái", field:"status", width:180
+              },
+              {headerName: "Phụ trách", field:"belong_user",width:140},  
+              
               {headerName: "Người tạo", field: "creator",width:160},
-              {headerName: "Ngày", field: "date_created",width:140,
+              {headerName: "Ngày tạo", field: "date_created",width:140,
                   cellRenderer(params){
                       const humanDate = moment(params.value).format('YYYY-MM-DD');
                       return humanDate;
@@ -94,7 +91,7 @@ class CashFlowView extends Component {
             rowData: []
         }
 
-        this._setup(); 
+        this._setup();
 
 
 
@@ -102,12 +99,11 @@ class CashFlowView extends Component {
 
     _setup(){
         this.model = new Model(MODE,this.props.dispatch);
+
     }
 
     _doOpenModalUpdate(){
         
-
-
         this.setState({
             receiptType:this._curInfo.type,
             isOpenForm:true,
@@ -142,6 +138,7 @@ class CashFlowView extends Component {
     }
 
     _callAction(item){
+
         document.querySelector('body').click();
         
         if(JSON.stringify(this._curInfo)!=='{}'){
@@ -157,13 +154,6 @@ class CashFlowView extends Component {
                     });
                 
                 break ;
-
-                case 'progress':
-                    this.setState({
-                        isOpenProgressForm:true
-                    }); 
-                break ;
-        
             }
         }else{ 
             BenMessage({
@@ -211,30 +201,26 @@ class CashFlowView extends Component {
         this._whereStateChange(newProps[MODE]['state']);
     }
 
-    
+
     render() {
         return (
             <div className="animated fadeIn">
-                <div className="ubuntu-app " style={{marginTop:20, padding:10}}>
+                <div className="ubuntu-app" style={{marginTop:20, padding:10}}>
                     <main>
 
 
-                        <DeleteForm  
-                            data={this._curInfo}
-                            isOpen={ this.state.isOpenDeleteForm }
-                            onToggle={(isOpen)=>{ this.setState({isOpenDeleteForm:isOpen}) }}
+                        <MyForm
+                            width="50%"
+
+                            isOpen={this.state.isOpenForm}
+                            onToggle={(isOpen)=>{ this.setState({isOpenForm:isOpen}) }}
+
                             model={this.model}
-                            onSubmitForm={(res)=>{ this._onSubmitForm(res) }}
-                        />
-                        <MyForm 
-                            width="45%"
-                            model={this.model}
-                            isOpen={ this.state.isOpenForm }
-                            onToggle={ (isOpen)=>{  this.setState({isOpenForm:isOpen}) }}
-                            data={ this._curInfo }
                             receiptType={this.state.receiptType}
                             typeAction={this.state.typeAction}
                             onSubmitForm={ (res)=>{ this._onSubmitForm(res) }}
+
+                            data={this._curInfo}
                         />
                         <BenGrid
 
@@ -258,8 +244,14 @@ class CashFlowView extends Component {
                             customButton={
                                 <ButtonGroup>
                                     
-                                    <Button onClick={()=>{ this._doOpenModal('pt') }} className="btn btn-normal"><i className="fa fa-plus-circle mr-5"></i> Tạo phiếu thu </Button>
-                                    <Button onClick={()=>{ this._doOpenModal('pc') }} className="btn btn-normal"><i className="fa fa-plus-circle mr-5"></i> Tạo phiếu chi </Button>
+                                    <Button 
+                                        onClick={()=>{ this._doOpenModal('outdoor') }} className="btn btn-normal">
+                                        <i className="fa fa-plus-circle mr-5"></i> Phiếu Dịch vụ  
+                                    </Button>
+                                    <Button 
+                                        onClick={()=>{ this._doOpenModal('issue') }} className="btn btn-normal">
+                                        <i className="fa fa-plus-circle mr-5"></i> Phiếu tiếp nhận 
+                                    </Button>
                                     
                                     <ButtonExpandList onSelected={(item)=>{  this._callAction(item) }} data={ this.state.actions } />
                                     
@@ -278,7 +270,8 @@ class CashFlowView extends Component {
                                         </FormGroup>
                                         <FormGroup>
                                             <Label> Hình thức T.T </Label>
-                                            <SelectList onChange={(e)=>{ this._onChange('acc_type',e.target.value) }} name="Tất cả" rows={ BILL_ACC_TYPES } />
+                                            {/*<SelectList onChange={(e)=>{ this._onChange('acc_type',e.target.value) }} name="Tất cả" rows={ BILL_ACC_TYPES } />*/}
+
 
                                         </FormGroup>
 
@@ -302,4 +295,4 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
 
-export default connect(mapStateToProps)(CashFlowView);
+export default Tickets ; 

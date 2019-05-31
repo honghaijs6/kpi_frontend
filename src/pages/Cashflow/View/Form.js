@@ -9,12 +9,17 @@ import {  Row, Col, FormGroup, Input  } from 'reactstrap';
 import ViewModal from '../../../components/ViewModal'; 
 
 import InputNumeral from '../../../components/InputNumeral';
-import InputSuggest from '../../../components/InputSuggest';
+
 
 import SelectList from '../../../components/SelectList';
 import SelectListModel from '../../../components/SelectListModel';
-import InputSuggestOrder from '../../../components/InputSuggestOrder';
 
+const FROM_OBJECTS = [
+    {code:'inv_code',name:'Đơn hàng bán'},
+    {code:'po_code',name:'Đơn hàng mua'},
+    {code:'user_code',name:'Nhân viên'},
+    {code:'other_code',name:'Khác'},
+]
 
 
 export default class MyForm extends Component {
@@ -33,12 +38,11 @@ export default class MyForm extends Component {
 
     _resetForm(){
 
-        //alert(this.props.receiptType);
-
 
         return {
-          from_type:'',
+          from_type:'inv_code',
           ref_code:'',
+          refcode_name:'Đơn hàng bán',
           person_name:'',
           person_address:'',
           total:0,
@@ -73,6 +77,19 @@ export default class MyForm extends Component {
           [name]:value
         });
         
+    }
+
+    _onObjectChange(code){
+        
+        const refcode_name = FROM_OBJECTS.map((item)=>{  if(item.code===code){ return item.name } })
+        
+        this.setState({
+            refcode_name:refcode_name,
+            from_type:code
+        });
+
+
+
     }
     async componentDidMount(){
         // INIT ORDERS MODEL
@@ -120,7 +137,9 @@ export default class MyForm extends Component {
           let state = this._resetForm();
           state.type = newProps.receiptType;
           state.code = '';
-          this.setState(state)
+          this.setState(state); 
+
+          
         
         }
   
@@ -150,20 +169,15 @@ export default class MyForm extends Component {
                             <Col md={4}> 
                                 <label> Đối tượng </label>
                                 <SelectList 
-                                    onChange={(e)=>{ this._onChange('from_type',e.target.value) }} 
-                                    defaultValue={ this.state.from_type } id="from_type" name="Vui lòng chọn"
                                     
-                                    rows={[
-                                        {code:'inv_code',name:'Đơn hàng bán'},
-                                        {code:'po_code',name:'Đơn hàng mua'},
-                                        {code:'user_code',name:'Nhân viên'},
-                                        {code:'other_code',name:'Khác'},
-                                    ]} 
+                                    onChange={(e)=>{ this._onObjectChange(e.target.value) }} 
+                                    defaultValue={ this.state.from_type } id="from_type" name="Vui lòng chọn"
+                                    rows={ FROM_OBJECTS } 
                                 />
                             </Col>
 
                             <Col md={4}>
-                                <label> Đơn hàng </label>
+                                <label> { this.state.refcode_name } </label>
                                 <Input onChange={(e)=>{  this._onChange('ref_code',e.target.value) }} defaultValue={this.state.ref_code} type="text" id="ref_code" />
                             </Col>
                             

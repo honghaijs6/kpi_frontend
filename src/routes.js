@@ -1,7 +1,7 @@
 import React from 'react';
 import Loadable from 'react-loadable'
 
-import DefaultLayout from './containers/DefaultLayout';
+ 
 
 function Loading() {
   return <div>Loading...</div>;
@@ -88,6 +88,25 @@ const CustomerSetting = Loadable({
 
 /* END CUSTOMER */
 
+// ISERVICE 
+const Tickets = Loadable({
+  loader:()=>import('./pages/iservice/tickets'),
+  loading:Loading
+});
+
+const Delivery = Loadable({
+  loader:()=> import('./pages/iservice/delivery'),
+  loading:Loading
+});
+
+const IserviceReport = Loadable({
+  loader:()=> import('./pages/iservice/report'),
+  loading:Loading
+})
+
+// END ISERVICE 
+
+
 /* ORDER*/
 const OrderView = Loadable({
   loader:()=> import('./pages/Order/_S'),
@@ -169,6 +188,7 @@ const Profile = Loadable({
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
+  
   { path: '/Dashboard', name:'Dashboard', component:Dashboard },
   { path: '/company', exact:true , name:'Công ty', component:Company},
   { path: '/inventory/warehouse', exact:true , name:'DS Kho', component:Warehouse},
@@ -187,6 +207,10 @@ const routes = [
   { path: '/customer/_S', exact:true , name:'Danh sách khách hàng', component:Customer},
   { path: '/customer/point', exact:true , name:'Điểm tích luỹ', component:CustomerPoint},
   { path: '/customer/setting', exact:true , name:'Thiết lập khách hàng', component:CustomerSetting},
+
+  { path:'/services/tickets',name:'Tickets', component:Tickets },
+  { path:'/services/delivery',name:'Giao hàng', component:Delivery },
+  { path:'/services/report', name:'Báo cáo', component:IserviceReport },
 
   { path: '/order/_s', exact:true , name:'DS Đơn hàng', component:OrderView},
   { path: '/order/add', name:'Tạo Báo Giá', component:OrderAddQuot },
