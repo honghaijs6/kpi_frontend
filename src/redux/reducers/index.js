@@ -37,12 +37,12 @@ import reducerIservice from './reducer-iservice';
 
 
 const allReducers = combineReducers({
-  department:reducerDepartment,
-  user:reducerUser,
-  office:reducerOffice,
+  departments:reducerDepartment,
+  users:reducerUser,
+  offices:reducerOffice,
   regions:reducerRegion,
   subregions:reducerSubregion,
-  store:reducerStore,
+  stores:reducerStore,
   
   purchases:reducerPurchase,
 

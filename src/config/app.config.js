@@ -66,9 +66,52 @@ export const BILL_ACC_TYPES = [
 ];
 
 
-export const ISERVICE_TYPES = {
-    outdoor:'Phiếu dịch vụ',
-    issue:'Phiếu tiếp nhận',
-    online:'Online',
-    delivery:'Giao hàng'
+export const ISERVICE_TYPES = {  
+    osv:{
+        icon:'fa fa-support',
+        color:'#0067A4',
+        name:'Phiếu dịch vụ'
+    },
+    isv:{
+        icon:'fa fa-bug',
+        color:'#00A65A',
+        name:'Phiếu tiếp nhận'
+    },
+    onl:{
+        color:'#F39C12',
+        name:'Online'
+    },
+    tra:{
+        color:'#643BAD',
+        name:'Giao hàng'
+    }
+  
 }
+
+export const JOB_TYPES = [
+    { code:0, name:'Nhân viên chính thức' },
+    { code:1, name:'Bán thời gian' },
+    { code:2, name:'Thử việc' },
+    { code:3, name:'Làm thêm ngoài giờ' },
+    { code:4, name:'Nhân viên thời vụ' },
+    { code:5, name:'Làm dự án' }
+
+];
+
+export const JOB_LEVELS = [
+    { code:0, name:'Mới tốt nghiệp' },
+    { code:1, name:'Thực tập' },
+    { code:2, name:'Nhân viên' },
+    { code:3, name:'Trưởng nhóm/ Giám sát' },
+    { code:4, name:'Phó phòng' },
+    { code:5, name:'Trưởng phòng' },
+    { code:6, name:'Phó cửa hàng' },
+    { code:7, name:'Trưởng cửa hàng' },
+    { code:8, name:'Phó giám đốc' },
+    { code:9, name:'Giám đốc' },
+    { code:10, name:'Giám đốc điều hành' },
+    { code:11, name:'Phó chủ tịch' },
+    { code:12, name:'Chủ tịch' }
+];
+
+export const DEFAULT_PASSWORD = 'admin@333';

@@ -11,7 +11,13 @@ function Loading() {
 const Dashboard = Loadable({
   loader:()=> import('./pages/Dashboard'),
   loading:Loading
+});
+
+const Employee =  Loadable({
+  loader:()=> import('./pages/Employee'),
+  loading:Loading
 })
+
 
 const Company = Loadable({
   loader:()=> import('./pages/Company/Company'),
@@ -183,6 +189,14 @@ const Profile = Loadable({
 /* END PROFILE*/
 
 
+// SETTING & CONFIGS 
+const Setting = Loadable({
+  loader:()=>import('./pages/Setting'),
+  loading:Loading
+});
+
+
+
 
 
 
@@ -191,6 +205,7 @@ const routes = [
   
   { path: '/Dashboard', name:'Dashboard', component:Dashboard },
   { path: '/company', exact:true , name:'Công ty', component:Company},
+  { path:'/employee', name:'Nhân sự', component:Employee },
   { path: '/inventory/warehouse', exact:true , name:'DS Kho', component:Warehouse},
   { path: '/inventory/receipt', exact:true , name:'Nhập - Xuất Kho', component:Receipt},
   { path: '/inventory/productnew', exact:true , name:'Xem Tồn Kho', component:Productnew},
@@ -230,6 +245,7 @@ const routes = [
   { path : '/profile', exact:true, name:'Thông tin cá nhân', component:Profile},
 
   { path : '/portal', exact:true, name:'Web Portal', component:Portal},
+  { path:'/setting', name:'Thiết lập & cài đặt', component:Setting }
 
 
 ];

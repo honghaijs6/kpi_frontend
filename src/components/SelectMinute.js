@@ -13,21 +13,21 @@ props :
 
 function SelectMinute(props){
 
-  const modal = props.modal ;
-
+  
   let list = [] ;
-  for(let i=0 ; i < 60 ; i++){
+  for(let i=0 ; i < 60 ; i+=5){
     const num = i < 10 ? '0'+i : i
 
-    list.push(<option key={i} value={ i } > {  num +' phút' } </option>)
+    list.push(<option key={i} value={ num } > {  num +' phút' } </option>)
   }
 
   return(
-    <Input onChange={(e)=>{  modal.onMinuteChange(props.type, e)  }}  type="select" defaultValue={ props.selected }>
+    <Input  {...props} type="select" >
       {list}
     </Input>
   )
 
 }
+
 
 export default SelectMinute;

@@ -1,5 +1,6 @@
 
 // DATA
+import {ISERVICE_TYPES} from '../../../config/app.config';
 import Model from '../../../model/model';
 
 // LIBS 
@@ -17,11 +18,14 @@ import BenMessage from '../../../components/BenMessage';
 import ButtonExpand from '../../../components/ButtonExpand';
 import ButtonExpandList from '../../../components/ButtonExpandList'; 
 
-import SelectList from '../../../components/SelectList'; 
+
 import RankDatePicker from '../../../components/RankDatePicker'; 
+import DeleteForm from '../../../components/DeleteForm';
 
 
 import MyForm from './Form'; 
+import ReportForm from './ReportForm'
+
 
 
 const MODE = 'iservices';
@@ -40,11 +44,13 @@ class Tickets extends Component {
 
             isOpenForm:false,
             isOpenDeleteForm:false,
+            isOpenReportForm:false,
 
-            receiptType:'outdoor', // MAC DINH LA DỊCH VỤ TẬN NƠI
+            receiptType:'osv', // MAC DINH LA DỊCH VỤ TẬN NƠI
             actions:[
                 {code:'update',icon:'fa-pencil',name:'Cập nhật phiếu'},
                 {code:'remove',icon:'fa-trash',name:'Huỷ phiếu',active:true},
+                {code:'report',icon:'fa-mail-reply',name:'Báo cáo kết quả'},
                 {code:'print',icon:'fa-print',name:'In phiếu'}
             ]
 
@@ -59,7 +65,15 @@ class Tickets extends Component {
                     return `<span class=" finalcial-${params.data.type} text-uppercase"> ${params.value} </span>`
                 }
               },
-              {headerName: "Loại", field: "bill_acc_type",width:100},
+              {headerName: "Loại", field: "type",width:180,
+                cellRenderer(params){
+
+
+                    return `<span style="color:${ISERVICE_TYPES[params.value]['color']}">
+                              <i class="fa ${ISERVICE_TYPES[params.value]['icon']} mr-5"></i>  ${ISERVICE_TYPES[params.value]['name']}                
+                            </span>`;
+                }
+              },
               {headerName: "Chứng từ", field: "ref_code", width:180,
                  cellRenderer(params){
                      return `<span class="text-uppercase"> ${params.value} </span>`
@@ -68,11 +82,37 @@ class Tickets extends Component {
               
               {headerName: "Vấn đề", field: "content_issue",width:410 },
               {
-                  headerName:"Trạng thái", field:"status", width:180
+                  headerName:"Trạng thái", field:"status", width:150,
+                  cellRenderer(params){
+                      const arr = [
+                          { class:'badge bg-red', name:'<i class="fa fa-clock-o mr-5"></i> Đang xử lý' },
+                          { class:'badge bg-green', name:'<i class="fa fa-check mr-5"></i> Hoàn thành'}
+                      ]
+                      return `<span class="${arr[params.value]['class']}"> ${arr[params.value]['name']} </span>`
+                  }
               },
-              {headerName: "Phụ trách", field:"belong_user",width:140},  
+              {
+                  headerName:"Hẹn giờ đến", field:"date_arrived", width:180,
+                  cellRenderer(params){
+                    const humanDate = moment(params.value).format('YYYY-MM-DD HH:mm');
+                    return humanDate;
+                  }
+              },
+              {headerName: "Phụ trách", field:"belong_user",width:140,
+                cellRenderer(params){
+                    return `<i class="fa fa-user mr-5"></i> ${params.value} `
+                }
+              },  
               
-              {headerName: "Người tạo", field: "creator",width:160},
+              {
+                  headerName: "Người tạo", field: "creator",width:180,
+                  cellRenderer(params){
+                      return `
+                        <i class="fa fa-user mr-5"></i> ${params.value}
+                      `
+                  }
+              },
+
               {headerName: "Ngày tạo", field: "date_created",width:140,
                   cellRenderer(params){
                       const humanDate = moment(params.value).format('YYYY-MM-DD');
@@ -98,11 +138,13 @@ class Tickets extends Component {
     }
 
     _setup(){
+        
         this.model = new Model(MODE,this.props.dispatch);
 
     }
 
     _doOpenModalUpdate(){
+        
         
         this.setState({
             receiptType:this._curInfo.type,
@@ -124,11 +166,13 @@ class Tickets extends Component {
     }
     _onSubmitForm(res){
         if(res.name==='success' || res.name==='ok'){
+
            this._curInfo = {}
 
            this.setState({
                isOpenForm:false,
                isOpenDeleteForm:false,
+               isOpenReportForm:false,
                typeAction:'',
                receiptType:'',
                status:res.name
@@ -153,6 +197,11 @@ class Tickets extends Component {
                         isOpenDeleteForm:true
                     });
                 
+                break ;
+                case 'report':
+                    this.setState({
+                        isOpenReportForm:true
+                    });
                 break ;
             }
         }else{ 
@@ -188,15 +237,18 @@ class Tickets extends Component {
 
     /* WHERE*/
     _whereStateChange(newState){
+        
         this.setState(Object.assign(this.state,newState));
     }
 
     componentDidMount(){
+
         this.model.load();
+
     }
     componentWillReceiveProps(newProps){
         this.grid.rowData = newProps[MODE]['list'];
-
+        
         // CONNECT REDUX STATE 
         this._whereStateChange(newProps[MODE]['state']);
     }
@@ -208,9 +260,17 @@ class Tickets extends Component {
                 <div className="ubuntu-app" style={{marginTop:20, padding:10}}>
                     <main>
 
+                        
+                        <DeleteForm  
+                            data={this._curInfo}
+                            isOpen={ this.state.isOpenDeleteForm }
+                            onToggle={(isOpen)=>{ this.setState({isOpenDeleteForm:isOpen}) }}
+                            model={this.model}
+                            onSubmitForm={(res)=>{ this._onSubmitForm(res) }}
+                        />
 
                         <MyForm
-                            width="50%"
+                            width="63%"
 
                             isOpen={this.state.isOpenForm}
                             onToggle={(isOpen)=>{ this.setState({isOpenForm:isOpen}) }}
@@ -222,6 +282,15 @@ class Tickets extends Component {
 
                             data={this._curInfo}
                         />
+
+                        <ReportForm
+                            isOpen={this.state.isOpenReportForm}
+                            onToggle={(isOpen)=>{ this.setState({isOpenReportForm:isOpen}) }}
+                            model={this.model}
+                            onSubmitForm={(res)=>{ this._onSubmitForm(res) }}
+                            data={this._curInfo}
+                        />
+
                         <BenGrid
 
                             onBtnEdit={(data)=>{ this._doOpenModalUpdate()  }}
@@ -245,14 +314,14 @@ class Tickets extends Component {
                                 <ButtonGroup>
                                     
                                     <Button 
-                                        onClick={()=>{ this._doOpenModal('outdoor') }} className="btn btn-normal">
+                                        onClick={()=>{ this._doOpenModal('osv') }} className="btn btn-normal">
                                         <i className="fa fa-plus-circle mr-5"></i> Phiếu Dịch vụ  
                                     </Button>
                                     <Button 
-                                        onClick={()=>{ this._doOpenModal('issue') }} className="btn btn-normal">
+                                        onClick={()=>{ this._doOpenModal('isv') }} className="btn btn-normal">
                                         <i className="fa fa-plus-circle mr-5"></i> Phiếu tiếp nhận 
                                     </Button>
-                                    
+                                     
                                     <ButtonExpandList onSelected={(item)=>{  this._callAction(item) }} data={ this.state.actions } />
                                     
                                     
@@ -264,14 +333,18 @@ class Tickets extends Component {
                                             <Label> Loại Phiếu  </Label>
                                             <Input type="select" onChange={(e)=>{ this._onChange('type',e.target.value) }}>
                                                 <option value=""> Tất cả </option>
-                                                <option value="pt"> Phiếu thu </option>
-                                                <option value="pc"> Phiếu chi </option>
+                                                <option value="osv"> Phiếu dịch vụ </option>
+                                                <option value="isv"> Phiếu tiếp nhận </option>
                                             </Input>
                                         </FormGroup>
                                         <FormGroup>
-                                            <Label> Hình thức T.T </Label>
-                                            {/*<SelectList onChange={(e)=>{ this._onChange('acc_type',e.target.value) }} name="Tất cả" rows={ BILL_ACC_TYPES } />*/}
+                                            <Label> Trạng thái </Label>
+                                            <Input type="select" onChange={(e)=>{ this._onChange('status',e.target.value) }} >
+                                                <option value=""> Tất cả </option>
+                                                <option value="0"> Đang xử lý </option>
+                                                <option value="1"> Hoàn tất </option>
 
+                                            </Input>
 
                                         </FormGroup>
 
@@ -295,4 +368,4 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
 
-export default Tickets ; 
+export default connect(mapStateToProps)(Tickets) ; 

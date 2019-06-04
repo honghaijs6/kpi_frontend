@@ -226,8 +226,9 @@ class CashFlowView extends Component {
                             model={this.model}
                             onSubmitForm={(res)=>{ this._onSubmitForm(res) }}
                         />
+                        
                         <MyForm 
-                            width="45%"
+                            width="45%"   
                             model={this.model}
                             isOpen={ this.state.isOpenForm }
                             onToggle={ (isOpen)=>{  this.setState({isOpenForm:isOpen}) }}

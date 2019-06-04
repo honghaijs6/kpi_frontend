@@ -19,12 +19,18 @@ export default {
         text: 'NEW',
       },
     },
-    {
+    /*{
       name: 'Nhân sự',
       url: '/company',
       icon: 'icon-compass'
 
+    },*/
+    {
+      name:'Nhân sự',
+      url:'/employee',
+      icon:'icon-user'
     },
+
     {
       name: 'Bán Hàng',
       url: '/order',
@@ -208,7 +214,6 @@ export default {
         },
       ]
     },
-
     
     {
       name: 'Web Portal',
@@ -216,13 +221,11 @@ export default {
       icon: 'icon-cursor',
     },
 
-    {
-      divider: true,
-    },
+    
 
     {
-      name: 'Thiết lập & Cấu hình',
-      url: '/setting/general',
+      name: 'Thiết lập',
+      url: '/setting',
       icon: 'icon-wrench'
     }
 

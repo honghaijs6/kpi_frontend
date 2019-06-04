@@ -14,16 +14,16 @@ props :
 
 function SelectHour(props){
 
-  const modal = props.modal;
+  //const modal = props.modal;
 
   let list = [] ;
   for(let i=0 ; i < 24 ; i++){
    const num = i < 10 ? '0'+i : i
-   list.push(<option key={i} value={ i }  > {  num +' giờ' } </option>)
+   list.push(<option key={i} value={ num }  > {  num +' giờ' } </option>)
   }
 
   return(
-    <Input onChange={(e)=>{ modal.onHourChange(props.type, e) }}  type="select" defaultValue={ props.selected }>
+    <Input  {...props} type="select" >
       {list}
     </Input>
   )

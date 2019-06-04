@@ -6,7 +6,8 @@ import {  Row, Col, Label, FormGroup, Input, Button } from 'reactstrap';
 import { MAU_PHIEUCHI } from '../../../config/temp-code';
 
 
-import { AppSwitch } from '@coreui/react'
+import { AppSwitch } from '@coreui/react';
+
 
 
 class BillDisplaySetting extends Component{

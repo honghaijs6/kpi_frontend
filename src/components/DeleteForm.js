@@ -1,12 +1,12 @@
 
 // HOOKS
-import detectForm from '../../../hook/before/detectform';
+import detectForm from '../hook/before/detectform';
 
 import React, { Component } from 'react';
 import { Row, Col, Button, FormGroup } from 'reactstrap';
 
-import ViewModal from '../../../components/ViewModal';
-import SelectListModel from '../../../components/SelectListModel' ; 
+import ViewModal from '../components/ViewModal';
+import SelectListModel from '../components/SelectListModel' ; 
 
 
 
