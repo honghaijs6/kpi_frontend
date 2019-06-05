@@ -1,29 +1,29 @@
-
+// DATA
 import Model from '../../../model/model';
 
-
-// LIBS 
+// LIBS
 import moment from 'moment';
 
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-
 import { BenGrid } from '../../../components/BenGrid2';
+
 import MyForm from './Form'; 
 
- 
-const MODE = 'offices';
-const MODE_NAME = 'Văn phòng làm việc'; 
+
+const MODE = 'departments';
+const MODE_NAME = 'Bộ phận'; 
 
 
-class MyOffice extends Component {
-
-    _curInfo = {} ; 
-    _isIniData = false ;
+class MyDepartment extends Component {
+    
+    _curInfo = {};
+    _isInitData = false;
 
     constructor(props){
+
         super(props);
 
         this.state = {
@@ -31,9 +31,9 @@ class MyOffice extends Component {
             onAction:'',
             status:'',
 
+            tab:'department',
             isOpenForm:false,
 
-            tab:'office'
         }
 
         this.grid = {
@@ -47,7 +47,6 @@ class MyOffice extends Component {
                 },
 
                 { headerName:"Số Nhân viên", field:"total_user",width:180 },
-                { headerName:"Tỉnh/Thành", field:"city",width:180 },
                 
                 { headerName:"Ngày tạo", field:"date_created",width:140,
 
@@ -63,35 +62,16 @@ class MyOffice extends Component {
             rowData:[]
         }
 
-        this._setup();
-
-        this._doOpenModalUpdate = this._doOpenModalUpdate.bind(this); 
+        this._doOpenModalUpdate = this._doOpenModalUpdate.bind(this);
         this._doOpenModalPost = this._doOpenModalPost.bind(this);
+        this._onSubmitForm = this._onSubmitForm.bind(this);
 
-
+        this._setup();
     }   
 
-    _setup(){
-        this.model = new Model(MODE,this.props.dispatch);
-    }
 
-    _doOpenModalUpdate(data){
-
-        this._curInfo = data ; 
-        this.setState({
-            isOpenForm:true,
-            typeAction:'put'
-        });
-    }
-    _doOpenModalPost(){
-        
-        this.setState({
-            isOpenForm:true,
-            typeAction:'post'
-        });
-    }
-    
     _onSubmitForm(res){
+
         if(res.name==='success' || res.name==='ok'){
 
             this._curInfo = {}
@@ -99,44 +79,63 @@ class MyOffice extends Component {
             this.setState({
                 isOpenForm:false,
                 typeAction:'',
-                receiptType:'',
                 status:res.name
             });
- 
-         }
+        }
+    }
+
+    _doOpenModalPost(){
+
+        this.setState({
+            typeAction:'post',
+            isOpenForm:true
+        });
+
+    }
+    _doOpenModalUpdate(data){
+        this._curInfo = data;
+
+        this.setState({
+            typeAction:'put',
+            isOpenForm:true
+        });
+    }
+
+    _setup(){
+        this.model = new Model(MODE,this.props.dispatch);
+
     }
     componentWillReceiveProps(newProps){
-    
-        if(!this._isIniData){
+
+        if(!this._isInitData){
             this.model.load();
-            this._isIniData = true ; 
+            this._isInitData = true ; 
         }
 
-        this.grid.rowData = newProps[MODE]['list'] || [] ;  
+        this.grid.rowData = newProps[MODE]['list'] || [];
         // CONNECT REDUX STATE 
         this._whereStateChange(newProps[MODE]['state']);
+        
+
     }
 
-    /* WHERE*/
     _whereStateChange(newState){
         this.setState(Object.assign(this.state,newState));
     }
-
+    
     render() {
         return (
-            <div hidden={ this.state.tab === this.props.onTab ? false : true } className="animated fadeIn" style={{padding:10}} >
+            <div hidden={ this.state.tab === this.props.onTab ? false : true } style={{padding:10}} className="animated fadeIn" >
 
                 <MyForm
-
-                    typeAction={this.state.typeAction}
-                    width="36%"
-                    data={ this._curInfo }
+                    name={ MODE_NAME }
                     model={this.model}
-                    isOpen={ this.state.isOpenForm }
-                    onToggle={(isOpen)=>{ this.setState({isOpenForm:isOpen}) }}
-                    
-                    onSubmitForm={ (res)=>{ this._onSubmitForm(res) }}
+                    isOpen={this.state.isOpenForm}
+                    onToggle={  (isOpen)=>{  this.setState({isOpenForm:isOpen}) }}
+                    typeAction={this.state.typeAction}
 
+                    data={this._curInfo}
+                    onSubmitForm={ this._onSubmitForm }
 
                 />
                 <BenGrid
@@ -168,5 +167,4 @@ const mapStateToProps = (state) => {
         [MODE]: state[MODE]
     }
 }
-
-export default connect(mapStateToProps)(MyOffice) ;
+export default connect(mapStateToProps)(MyDepartment);

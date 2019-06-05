@@ -19,11 +19,6 @@ const Employee =  Loadable({
 })
 
 
-const Company = Loadable({
-  loader:()=> import('./pages/Company/Company'),
-  loading:Loading
-});
-
 /* NHÀ KHO*/
 const Warehouse = Loadable({
   loader:()=> import('./pages/Inventory/Warehouse'),
@@ -204,7 +199,7 @@ const Setting = Loadable({
 const routes = [
   
   { path: '/Dashboard', name:'Dashboard', component:Dashboard },
-  { path: '/company', exact:true , name:'Công ty', component:Company},
+  
   { path:'/employee', name:'Nhân sự', component:Employee },
   { path: '/inventory/warehouse', exact:true , name:'DS Kho', component:Warehouse},
   { path: '/inventory/receipt', exact:true , name:'Nhập - Xuất Kho', component:Receipt},

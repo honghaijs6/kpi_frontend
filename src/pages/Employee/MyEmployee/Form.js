@@ -93,7 +93,7 @@ class MyForm extends Component {
                 gender:data.gender,
                 email:data.email,
                 phone:data.phone,
-                office_id:data.office_id,
+                office_id:data.office_id,  
                 job_type:data.job_type,
                 department_id:data.department_id,
                 job_level:data.job_level,

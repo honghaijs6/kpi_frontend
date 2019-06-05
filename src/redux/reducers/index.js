@@ -33,6 +33,7 @@ import reducerWarehouses from './reducer-warehouse';
 import reducerWarehouseReceipt from './reducer-warehouse-receipt';
 
 import reducerIservice from './reducer-iservice';
+import reducerRole from './reducer-role';
 
 
 
@@ -63,7 +64,8 @@ const allReducers = combineReducers({
   customer_originals:reducerCusOriginal,
   warehouses:reducerWarehouses,
   warehouse_receipts:reducerWarehouseReceipt,
-  iservices:reducerIservice
+  iservices:reducerIservice,
+  roles:reducerRole
 
 });
 

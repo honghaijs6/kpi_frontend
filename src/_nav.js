@@ -19,12 +19,7 @@ export default {
         text: 'NEW',
       },
     },
-    /*{
-      name: 'Nhân sự',
-      url: '/company',
-      icon: 'icon-compass'
-
-    },*/
+    
     {
       name:'Nhân sự',
       url:'/employee',

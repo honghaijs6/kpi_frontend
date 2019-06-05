@@ -6,6 +6,8 @@ import {BenExplorer} from '../../components/BenExplorer';
 
 import MyEmployee from './MyEmployee'; 
 import MyOffice from './MyOffice' ; 
+import MyDepartment from './MyDepartment';
+import Role from './Role'; 
 
 
 class Employee extends Component {
@@ -16,7 +18,7 @@ class Employee extends Component {
         this.state = {
 
              
-            onTab:'office',
+            onTab:'role',
             navData:[
                 {icon:'fa fa-user', code:'employee',name:'Nhân viên',active:true},
                 {icon:'fa fa-folder', code:'office',name:'Văn phòng làm việc'},
@@ -50,6 +52,8 @@ class Employee extends Component {
                         <BenExplorer onLeftSideChange={ this._onNavChange } data={this.state.navData} >
                             <MyEmployee  {...this.state} />
                             <MyOffice {...this.state} />
+                            <MyDepartment {...this.state} />
+                            <Role {...this.state} />
                         </BenExplorer> 
                     </main>
                 </div>
