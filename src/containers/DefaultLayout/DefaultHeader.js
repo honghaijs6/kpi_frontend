@@ -69,7 +69,7 @@ class DefaultHeader extends Component {
         {/* LEFT  */}
         <Nav navbar>
           <NavItem className="px-3">
-              Tháng 05
+              Tháng 06
           </NavItem>
         </Nav>
 
@@ -77,21 +77,21 @@ class DefaultHeader extends Component {
         {/* RIGHT */}
         <Nav className="ml-auto" navbar>
 
-          <NavItem className="d-md-down-none">
-            <NavLink href="#"><i className="icon-bell"></i><Badge pill color="danger"></Badge></NavLink>
-          </NavItem>
-
-
+          
           <AppHeaderDropdown className="px-3  " direction="down">
 
             <DropdownToggle nav>
-              <img src={avatar} className="img-avatar" />
+              <img src={avatar} className="img-avatar" /> 
+              <span className="caret"> 
+                { window.USERINFO.name }
+                <i className="ml-10 fa fa-caret-down"></i>
+              </span>
             </DropdownToggle>
 
             <DropdownMenu right style={{ right: 'auto' }}>
 
               <DropdownItem>
-                <Link to="/404">
+                <Link to="/profile">
                   <i className="fa fa-user"></i> Tài khoản
                 </Link>
               </DropdownItem>
@@ -101,6 +101,11 @@ class DefaultHeader extends Component {
             </DropdownMenu>
 
           </AppHeaderDropdown>
+
+          <NavItem className="d-md-down-none">
+            <NavLink href="#"><i className="font-18 fa fa-globe"></i><Badge pill color="danger"></Badge></NavLink>
+          </NavItem>
+          
         </Nav>
 
         <AppAsideToggler className="d-md-down-none" />

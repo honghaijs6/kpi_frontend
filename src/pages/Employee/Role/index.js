@@ -30,11 +30,15 @@ class Role extends Component {
 
         this.grid = {
             colums:[
-              {headerName:"STT",width:'50px'},
+              {headerName:"SID",width:'50px'},
               {headerName: "Mã",width:'140px'},
               {headerName:" Tính năng ", width:'240px'},
               {headerName: "Root Admin", width:'140px'},
-              {headerName: <a onClick={()=>{ alert('ok') }}>asdasd </a>, width:'140px'},
+
+              {headerName: 
+                    <a style={{borderRadius:12,fontSize:9}} className="btn btn-xs btn-normal" onClick={()=>{ alert('ok') }}> 
+                       <i className="font-12 mr-5 fa fa-plus-circle"></i> Thêm nhóm phân quyền </a>, 
+                width:'140px'},
               
             ],
             rowData:[]
@@ -93,12 +97,9 @@ class Role extends Component {
  
          }
     }
+    
 
-    componentDidMount(){
-        this.model.load();
-    }
-
-    componentWillReceiveProps(newProps){
+    componentWillReceiveProps(newProps){  
 
         if(!this._isIniData){
             this.model.load();
@@ -138,7 +139,7 @@ class Role extends Component {
                                 
                                 return(
                                     <tr key={item.id}>
-                                        <td style={{ width: this.grid['colums'][0]['width'] }} > { stt } </td>
+                                        <td style={{ width: this.grid['colums'][0]['width'] }} > { item.id } </td>
                                         <td style={{ width: this.grid['colums'][1]['width'] }} > { item.code } </td>
                                         <td style={{ width: this.grid['colums'][2]['width'] }} > { item.name } </td>
                                         <td style={{ width: this.grid['colums'][3]['width'] }}>    

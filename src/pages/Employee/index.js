@@ -18,7 +18,7 @@ class Employee extends Component {
         this.state = {
 
              
-            onTab:'role',
+            onTab:'employee',
             navData:[
                 {icon:'fa fa-user', code:'employee',name:'Nhân viên',active:true},
                 {icon:'fa fa-folder', code:'office',name:'Văn phòng làm việc'},
