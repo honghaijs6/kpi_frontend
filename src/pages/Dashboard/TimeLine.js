@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Label } from 'reactstrap';
+import { Label, Input } from 'reactstrap';
 
 function LineHeader(props){
    return(
@@ -57,10 +57,10 @@ function FeedTable(props){
                <img style={{height: 60}} src="" />
             </td>
         <td>
-          <input type="text" style={{backgroundColor: 'transparent', borderWidth: 0}} value="Mr Trung" />
+          <input type="text" style={{backgroundColor: 'transparent', borderWidth: 0}} defaultValue="Mr Trung" />
           </td>
           <td>
-            <input type="text" style={{backgroundColor: 'transparent', borderWidth: 0}} value="0909091888" />
+            <input type="text" style={{backgroundColor: 'transparent', borderWidth: 0}} defaultValue="0909091888" />
             </td>
             <td>
               <i title="Giá chuẩn" data-toggle="tooltip" className="fa fa-check"></i>

@@ -137,7 +137,7 @@ export default class InputSuggestOrder extends Component{
                     <Input 
                         onKeyUp={ this._keyHandling } 
                         id={this.props.id || 0 } 
-                        placeholder="Tìm kiếm..." 
+                        placeholder="Số inv..." 
                         style={{
                             borderRight:0,
                             borderTopRightRadius:0,

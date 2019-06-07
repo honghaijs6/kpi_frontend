@@ -15,8 +15,8 @@ import SelectList from '../../../components/SelectList';
 import SelectListModel from '../../../components/SelectListModel';
 
 const FROM_OBJECTS = [
-    {code:'inv_code',name:'Đơn hàng bán'},
-    {code:'po_code',name:'Đơn hàng mua'},
+    {code:'inv_code',name:'Đơn hàng bán số INV'},
+    {code:'po_code',name:'Đơn hàng mua Số PO'},
     {code:'user_code',name:'Nhân viên'},
     {code:'other_code',name:'Khác'},
 ]
@@ -42,7 +42,7 @@ export default class MyForm extends Component {
         return {
           from_type:'inv_code',
           ref_code:'',
-          refcode_name:'Đơn hàng bán',
+          refcode_name:'Đơn hàng bán số INV',
           person_name:'',
           person_address:'',
           total:0,
@@ -166,10 +166,10 @@ export default class MyForm extends Component {
                     <FormGroup>
                         <Row>
                             
-                            <Col md={4}> 
+                            <Col md={4}>    
                                 <label> Đối tượng </label>
                                 <SelectList 
-                                    
+                                    disabled={ this.props.typeAction === 'post' ? false : true }
                                     onChange={(e)=>{ this._onObjectChange(e.target.value) }} 
                                     defaultValue={ this.state.from_type } id="from_type" name="Vui lòng chọn"
                                     rows={ FROM_OBJECTS } 

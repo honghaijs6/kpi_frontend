@@ -30,10 +30,11 @@ class Role extends Component {
 
         this.grid = {
             colums:[
-              {headerName:"SID",width:'50px'},
-              {headerName: "Mã",width:'140px'},
-              {headerName:" Tính năng ", width:'240px'},
-              {headerName: "Root Admin", width:'140px'},
+              { headerName:"STT",width:'50px' },
+              { headerName:"SID",width:'50px'},
+              { headerName: "Mã",width:'140px'},
+              { headerName:" Tính năng ", width:'240px'},
+              { headerName: "Root Admin", width:'140px'},
 
               {headerName: 
                     <a style={{borderRadius:12,fontSize:9}} className="btn btn-xs btn-normal" onClick={()=>{ alert('ok') }}> 
@@ -139,10 +140,11 @@ class Role extends Component {
                                 
                                 return(
                                     <tr key={item.id}>
-                                        <td style={{ width: this.grid['colums'][0]['width'] }} > { item.id } </td>
-                                        <td style={{ width: this.grid['colums'][1]['width'] }} > { item.code } </td>
-                                        <td style={{ width: this.grid['colums'][2]['width'] }} > { item.name } </td>
-                                        <td style={{ width: this.grid['colums'][3]['width'] }}>    
+                                        <td style={{ width: this.grid['colums'][0]['width'] }} > { stt }  </td>
+                                        <td style={{ width: this.grid['colums'][1]['width'] }} > { item.id } </td>
+                                        <td style={{ width: this.grid['colums'][2]['width'] }} > { item.code } </td>
+                                        <td style={{ width: this.grid['colums'][3]['width'] }} > { item.name } </td>
+                                        <td style={{ width: this.grid['colums'][4]['width'] }}>    
                                             <AppSwitch 
                                                 disabled
                                                 className={'mx-1'} 
@@ -150,7 +152,7 @@ class Role extends Component {
                                                 color={'primary'}  
                                                 checked={ true } />
                                         </td>
-                                        <td style={{ width: this.grid['colums'][3]['width'] }} ></td>
+                                        <td style={{ width: this.grid['colums'][5]['width'] }} ></td>
                                         
 
                                     </tr>
