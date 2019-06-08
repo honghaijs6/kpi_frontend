@@ -1,12 +1,14 @@
 // HOOKS 
 import detectForm from '../../hook/before/detectform';
 import doUpdateModelInfo from '../../hook/ultil/doUpdateModelInfo';
+import doLogin from '../../hook/ultil/doLogin';
 
 import React, { Component } from 'react';
 import { Row, Col, Button, FormGroup, Input, InputGroup,InputGroupAddon, InputGroupText  } from 'reactstrap';
 
 import BenTabs from '../../components/BenTabs';
 import ButtonUploadImage from '../../components/ButtonUploadImage';
+import BenMessage from '../../components/BenMessage';
 
 
 class Profile extends Component{
@@ -48,10 +50,45 @@ class Profile extends Component{
 
     
     const fields = ['pre_password','new_password','rep_password'];
+
+    
+
     if(detectForm(fields,this.state.data_pass)===''){
 
-      alert(JSON.stringify(this.state.data_pass))
+      const checkPrePass =  await doLogin(window.USERINFO.email,this.state.data_pass['pre_password']);
+      let msg = '';
 
+
+      if(checkPrePass.token!=='no-key'){
+        
+        if(this.state.data_pass['new_password']===this.state.data_pass['rep_password']){
+          const data = {
+            id:window.USERINFO.id,
+            password:this.state.data_pass['rep_password']
+          }
+  
+          const res = await  doUpdateModelInfo('users',data);
+          msg =  res.name === 'success' ? 'Đã đổi mật khẩu thành công !' : res.message
+          
+
+
+        }else{
+          
+          msg = 'Mật khẩu mới không khớp';
+          
+        }
+      }else{
+        msg = 'Mật khẩu cũ không đúng'
+      }
+
+      if(msg!==''){
+        BenMessage({
+          title:'Thông báo',
+          message:msg
+        });
+      }
+      
+      
     }
   }
   async _updateUserInfo(){
@@ -115,14 +152,16 @@ class Profile extends Component{
 
 
   }
+  
 
   render(){
 
     
     
-    return (
+    return (  
       <div className="animated fadeIn">
-        <main style={{marginTop: 20, padding: 30, height:'89vh', overflow:'auto'}}>
+        <main className="div-main">
+
             <div style={{
               width:'70%',
               margin:'auto',
@@ -190,7 +229,7 @@ class Profile extends Component{
 
                     <Row style={{marginTop:60}}>
                        <Col md={4}>
-                           <Button onClick={ this._updateUserInfo } size="lg" className="btn btn-normal bg-green"> Cấp nhật </Button> 
+                           <Button onClick={ this._updateUserInfo } className="btn btn-normal bg-green"> <i className="fa  fa-chevron-circle-right mr-5"></i> Cấp nhật </Button> 
                            <span className="text-red ml-10 form-err " id="form-err"></span>
                        </Col>     
                     </Row>
@@ -210,10 +249,10 @@ class Profile extends Component{
                               <Input 
                                     id="pre_password" 
                                     type="password" 
-                                    onChange={ (e)=>{ this._onChangeUserInfo('pre_password',e.target.value) }} 
+                                    onChange={ (e)=>{ this._onChangeUserPass('pre_password',e.target.value) }} 
                               />
                           </InputGroup>
-                         </Col>
+                         </Col>  
                       </Row>
                       
                       <Row style={{marginTop:30}}>
@@ -250,9 +289,10 @@ class Profile extends Component{
                        
                       <Row style={{marginTop:30}}>
                           <Col md={4}>
-                            <Button size="lg" onClick={this._submitChangePassword}  className="btn btn-normal bg-green" >
-                               Cập nhật 
+                            <Button onClick={this._submitChangePassword}  className="btn btn-normal bg-green" >
+                              <i className="fa  fa-chevron-circle-right mr-5"></i> Cập nhật 
                             </Button>
+                            <span className=" text-red form-err"></span>
                           </Col>
                       </Row>
                       

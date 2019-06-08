@@ -221,7 +221,24 @@ export default {
     {
       name: 'Thiết lập',
       url: '/setting',
-      icon: 'icon-wrench'
+      icon: 'icon-wrench',
+      children:[
+        { 
+          name:'Công ty',
+          url:'/setting/company',
+          icon:'fa fa-gg-circle'
+        },
+        {
+          name:'Thông báo',
+          url:'/setting/notification',
+          icon:'fa fa-bell'
+        },
+        {
+          name:'Mail server',
+          url:'/setting/server',
+          icon:'fa fa-server'
+        }
+      ]
     }
 
 

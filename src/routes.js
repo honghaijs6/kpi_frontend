@@ -180,18 +180,25 @@ const Portal = Loadable({
 const Profile = Loadable({
   loader:()=> import('./pages/Profile'),
   loading:Loading
-})
+});
 /* END PROFILE*/
 
 
 // SETTING & CONFIGS 
-const Setting = Loadable({
-  loader:()=>import('./pages/Setting'),
+const Company = Loadable({
+  loader:()=> import('./pages/Setting/Company'),
   loading:Loading
 });
 
+const Notification = Loadable({
+  loader:()=>import('./pages/Setting/Notification'),
+  loading:Loading
+});
 
-
+const Server = Loadable({
+  loader:()=>import('./pages/Setting/Server'),
+  loading:Loading
+})
 
 
 
@@ -237,10 +244,13 @@ const routes = [
   { path : '/crm/automation', exact:true, name:'E-mail marketing', component:CrmAuutomation},
   { path : '/crm/setting', exact:true, name:'E-mail marketing', component:CrmSetting},
 
-  { path : '/profile', exact:true, name:'Thông tin cá nhân', component:Profile},
+  { path : '/profile', name:'Thông tin cá nhân', component:Profile},
 
-  { path : '/portal', exact:true, name:'Web Portal', component:Portal},
-  { path:'/setting', name:'Thiết lập & cài đặt', component:Setting }
+  { path : '/portal', name:'Web Portal', component:Portal},
+  
+  { path :'/setting/company', name:'Công ty', component:Company },
+  { path:'/setting/notification', name:'Thông báo', component:Notification },
+  { path:'/setting/server', name:'Mail server', component:Server }
 
 
 ];

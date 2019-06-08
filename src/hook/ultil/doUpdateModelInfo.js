@@ -19,6 +19,7 @@ const doUpdateModelInfo = (strModel=null,data={})=>{
                 const id = data.id ;     
                 
                 const url = server.base() + '/' + strModel + '?id='+id;
+                
                 preLoad('put');
                 
 
