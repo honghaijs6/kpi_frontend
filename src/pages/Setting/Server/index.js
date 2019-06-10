@@ -81,7 +81,7 @@ class Server extends Component {
                 id:res.data.id,
                 ...server_setting
             }
-
+            
             this.setState(data);
             
         }
@@ -171,7 +171,7 @@ class Server extends Component {
                                             <label> Username </label>
                                         </Col>
                                         <Col md={4}>
-                                            <Input type="text" onChange={(e)=>{  this.setState({User:e.target.value}) }} defaultValue={this.state.Username} />
+                                            <Input type="text" onChange={(e)=>{  this.setState({Username:e.target.value}) }} defaultValue={this.state.Username} />
                                         </Col>
                                     </FormGroup>
                                     
@@ -241,12 +241,18 @@ class Server extends Component {
                                     </FormGroup>
 
                                     <FormGroup style={{marginTop:90}} row>
-                                        <Col md={3}>
+                                        <Col md={12}>
                                             <Button onClick={ this._onSubmit } className="btn btn-normal bg-green">
                                                 <i className="fa  fa-chevron-circle-right mr-5"></i>  Cập nhận 
                                             </Button>
                                             <span className="form-err text-red ml-10 " id="form-err"></span>
+
+                                            <div className="pull-right">
+                                                <Button className="btn btn-normal bg-blue" size="sm"> 
+                                                   <i className="fa fa-bug mr-5"></i> Test mail server </Button>
+                                            </div>
                                         </Col>
+
                                     </FormGroup>
 
                                     

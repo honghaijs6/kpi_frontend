@@ -114,4 +114,11 @@ export const JOB_LEVELS = [
     { code:12, name:'Chủ tịch' }
 ];
 
+export const PRICE_SETTING = {
+    b:"(a *0.3) + a",
+    c:"(b *0.2) + b",
+    d:"(c *0.1) + c"
+}
+
+
 export const DEFAULT_PASSWORD = 'admin@333';

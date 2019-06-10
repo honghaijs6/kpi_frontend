@@ -4,7 +4,6 @@ import doGetModelInfo from '../hook/ultil/doGetModelInfo';
 import {N2T} from '../hook/ultil/N2T'; 
 
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import Barcode from 'react-barcode';
 
 import '../scss/print.scss';
@@ -57,7 +56,7 @@ class TemplateQuotation extends Component {
         const cusInfo = this.state.cusInfo;
         const orderInfo = this.props.data ; 
         const comInfo =  this.state.companyInfo;  
-        const cart = JSON.parse(orderInfo.cart); 
+        const cart = JSON.parse(orderInfo.cart);  
         
         const TOTAL_VAT = parseFloat(orderInfo['total_sum']) * ( parseInt(orderInfo['vat'])/100 ) ; 
         

@@ -61,6 +61,7 @@ class Company extends Component {
 
     async componentDidMount(){
         const info = await doGetModelInfo('companies',window.USERINFO.company_id);
+
         if(info.name==='success'){
             
             const data = info.data;
@@ -187,7 +188,7 @@ class Company extends Component {
                                         <Row style={{marginTop:60}}>
                                             <Col md={12}>
                                                 <Button onClick={ this._onSubmit } className="btn btn-normal bg-green"> 
-                                                    <i className="fa  fa-chevron-circle-rgight mr-5"></i> Cập nhật  
+                                                    <i className="fa  fa-chevron-circle-right mr-5"></i> Cập nhật  
                                                 </Button>
 
                                                 <span className="form-err text-danger ml-10" id="form-err"></span>

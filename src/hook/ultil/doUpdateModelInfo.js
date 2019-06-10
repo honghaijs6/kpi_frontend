@@ -26,23 +26,13 @@ const doUpdateModelInfo = (strModel=null,data={})=>{
                 axios.put(url,data,server.setHeader())
                     .then((res)=>{
                         
-                        
-                        ret = {
-                            name:'success',
-                            message:'',
-                            res:res 
-                        }
-                        resolve(ret) ; 
-
+                        resolve(res.data) ; 
                         preLoad('stop'); 
 
 
                     },(error)=>{
 
-                        ret.message = 'Đã có lỗi update xảy ra';
-                        console.log(ret);
-                        
-                        resolve(ret) ; 
+                         
                         preLoad('stop'); 
 
                 })

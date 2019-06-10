@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 import {BenExplorer} from '../../../components/BenExplorer';
 
-
+ 
 
 import ProductPage from './productPage';
 import CategoryPage from './categoryPage';
@@ -35,7 +35,7 @@ class OrderSetting extends Component{
         {icon:'fa fa-gg', code:'supplierPage',name:'Nhà Cung Cấp'},
         {icon:'fa fa-tags', code:'unitPage',name:'Đơn vị tính'},
         {icon:'fa fa-trash', code:'causeDelPage',name:'Lý do huỷ đơn hàng'},
-        {icon:'fa  fa-codepen', code:'settingOrderPage',name:'Cấu hình tạo đơn hàng'},
+        {icon:'fa  fa-codepen', code:'settingOrderPage',name:'Cấu hình đơn hàng'},
         {icon:'fa  fa-dollar', code:'formulaPricePage',name:'Công thức tính giá'},
         
         

@@ -38,9 +38,10 @@ class PrintForm extends Component {
                         
                     </div>
                     <div style={{padding:'40px 0px'}}>
-                        <TemplateQuotation data={data}  ref={el => (this.componentRefQuotation = el)} />
+                        <TemplateOrder data={data} ref={el => (this.componentRefOrder = el)} />
+
                         <div style={{display:'none'}}>
-                            <TemplateOrder data={data} ref={el => (this.componentRefOrder = el)} />
+                            
                         </div>
                     </div>
                 </div>

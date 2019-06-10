@@ -220,7 +220,7 @@ export default {
 
     {
       name: 'Thiết lập',
-      url: '/setting',
+      url: '/settings',
       icon: 'icon-wrench',
       children:[
         { 

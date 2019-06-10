@@ -11,7 +11,7 @@ class InputNumeral extends React.Component {
     super(props);
 
     this.state = {
-      defaultValue:props.defaultValue
+      defaultValue:props.defaultValue || 0
     }
 
     this._onChange = this._onChange.bind(this);
@@ -40,7 +40,14 @@ class InputNumeral extends React.Component {
 
   render() {
     return (
-      <Input style={this.props.style} onChange={ this._onChange } id={ this.props.id || 0 } value={ numeral(this.state.defaultValue).format('0,0') } type="text" />
+      
+      <Input 
+        disabled={this.props.disabled} 
+        onDoubleClick={this.props.onDoubleClick}
+        style={this.props.style} onChange={ this._onChange } id={ this.props.id || 0 } 
+        value={ numeral(this.state.defaultValue).format('0,0') } type="text" 
+      />
+
     );
   }
 }

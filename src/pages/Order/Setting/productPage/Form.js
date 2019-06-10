@@ -92,28 +92,29 @@ function FormRow2(props){
   let photo_url = data.images ;
   
   
+  
 
   return(
     <div style={{marginTop: -20}} className="row-form">
 
       <Row>
           <Col md="2">
-            <FormGroup>
+            <FormGroup> 
               <label> Giá nhà máy <span className="text-danger">*</span></label>
-              <InputNumeral onChange={(value)=>{ modal.onChange('price_1',value) }} id="price_1"  defaultValue={ data.price_1 } />
+              <InputNumeral  onChange={(value)=>{ props.onChangePrice('price_1',value) }} id="price_1"  defaultValue={ data.price_1 } />
 
             </FormGroup>
           </Col>
           <Col md="2">
             <FormGroup>
               <label> Giá gốc  <span className="text-danger">*</span> </label>
-              <InputNumeral id="price_2" onChange={(value)=>{ modal.onChange('price_2',value) }} defaultValue={ data.price_2 }   type="text"/>
+              <InputNumeral id="price_2" onChange={(value)=>{ props.onChangePrice('price_2',value) }} defaultValue={ data.price_2 }   type="text"/>
             </FormGroup>
           </Col>
           <Col md="2">
             <FormGroup>
               <label>Giá ĐL </label>
-              <InputNumeral id="price_3" onChange={(value)=>{ modal.onChange('price_3',value) }}  defaultValue={ data.price_3 }    type="text"/>
+              <InputNumeral id="price_3" onChange={(value)=>{ props.onChangePrice('price_3',value) }}  defaultValue={ data.price_3 }    type="text"/>
 
             </FormGroup>
           </Col>
@@ -121,7 +122,7 @@ function FormRow2(props){
           <Col md={2}>
             <FormGroup>
               <label>Giá lẻ </label>
-              <InputNumeral id="price_4" onChange={(value)=>{ modal.onChange('price_4',value) }} defaultValue={ data.price_4 }  type="text"/>
+              <InputNumeral id="price_4" onChange={(value)=>{ props.onChangePrice('price_4',value) }} defaultValue={ data.price_4 }  type="text"/>
             </FormGroup>
           </Col>
 
@@ -224,7 +225,34 @@ class MyForm extends Component {
 
     }
   }
+  
+  onChangePrice(field,value){
+    
 
+    try{
+
+        if(field==='price_1'){
+          let a = value
+
+          let b = eval( this.props.price_setting['b'] );
+          let c = eval( this.props.price_setting['c'] );
+          let d = eval( this.props.price_setting['d'] );
+
+          this.props.modal.onChange('price_1',value);
+          this.props.modal.onChange('price_2',b);
+          this.props.modal.onChange('price_3',c);
+          this.props.modal.onChange('price_4',d);
+
+        }else{ this.props.modal.onChange(field,value) }
+        
+        
+        
+    }catch(err){
+        console.log(err);
+    }
+    
+    //this.props.modal.onChange(field,value); 
+  }
   
   render(){
 
@@ -234,7 +262,7 @@ class MyForm extends Component {
        <BenModal width={ this.props.width } name={ this.props.name } typeAction={ this.props.typeAction } modal={ this.props.modal }  >
 
           <FormRow1 {...this.props} />
-          <FormRow2 onUploaded={(res)=>{ this._onUploadImage(res) }} {...this.props} />
+          <FormRow2 onUploaded={(res)=>{ this._onUploadImage(res) }} onChangePrice={ (field, value)=>{ this.onChangePrice(field,value) } } {...this.props} />
 
           <div>
             <CKEditor

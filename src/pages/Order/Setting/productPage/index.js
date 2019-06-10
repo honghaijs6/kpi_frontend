@@ -1,5 +1,5 @@
 import {PRODUCT_TYPE_DECO,LIST_PRODUCT_TYPE} from '../../../../config/product.conf';
-
+import { PRICE_SETTING } from '../../../../config/app.config'; 
 
 /* OBJECT - PLUGIN*/
 import Model from '../../../../model/model';
@@ -51,6 +51,7 @@ class ProductPage extends Component{
       status:'', // status
       
       selectedData:{},
+      price_setting:{},
 
       tab:MODE_TAB
     }
@@ -170,9 +171,20 @@ class ProductPage extends Component{
     this._doOpenModalPost();
   }
 
-  componentDidMount(){
+  async componentDidMount(){
     //this._isMounted = true;
     this.model.initData();
+
+    // GET COMPANY INFO 
+    const comInfo = await doGetModelInfo('companies',window.USERINFO.company_id);
+    if(comInfo.name==='success'){
+
+      let price_setting =  typeof comInfo.data.price_setting === 'string' ? JSON.parse(comInfo.data.price_setting) : PRICE_SETTING
+
+      this.setState({price_setting});
+      
+    }      
+
     
   }
 
@@ -211,7 +223,7 @@ class ProductPage extends Component{
 
   render(){
 
-    console.log(this.state.status);
+    
 
     return(
       <div hidden={  this.props.onTab === this.state.tab ? false : true } style={{padding:10}} >
@@ -222,6 +234,8 @@ class ProductPage extends Component{
             modal={this.modal}
             width='70%'
             
+            price_setting = {this.state.price_setting}
+
           />
           <BenGrid
              
