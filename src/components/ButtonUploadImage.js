@@ -34,24 +34,6 @@ class ButtonUploadImage extends React.Component {
                 this.props.onUploaded(res);
             }
             
-
-            /*const photo = e.target.files[0];
-            const reader = new FileReader();
-
-            reader.addEventListener('load', ()=>{
-
-                this.setState({
-                    onAction:'handleFile',
-                    photo_base64:reader.result,
-                    photo:photo
-
-                });
-                this._doUpload();
-                
-
-            });
-
-            reader.readAsDataURL(e.target.files[0]);*/
             
         }
     }
@@ -62,7 +44,9 @@ class ButtonUploadImage extends React.Component {
               }}>
                 <i className="fa fa-upload" style={{fontSize: 20}}></i>
                 
-                <Input style={{width: 90,height: 90,position: 'absolute', top:0, left: 15, opacity: 0}} id="photo" type="file" onChange={ (e)=> { this._handleFile(e) } } ></Input>
+                <Input 
+                    accept=".png,.jpg"
+                    style={{width: 90,height: 90,position: 'absolute', top:0, left: 15, opacity: 0}} id="photo" type="file" onChange={ (e)=> { this._handleFile(e) } } ></Input>
                     
 
             </button>

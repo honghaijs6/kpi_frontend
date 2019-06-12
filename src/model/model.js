@@ -104,6 +104,10 @@ class Model {
 
   /********WHEN *********** */
   onError(err){
+
+
+    console.log(err);
+    
     const data = err.response.data ;
     const msg = data.errors[0];
 
@@ -496,6 +500,8 @@ class Model {
             // ADD TO REDUX STORE
             res = res.data ;
             this.data = res.rows ;
+
+            
 
             this.resetConfigDB("total",res.count);
 

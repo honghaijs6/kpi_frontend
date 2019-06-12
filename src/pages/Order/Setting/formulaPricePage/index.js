@@ -50,27 +50,27 @@ class SettingOrderPage extends Component{
 
     }
 
-    async componentDidMount(){
-
-        const info = await doGetModelInfo('companies',window.USERINFO.company_id);
-        this._parsePrice(100);
-
-        if(info.name==='success'){
-            
-            const data = info.data;
-            const price_setting =  typeof data.price_setting ==='string' ? JSON.parse(data.price_setting) : this.state.price_setting
-            
-            this.setState({
-                id:data.id,
-                price_setting:price_setting 
-            });
-
-            
-
-            
+    async componentWillReceiveProps(newProps){
+        if(newProps.onTab === this.state.tab){
+            const info = await doGetModelInfo('companies',window.USERINFO.company_id);
+            this._parsePrice(100);
+    
+            if(info.name==='success'){
+                
+                const data = info.data;
+                const price_setting =  typeof data.price_setting ==='string' ? JSON.parse(data.price_setting) : this.state.price_setting
+                
+                this.setState({
+                    id:data.id,
+                    price_setting:price_setting 
+                });
+                
+                this._parsePrice(100)
+                
+            }
         }
-
     }
+    
     _parsePrice(value){
         const a = value ; 
         

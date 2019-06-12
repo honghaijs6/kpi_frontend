@@ -86,14 +86,14 @@ export const MAU_QUOTATION = `
             <div>
                 <div style="float: left; width: 25%;">
                     
-                    <img src="[[COMPANY_LOGO]]" style="height: 127px;">
+                    <img src="{{COMPANY_LOGO}}" style="height: 127px;">
                 </div>
                 <div style="float: left; width: 65%; padding-left: 40px;">
-                    <p style="font-size: 14px; margin: 0px; padding: 5px 0px; font-weight: 500;"> [[COMPANY_NAME]] </p>
-                    <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> [[COMPANY_ADDRESS]] </p>
-                    <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> MST : [[COMPANY_TAXNO]] </p>
-                    <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> Tel: [[COMPANY_PHONE]] </p>
-                    <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> Website: [[COMPANY_WEBSITE]] - E-mail: [[COMPANY_EMAIL]] </p>
+                    <p style="font-size: 14px; margin: 0px; padding: 5px 0px; font-weight: 500;"> {{COMPANY_NAME}} </p>
+                    <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> {{COMPANY_ADDRESS}} </p>
+                    <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> MST : {{COMPANY_TAXNO}} </p>
+                    <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> Tel: {{COMPANY_PHONE}} </p>
+                    <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> Website: {{COMPANY_WEBSITE}} - E-mail: {{COMPANY_EMAIL}} </p>
                 </div>
                 <div style="float: left; width: 10%; text-align: right;">
                     <img src="http://kpi.vikhang.com:9000/js/app/cpanel/img/brand.jpg" style="height: 127px;">
@@ -120,7 +120,7 @@ export const MAU_QUOTATION = `
                                         Company <span style="padding: 0px 10px;"> : </span>
                                     </td>
                                     <td style="width: 100%; font-size: 12px; padding: 9px 10px;"> 
-                                        [[CUSTOMER_NAME]]
+                                        {{CUSTOMER_NAME}}
                                     </td>
                                 </tr>
                                 <tr>
@@ -128,7 +128,7 @@ export const MAU_QUOTATION = `
                                         Address (Địa chỉ) <span style="padding: 0px 10px;"> : </span>
                                     </td>
                                     <td style="width: 100%; font-size: 12px; padding: 3px 10px;">
-                                        [[CUSTOMER_ADDRESS]]
+                                        {{CUSTOMER_ADDRESS}}
                                     </td>
                                 </tr>
                                 <tr>
@@ -136,14 +136,14 @@ export const MAU_QUOTATION = `
                                         Tel (SĐT) <span style="padding: 0px 10px;"> : </span>
                                     </td>
                                     <td style="width: 100%; font-size: 12px; padding: 3px 10px;">
-                                        [[CUSTOMER_PHONE]]
+                                        {{CUSTOMER_PHONE}}
                                     </td>
                                 </tr>
                                 
                                 <tr>
                                     <td style="width: 30%; font-size: 12px; text-align: right; padding: 3px 10px;">Email <span style="padding: 0px 10px;"> : </span></td>
                                     <td style="width: 100%; font-size: 12px; padding: 3px 10px;">
-                                        [[CUSTOMER_EMAIL]]
+                                        {{CUSTOMER_EMAIL}}
                                     </td>
                                 </tr>
                                 
@@ -152,7 +152,7 @@ export const MAU_QUOTATION = `
                                         Attn(Người nhận) <span style="padding: 0px 10px;"> : </span>
                                     </td>
                                     <td style="width: 100%; font-size: 12px; padding: 9px 10px;">
-                                        [[CUSTOMER_RECEIVER]]
+                                        {{CUSTOMER_RECEIVER}}
                                     </td>
                                 </tr>
                             </tbody>
@@ -164,13 +164,13 @@ export const MAU_QUOTATION = `
                                 <tr>
                                     <td style="width: 55%; font-size: 12px; text-align: right; padding: 3px 10px;">Number <span style="padding: 0px 10px;"> : </span></td>
                                     <td class="text-uppercase" style="border: 1px solid rgb(0, 0, 0); width: 100%; padding: 3px; font-size: 12px;">
-                                        [[ORDER_CODE]]
+                                        {{ORDER_CODE}}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="width: 55%; font-size: 12px; text-align: right; padding: 3px 10px;">Date <span style="padding: 0px 10px;"> : </span></td>
                                     <td style="border: 1px solid rgb(0, 0, 0); width: 100%; padding: 3px; font-size: 12px;">
-                                        [[ORDER_CODE_CREATED]]
+                                        {{ORDER_CODE_CREATED}}
                                     </td>
                                 </tr>
                                 <tr>
@@ -190,7 +190,7 @@ export const MAU_QUOTATION = `
                                         A/C code <span style="padding: 0px 10px;"> : </span>
                                     </td>
                                     <td style="border: 1px solid rgb(0, 0, 0); width: 100%; padding: 3px; font-size: 12px;">
-                                        [[ORDER_BELONG]]
+                                        {{ORDER_BELONG}}
                                     </td>
                                 </tr>
                                 <tr>
@@ -198,7 +198,7 @@ export const MAU_QUOTATION = `
                                         Term(Hạn thanh toán) <span style="padding: 0px 10px;"> : </span>
                                     </td>
                                     <td class="text-uppercase" style="border: 1px solid rgb(0, 0, 0); width: 100%; padding: 3px; font-size: 12px;">
-                                        [[ORDER_PAYMENT_CODE]]
+                                        {{ORDER_PAYMENT_CODE}}
                                     </td>
                                 </tr>
                             </tbody>
@@ -222,31 +222,31 @@ export const MAU_QUOTATION = `
                         </tr>
                     </thead>
                     <tbody style="border: 1px solid rgb(0, 0, 0);">
-                        [[ORDER_RECORDS]]
+                        {{ORDER_RECORDS}}
                     </tbody>
                     <tfoot>
                         <tr class="record-item">
                             <td class="item" colspan="4" style="border-right: 0px;"> </td>
                             <td class="item" colspan="3" style="text-align: right; border-left: 0px;"> Giảm </td>
-                            <td class="item" colspan="1"> [[ORDER_DISCOUNT]] </td>
+                            <td class="item" colspan="1"> {{ORDER_DISCOUNT}} </td>
                         </tr>
                         <tr class="record-item">
                             <td class="item" colspan="4" style="border-right: 0px;"> </td>
                             <td class="item" colspan="3" style="text-align: right; border-left: 0px;">Amount/ Cộng tiền hàng</td>
-                            <td class="item" colspan="1"> [[ORDER_AMOUNT]] </td>
+                            <td class="item" colspan="1"> {{ORDER_AMOUNT}} </td>
                         </tr>
                         <tr class="record-item">
                             <td class="item" colspan="4" style="border-right: 0px;"> </td>
                             <td class="item" colspan="3" style="text-align: right; border-left: 0px;">VAT Tax/ Tiền thuế GTGT (10%)</td>
-                            <td class="item" colspan="1"> [[ORDER_AMOUNT_ATM]] </td>
+                            <td class="item" colspan="1"> {{ORDER_AMOUNT_TAX}} </td>
                         </tr>
                         <tr class="record-item">
                             <td class="item" colspan="7" style="text-align: right; border-left: 0px;"> Total Payment/Tổng cộng tiền thanh toán </td>
-                            <td class="item" colspan="1"> [[ORDER_SUM]] </td>
+                            <td class="item" colspan="1"> {{ORDER_SUM}} </td>
                         </tr>
                         <tr>
                             <td class="item" colspan="2"> Số tiền bằng chữ </td>
-                            <td class="item N2T" colspan="6" style="font-style: italic;"> " [[ORDER_SUM_TEXT]] " </td>
+                            <td class="item N2T" colspan="6" style="font-style: italic;"> " {{ORDER_SUM_TEXT}} " </td>
                         </tr>
                     </tfoot>
                 </table>
@@ -262,7 +262,7 @@ export const MAU_QUOTATION = `
                         </tr>
                         <tr>
                             <td style="width: 220px;">Terms (Thời hạn thanh toán)</td>
-                            <td> [[ORDER_PAYMENT_DESC]] </td>
+                            <td> {{ORDER_PAYMENT_DESC}} </td>
                         </tr>
                         <tr>
                             <td style="width: 220px;">Validity (Giá trị báo giá)</td>
@@ -274,7 +274,7 @@ export const MAU_QUOTATION = `
                         </tr>
                         <tr>
                             <td style="width: 220px;">Prepared by (Được chuẩn bị bởi)</td>
-                            <td> [[ORDER_PREPARE]] </td>
+                            <td> {{ORDER_PREPARE}} </td>
                         </tr>
                     </tbody>
                 </table>
@@ -331,12 +331,7 @@ export const MAU_ORDER = `
 
                 }
 
-                td img{
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto;
-
-                }
+                
                 td.company-info p{
                     padding-left: 90px;
                     font-size: 10px;
@@ -344,19 +339,7 @@ export const MAU_ORDER = `
                     font-family: 'Arial'; color: #121212 !important;
                 }
                 .row-page-name{ font-size: 14px; font-weight: bold; line-height: 12px; margin-top: 30px;}
-
-                .table-page-header td{ font-size: 12px; color: #121212 !important; }
-                .table-page-header td.left-left{width: 180px; text-align: right;}
-                .table-page-header td.left-left span{ padding: 0px 10px 0px 10px;}
-
-                .table-page-header td.right-left{ width: 250px; text-align: right;}
-                .table-page-header td.right-left-wh{ width: 138px; text-align: left;}
-
-
-                .table-page-header td.right-left span{ padding: 0 10px 0 10px;}
-                .table-page-header td.right-right{ text-align: right }
-                .table-page-header td.right-right-wh{ text-align: left; border: 1px solid #333; width: 160px}
-
+                
 
                 .print-table{ border: 1px solid #333; font-size: 12px;}
                 .print-table .record-item td.item{ border: 0.5px solid #333;}
@@ -388,17 +371,25 @@ export const MAU_ORDER = `
     </head>
     <body style='background:#fff'>
         <div id="doc-pdf" class="print-document" style="padding: 0px; width: 92%; margin: auto;">
-            <div>
-                <div style="float: left; width: 25%;"><img src="http://kpi.vikhang.com:9000/js/app/cpanel/img/kpi.vikhang.com-logo.jpg" style="height: 127px;"></div>
-                <div style="float: left; width: 65%; padding-left: 40px;">
-                    <p style="font-size: 14px; margin: 0px; padding: 5px 0px; font-weight: 500;"> CÔNG TY TNHH TM DV THIẾT BỊ KỸ THUẬT VI KHANG </p>
-                    <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> Tòa nhà Rivergate, Tháp B, 151-155 Bến Vân Đồn, Phường 6, Q.4, TP.HCM </p>
-                    <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> MST : 0310820281 </p>
-                    <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> Tel : 19006976 </p>
-                    <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> Website : www.vikhang.com - E-mail : info@vikhang.com </p>
+                <div>
+                    <div style="float: left; width: 25%;">
+                            
+                    <img src="{{COMPANY_LOGO}}" style="height: 127px;">
                 </div>
-                <div style="float: left; width: 10%; text-align: right;"><img src="http://kpi.vikhang.com:9000/js/app/cpanel/img/brand.jpg" style="height: 127px;"></div>
+                <div style="float: left; width: 65%; padding-left: 40px;">
+                    <p style="font-size: 14px; margin: 0px; padding: 5px 0px; font-weight: 500;"> {{COMPANY_NAME}} </p>
+                    <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> {{COMPANY_ADDRESS}} </p>
+                    <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> MST : {{COMPANY_TAXNO}} </p>
+                    <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> Tel: {{COMPANY_PHONE}} </p>
+                    <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> Website: {{COMPANY_WEBSITE}} - E-mail: {{COMPANY_EMAIL}} </p>
+                </div>
+                <div style="float: left; width: 10%; text-align: right;">
+                    <img src="http://kpi.vikhang.com:9000/js/app/cpanel/img/brand.jpg" style="height: 127px;">
+                </div>
+                
                 <div style="clear: both;"></div>
+
+
             </div>
             <div style="margin-top: 30px; position: relative;">
                 <div>
@@ -407,7 +398,7 @@ export const MAU_ORDER = `
                         <p style="margin: 0px; padding: 5px 0px; font-size: 16px; font-weight: 500;"> SALES INVOICE </p>
                     </div>
                     <div style="position: absolute; right: 0px; top: -10px;">
-                        [[BARCODE]]
+                        {{BARCODE}}
                     </div>
                 </div>
                 <div style="margin-top: 30px;">
@@ -415,29 +406,46 @@ export const MAU_ORDER = `
                         <table style="border: 1px solid rgb(0, 0, 0); padding: 10px 0px;">
                             <tbody>
                                 <tr>
-                                    <td style="width: 30%; font-size: 12px; text-align: right; padding: 9px 10px;">Company <span style="padding: 0px 10px;"> : </span></td>
-                                    <td style="width: 100%; font-size: 12px; padding: 9px 10px;"> LIÃŠN HIá»†P Há»¢P TÃC XÃƒ THÆ¯Æ&nbsp;NG Máº&nbsp;I QUáº¬N 3</td>
+                                    <td style="width: 30%; font-size: 12px; text-align: right; padding: 9px 10px;">
+                                        Company <span style="padding: 0px 10px;"> : </span>
+                                    </td>
+                                    <td style="width: 100%; font-size: 12px; padding: 9px 10px;"> 
+                                        {{CUSTOMER_NAME}}
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 30%; font-size: 12px; text-align: right; padding: 3px 10px;">Address (Địa chỉ) <span style="padding: 0px 10px;"> : </span></td>
-                                    <td style="width: 100%; font-size: 12px; padding: 3px 10px;">20 Cá»™ng HÃ²a, PhÆ°á»ng 12, TÃ¢n BÃ¬nh</td>
+                                    <td style="width: 30%; font-size: 12px; text-align: right; padding: 3px 10px;">
+                                        Address (Địa chỉ) <span style="padding: 0px 10px;"> : </span>
+                                    </td>
+                                    <td style="width: 100%; font-size: 12px; padding: 3px 10px;">
+                                        {{CUSTOMER_ADDRESS}}
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 30%; font-size: 12px; text-align: right; padding: 3px 10px;">Tel (SĐT) <span style="padding: 0px 10px;"> : </span></td>
-                                    <td style="width: 100%; font-size: 12px; padding: 3px 10px;">0908338835</td>
+                                    <td style="width: 30%; font-size: 12px; text-align: right; padding: 3px 10px;">
+                                        Tel (SĐT) <span style="padding: 0px 10px;"> : </span>
+                                    </td>
+                                    <td style="width: 100%; font-size: 12px; padding: 3px 10px;">
+                                        {{CUSTOMER_PHONE}}
+                                    </td>
                                 </tr>
-                                <tr>
-                                    <td style="width: 30%; font-size: 12px; text-align: right; padding: 3px 10px;">FAX <span style="padding: 0px 10px;"> : </span></td>
-                                    <td style="width: 100%; font-size: 12px; padding: 3px 10px;"></td>
-                                </tr>
+                                
                                 <tr>
                                     <td style="width: 30%; font-size: 12px; text-align: right; padding: 3px 10px;">Email <span style="padding: 0px 10px;"> : </span></td>
-                                    <td style="width: 100%; font-size: 12px; padding: 3px 10px;">khanh.hoptacxa@gmail.com</td>
+                                    <td style="width: 100%; font-size: 12px; padding: 3px 10px;">
+                                        {{CUSTOMER_EMAIL}}
+                                    </td>
                                 </tr>
+                                
                                 <tr>
-                                    <td style="width: 30%; font-size: 12px; text-align: right; padding: 9px 10px;">Attn(Người nhận) <span style="padding: 0px 10px;"> : </span></td>
-                                    <td style="width: 100%; font-size: 12px; padding: 9px 10px;">Mr Sá»¹</td>
+                                    <td style="width: 30%; font-size: 12px; text-align: right; padding: 9px 10px;">
+                                        Attn(Người nhận) <span style="padding: 0px 10px;"> : </span>
+                                    </td>
+                                    <td style="width: 100%; font-size: 12px; padding: 9px 10px;">
+                                        {{CUSTOMER_RECEIVER}}
+                                    </td>
                                 </tr>
+                                
                             </tbody>
                         </table>
                     </div>
@@ -445,16 +453,28 @@ export const MAU_ORDER = `
                         <table>
                             <tbody>
                                 <tr>
-                                    <td style="width: 55%; font-size: 12px; text-align: right; padding: 3px 10px;">Số Bill/PI No <span style="padding: 0px 10px;"> : </span></td>
-                                    <td class="text-uppercase" style="border: 1px solid rgb(0, 0, 0); width: 100%; padding: 3px; font-size: 12px;">inv-201905-002</td>
+                                    <td style="width: 55%; font-size: 12px; text-align: right; padding: 3px 10px;">
+                                        Số Inv/Inv No <span style="padding: 0px 10px;"> : </span>
+                                    </td>
+                                    <td class="text-uppercase" style="border: 1px solid rgb(0, 0, 0); width: 100%; padding: 3px; font-size: 12px;">
+                                        {{ORDER_CODE_PI}}
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 55%; font-size: 12px; text-align: right; padding: 3px 10px;">Ngày/Date <span style="padding: 0px 10px;"> : </span></td>
-                                    <td style="border: 1px solid rgb(0, 0, 0); width: 100%; padding: 3px; font-size: 12px;">2019-05-31</td>
+                                    <td style="width: 55%; font-size: 12px; text-align: right; padding: 3px 10px;">
+                                        Ngày/Date <span style="padding: 0px 10px;"> : </span>
+                                    </td>
+                                    <td style="border: 1px solid rgb(0, 0, 0); width: 100%; padding: 3px; font-size: 12px;">
+                                        {{ORDER_DATE_CONFIRMED}}
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 55%; font-size: 12px; text-align: right; padding: 3px 10px;">Báo giá số/Quo. No <span style="padding: 0px 10px;"> : </span></td>
-                                    <td style="border: 1px solid rgb(0, 0, 0); width: 100%; padding: 3px; font-size: 12px;">vk-201905-002</td>
+                                    <td style="width: 55%; font-size: 12px; text-align: right; padding: 3px 10px;">
+                                        Báo giá số/Quo. No <span style="padding: 0px 10px;"> : </span>
+                                    </td>
+                                    <td style="border: 1px solid rgb(0, 0, 0); width: 100%; padding: 3px; font-size: 12px;">
+                                        {{ORDER_CODE}}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td style="width: 55%; font-size: 12px; text-align: right; padding: 3px 10px;">Ref.(T.Gia T.Khảo) <span style="padding: 0px 10px;"> : </span></td>
@@ -462,11 +482,17 @@ export const MAU_ORDER = `
                                 </tr>
                                 <tr>
                                     <td style="width: 55%; font-size: 12px; text-align: right; padding: 3px 10px;">A/C code <span style="padding: 0px 10px;"> : </span></td>
-                                    <td style="border: 1px solid rgb(0, 0, 0); width: 100%; padding: 3px; font-size: 12px;">system</td>
+                                    <td style="border: 1px solid rgb(0, 0, 0); width: 100%; padding: 3px; font-size: 12px;">
+                                        {{ORDER_BELONG}}
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 55%; font-size: 12px; text-align: right; padding: 3px 10px;">Term(Hạn thanh toán) <span style="padding: 0px 10px;"> : </span></td>
-                                    <td class="text-uppercase" style="border: 1px solid rgb(0, 0, 0); width: 100%; padding: 3px; font-size: 12px;">pt009</td>
+                                    <td style="width: 55%; font-size: 12px; text-align: right; padding: 3px 10px;">
+                                        Term(Hạn thanh toán) <span style="padding: 0px 10px;"> : </span>
+                                    </td>
+                                    <td class="text-uppercase" style="border: 1px solid rgb(0, 0, 0); width: 100%; padding: 3px; font-size: 12px;">
+                                        {{ORDER_PAYMENT_CODE}}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -488,66 +514,50 @@ export const MAU_ORDER = `
                         </tr>
                     </thead>
                     <tbody style="border: 1px solid rgb(0, 0, 0);">
-                        <tr class="record-item">
-                            <td class="text-center item" style="vertical-align: middle;">1</td>
-                            <td class="text-center item" style="vertical-align: middle;">inbio160poe</td>
-                            <td class="item-pro-desc item">Bá»™ Ä‘iá»u khiá»ƒn trung tÃ¢m hiá»‡u : ZKTeco, MÃ£ hÃ&nbsp;ng: INBIO-160 POE, hÃ&nbsp;ng má»›i 100%</td>
-                            <td class="text-center item" style="vertical-align: middle;"></td>
-                            <td class="text-center item" style="vertical-align: middle;">3</td>
-                            <td class="text-center item" style="vertical-align: middle;">4,800,000</td>
-                            <td class="text-center item" style="vertical-align: middle;">14,400,000</td>
-                        </tr>
-                        <tr class="record-item">
-                            <td class="text-center item" style="vertical-align: middle;">2</td>
-                            <td class="text-center item" style="vertical-align: middle;">trans</td>
-                            <td class="item-pro-desc item">Dịch vụ vận chuyển hàng hóa có tính phí</td>
-                            <td class="text-center item" style="vertical-align: middle;">Cái</td>
-                            <td class="text-center item" style="vertical-align: middle;">1</td>
-                            <td class="text-center item" style="vertical-align: middle;">17,000</td>
-                            <td class="text-center item" style="vertical-align: middle;">17,000</td>
-                        </tr>
+                        {{ORDER_RECORDS}}
                     </tbody>
                     <tfoot>
                         <tr class="record-item">
                             <td class="item" colspan="4" style="border-right: 0px;"> </td>
                             <td class="item" colspan="2" style="text-align: right; border-left: 0px;"> Giảm </td>
-                            <td class="item" colspan="1"> 0 </td>
+                            <td class="item" colspan="1"> {{ORDER_DISCOUNT}} </td>
                         </tr>
                         <tr class="record-item">
                             <td class="item" colspan="3" style="border-right: 0px;"> </td>
                             <td class="item" colspan="3" style="text-align: right; border-left: 0px;">Amount/ Cộng tiền hàng</td>
-                            <td class="item" colspan="1"> 14,417,000 </td>
+                            <td class="item" colspan="1"> {{ORDER_AMOUNT}} </td>
                         </tr>
                         <tr class="record-item">
                             <td class="item" colspan="3" style="border-right: 0px;"> </td>
                             <td class="item" colspan="3" style="text-align: right; border-left: 0px;">VAT Tax/ Tiền thuế GTGT (10%)</td>
-                            <td class="item" colspan="1"> 1,441,700 </td>
+                            <td class="item" colspan="1"> {{ORDER_AMOUNT_TAX}} </td>
                         </tr>
                         <tr class="record-item">
                             <td class="item" colspan="6" style="text-align: right; border-left: 0px;"> Total Payment/Tổng cộng tiền thanh toán </td>
-                            <td class="item" colspan="1"> 15,858,700 </td>
+                            <td class="item" colspan="1"> {{ORDER_SUM}} </td>
                         </tr>
                         <tr>
                             <td class="item" colspan="2"> Số tiền bằng chữ </td>
-                            <td class="item N2T" colspan="5" style="font-style: italic;"> " mười lăm triệu tám trăm năm mươi tám nghìn bảy trăm đồng " </td>
+                            <td class="item N2T" colspan="5" style="font-style: italic;"> " {{ORDER_SUM_TEXT}} " </td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
             <div class="conditions ">
                 <p class="font-12"> Ghi chú / <i>Noted</i> : </p>
-                <label> - Thông tin ngân hàng <i>(Bank Information)</i>: </label>
+                <label> - Thông tin ngân hàng <i>(Bank Information)</i>: ... </label>
                 <br>
-                <label> - Số tài khoản <i>(A/C NO.Beneficiary)</i>: </label>
+                <label> - Số tài khoản <i>(A/C NO.Beneficiary)</i>: ... </label>
                 <br>
-                <label> - Thụ hưởng bởi <i>(Beneficiary)</i>: </label>
+                <label> - Thụ hưởng bởi <i>(Beneficiary)</i>: ... </label>
                 <br>
-                <label> - Địa chỉ ngân hàng <i>(Bank Address)</i>: </label>
+                <label> - Địa chỉ ngân hàng <i>(Bank Address)</i>: ... </label>
                 <br>
-                <label> - Terms (Thời hạn thanh toán) : </label>
+                <label> - Terms (Thời hạn thanh toán) : {{ORDER_PAYMENT_DESC}} </label>
                 <br>
                 <br>
                 <label>Đơn đặt hàng đặc biệt không thể bị hủy bỏ trong quá trình sản xuất. Không chấp nhận trả lại cho đơn đặt hàng đặc biệt.Tất cả các đơn đặt hàng cho dự án (Như là: sản phẩm OEM, dự án) đều được coi là đơn hàng đặc biệt. Không trả lại mà không có sự cho phép trước hoặc không có số RMA phải được phê duyệt từ nhà cung cấp.<i>(Notes: Special order cannot be cancelled once in production.No return allowned on special orders. All Project orders (Ex: OEM Products, project) are considered special orders. No return without prior authorization and without RMA number and subject to an approval from supplier)</i></label>
+
             </div>
             <div class="signature">
                 <div style="float: left; width: 33%; border: 1px solid rgb(0, 0, 0); padding: 5px;">
@@ -558,7 +568,7 @@ export const MAU_ORDER = `
                     <br>Date :</div>
                 <div style="float: left; width: 33%; color: rgb(255, 255, 255);">_</div>
                 <div style="float: left; width: 33%; border: 1px solid rgb(0, 0, 0); padding: 5px;">
-                    <label>CÔNG TY TNHH TM DV THIẾT BỊ KỸ THUẬT VI KHANG </label>
+                    <label> {{COMPANY_NAME}} </label>
                     <br>
                     <br>
                     <br>Verified by (Được xác nhận bởi)
@@ -615,14 +625,14 @@ export const MAU_PHIEUCHI =
   <table width='100%'>
       <tr>
           <td>
-              Công ty : [[COMPANY_NAME]]<br>
-              Địa chỉ : [[COMPANY_ADDRESS]] <br>
-              <div class='phonediv innerleft'>ĐT : [[COMPANY_PHONE]]</div> &nbsp<div class='innerleft'> Fax : [[COMPANY_FAX]]</div>
+              Công ty : {{COMPANY_NAME}}<br>
+              Địa chỉ : {{COMPANY_ADDRESS}} <br>
+              <div class='phonediv innerleft'>ĐT : {{COMPANY_PHONE}}</div> &nbsp<div class='innerleft'> Fax : {{COMPANY_FAX}}</div>
           </td>
           <td style='width: 35%'>
-              Ngày : [[CASHFLOW_DATECREATED]] <br>
-              Số : [[CASHFLOW_CODE]] <br>
-              Cửa hàng : [[CASHFLOW_LOCATION]]
+              Ngày : {{CASHFLOW_DATECREATED}} <br>
+              Số : {{CASHFLOW_CODE}} <br>
+              Cửa hàng : {{CASHFLOW_LOCATION}}
           </td>
       </tr>
   </table>
@@ -631,7 +641,7 @@ export const MAU_PHIEUCHI =
       <tbody>
           <tr>
               <td colspan='2' style='text-align: center'>
-                  <h2 id=''>PHIẾU [[CASHFLOW_TYPE]]</h2>
+                  <h2 id=''>PHIẾU {{CASHFLOW_TYPE}}</h2>
               </td>
           </tr>
           <tr>
@@ -639,38 +649,38 @@ export const MAU_PHIEUCHI =
                    Đối tượng :
               </td>
               <td>
-                  <div class='dotline'>[[CASHFLOW_PARTNER]]</div>
+                  <div class='dotline'>{{CASHFLOW_PARTNER}}</div>
               </td>
           </tr>
           <tr>
               <td>
                    Thanh toán bằng :
               </td>
-              <td><div class='dotline'> [[CASHFLOW_PAYMENTTYPE]] [[CASHFLOW_BANKNAME]]</div></td>
+              <td><div class='dotline'> {{CASHFLOW_PAYMENTTYPE}} {{CASHFLOW_BANKNAME}}</div></td>
           </tr>
           <tr>
               <td>
                   Số tài khoản :
               </td>
-              <td><div class='dotline'> [[CASHFLOW_ACCOUNTNUMBER]]</div></td>
+              <td><div class='dotline'> {{CASHFLOW_ACCOUNTNUMBER}}</div></td>
           </tr>
           <tr>
               <td>
                   Lý do nộp :
               </td>
-              <td><div class='dotline'>[[CASHFLOW_TITLE]]</div></td>
+              <td><div class='dotline'>{{CASHFLOW_TITLE}}</div></td>
           </tr>
           <tr>
               <td>
                   Số tiền :
               </td>
-              <td><div class='dotline'>[[CASHFLOW_VALUE]]</div></td>
+              <td><div class='dotline'>{{CASHFLOW_VALUE}}</div></td>
           </tr>
           <tr>
               <td>
                   Ghi chú :
               </td>
-              <td><div class='dotline'>[[CASHFLOW_NOTE]]</div> </td>
+              <td><div class='dotline'>{{CASHFLOW_NOTE}}</div> </td>
           </tr>
       </tbody>
   </table>

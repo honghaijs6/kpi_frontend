@@ -5,6 +5,11 @@ export default function(loading){
 
     switch(loading){
 
+        case 'get':
+            preload.style.display = 'block';
+            preloadText.innerHTML = 'process Loading...';
+
+        break ;
         case 'authenticate':
             
             preload.style.display = 'block';

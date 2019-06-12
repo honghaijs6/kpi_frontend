@@ -43,6 +43,18 @@ class SettingOrderPage extends Component{
         }
     } 
 
+    _defaultTemplate(type){
+        const arr = {
+            quotation_temp:MAU_QUOTATION,
+            order_temp:MAU_ORDER
+        };
+
+        this.setState({
+            [type]:arr[type]
+        });
+
+
+    }
     _previewForm = (type)=>{
         this.setState({
             type:type,
@@ -50,22 +62,25 @@ class SettingOrderPage extends Component{
         });
     }
 
-    async componentDidMount(){
-        const info = await doGetModelInfo('companies',window.USERINFO.company_id);
-        if(info.name==='success'){
 
-            const data = info.data;
-            
-            this.setState({
-                companyInfo:info.data,
-                quotation_temp:data.quotation_temp || MAU_QUOTATION,
-                order_temp:data.order_temp || MAU_ORDER,
+    async componentWillReceiveProps(newProps){
+        if(newProps.onTab===this.state.tab){
+            const info = await doGetModelInfo('companies',window.USERINFO.company_id);
+            if(info.name==='success'){
+
+                const data = info.data;
                 
-            });
+                this.setState({
+                    companyInfo:info.data,
+                    quotation_temp:data.quotation_temp || MAU_QUOTATION,
+                    order_temp:data.order_temp || MAU_ORDER,
+                    
+                });
 
+            }
         }
     }
-
+    
     async _onSubmit(field){
         // quotation_temp - order_temp
         const data = {
@@ -86,7 +101,7 @@ class SettingOrderPage extends Component{
 
                     <PreviewForm 
                         
-                        name="Báo giá"
+                        name="Xem trước"
                         type={this.state.type}
 
                         width="72%"
@@ -109,7 +124,16 @@ class SettingOrderPage extends Component{
                             <FormGroup row>
                                 <Col md={12}>
                                     <Label> Mẫu hiển thị báo giá </Label>
-                                    <span style={{cursor:'pointer'}} onClick={()=>{ this._previewForm('quotation_temp') }} className="txt-green pull-right">  Xem trước </span>
+                                    
+                                    
+                                    <span style={{cursor:'pointer'}} onClick={()=>{ this._previewForm('quotation_temp') }} className="txt-green pull-right">  
+                                        <i className="fa fa-search-plus mr-5"></i>    Xem trước 
+                                    </span>
+
+                                    <span onClick={()=>{ this._defaultTemplate('quotation_temp') }} className="pointer pull-right mr-20 text-red">  
+                                        <i className="fa fa-file-code-o mr-5"></i> Template mặc định
+                                    </span>
+
                                     <div style={{marginTop:10}}>
                                         <Input 
                                             onChange={(e)=>{ this.setState({quotation_temp:e.target.value}) }}    
@@ -139,7 +163,16 @@ class SettingOrderPage extends Component{
                             <FormGroup row>
                                 <Col md={12}>
                                     <Label> Mẫu hiển thị Đơn hàng </Label>
-                                    <span style={{cursor:'pointer'}} onClick={()=>{ this._previewForm('order_temp') }} className="txt-green pull-right">  Xem trước </span>
+                                    
+
+                                    <span style={{cursor:'pointer'}} onClick={()=>{ this._previewForm('order_temp') }} className="txt-green pull-right">  
+                                        <i className="fa fa-search-plus mr-5"></i>    Xem trước 
+                                    </span>
+
+                                    <span onClick={()=>{ this._defaultTemplate('order_temp') }} className="pointer pull-right mr-20 text-red">  
+                                        <i className="fa fa-file-code-o mr-5"></i> Template mặc định
+                                    </span>
+
                                     <div style={{marginTop:10}}>
                                         <Input 
                                             onChange={(e)=>{ this.setState({order_temp:e.target.value}) }}    

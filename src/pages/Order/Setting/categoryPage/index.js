@@ -50,6 +50,7 @@ class CategoryPage extends Component{
     this.grid = {
       colums:[
         {headerName: "Tên ", field: "name",width:400},
+        { headerName:"Sản phẩm ", field:"total_product", width:140 },
         {headerName: "Thứ tự", field: "sort",width:120},
         {headerName: "Người tạo", field: "creator",width:200},
         
@@ -126,26 +127,18 @@ class CategoryPage extends Component{
 
   /* WHEN*/
   
-  componentWillUnmount(){
-    this._isData = false; 
-
-  }
+  
   componentWillReceiveProps(newProps){
     
     if(!this._isData){
       this.model.initData() ; 
       this._isData = true ; 
-      
+
     }
-    this.data[MODE] = newProps[MODE]['list'] || [] ;  
-    // UPDATE CURRRENT STATE 
-    Object.assign(this.state,newProps[MODE]['state']);
+
+    this.grid.rowData = newProps[MODE]['list'] || [] ;
+    this._whereStateChange(newProps[MODE]['state']);
     
-
-
-    this.resetGrid();
-
-
   }
   
 

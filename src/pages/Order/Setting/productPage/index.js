@@ -7,7 +7,7 @@ import Model from '../../../../model/model';
 /*  HOOKS */
 import { doGetModelInfo } from '../../../../hook/ultil'
 import React, { Component } from 'react';
-import {ButtonGroup, FormGroup} from 'reactstrap'
+import {ButtonGroup, FormGroup} from 'reactstrap';
 
 import { connect } from 'react-redux';
 
@@ -31,6 +31,10 @@ import SelectListModel  from '../../../../components/SelectListModel';
 import SelectList from '../../../../components/SelectList'; 
 
 import ButtonExpand from '../../../../components/ButtonExpand'; 
+import ButtonImportXLS from '../../../../components/ButtonImportXLS' ; 
+import ButtonExportXLS from '../../../../components/ButtonExportXLS';
+import ButtonExportXLSTemp from '../../../../components/ButtonExportXLSTemp';
+
 
 
 const MODE = 'products';
@@ -71,7 +75,13 @@ class ProductPage extends Component{
           }
         },
         {headerName: "Danh Mục", field: "category",width:140},
-        {headerName: "Nhà Cung Cấp", field: "supplier_codes",width:160},
+        {headerName: "Nhà Cung Cấp", field: "supplier_codes",width:160,
+          cellRenderer(params){
+            return `
+              <i class="fa fa-user mr-5"></i> ${params.value}
+            `;
+          }
+        },
 
         {headerName: "Giá nhà máy", field: "price_1",width:140,
           cellRenderer(params){
@@ -103,7 +113,13 @@ class ProductPage extends Component{
         {headerName: "ĐVT", field: "unit_name",width:100},
         {headerName: "BH", field: "guran_month",width:100},
         {headerName: "Serial", field: "is_serial",width:100},
-        {headerName: "Người tạo", field: "creator",width:140},
+        {headerName: "Người tạo", field: "creator",width:160,
+          cellRenderer(params){
+            return `
+              <i class="fa fa-user mr-5"></i> ${params.value}
+            `;
+          }
+        },
         {headerName: "Ngày tạo", field: "date_created",
           cellRenderer(params){
             const humanDate = moment(params.value).format('YYYY-MM-DD')
@@ -177,6 +193,7 @@ class ProductPage extends Component{
 
     // GET COMPANY INFO 
     const comInfo = await doGetModelInfo('companies',window.USERINFO.company_id);
+
     if(comInfo.name==='success'){
 
       let price_setting =  typeof comInfo.data.price_setting === 'string' ? JSON.parse(comInfo.data.price_setting) : PRICE_SETTING
@@ -195,7 +212,6 @@ class ProductPage extends Component{
     this.data[MODE] = newProps[MODE]['list'] || [] ;
     // UPDATE CURRRENT STATE 
     Object.assign(this.state,newProps[MODE]['state']);
-    
     this.resetGrid(); // HAD INSIDE setSatte 
     
 
@@ -256,13 +272,31 @@ class ProductPage extends Component{
              
 
              customButton={
-                  <ButtonGroup>
-              
+                  <ButtonGroup > 
+
+                      <ButtonExportXLSTemp
+                        strModel={MODE}
+                        
+                        columns={['code','name','type','supplier_codes','price_1','price_2','price_3','price_4','is_serial']}
+                      />
+
+                      <ButtonImportXLS 
+                         title="Upload file Excel "
+                         strModel={MODE}
+                         columns={ ['code','name','type','supplier_codes','price_1','price_2','price_3','price_4','is_serial'] }
+                      />
+ 
+                      <ButtonExportXLS  
+                        title="Download file"
+                        strModel={MODE}
+                        columns={ ['code','name','type','supplier_codes','price_1','price_2','price_3','price_4','is_serial'] }
+                      />
+
                       <ButtonExpand width={720} icon="fa-tags">
                           <FormFollow data={this.state.selectedData} />
                       </ButtonExpand>
                       
-                      <ButtonExpand icon="fa-filter">
+                      <ButtonExpand icon="fa-filter" style={{borderRight:0}}>
                           <FormGroup>
                                 <label> Danh mục </label>
                                 <SelectListModel onChange={(e)=>{ this._doFilter('categories_id',e.target.value) }} name="Tất cả" strModel='categories' />

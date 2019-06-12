@@ -4,7 +4,8 @@ import Model from '../../../model/model'
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import {  Row, Col, FormGroup,Label, Input, Table, Button, ButtonGroup  } from 'reactstrap';
+import {   Table  } from 'reactstrap';
+
 import { AppSwitch } from '@coreui/react';
 
 

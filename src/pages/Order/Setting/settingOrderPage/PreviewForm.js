@@ -17,15 +17,15 @@ class PreviewForm extends Component {
 
     _formatHTML(HTML){
         
-        HTML = HTML.replace('[[COMPANY_LOGO]]',this.state.companyInfo['logo']);
         
 
-        HTML = HTML.replace('[[COMPANY_NAME]]',this.state.companyInfo['name']);
-        HTML = HTML.replace('[[COMPANY_ADDRESS]]',this.state.companyInfo['address']);
-        HTML = HTML.replace('[[COMPANY_TAXNO]]',this.state.companyInfo['tax_no']);
-        HTML = HTML.replace('[[COMPANY_PHONE]]',this.state.companyInfo['phone']);
-        HTML = HTML.replace('[[COMPANY_WEBSITE]]',this.state.companyInfo['website']);
-        HTML = HTML.replace('[[COMPANY_EMAIL]]',this.state.companyInfo['email']);
+        HTML = HTML.replace(/{{COMPANY_LOGO}}/g,this.state.companyInfo['logo']);
+        HTML = HTML.replace(/{{COMPANY_NAME}}/g,this.state.companyInfo['name']);
+        HTML = HTML.replace(/{{COMPANY_ADDRESS}}/g,this.state.companyInfo['address']);
+        HTML = HTML.replace(/{{COMPANY_TAXNO}}/g,this.state.companyInfo['tax_no']);
+        HTML = HTML.replace(/{{COMPANY_PHONE}}/g,this.state.companyInfo['phone']);
+        HTML = HTML.replace(/{{COMPANY_WEBSITE}}/g,this.state.companyInfo['website']);
+        HTML = HTML.replace(/{{COMPANY_EMAIL}}/g,this.state.companyInfo['email']);
         
 
 

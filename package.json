@@ -28,6 +28,7 @@
     "draft-js": "^0.10.5",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
+    "file-saver": "^2.0.2",
     "firebase": "^5.10.0",
     "flag-icon-css": "^3.2.1",
     "font-awesome": "^4.7.0",
@@ -53,10 +54,10 @@
     "react-test-renderer": "^16.6.0",
     "react-toastify": "^4.5.1",
     "reactstrap": "^6.5.0",
-    "read-excel-file": "^4.0.1",
     "redux": "^4.0.1",
     "simple-line-icons": "^2.4.1",
-    "socket.io-client": "^2.1.1"
+    "socket.io-client": "^2.1.1",
+    "xlsx": "^0.14.3"
   },
   "devDependencies": {
     "react-scripts": "^2.1.2",

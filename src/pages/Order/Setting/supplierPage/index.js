@@ -7,6 +7,8 @@ supplier page
 import Model from '../../../../model/model';
 
 import React, { Component } from 'react';
+import {ButtonGroup, FormGroup} from 'reactstrap'
+
 import { connect } from 'react-redux';
 
 import moment from 'moment';
@@ -21,14 +23,18 @@ import formCtrl from './formCtrl';
 /*INCLUDE OTHER COMPONENT*/
 import { BenGrid } from '../../../../components/BenGrid2';
 
+import ButtonImportXLS from '../../../../components/ButtonImportXLS' ; 
+import ButtonExportXLS from '../../../../components/ButtonExportXLS';
+import ButtonExportXLSTemp from '../../../../components/ButtonExportXLSTemp' ; 
+
+
 const MODE = 'suppliers';
 const MODE_NAME = 'Nhà cung cấp';
 const MODE_TAB = 'supplierPage';
 
 class SupplierPage extends Component{
 
-  _isData = false;
-
+  
   constructor(props){
     super(props);
 
@@ -159,22 +165,18 @@ class SupplierPage extends Component{
 
   componentWillUnmount() {
     //this.unsubscribe();
-    this._isData = false ;
+    //this.state.isIniData = false ;
   }
 
   componentWillReceiveProps(newProps){
 
-    if(!this._isData){
+    if(!this.state.isIniData){
       this._doInitData();
-      this._isData = true ;
     }
 
     this.data[MODE] = newProps[MODE]['list'] || [] ;
-
     // UPDATE STATE FORM DATA
     Object.assign(this.state,newProps[MODE]['state']) ;
-    
-
     this.resetGrid();
 
 
@@ -187,6 +189,12 @@ class SupplierPage extends Component{
   }
 
 
+  _onComplete = (isFinish) =>{
+    if(isFinish){
+      this._doInitData();
+
+    }
+  }
   render(){
 
 
@@ -217,6 +225,33 @@ class SupplierPage extends Component{
              nextColums={ this.grid.colums }
              rowData={this.grid.rowData}
              model={ this.model }
+
+             customButton={
+                <ButtonGroup>
+
+                    <ButtonExportXLSTemp
+                      strModel={MODE}
+                      columns={['code','name','tax_no','address','subregion_code','region_code','address_2','phone']}
+                    />
+                    
+                    <ButtonImportXLS 
+                        title="Upload file"
+                        strModel={MODE}
+                        columns={ ['code','name','tax_no','address','subregion_code','region_code','address_2','phone'] }
+                        onComplete={ this._onComplete }
+                    />
+
+                    <ButtonExportXLS  
+                      style={{
+                        borderRadius:0,
+                        borderRight:0
+                      }}
+                      title="Download file"
+                      strModel={MODE}
+                      columns={ ['code','name','tax_no','address','subregion_code','region_code','address_2','phone'] }
+                    />
+                </ButtonGroup>
+             }
 
           />
       </div>
