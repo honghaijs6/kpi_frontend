@@ -44,7 +44,11 @@ class SelectListModelCode extends React.Component {
 
     render() {
         return (
-            <Input id={this.props.id} value={ this.state.defaultValue } onChange={(e)=>{ this.props.onChange(e) }} type="select" style={ this.props.style || {} }>
+            <Input 
+                disabled={this.props.disabled}  
+                id={this.props.id} value={ this.state.defaultValue }
+                onChange={(e)=>{ this.props.onChange(e) }} type="select" style={ this.props.style || {} }
+            >
                 <option value=""> { this.state.name } </option>
                 {
                     this.state.rows.map((item)=>{

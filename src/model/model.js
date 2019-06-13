@@ -108,16 +108,13 @@ class Model {
 
     console.log(err);
     
-    const data = err.response.data ;
+    /*const data = err.response.data ;
     const msg = data.errors[0];
-
-    // show err
     if(typeof msg === 'object'){
       msg = msg.message.indexOf('must be unique') >-1 ? 'Mã này đã được dùng' : msg.message ;
     }
 
     let el = document.querySelector("#form-err");
-
     console.log(err);
 
     if(el !== null){
@@ -125,7 +122,8 @@ class Model {
       setTimeout(()=>{
         el.innerHTML = 'status';
       },2000)
-    }else{  console.log(msg);}
+    }else{  console.log(msg);}*/
+
     // end show
   }
 
@@ -529,19 +527,21 @@ class Model {
           case 'PUT':
 
             /*UPDATE REDUX STORE*/
-            const id = idata.data.id;
             
+            if(this.dispatcher !== null){
+              const id = idata.data.id;
+              list.forEach((item,index)=>{
+                
+                if(parseInt(item.id) === parseInt(id)){
+                  list[index] = idata.data;
+                }
+              })
 
-            list.forEach((item,index)=>{
-              
-              if(parseInt(item.id) === parseInt(id)){
-                 list[index] = idata.data;
-              }
-            })
-
-            this.restResp({
-              list:list
-            });
+              this.restResp({
+                list:list
+              });
+            }
+            
 
 
           break ;

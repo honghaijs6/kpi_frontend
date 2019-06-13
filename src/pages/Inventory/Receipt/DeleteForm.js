@@ -61,38 +61,35 @@ export default  class DeleteForm extends Component {
     
     componentWillReceiveProps(newProps){
         this._curInfo = newProps.data;
+        
     }
     render() {
         return (
-            <ViewModal name="Cảnh báo" { ...this.props } onToggle={(isOpen)=>{  this.props.onToggle(isOpen)}} >
-                <div style={{
-                    padding:'20px 10px'
-                }}>
-                    <p> Bạn có chắc là muốn xoá dữ liệu này? </p>
-                    <FormGroup>
-                        <Row>
-                            <Col md={12}>
-                                <label> Lý do xoá </label>
-                                <SelectListModel id="delete_reason_id" onChange={(e)=>{ this.setState({delete_reason_id:e.target.value}) }} strModel="delete_reasons" name="Vui lòng chọn" />
-                            </Col>
-                        </Row>
-                    </FormGroup>
+            <ViewModal   name="Cảnh báo" { ...this.props } onToggle={(isOpen)=>{  this.props.onToggle(isOpen)}} >
+                <div className="view-modal-body" >
+
+                    {
+                        this.props.data.status === 0 ? 
+                        (
+                            <div>
+                                <p> Bạn có chắc là muốn xoá dữ liệu này? </p>
+                                <FormGroup>
+                                    <Row>
+                                        <Col md={12}>
+                                            <label> Lý do xoá </label>
+                                            <SelectListModel id="delete_reason_id" onChange={(e)=>{ this.setState({delete_reason_id:e.target.value}) }} strModel="delete_reasons" name="Vui lòng chọn" />
+                                        </Col>
+                                    </Row>
+                                </FormGroup>
+                            </div>
+                        ): <div style={{textAlign:'center'}} className="text-red" > <i className="fa fa-warning mr-5"></i> Xin lỗi bạn không thể xoá !  </div>
+                    }
+
+                    
                 
                 </div>
-                <div style={{
-                    padding:'30px 0px',
-                    marginBottom:20
-                }}>
-                    <div className="float-left">
-                        <div className="form-err text-red" id="form-err"></div>
-                    </div>
-                    <div className="float-right">
-                        <div role="group" className="btn-group">
-                            <Button className="btn-ubuntu bg-dark" onClick={ this._cancel }> <i className="fa fa fa-reply"></i> Từ Chối  </Button>
-                            <Button  className="btn-ubuntu-ok bg-green" onClick={  this._onSubmit }> <i className="fa fa-chevron-circle-right"></i> Đồng Ý </Button>
-                        </div>
-                    </div>
-                </div>                  
+
+                 
             </ViewModal>
         );
     }

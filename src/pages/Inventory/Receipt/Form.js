@@ -13,6 +13,9 @@ import InputSuggestProduct from '../../../components/InputSuggestProduct' ;
 import SelectListModelCode from '../../../components/SelectListModelCode';
 import SelectList from '../../../components/SelectList'; 
 
+import ButtonImportSerial from '../../../components/ButtonImportSerial';
+import ButtonSerialVerify from '../../../components/ButtonSerialVerify';
+
 
 function Info(props){  
 
@@ -24,24 +27,44 @@ function Info(props){
         
         <FormGroup>
           <Label> Loại  <span className="text-red">*</span></Label>
-          <SelectList id="track_code"  defaultValue={ props.track_code } onChange={(e)=>{ props.onChange('track_code',e.target.value)  }} rows={ WAREHOUSE_TRACKS[props.type] } name="-- Chọn --" />
+          <SelectList 
+            id="track_code" 
+            disabled={ props.status === 0 ? false : true } 
+            defaultValue={ props.track_code } onChange={(e)=>{ props.onChange('track_code',e.target.value)  }}
+             rows={ WAREHOUSE_TRACKS[props.type] } name="-- Chọn --" 
+          />
 
         </FormGroup>
 
-        <FormGroup>
+        <FormGroup>  
           <Label> Kho </Label>
-          <SelectListModelCode id="warehouse_code" defaultValue={ props.warehouse_code } onChange={(e)=>{  props.onChange('warehouse_code',e.target.value) }} name="-- Chọn --" strModel="warehouses" />
+          <SelectListModelCode 
+            disabled={ props.status === 0 ? false : true } 
+            id="warehouse_code" 
+            defaultValue={ props.warehouse_code } 
+            onChange={(e)=>{  props.onChange('warehouse_code',e.target.value) }} 
+            name="-- Chọn --" 
+            strModel="warehouses" 
+          />
 
         </FormGroup>
         
         <FormGroup>
           <Label> Trạng thái </Label>
-          <SelectList defaultValue={props.status} rows={WAREHOUSE_RECEIPT} defaultValue={ props.status } onChange={(e)=>{ props.onChange('status',e.target.value) }} name="-- Chọn -- " />
+          <SelectList 
+            disabled={ props.status === 0 ? false : true }   
+            defaultValue={props.status} rows={WAREHOUSE_RECEIPT} defaultValue={ props.status } onChange={(e)=>{ props.onChange('status',e.target.value) }} name="-- Chọn -- " />
 
         </FormGroup>
         <FormGroup>
           <Label> Ghi chú  </Label>
-          <Input defaultValue={props.note} type="textarea" onChange={(e)=>{props.onChange('note',e.target.value)  }}  style={{height:100}} id="note" />
+          <Input
+            disabled={ props.status === 0 ? false : true }    
+            defaultValue={props.note} 
+            type="textarea" 
+            onChange={(e)=>{props.onChange('note',e.target.value)  }}  
+            style={{height:100}} id="note" 
+          />
         </FormGroup>
 
 
@@ -55,9 +78,6 @@ function TableInfo(props){
     
   const grid = props.grid ; 
   
-  
-
-  
   return(
 
     <div style={{padding:'30px 10px'}}>
@@ -66,7 +86,7 @@ function TableInfo(props){
         
         <Row>
           <Col md="9">
-            <InputSuggestProduct   type="all" onSelected={(json)=>{ props.onSelectedProduct(json) }}    />
+            <InputSuggestProduct disabled={ props.status === 1 ? true : false }   type="all" onSelected={(json)=>{ props.onSelectedProduct(json) }}    />
           </Col>
           <Col md="3">
             
@@ -95,31 +115,87 @@ function TableInfo(props){
                   props.cart.map((item)=>{
                     
                     const amount = parseInt(item.amount) ; 
-                    const price = item.price;
-                    const total = parseInt(price) * amount ;  
-                    const totalWithVat = (total * (parseInt(props.vat) / 100)) + total ;
-                    
 
+                    const BtnSerial = ()=>{
+
+                      if(item.is_serial===1){
+
+                        if(item.is_upload_serial===0){
+                          
+                          const arr = {
+                            in:<ButtonImportSerial  
+                                    icon="fa fa-ticket"
+                                    title=""
+                                    strModel="serials"
+                                    columns={['code']}
+                                    width="36%"
+                                    total={amount}  
+                                    fields={{
+                                    product_code:item.code,
+                                    warehouse_receipt_code:props.code,
+                                    type:'in'
+                                    }}
+                                    onComplete={(isFinish)=>{ props.onCardChange({row_id:item.id,field:'is_upload_serial',value:1}) }}
+                                />,
+                            out:<ButtonSerialVerify
+
+                                  icon="fa fa-ticket"
+                                  title=""
+                                  strModel="serials"
+                                  width="30%"
+                                  total={amount}  
+                                  onComplete={(isFinish)=>{ props.onCardChange({row_id:item.id,field:'is_upload_serial',value:1}) }}
+
+                                />
+                          }
+                          return( 
+                            arr[props.type] 
+                          )
+                        }else{  
+                           return(
+                             <Button className="btn btn-normal"><i className="fa  fa-check"></i></Button>
+                           )
+                        }
+                        
+                      }
+                      return <span></span>
+
+                      
+                    }
+                    
                     return(
                       <tr key={item.id}>
 
                         <td style={{ width: grid['colums'][0]['width'] }}> { item.code } </td>
                         <td style={{width:grid['colums'][1]['width']}}> {item.name} </td>
                         
-                        
 
                         <td style={{width:grid['colums'][2]['width']}}> { item.unit } </td>
 
                         <td style={{width:grid['colums'][3]['width']}}>
-                            <Input type="number" 
-                              onChange={(e)=>{ props.onCardChange({row_id:item.id,field:'amount',value:e.target.value}) }} 
-                              min={1} max={1000000} 
-                              defaultValue={ amount } 
-                            />
+                            {
+                              props.status === 0 ? 
+                                <Input type="number" 
+                                  onChange={(e)=>{ props.onCardChange({row_id:item.id,field:'amount',value:e.target.value}) }} 
+                                  min={1} max={1000000} 
+                                  defaultValue={ amount } 
+                                /> : <span> { amount }  </span>
+                            }
                         </td>
 
                         <td style={{width:grid['colums'][4]['width']}}>
-                          <button style={{width:24, height:24, borderRadius:'50%',border:0}} onClick={()=>{ props.onRemoveCard(item.id) }}  className="bg-green"><i className="fa fa-trash"></i></button>
+                           {
+                             props.status === 0 ? 
+                             <ButtonGroup>
+                                <Button 
+                                  onClick={()=>{ props.onRemoveCard(item.id) }}
+                                  className="btn btn-normal"> 
+                                  <i className="fa fa-trash"></i>
+                                </Button>
+                                <BtnSerial />
+                              </ButtonGroup>
+                            : null
+                           }
                         </td>
                       </tr>
                     )
@@ -161,7 +237,7 @@ export default class ReceiptForm extends Component {
                 {headerName: "Sản phẩm", width:410},
                 {headerName: "ĐVT", width:120},
                 {headerName: "SL", width:90},
-                {headerName: "", width:90}
+                {headerName: "", width:140}
               ]
           }
 
@@ -353,6 +429,14 @@ export default class ReceiptForm extends Component {
       if(newProps.typeAction==='put'){
 
         const data = newProps.data; 
+
+        const cart = JSON.parse(data.cart).map((item)=>{
+          return {
+            ...item,
+            is_upload_serial:0
+          }
+        })
+
         const code  = data['code_'+data.type];
         const state = {
           id:data.id,
@@ -361,7 +445,7 @@ export default class ReceiptForm extends Component {
           type: data.type , 
           track_code:data.track_code,
           status:data.status,
-          cart:JSON.parse(data.cart),
+          cart:cart,
           total:data.total,
           note:data.note,
         }
@@ -404,7 +488,8 @@ export default class ReceiptForm extends Component {
     
 
     return (
-      <ViewModal name={ FORM_NAME } isFooter={true} onSubmit={ this._onSubmit } {...this.props}  onToggle={(isOpen)=>{this.props.onToggle(isOpen)  }} >
+      <ViewModal name={ FORM_NAME } 
+          isFooter={ true } onSubmit={ this._onSubmit } {...this.props}  onToggle={(isOpen)=>{this.props.onToggle(isOpen)  }} >
           <Row>
               <Col md={9} >
                   <TableInfo 

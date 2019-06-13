@@ -87,15 +87,8 @@ class Po extends Component {
                  }
               },
 
-              {
-                  headerName:"Nguồn", field:"supplier_info", width:100,
-                  cellRenderer(params){
-                      const supInfo = JSON.parse(params.value);
-                      return `<span class="text-uppercase"> ${supInfo.roots} </span>`
-                  }
-              },
               
-              {headerName: "Trạng thái", field: "status",width:140,
+              {headerName: "Trạng thái", field: "status",width:180,
                 cellRenderer(params){
                     return `<span style="background: ${PURCHASE_STATUS[params.value]['color']}; color:#fff " class="badge"> <i class="fa mr-5 ${ PURCHASE_STATUS[params.value]['icon'] }"></i> ${PURCHASE_STATUS[params.value]['name']} </span>`;
                 }

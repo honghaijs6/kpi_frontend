@@ -142,6 +142,7 @@ export default class InputSuggest extends Component{
             <div>
                 <ButtonGroup style={{width:'100%'}}>
                     <Input 
+                        disabled={this.props.disabled}
                         onKeyUp={ this._keyHandling } 
                         id={this.props.id || 0 } 
                         placeholder="Tìm kiếm..." 

@@ -9,7 +9,6 @@ import {  Row, Col, FormGroup,Label, Input, Table  } from 'reactstrap';
 
 import ViewModal from '../../../components/ViewModal'; 
 
-import ButtonExpand from '../../../components/ButtonExpand';
 import SelectListModelCode from '../../../components/SelectListModelCode';
 import SelectList from '../../../components/SelectList'; 
 
@@ -36,7 +35,11 @@ function Info(props){
         
         <FormGroup>
           <Label> Trạng thái </Label>
-          <SelectList defaultValue={props.status} rows={WAREHOUSE_RECEIPT} defaultValue={ props.status } onChange={(e)=>{ props.onChange('status',e.target.value) }} name="-- Chọn -- " />
+          <SelectList 
+              disabled 
+              defaultValue={props.status} 
+              rows={WAREHOUSE_RECEIPT} 
+              onChange={(e)=>{ props.onChange('status',e.target.value) }} name="-- Chọn -- " />
 
         </FormGroup>
         <FormGroup>
@@ -109,12 +112,7 @@ function TableInfo(props){
                             />
                         </td>
 
-                        <td style={{width:grid['colums'][4]['width']}}>
-                            <ButtonExpand style={{borderRadius:0}} icon="fa-get-pocket">
-                              asdas
-                            </ButtonExpand>
-                            
-                        </td>
+                        <td style={{width:grid['colums'][4]['width']}}></td>
                       </tr>
                     )
                   })
@@ -174,7 +172,7 @@ export default class ReceiptForm extends Component {
       warehouse_code:'',
       type: 'in', 
       track_code:'muahang',
-      status:1, // TRANG THAI HOÀN THÀNH
+      status:0, // TRANG THAI ĐANG XƯ LÝ
       cart:[],
       total:0,
       note:'',

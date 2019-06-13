@@ -8,7 +8,7 @@ import { Input  } from 'reactstrap';
 const SelectList = (props)=>{
 
     return (
-        <Input onChange={(e)=>{ props.onChange(e) }} { ...props} type="select">  
+        <Input  disabled={props.disabled} onChange={(e)=>{ props.onChange(e) }} { ...props} type="select">  
             <option key="" value="" > { props.name || 'Tất cả'  } </option>
             {
                 props.rows.map((item)=>{
@@ -34,6 +34,7 @@ SelectList.defaultProps = {
     name:'Loại',
     rows:[],
     style:{},
+    disabled:false,
     onChange:function(){}
 }
 

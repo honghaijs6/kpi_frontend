@@ -8,12 +8,10 @@ import React, { Component } from 'react';
 import { Input, Button, Row, Col } from 'reactstrap';
 
 
+
 import BenMessage from './BenMessage'; 
 import ViewModal  from './ViewModal';
 import BenTable from './BenTable' ; 
-
-
- 
 
 
 
@@ -42,7 +40,7 @@ Array.prototype.equals = function (array) {
 }
 
 
-class ButtonImportXLS extends Component {
+class ButtonImportSerial extends Component {
 
     _index = 0 ;
     _percentage = 0 ;
@@ -54,7 +52,9 @@ class ButtonImportXLS extends Component {
             status:'',
             columns:props.columns,
 
-            isOpen:false
+            isOpen:false,
+            data_fail:[],
+            msg:''
         }
 
         this.grid = {
@@ -83,6 +83,16 @@ class ButtonImportXLS extends Component {
     }
 
     _openForm(){
+
+        this.grid.rowData = this.grid.rowData.map((item)=>{
+            return {
+                code:item.code,
+                ...this.props.fields
+                
+            }
+            
+        });
+        
         this.setState({
             isOpen:true
         });
@@ -108,7 +118,7 @@ class ButtonImportXLS extends Component {
               const sheetName  = wb.SheetNames[0];
               const worksheet = wb.Sheets[sheetName];
               
-              const list = XLSX.utils.sheet_to_json(worksheet,{raw:true});
+              let list = XLSX.utils.sheet_to_json(worksheet,{raw:true});
               
               if(list.length>0){
                 if(this._compareColumns(Object.keys(list[0]))){
@@ -131,36 +141,70 @@ class ButtonImportXLS extends Component {
     }
     
     _uploadNow(){
+
         const data = this.grid.rowData[this._index]; 
         
 
         if(this._index < this.grid.rowData.length){
 
             this.model.axios('post',data,(res)=>{
-                this._index +=1 ;
-                this._percentage = (this._index * 100)/this.grid.rowData.length;
-                
-                this.setState({
-                    status:res.name
-                });
 
-                this._uploadNow();
+                if(res.name==='ok' || res.name === 'success'){
+
+                    this._index +=1 ;
+                    this._percentage = (this._index * 100)/this.grid.rowData.length;
+                    
+                    this.setState({
+                        status:res.name,
+                        msg:res.name
+                    });
+                    this._uploadNow();
+                    
+                }else{  
+
+                    let data_fail = this.state.data_fail; 
+                    data_fail.push(data); 
+
+                    this.setState({
+                        data_fail:data_fail,
+                        msg: this.state.data_fail.length +' '+ res.message
+                    });
+
+                    this._index +=1 ;
+                    this._percentage = (this._index * 100)/this.grid.rowData.length;
+                    this._uploadNow();
+
+                    
+
+                }
             })
             
         }else{ 
-            this.setState({
-                status:'finish'
-            });
 
-            this.props.onComplete(true);
+            if(this.state.msg==='success' || this.state.msg ==='ok'){
+                
+                this.setState({
+                    status:'finish'
+                });
+                this.props.onComplete(true);
+            }    
+
+            
         }
         
     }
     _onSubmit = ()=>{
         
-        this._index = 0 ;
-        this._percentage = 0 ;
-        this._uploadNow();
+        if(this.props.total === this.grid.rowData.length ){
+            this._index = 0 ;
+            this._percentage = 0 ;
+            this._uploadNow();
+        }else{
+            BenMessage({
+                message:'Số lượng serial/imei không khớp'
+            });
+        }
+        
         
     }
 
@@ -169,7 +213,7 @@ class ButtonImportXLS extends Component {
             <Button style={this.props.style} className="btn btn-normal">
                 <ViewModal  
                     width={this.props.width}
-                    name={this.props.strModel}
+                    name={this.props.strModel+' : '+this.grid.rowData.length}
                     isOpen={ this.state.isOpen }
                     onToggle={(isOpen)=>{  this.setState({isOpen:isOpen})  }}
                 >
@@ -181,26 +225,32 @@ class ButtonImportXLS extends Component {
                         <div style={{marginTop:20}}>
                             
                             <Row>
-                                <Col md={1}>
-                                    <Button onClick={ this._onSubmit } className="btn btn-normal bg-green">
-                                        <i className="fa fa-cloud-upload"></i> Tải lên
-                                    </Button>
-                                </Col>
-                                <Col md={11} style={{
-                                    margin:'auto'
-                                }}>
+                                <Col md={12}>
                                     <div style={{display: this.state.status ==='' ? 'none':'block' }} className="progress progress-sm ">
                                         <div 
                                             className="progress-bar progress-bar-success progress-bar-striped" 
                                             style={{width:  this._percentage+'%' }}>
                                             <span> { Math.floor(this._percentage) + '%' } Complete</span>
                                         </div>
-                                    </div>
+                                    </div>   
                                 </Col>
                             </Row>
-                            
-                            
 
+                            <Row style={{marginTop:30}}>
+                                <Col md={3}>
+                                    <Button onClick={ this._onSubmit } className="btn btn-normal bg-green">
+                                        <i className="fa fa-cloud-upload"></i> Tải lên
+                                    </Button>
+                                </Col>
+                                <Col md={7} style={{
+                                    margin:'auto'
+                                }}>
+                                    <span className="text-red font-12"> { this.state.msg } </span>
+                                </Col>
+                                <Col md={2} className="font-12" style={{textAlign:'right'}}>
+                                    {   this.state.data_fail.length +'/'+this.grid.rowData.length }
+                                </Col>
+                            </Row>
                         </div>
                     </div>
                 </ViewModal>
@@ -215,16 +265,19 @@ class ButtonImportXLS extends Component {
     }
 }
 
-ButtonImportXLS.defaultProps = {
+ButtonImportSerial.defaultProps = {
 
     onComplete:(isSuccess)=>{},
+    total:0,
     strModel:'products',
     columns:['code','name','type','supplier_codes','price_1','price_2','price_3','price_4','is_serial'],
-    
+    fields:{
+        product_code:'vt300'
+    },
     icon:"fa fa-cloud-upload mr-5",
     title:'.xlsx',
     width:'81%',
     height:'55vh'
 }
 
-export default ButtonImportXLS;
+export default ButtonImportSerial;

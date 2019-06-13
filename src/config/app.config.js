@@ -13,8 +13,8 @@ export const DATE_FORMAT = 'yyyy-MM-dd';
 export const PURCHASE_STATUS = [
     { code:0, icon:'fa-clock-o',color:'#C64333' ,name:'Đề xuất', action:'Duyệt' },
     { code:1,icon:'fa-shopping-cart',color:'#00ACD7',name:'Đã Duyệt', action:'Lập phiếu nhập kho' },
-    { code:2,icon:'fa-cube', color:'#0067A4',name:'Đã nhập', action:'Lập phiếu chi' },
-    { code:3,icon:'fa-truck',color:'#16957B',name:'Đã chi', action:'' }
+    { code:2,icon:'fa-cube', color:'#0067A4',name:'Đã lập phiếu nhập kho', action:'Lập phiếu chi' },
+    { code:3,icon:'fa-truck',color:'#16957B',name:'Đã lập phiếu chi', action:'' }
 
 ];
 
