@@ -47,7 +47,6 @@ class Model {
   setup(){
 
     this.jwt = localStorage.getItem('feathers-jwt');
-
     // SETUP MAC DINH 
     this.set('method',{
       name:'listAll',

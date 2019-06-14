@@ -125,7 +125,8 @@ export default class MyForm extends Component {
             pc:'Phiếu chi'
         }
         
-        return arrTitle[this.props.receiptType];
+
+        return arrTitle[this.props.receiptType]+' từ đơn hàng : ' + this.props.data.code;
     }
     render() {
 

@@ -150,7 +150,7 @@ class Po extends Component {
                      return numeral(params.value).format('0,0')+' đ'
                  }
               },
-              { headerName:"Kho", field:'code', width:140 },
+              
               { headerName:"Phụ trách", field:"creator", width:140 }
               
             ],

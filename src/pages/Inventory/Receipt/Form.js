@@ -29,7 +29,7 @@ function Info(props){
           <Label> Loại  <span className="text-red">*</span></Label>
           <SelectList 
             id="track_code" 
-            disabled={ props.status === 0 ? false : true } 
+            
             defaultValue={ props.track_code } onChange={(e)=>{ props.onChange('track_code',e.target.value)  }}
              rows={ WAREHOUSE_TRACKS[props.type] } name="-- Chọn --" 
           />
@@ -39,7 +39,7 @@ function Info(props){
         <FormGroup>  
           <Label> Kho </Label>
           <SelectListModelCode 
-            disabled={ props.status === 0 ? false : true } 
+            
             id="warehouse_code" 
             defaultValue={ props.warehouse_code } 
             onChange={(e)=>{  props.onChange('warehouse_code',e.target.value) }} 
@@ -52,14 +52,14 @@ function Info(props){
         <FormGroup>
           <Label> Trạng thái </Label>
           <SelectList 
-            disabled={ props.status === 0 ? false : true }   
+            
             defaultValue={props.status} rows={WAREHOUSE_RECEIPT} defaultValue={ props.status } onChange={(e)=>{ props.onChange('status',e.target.value) }} name="-- Chọn -- " />
 
         </FormGroup>
         <FormGroup>
           <Label> Ghi chú  </Label>
           <Input
-            disabled={ props.status === 0 ? false : true }    
+            
             defaultValue={props.note} 
             type="textarea" 
             onChange={(e)=>{props.onChange('note',e.target.value)  }}  
@@ -86,7 +86,7 @@ function TableInfo(props){
         
         <Row>
           <Col md="9">
-            <InputSuggestProduct disabled={ props.status === 1 ? true : false }   type="all" onSelected={(json)=>{ props.onSelectedProduct(json) }}    />
+            <InputSuggestProduct    type="all" onSelected={(json)=>{ props.onSelectedProduct(json) }}    />
           </Col>
           <Col md="3">
             
@@ -173,29 +173,24 @@ function TableInfo(props){
                         <td style={{width:grid['colums'][2]['width']}}> { item.unit } </td>
 
                         <td style={{width:grid['colums'][3]['width']}}>
-                            {
-                              props.status === 0 ? 
-                                <Input type="number" 
-                                  onChange={(e)=>{ props.onCardChange({row_id:item.id,field:'amount',value:e.target.value}) }} 
-                                  min={1} max={1000000} 
-                                  defaultValue={ amount } 
-                                /> : <span> { amount }  </span>
-                            }
+                          <Input type="number" 
+                            onChange={(e)=>{ props.onCardChange({row_id:item.id,field:'amount',value:e.target.value}) }} 
+                            min={1} max={1000000} 
+                            defaultValue={ amount } 
+                          />
+                          
                         </td>
 
                         <td style={{width:grid['colums'][4]['width']}}>
-                           {
-                             props.status === 0 ? 
-                             <ButtonGroup>
-                                <Button 
-                                  onClick={()=>{ props.onRemoveCard(item.id) }}
-                                  className="btn btn-normal"> 
-                                  <i className="fa fa-trash"></i>
-                                </Button>
-                                <BtnSerial />
-                              </ButtonGroup>
-                            : null
-                           }
+                          <ButtonGroup>
+                            <Button 
+                              onClick={()=>{ props.onRemoveCard(item.id) }}
+                              className="btn btn-normal"> 
+                              <i className="fa fa-trash"></i>
+                            </Button>
+                            <BtnSerial />
+                          </ButtonGroup>
+                          
                         </td>
                       </tr>
                     )

@@ -281,13 +281,13 @@ class ProductPage extends Component{
                       />
 
                       <ButtonImportXLS 
-                         title="Upload file Excel "
+                         title="Import File Excel "
                          strModel={MODE}
                          columns={ ['code','name','type','supplier_codes','price_1','price_2','price_3','price_4','is_serial'] }
                       />
  
                       <ButtonExportXLS  
-                        title="Download file"
+                        title="Export File Excel"
                         strModel={MODE}
                         columns={ ['code','name','type','supplier_codes','price_1','price_2','price_3','price_4','is_serial'] }
                       />

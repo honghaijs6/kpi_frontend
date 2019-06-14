@@ -157,7 +157,9 @@ function TableInfo(props){
                         <td style={{width:grid['colums'][1]['width']}}> {item.name} </td>
                         
                         <td style={{ width:grid['colums'][2]['width'] }}>
-                          <img style={{height:90,border:'1px solid #ddd'}} src={ item.images }  />
+                          {
+                            item.images !== null ? <img style={{height:90,border:'1px solid #ddd'}} src={ item.images }  /> : null 
+                          }
                         </td>
 
                         <td tyle={{ width:grid['colums'][3]['width'] }}> { item.unit } </td>

@@ -164,6 +164,8 @@ function TableInfo(props){
                       const total = parseInt(price) * amount ;  
                       const totalWithVat = (total * (parseInt(props.vat) / 100)) + total ;
                       
+                      
+
 
                       return(
                         <tr key={item.id}>
@@ -172,10 +174,12 @@ function TableInfo(props){
                           <td style={{width:grid['colums'][1]['width']}}> {item.name} </td>
                           
                           <td style={{ width:grid['colums'][2]['width'] }}>
-                            <img style={{height:90,border:'1px solid #ddd'}} src={ item.images }  />
+                            {
+                              item.images !== null ? <img style={{height:90,border:'1px solid #ddd'}} src={ item.images }  /> : null
+                            }
                           </td>
 
-                          <td tyle={{ width:grid['colums'][3]['width'] }}> Cái </td>
+                          <td tyle={{ width:grid['colums'][3]['width'] }}> { item.unit } </td>
 
                           <td style={{width:grid['colums'][4]['width']}}>
                               <Input type="number" 
@@ -333,7 +337,7 @@ class CreatePO extends Component {
 
       
         const fields = [
-          'supplier_code','vat','payment_code',
+          'supplier_code','vat','payment_code',  
         ];
         
         if(detectForm(fields,this.state)===''){
@@ -348,6 +352,7 @@ class CreatePO extends Component {
                 id:supInfo.id,
                 code:supInfo.code,
                 name:supInfo.name,
+                address:supInfo.address,
                 phone:supInfo.phone,
                 roots:supInfo.roots
               }
@@ -369,6 +374,7 @@ class CreatePO extends Component {
     }
 
     _onSelectedSupplier(json){
+
 
         this.setState({
           supplier_code:json.code,

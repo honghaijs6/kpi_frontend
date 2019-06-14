@@ -63,9 +63,11 @@ export default  class DeleteForm extends Component {
         this._curInfo = newProps.data;
         
     }
+
+
     render() {
         return (
-            <ViewModal   name="Cảnh báo" { ...this.props } onToggle={(isOpen)=>{  this.props.onToggle(isOpen)}} >
+            <ViewModal isFooter={true}  name="Cảnh báo" { ...this.props } onSubmit={ this._onSubmit } >
                 <div className="view-modal-body" >
 
                     {
