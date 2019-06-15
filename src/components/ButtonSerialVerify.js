@@ -68,7 +68,8 @@ export default class ButtonSerialVerify extends Component {
         if(this._index < this.state.data.length){   
 
             const data = {
-                code:this.state.data[this._index]
+                code:this.state.data[this._index],
+                ...this.props.fields
             };
 
             this.model.putCustom('verify',data,(res)=>{
@@ -117,7 +118,8 @@ export default class ButtonSerialVerify extends Component {
 
     }
     _onSubmit = ()=>{
-        // detect code 
+        // detect code
+        
         let msg = '';
         if(this._detectCode()){
             if(this.props.total !== this.state.data.length ){
@@ -131,6 +133,8 @@ export default class ButtonSerialVerify extends Component {
         this.setState({
             msg:msg
         })
+
+
     }
     render() {
         return (
@@ -186,7 +190,10 @@ ButtonSerialVerify.defaultProps = {
     icon:"fa fa-cloud-upload mr-5",
     title:'.xlsx',
     width:'81%',
-    height:'55vh',
+    height:'55vh',  
     strModel:'model',
-    total:0
+    total:0,
+    fields:{
+        warehouse_receipt_code_out:''
+    }
 }

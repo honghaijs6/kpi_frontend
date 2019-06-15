@@ -20,7 +20,6 @@ import ButtonSerialVerify from '../../../components/ButtonSerialVerify';
 function Info(props){  
 
   
-  
   return( 
     <div style={{padding:10,paddingTop:30,paddingRight:10}}>
         
@@ -52,7 +51,7 @@ function Info(props){
         <FormGroup>
           <Label> Trạng thái </Label>
           <SelectList 
-            
+            disabled={ props.typeAction === 'post' ? true : false }
             defaultValue={props.status} rows={WAREHOUSE_RECEIPT} defaultValue={ props.status } onChange={(e)=>{ props.onChange('status',e.target.value) }} name="-- Chọn -- " />
 
         </FormGroup>
@@ -131,9 +130,9 @@ function TableInfo(props){
                                     width="36%"
                                     total={amount}  
                                     fields={{
-                                    product_code:item.code,
-                                    warehouse_receipt_code:props.code,
-                                    type:'in'
+                                      product_code:item.code,
+                                      warehouse_receipt_code_in:props.code,
+                                      type:'in'
                                     }}
                                     onComplete={(isFinish)=>{ props.onCardChange({row_id:item.id,field:'is_upload_serial',value:1}) }}
                                 />,
@@ -144,6 +143,10 @@ function TableInfo(props){
                                   strModel="serials"
                                   width="30%"
                                   total={amount}  
+                                  fields={{
+                                    warehouse_receipt_code_out:props.code,
+                                  }}
+
                                   onComplete={(isFinish)=>{ props.onCardChange({row_id:item.id,field:'is_upload_serial',value:1}) }}
 
                                 />
@@ -497,7 +500,7 @@ export default class ReceiptForm extends Component {
               </Col>
               <Col md={3} style={{background:'#f0f0f0',borderLeft:'1px solid #ddd'}}>
 
-                  <Info {...this.state} 
+                  <Info typeAction={this.props.typeAction} {...this.state} 
                       onChange={this._onChange}  
                   />
                   

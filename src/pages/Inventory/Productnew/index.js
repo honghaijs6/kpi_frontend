@@ -6,11 +6,13 @@ import { connect } from 'react-redux';
 
 import { ButtonGroup, Button } from 'reactstrap';
 
-
-
 import { BenGrid } from '../../../components/BenGrid2'; 
+import BenMessage from '../../../components/BenMessage';
+
 import ButtonExportXLS from '../../../components/ButtonExportXLS'; 
 
+
+import HistoryForm from './HistoryForm';
 
 
 const MODE = 'products';
@@ -18,17 +20,21 @@ const MODE = 'products';
 class ProductNew extends Component {
 
   
+
+    
   constructor(props){
     super(props);
 
     this.state = {
-      selectedData:{}
+      selectedData:{},
+
+      isOpen:false
     }
 
     this.grid = {
       colums:[
         { headerName: "Mã", field: "code", width:180} ,
-        { headerName: "Sản phẩm", field: "name", width:720 },
+        { headerName: "Sản phẩm", field: "name", width:600 },
         { headerName: "ĐVT", field:"unit_name",width:140 },
         { headerName: "Serial/Emei", field:"SERIAL_NUM", width:140 },
         { headerName: "Tổng nhập", field: "NHAP", width:180 },
@@ -65,11 +71,39 @@ class ProductNew extends Component {
 
   }
 
+  _openForm = ()=>{
+
+    if(JSON.stringify(this.state.selectedData)!=='{}'){
+      
+      this.setState({
+        isOpen:true
+      });
+
+    }else{
+      BenMessage({
+        message:'Vui lòng chọn dữ liệu để xem'
+      });
+
+    }
+
+
+  }
+
   render() {
     return (
       <div className="animated fadeIn">
         <div className="ubuntu-app" style={{marginTop:20, padding:10}}>
           <main>
+
+
+                <HistoryForm
+        
+                  isOpen={this.state.isOpen}
+                  onToggle={(isOpen)=>{ this.setState({isOpen:isOpen}) }}
+                  data={this.state.selectedData}
+
+
+                />
                 <BenGrid
 
                   
@@ -91,10 +125,10 @@ class ProductNew extends Component {
                   customButton={
                         <ButtonGroup> 
       
-                            <Button className="btn btn-normal">
+                            <Button onClick={this._openForm } className="btn btn-normal">
                               <i className="fa fa-history mr-5"></i> Xem lich sử
                             </Button>
-
+                            
                             <ButtonExportXLS  
                               style={{
                                 borderTopRightRadius:0,
