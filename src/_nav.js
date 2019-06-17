@@ -36,7 +36,7 @@ export default {
           url:'/order/_s',
           icon:''
         },
-        {
+        /*{
           name:'Q.L Hoá đơn VAT',
           url:'order/invoice',
           icon:''
@@ -50,7 +50,7 @@ export default {
           name:'Nhà Vận Chuyển',
           url:'/order/shippingmethod',
           icon:''
-        },
+        },*/
         {
           name:'Báo Cáo',
           url:'/order/summary',

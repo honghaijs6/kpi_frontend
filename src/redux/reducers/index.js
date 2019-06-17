@@ -16,6 +16,7 @@ import reducerOrder from './reducer-order';
 
 import reducerProduct from './reducer-product';
 import reducerProductLog from './reducer-product-log';
+import reducerSerial from './reducer-serial';
 
 import reducerCategory from './reducer-category';
 import reducerSupplier from './reducer-supplier';
@@ -53,6 +54,7 @@ const allReducers = combineReducers({
   orders:reducerOrder,
   products:reducerProduct,
   product_logs:reducerProductLog,
+  serials:reducerSerial,
   
   categories:reducerCategory,
   suppliers:reducerSupplier,

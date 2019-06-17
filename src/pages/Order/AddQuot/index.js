@@ -130,18 +130,18 @@ function TableInfo(props){
           
           <Row>
             <Col md="9">
-              <InputSuggestProduct  type="root" onSelected={(json)=>{ props.onSelectedProduct(json) }} defaultValue={props.main_code}   />
+              <InputSuggestProduct  type="MAIN" onSelected={(json)=>{ props.onSelectedProduct(json) }} defaultValue={props.main_code}   />
             </Col>
             <Col md="3">
               <ButtonGroup>
                 <ButtonExpand width={720} name="SP Phụ" icon="fa-tags">
-                    <FormAddOn onSelected={(json)=>{ props.onSelectedProduct(json) }} main_code={props.main_code} type='none-root' />
+                    <FormAddOn onSelected={(json)=>{ props.onSelectedProduct(json) }} main_code={props.main_code} type='SUB' />
                 </ButtonExpand>
                 <ButtonExpand width={720} name="Phần mềm" icon="fa-desktop">
-                      <FormAddOn onSelected={(json)=>{ props.onSelectedProduct(json) }} main_code={props.main_code} type='root-software' />
+                      <FormAddOn onSelected={(json)=>{ props.onSelectedProduct(json) }} main_code={props.main_code} type='SOFTWARE' />
                 </ButtonExpand>
                 <ButtonExpand width={720} name="Dịch vụ" icon="fa-plus">
-                    <FormAddOn onSelected={(json)=>{ props.onSelectedProduct(json) }} main_code={props.main_code} type='root-service' />
+                    <FormAddOn onSelected={(json)=>{ props.onSelectedProduct(json) }} main_code={props.main_code} type='SERVICE' />
                 </ButtonExpand>
               </ButtonGroup>
             </Col>
@@ -167,7 +167,7 @@ function TableInfo(props){
 
                   {
                     props.cart.map((item)=>{
-                      
+                        
                       const amount = parseInt(item.amount) ; 
                       const price = item.price;
                       const total = parseInt(price) * amount ;  
@@ -181,7 +181,9 @@ function TableInfo(props){
                           <td style={{width:grid['colums'][1]['width']}}> {item.name} </td>
                           
                           <td style={{ width:grid['colums'][2]['width'] }}>
-                            <img style={{height:90,border:'1px solid #ddd'}} src={ item.images }  />
+                            {
+                              item.images !== null ? <img style={{height:90,border:'1px solid #ddd'}} src={ item.images }  /> : null
+                            }
                           </td>
 
                           <td tyle={{ width:grid['colums'][3]['width'] }}> Cái </td>
@@ -523,7 +525,7 @@ class AddQuotation extends React.Component {
         let cart = this.state.cart;
         // LẤY GIÁ TỪ THÔNG TIN KHÁCHNG HÀNG 
         const price =  json['price_'+this.state.customer_info['ref_price']] || 0 ;   
-        const main_code = json.type ==='root' ? json.code : this.state.main_code 
+        const main_code = json.type ==='MAIN' ? json.code : this.state.main_code 
         
         cart.push({
           id:json.id,

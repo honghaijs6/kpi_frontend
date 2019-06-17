@@ -1,8 +1,7 @@
 import Model from '../../../model/model';
 import moment from 'moment'; 
 
-
-import React, { Component } from 'react';
+import React from 'react';
 import {connect} from 'react-redux';
 
 
@@ -14,62 +13,76 @@ import { BenGrid } from '../../../components/BenGrid2';
 import SelectList from '../../../components/SelectList';
 
 
-const MODE = 'product_logs';
+const MODE = 'serials';
 
 
-class HistoryForm extends Component {
 
-    constructor(props){
+
+class SerialForm extends React.Component {
+    constructor(props) {
         super(props);
-
-
+        
         this.state = {
 
             curCode:'',
             status:''
         }
-        
+
         this.grid = {
             colums:[
-              { headerName: "Mã Phiếu Kho", field: "warehouse_receipt_code", width:180,
+              { headerName: "Serial/Emei", field: "code", width:180,
                 cellRenderer(params){
                     return `
                         <span class="text-uppercase"> ${params.value} </span>
                     `;
                 }
               },
-              { headerName: "Sản phẩm", field: "product_code", width:200 },
+              { headerName: "Sản phẩm", field: "product_code", width:200,  
+                cellRenderer(params){
+                    return `<span class="text-uppercase"> ${params.value} </span>`
+                }
+              },
 
-              { headerName: "Loại", field:"type",width:100, 
+              { headerName: "Trạng thái", field:"status",width:180, 
                 cellRenderer(params){
 
-                    const bgArr = {
-                        in:'bg-red',
-                        out:'bg-green'
-                    }
+                    const bgArr = [
+                        {
+                            class:'text-green',
+                            name:'<i class="fa fa-clock-o mr-5"></i> còn hàng'
+                        },
+                        {
+                            class:'text-blue',
+                            name:'<i class="fa fa-truck mr-5"></i> đã bán'
+                        },
+                        
+                    ] ; 
+
                     return `
-                        <span class="badge text-uppercase ${ bgArr[params.value] } " > ${ params.value} <span>
+                        <span class="${bgArr[params.value]['class']}"> ${   bgArr[params.value]['name']} <span>
                     `
                 }
               },
 
-              {
-                  headerName:"Mã chứng từ", field:"purchase_code", width:200
-              },
-
-              { headerName: "S.L", field:"balance", width:140 },
-              { headerName: "Kho", field: "warehouse_code", width:140,
-                 cellRenderer(params){
-                     return `
-                        <span class="text-uppercase"> ${params.value} </span>
-                     `
-                 }
-              },
-              { headerName: "Ngày", field: "date_created", width:140,
+              { headerName: "Ngày Nhập", field: "date_created", width:140,
                 cellRenderer(params){
                     return  moment(params.value).format('YYYY-MM-DD');
 
                 }
+              },
+
+              { headerName: "Ngày bán", field: "date_modified", width:140,
+                cellRenderer(params){
+                    return  params.value === null ? '' : moment(params.value).format('YYYY-MM-DD')
+
+                }
+              },
+              {
+                  headerName:"Chứng từ", field:"warehouse_receipt_code_in",width:200,
+                  cellRenderer(params){
+                    const code = params.data.status === 0 ? params.value : params.data.warehouse_receipt_code_out
+                      return ` <span class="text-uppercase"> ${code} </span> `
+                  }
               }
               
               
@@ -78,14 +91,14 @@ class HistoryForm extends Component {
           }
 
         this._setup();
+        
+        
 
     }
 
     _setup(){
-
         this.model = new Model(MODE,this.props.dispatch);
-        
-    }
+    }   
 
     componentWillReceiveProps(newProp){
         if(newProp.isOpen){
@@ -109,23 +122,22 @@ class HistoryForm extends Component {
     }
 
     _onChangeType = (e)=>{
-        const type = e.target.value;
+        const status = e.target.value;
 
-        if(type!==''){
+        if(status!==''){
             this.model.set('paginate',{
-                type:type
+                status:status
             });
         }else{
-            this.model.remove('type');
+            this.model.remove('status');
         }
 
         this.model.load();
 
         
     }
+    
     render() {
-
-        
         return (
             <ViewModal
                 width="68%"  
@@ -157,8 +169,8 @@ class HistoryForm extends Component {
                                     style={{borderRadius:0,borderRight:0}}
                                     name='Tất cả'
                                     rows={[
-                                        {code:'in', name:'Nhập'},
-                                        {code:'out', name:'Xuất'},
+                                        {code:0, name:'Còn hàng'},
+                                        {code:1, name:'Đã bán'},
 
                                     ]}
                                 />
@@ -185,4 +197,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(HistoryForm);
+export default connect(mapStateToProps)(SerialForm);

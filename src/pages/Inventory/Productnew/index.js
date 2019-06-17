@@ -10,16 +10,15 @@ import { BenGrid } from '../../../components/BenGrid2';
 import BenMessage from '../../../components/BenMessage';
 
 import ButtonExportXLS from '../../../components/ButtonExportXLS'; 
-
-
 import HistoryForm from './HistoryForm';
+import SerialForm from './SerialForm'; 
 
 
 const MODE = 'products';
 
-class ProductNew extends Component {
 
-  
+
+class ProductNew extends Component {
 
     
   constructor(props){
@@ -28,7 +27,8 @@ class ProductNew extends Component {
     this.state = {
       selectedData:{},
 
-      isOpen:false
+      isOpen:false,
+      isOpenSerialForm:false
     }
 
     this.grid = {
@@ -36,13 +36,14 @@ class ProductNew extends Component {
         { headerName: "Mã", field: "code", width:180} ,
         { headerName: "Sản phẩm", field: "name", width:600 },
         { headerName: "ĐVT", field:"unit_name",width:140 },
-        { headerName: "Serial/Emei", field:"SERIAL_NUM", width:140 },
+        { headerName: "Serial/Emei", field:"SERIAL_NUM", width:140},
         { headerName: "Tổng nhập", field: "NHAP", width:180 },
         { headerName: "Tổng xuất", field: "XUAT", width:180 },
         { headerName: "Tồn kho", field: "total_available", width:180 },
         
         
       ],
+      
       rowData:[]
     }
 
@@ -71,12 +72,12 @@ class ProductNew extends Component {
 
   }
 
-  _openForm = ()=>{
+  _openForm = (json)=>{
 
     if(JSON.stringify(this.state.selectedData)!=='{}'){
       
       this.setState({
-        isOpen:true
+       ...json
       });
 
     }else{
@@ -95,7 +96,13 @@ class ProductNew extends Component {
         <div className="ubuntu-app" style={{marginTop:20, padding:10}}>
           <main>
 
+                <SerialForm
+                  
+                  isOpen={this.state.isOpenSerialForm}
+                  onToggle={(isOpen)=>{ this.setState({isOpenSerialForm:isOpen}) }}
+                  data={this.state.selectedData}
 
+                />
                 <HistoryForm
         
                   isOpen={this.state.isOpen}
@@ -125,8 +132,12 @@ class ProductNew extends Component {
                   customButton={
                         <ButtonGroup> 
       
-                            <Button onClick={this._openForm } className="btn btn-normal">
+                            <Button onClick={ ()=>{ this._openForm({isOpen:true}) } } className="btn btn-normal">
                               <i className="fa fa-history mr-5"></i> Xem lich sử
+                            </Button>
+
+                            <Button onClick={ ()=>{ this._openForm({isOpenSerialForm:true}) } } className="btn btn-normal" >
+                              <i className="fa fa-ticket mr-5"></i> Xem Serial/Emei
                             </Button>
                             
                             <ButtonExportXLS  

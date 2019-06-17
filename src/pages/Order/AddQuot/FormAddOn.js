@@ -11,10 +11,10 @@ class FormAddOn extends Component {
 
     constructor(props){
         super(props);
-
+   
         this.state = {
             
-            type:props.type || 'none-root',
+            type:props.type || 'SUB',
             rows:[],
             main_code:'',
             err_msg:'Vui lòng chọn sản phẩm chính '
@@ -51,6 +51,7 @@ class FormAddOn extends Component {
 
     componentWillReceiveProps(newProps){
         
+        
         if(newProps.main_code!==''){
             // load here 
             
@@ -59,7 +60,7 @@ class FormAddOn extends Component {
                 follow_list:newProps.main_code,
                 max:'all'
             };
-            if(newProps.type==='root-service'){ delete paginate.follow_list }
+            if(newProps.type==='SERVICE'){ delete paginate.follow_list }
             
             this.model.set('paginate', paginate );
         

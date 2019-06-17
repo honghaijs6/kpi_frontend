@@ -94,7 +94,7 @@ class FormFollow extends Component {
     componentDidMount(){
         this.model = new Model('products');
         this.model.set('paginate',{
-            type:'root',
+            type:'MAIN',
             max:'all'
         });
     }
@@ -115,7 +115,7 @@ class FormFollow extends Component {
 
         if(JSON.stringify(this.state.data)!='{}'){
             
-            if(this.state.data.type === 'root-software' || this.state.data.type ==='none-root'){
+            if(this.state.data.type === 'SOFTWARE' || this.state.data.type ==='SUB'){
                 return (
                     <div>
                         <FormGroup>

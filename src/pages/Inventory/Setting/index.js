@@ -1,4 +1,5 @@
 
+// DATA
 // HOOKS 
 import { detectForm } from '../../../hook/before'; 
 import doUpdateModelInfo from '../../../hook/ultil/doUpdateModelInfo'; 
@@ -6,12 +7,15 @@ import doGetModelInfo from '../../../hook/ultil/doGetModelInfo';
 
 import React, { Component } from 'react';
 import { Row, Col, FormGroup, Input, Button, InputGroup,InputGroupAddon, InputGroupText  } from 'reactstrap';
-import { AppSwitch } from '@coreui/react'
+import { AppSwitch } from '@coreui/react' ; 
 
+import InOutDisplayConfig from './InOutDisplayConfig';
 
 
 class Dashboard extends Component{
 
+
+  _companyInfo = {};
 
   constructor(props){
     super(props);
@@ -25,6 +29,8 @@ class Dashboard extends Component{
       user_name:'',
       user_phone:''  
     }
+
+
 
     this._onSubmit = this._onSubmit.bind(this);
     
@@ -51,6 +57,8 @@ class Dashboard extends Component{
 
   async componentDidMount(){
     const info = await doGetModelInfo('companies',window.USERINFO.company_id);
+    this._companyInfo = info ;
+
     if(info.name==='success'){
        const setting = JSON.parse(info.data.warehouse_setting);
        this.setState(setting);
@@ -62,10 +70,12 @@ class Dashboard extends Component{
   render(){
     return (
       <div className="animated fadeIn">
-        <div className="ubuntu-app " style={{border:0, padding:20, height:'91vh'}}>
+        <div className="div-main">
             <main className="form-general" >
-                <h3 className="text-uppercase"> Cài đặt kho hàng </h3>
-                <Row>
+              
+              
+              <h4 className="text-uppercase"> Cài đặt kho hàng </h4>
+              <Row>
                   <Col md="4">
                     <h5 className="txt-green"> Đặt hàng </h5>
                     Thiết lâp liên quan đến đặt hàng
@@ -85,9 +95,9 @@ class Dashboard extends Component{
                     <p> <AppSwitch onClick={()=>{ this.setState({ban_delete:!this.state.ban_delete}) }} className={'mx-1'} variant={'pill'} color={'primary'}  checked={ this.state.ban_delete } /> </p>
                   </Col>
 
-                </Row>
+              </Row>
 
-                <Row>
+              <Row>
                   <Col md="4" className="align-middle">
                     <h5 className="txt-green"> Phương pháp tồn kho </h5>
                     Thiết lâp liên quan đến Phương pháp tồn kho
@@ -99,9 +109,9 @@ class Dashboard extends Component{
                     <AppSwitch onClick={()=>{ this.setState({is_serial:!this.state.is_serial}) }} className={'mx-1'} variant={'pill'} color={'primary'} checked={ this.state.is_serial } />
                   </Col>
 
-                </Row>
+              </Row>
                 
-                <Row style={{borderBottom:0}}>  
+              <Row style={{borderBottom:0}}>  
                   <Col md={9}>
                       <h5 className='txt-green'> Thông tin nhận hàng </h5>
                       <span> Thiết lập thông tin khi tạo PO mua hàng </span>
@@ -174,7 +184,15 @@ class Dashboard extends Component{
                       
                   </Col>  
                 </Row>
+
+                <h4 style={{marginBottom:0, marginTop:20}} className="text-uppercase"> Cấu hình phiếu Nhập - Xuất </h4>
+                <Row style={{border:0}}>
+                  <Col md={9}>
+                    <InOutDisplayConfig companyInfo={this._companyInfo} />  
+                  </Col>
+                </Row>
                 
+
 
             </main>
         </div>

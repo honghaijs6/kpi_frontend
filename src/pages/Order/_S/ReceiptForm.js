@@ -36,7 +36,13 @@ function Info(props){
         
         <FormGroup>
           <Label> Trạng thái </Label>
-          <SelectList defaultValue={props.status} rows={WAREHOUSE_RECEIPT} defaultValue={ props.status } onChange={(e)=>{ props.onChange('status',e.target.value) }} name="-- Chọn -- " />
+          <SelectList 
+            disabled 
+            defaultValue={props.status} 
+            rows={WAREHOUSE_RECEIPT} defaultValue={ props.status } 
+            onChange={(e)=>{ props.onChange('status',e.target.value) }} 
+            name="-- Chọn -- " 
+          />
 
         </FormGroup>
         <FormGroup>
@@ -171,7 +177,7 @@ export default class ReceiptForm extends Component {
       warehouse_code:'',
       type: 'out', 
       track_code:'banhang',
-      status:1, // TRANG THAI HOÀN THÀNH
+      status:0, // TRANG THAI HOÀN THÀNH
       cart:[],
       total:0,
       note:'',
