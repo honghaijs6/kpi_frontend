@@ -3,8 +3,10 @@
 import doGetModelInfo from '../hook/ultil/doGetModelInfo'; 
 import {N2T} from '../hook/ultil/N2T'; 
 
+
 import React, { Component } from 'react';
 import Barcode from 'react-barcode';
+
 
 import '../scss/print.scss';
 

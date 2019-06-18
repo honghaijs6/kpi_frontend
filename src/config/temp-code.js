@@ -1,5 +1,7 @@
 
+
 export const MAU_QUOTATION = `
+
 <!doctype html>
 <html lang='en'>
     <head>
@@ -19,8 +21,8 @@ export const MAU_QUOTATION = `
                 
                 @page {
                     size:'A4';
-                    margin: 0;
-                    margin-top: 1cm;
+                    margin: 0.5cm;
+                    
                 }
                 
                 @media print {
@@ -81,8 +83,8 @@ export const MAU_QUOTATION = `
                 
             </style>
     </head>
-    <body style='background:#fff'>
-        <div class="print-document">
+    <body>
+        <div class="print-document" style="padding:20px">
             <div>
                 <div style="float: left; width: 25%;">
                     
@@ -107,12 +109,11 @@ export const MAU_QUOTATION = `
                         <p style="margin: 0px; padding: 5px 0px; font-size: 16px; font-weight: 500;"> BẢNG BÁO GIÁ </p>
                     </div>
                     <div style="position: absolute; right: 0px; top: -10px;">
-                        
-                            
+                        {{BARCODE}}    
                     </div>
                 </div>
                 <div style="margin-top: 30px;">
-                    <div style="float: left; width: 63%; border: 0px solid rgb(0, 0, 0); padding: 10px;">
+                    <div style="float: left; width: 63%; border: 0px solid rgb(0, 0, 0);">
                         <table style="border: 1px solid rgb(0, 0, 0); padding: 10px 0px;">
                             <tbody>
                                 <tr>
@@ -693,7 +694,7 @@ export const MAU_PHIEUCHI =
           </tr>
           <tr>
               <td>
-                  Số tiền :
+                  Số tiền :  
               </td>
               <td><div class='dotline'>{{CASHFLOW_VALUE}}</div></td>
           </tr>

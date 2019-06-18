@@ -29,9 +29,10 @@ class PreviewForm extends Component {
     }  
     render() {
 
+
         
         //let HTML = this._formatHTML(this.props[this.props.type]);
-        let HTML = this._formatHTML(this.props.receipt_out_temp);
+        let HTML = this.props.type !== undefined ?  this._formatHTML(this.props[this.props.type]) : '';
                     
         
 

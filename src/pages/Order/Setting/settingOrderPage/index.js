@@ -96,7 +96,7 @@ class SettingOrderPage extends Component{
 
         return(
             <div hidden={  this.props.onTab === this.state.tab ? false : true } style={{background:'#E4E5E6' , height:'90vh' }}>
-                <div style={{padding:20}}>
+                <div style={{padding:40}}>
                     <h4 className="text-uppercase" style={{marginBottom:20}}> Cấu hình đơn hàng </h4>
 
                     <PreviewForm 
@@ -139,7 +139,10 @@ class SettingOrderPage extends Component{
                                             onChange={(e)=>{ this.setState({quotation_temp:e.target.value}) }}    
                                             value={ this.state.quotation_temp }
                                             type="textarea" style={{
-                                            height:400
+                                            height:400,
+                                            background:'#2F353A',
+                                            color:'#f1f1f1'
+
                                         }} />
                                     </div>
 
@@ -176,9 +179,11 @@ class SettingOrderPage extends Component{
                                     <div style={{marginTop:10}}>
                                         <Input 
                                             onChange={(e)=>{ this.setState({order_temp:e.target.value}) }}    
-                                            value={ this.state.quotation_temp }
+                                            value={ this.state.order_temp }
                                             type="textarea" style={{
-                                            height:400
+                                            height:400,
+                                            background:'#2F353A',
+                                            color:'#f1f1f1'
                                         }} />
                                     </div>
 

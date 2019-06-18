@@ -118,7 +118,7 @@ class InOutDisplayConfig extends React.Component {
                     onChangeTab={(code)=>{ this.setState({onTab:code}) }}  
                     tabs={this.state.tabs}>
                     
-                    {/* TAB PHIẾU THU  */}
+                    {/* TAB PHIẾU XUAT KHO  */}
                     <div className={  `tab-pane  ${ this.state.onTab==='out'?'active':'' } ` }>
                         <FormGroup row style={{border:0}}>
                             <Col md={12}>
@@ -137,7 +137,9 @@ class InOutDisplayConfig extends React.Component {
                                         onChange={(e)=>{ this.setState({receipt_out_temp:e.target.value}) }}    
                                         value={ this.state.receipt_out_temp }
                                         type="textarea" style={{
-                                        height:300
+                                        height:300,
+                                        background:'#262A2E',
+                                        color:'#fff'
                                     }} />
                                 </div>
 
@@ -155,9 +157,43 @@ class InOutDisplayConfig extends React.Component {
                         </FormGroup>
                     </div>
                 
-                    {/* TAB PHIẾU THU */}
+                    {/* TAB PHIẾU NHAP KHO */}
                     <div className={  `tab-pane  ${ this.state.onTab==='in'?'active':'' } ` }>
-                        IN
+                        <FormGroup row style={{border:0}}>
+                            <Col md={12}>
+                                <Label> Mẫu hiển thị phiếu nhập kho </Label>
+                                
+                                <span style={{cursor:'pointer'}} onClick={()=>{ this._previewForm('receipt_in_temp') }} className="txt-green pull-right">  
+                                    <i className="fa fa-search-plus mr-5"></i>    Xem trước 
+                                </span>
+
+                                <span onClick={()=>{ this._defaultTemplate('receipt_in_temp') }} className="pointer pull-right mr-20 text-red">  
+                                    <i className="fa fa-file-code-o mr-5"></i> Template mặc định
+                                </span>
+
+                                <div style={{marginTop:10}}>
+                                    <Input 
+                                        onChange={(e)=>{ this.setState({receipt_in_temp:e.target.value}) }}    
+                                        value={ this.state.receipt_in_temp }
+                                        type="textarea" style={{
+                                        height:300,
+                                        background:'#262A2E',
+                                        color:'#fff'
+                                    }} />
+                                </div>
+
+                            </Col>
+                            
+                        </FormGroup>
+
+                        <FormGroup row style={{marginTop:10, border:0, margin:-20}}>
+                            <Col md={12}>
+                                <Button onClick={ ()=>{ this._onSubmit('receipt_in_temp') } } className="btn btn-ubuntu bg-green"> 
+                                    <i className="fa  fa-chevron-circle-right mr-5"></i> Cập nhật 
+                                </Button>        
+                                <span className="form-err text-red" id="form-err"></span>
+                            </Col>
+                        </FormGroup>
                     </div>
                     
 

@@ -11,14 +11,16 @@ export default {
       class: ''             // optional class names space delimited list for title item ex: "text-center"
     },
     {
-      name: 'Tổng quan',
+      name: 'Timeline',
       url: '/dashboard',
-      icon: 'icon-speedometer',
+      icon: 'fa fa-clock-o',
       badge: {
         variant: 'info',
         text: 'NEW',
       },
     },
+
+    
     
     {
       name:'Nhân sự',
@@ -27,7 +29,7 @@ export default {
     },
 
     {
-      name: 'Bán Hàng',
+      name: 'Bán Hàng (F4)',
       url: '/order',
       icon: 'icon-screen-desktop',
       children:[
@@ -120,7 +122,7 @@ export default {
       ]
     },
     {
-      name: 'Khách Hàng',
+      name: 'Khách Hàng (F2)',
       url: '/customer',
       icon: 'icon-people',
       children:[
@@ -175,8 +177,9 @@ export default {
         }
       ]
     },
+    
     {
-      name: 'Marketting',
+      name: 'Marketting (F3)',
       url: '/crm',
       icon: 'icon-magnet',
       children:[
@@ -207,6 +210,21 @@ export default {
           url:'/crm/setting',
           icon:''
         },
+      ]
+    },
+
+    {
+      name:'KPI (F7)',
+      url:'/kpi',
+      icon:'fa fa-dashboard',
+      children:[
+        { name:'DS KPI', url:'/kpi/targets', icon:'' },
+        { name:'Khách Hàng', url:'/kpi/customers', icon:'' },
+        { name:'Nhân viên', url:'/kpi/users', icon:'' },
+        { name:'Sản phẩm', url:'/kpi/products', icon:'' },
+        { name:'Công việc', url:'/kpi/tasks', icon:'' },
+        { name:'Nhân viên', url:'/kpi/users', icon:'' }
+        
       ]
     },
     

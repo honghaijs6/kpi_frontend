@@ -2,6 +2,9 @@
 import { ORDER_STATUS } from '../../../config/app.config'; 
 import { PAYMENT_TYPES_DECO } from '../../../config/payment.type'; 
 
+// HOOKS 
+import doGetModelInfo from '../../../hook/ultil/doGetModelInfo'; 
+
  /* OBJECT - PLUGIN*/ 
 import Model from '../../../model/model';
 
@@ -54,6 +57,8 @@ const BILLS = 'bills';
 class OrderView extends Component{
 
   _curInfo = {}
+  _companyInfo = {}
+
   constructor(props){
     super(props);
 
@@ -62,6 +67,7 @@ class OrderView extends Component{
       typeAction:'',
       onAction:'',
       status:'',
+
       isOpenForm:false, 
       isOpenProgressForm:false,
       isOpenDeleteForm:false,
@@ -71,6 +77,8 @@ class OrderView extends Component{
 
       defaultStatusType:2, // 0 : BAO GIA - 1 DON HANG - 2 : TAT CA
       
+      type:'', // ORDER TYPE : QUOTATION - ORDER FOR RENDER PRINT FORM
+
       actions:[
         {code:'update',icon:'fa-pencil',name:'Cập nhật báo giá'},
         {code:'remove',icon:'fa-trash',name:'Huỷ báo giá',active:true},
@@ -79,7 +87,8 @@ class OrderView extends Component{
         {code:'out_stock', icon:'fa-truck',name:'Tạo phiếu xuất kho'},
         {code:'income',icon:'fa-heart',name:'Tạo phiếu thu'},
 
-        {code:'view',icon:'fa-search',name:'Xem Đơn hàng'}
+        {code:'view-quotation',icon:'fa-search',name:'Xem Báo Giá'},
+        {code:'view-order',icon:'fa-search',name:'Xem Đơn hàng'}
         
         
       ]
@@ -229,8 +238,16 @@ class OrderView extends Component{
   }
   
 
-  componentDidMount(){
-    this._load(this.state.defaultStatusType);
+  async componentDidMount(){
+
+    this._load(this.state.defaultStatusType); 
+
+    // GET COMPANY INFO
+    const resComInfo = await doGetModelInfo('companies', window.USERINFO.company_id );
+    if(resComInfo.name==='success'){
+      this._companyInfo = resComInfo.data;
+    }
+    
   }
 
   componentWillReceiveProps(newProps){
@@ -276,11 +293,27 @@ class OrderView extends Component{
            });
         break ; 
 
-        case 'view':
+        case 'view-quotation':
            this.setState({
-             isOpenPrintForm:true
+             isOpenPrintForm:true,
+             type:'quotation_temp'
            }); 
         break ;
+
+        case 'view-order':
+
+           console.log(this._curInfo);
+
+           if(this._curInfo.code_pi !== null){
+              this.setState({
+                isOpenPrintForm:true,
+                type:'order_temp'
+              });
+           }else{  BenMessage({message:'Đơn hàng này chưa được xác nhận'}) }
+
+
+        break ;
+
 
         case 'income':
            this.setState({
@@ -404,9 +437,6 @@ class OrderView extends Component{
           }
 
       });
-
-      
-
         
   }
   
@@ -432,12 +462,16 @@ class OrderView extends Component{
         <div className="ubuntu-app " style={{border:0, marginTop: 20,padding:10}}>
             <main>
 
-              <PrintForm width="81%" 
+              <PrintForm width="72%" 
+                type={this.state.type}
                 isOpen={ this.state.isOpenPrintForm }
                 onToggle={(isOpen)=>{ this.setState({isOpenPrintForm:isOpen}) }}
                 data={this._curInfo}
+  
+                companyInfo = {this._companyInfo}
+
               />
-              
+               
 
               <CashFlowForm  
                 width="45%"
