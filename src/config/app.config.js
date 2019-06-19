@@ -20,7 +20,7 @@ export const PURCHASE_STATUS = [
 
 export const WAREHOUSE_RECEIPT = [
     { code:0, icon:'fa-clock-o',color:'#C64333' ,name:'Đang xử lý', action:'Duyệt' },
-    { code:1,icon:'fa-shopping-cart',color:'#00ACD7',name:'Hoàn thành', action:'Nhập hàng' },
+    { code:1,icon:'fa-check',color:'#00ACD7',name:'Hoàn thành', action:'Nhập hàng' },
 ];
 
 

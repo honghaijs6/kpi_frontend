@@ -1,7 +1,10 @@
 import Model from '../../../model/model';
 
 // HOOKS 
+
 import moment from 'moment';
+
+
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux'; 
@@ -40,9 +43,19 @@ class Warehouse extends Component {
           {
             headerName:"Kho Hàng",field:"name", width:270},
           {
-              headerName:"Địa chỉ", field:"address", width:600
+              headerName:"Địa chỉ", field:"address", width:400
+          },
+
+          {
+            headerName:"Người liên hệ", field:"contact_person", width:220
+          },
+
+          {
+            headerName:"SĐT", field:"phone", width:140
           },
           
+        
+
           {
             headerName:"Người tạo", field:"creator",width:180
           },

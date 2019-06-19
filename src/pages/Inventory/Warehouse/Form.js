@@ -28,13 +28,16 @@ export default class MyForm extends Component {
     return {
       code:'',
       name:'',
-      address:''
+      address:'',
+      contact_person:'',
+      phone:''
     }
   }
 
   _onSubmit(){
     
-    const fields = ['code','name','address'];
+    const fields = ['code','name','address','contact_person','phone'];
+
     if(detectForm(fields,this.state)===''){
        
       this.props.model.axios(this.props.typeAction,this.state,(res)=>{
@@ -48,7 +51,21 @@ export default class MyForm extends Component {
   
   componentWillReceiveProps(newProps){
     
-    const state = newProps.typeAction === 'post' ? this._resetForm() : newProps.data; 
+    let state = {}
+    if(newProps.typeAction==='post'){
+      state = this._resetForm();
+    }else{
+      state = {
+        id:newProps.data.id,
+        code:newProps.data.code,
+        name:newProps.data.name,
+        address:newProps.data.address,
+        contact_person:newProps.data.contact_person,
+        phone:newProps.data.phone
+        
+      }
+    }
+    
     this.setState(state);
 
   }
@@ -88,6 +105,27 @@ export default class MyForm extends Component {
 
                   </Col>
                </Row>
+
+               <Row style={{marginTop:20}}>
+                  <Col md={4}>
+                    <label> Người liên hệ </label>
+                    <InputGroup>
+                      <InputGroupAddon addonType="prepend"><InputGroupText><i className="fa fa-user"></i></InputGroupText></InputGroupAddon>
+                      <Input id="contact_person" onChange={(e)=>{ this.setState({contact_person:e.target.value}) }} defaultValue={ this.state.contact_person } />
+                    </InputGroup>
+
+                  </Col>
+                  <Col md={6}>
+                    <label> SĐT </label>
+                    <InputGroup>
+                      <InputGroupAddon addonType="prepend"><InputGroupText><i className="fa fa-phone"></i></InputGroupText></InputGroupAddon>
+                      <Input id="phone" onChange={(e)=>{ this.setState({phone:e.target.value}) }} defaultValue={ this.state.phone } />
+                    </InputGroup>
+
+                  </Col>
+
+               </Row>
+
             </FormGroup>
             
         </div>     

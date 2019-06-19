@@ -1,4 +1,5 @@
 export const MAU_PHIEU_XUATKHO = `
+
 <!doctype html>
 <html lang='en'>
     <head>  
@@ -83,8 +84,8 @@ export const MAU_PHIEU_XUATKHO = `
                 
             </style>
     </head>
-    <body style='background:#fff'>
-        <div id="doc-pdf" class="print-document" style="padding: 0px; width: 92%; margin: auto;">
+    <body>
+        <div id="doc-pdf" class="print-document" style="padding: 30px;">
                 <div>
                     <div style="float: left; width: 25%;">
                             
@@ -197,7 +198,7 @@ export const MAU_PHIEU_XUATKHO = `
                                         T.liệu T.K <span style="padding: 0px 10px;"> : </span>
                                     </td>
                                     <td style="border: 1px solid rgb(0, 0, 0); width: 100%; padding: 3px; font-size: 12px;">
-                                        {{ RECEIPT_ORDER_INV }}
+                                        {{RECEIPT_ORDER_INV}}
                                     </td>
                                 </tr>
                                 <tr>
@@ -238,8 +239,6 @@ export const MAU_PHIEU_XUATKHO = `
                             <th class="text-center" style="vertical-align: middle; font-size: 17px; color: rgb(17, 17, 17); width: 290px; font-family: Arial;">Name / Tên hàng hoá</th>
                             <th class="text-center" style="vertical-align: middle; font-size: 17px; color: rgb(17, 17, 17); width: 41px; font-family: Arial;">Unit / ĐVT</th>
                             <th class="text-center" style="vertical-align: middle; font-size: 17px; color: rgb(17, 17, 17); width: 41px; font-family: Arial;">Q.ty / S.lượng</th>
-                            <th class="text-center" style="vertical-align: middle; font-size: 17px; color: rgb(17, 17, 17); width: 90px; font-family: Arial;">Unit Price / Đơn giá</th>
-                            <th class="text-center" style="vertical-align: middle; font-size: 17px; color: rgb(17, 17, 17); width: 90px; font-family: Arial;">Amount / Thành tiền</th>
                         </tr>
                     </thead>
                     <tbody style="border: 1px solid rgb(0, 0, 0);">
@@ -249,7 +248,7 @@ export const MAU_PHIEU_XUATKHO = `
                 </table>
             </div>
             <div class="conditions ">
-                <p class="font-12"> Ghi chú / <i>Noted</i> : {{ RECEIPT_NOTE }}</p>
+                <p class="font-12"> Ghi chú / <i>Noted</i> : {{RECEIPT_NOTE}}</p>
             </div>
 
             <div class="signature" style="margin-top:40px;">
@@ -270,13 +269,13 @@ export const MAU_PHIEU_XUATKHO = `
                         <td style="width: 400px; ">
                             <p class="bold">Người xuất kho/Exp  </p>
                             <br> <br> <br><br>
-                            {{ USER_CODE }} <br>
+                            {{USER_CODE}} <br>
                             Ngày/date
                         </td>
                         <td style="width: 400px; ">
                             <p class="bold">Người bán/Sale  </p>
                             <br> <br> <br><br>
-                            {{ ORDER_BELONG_USER }}<br>
+                            {{ORDER_BELONG_USER}}<br>
                             Ngày/date
                         </td>
                     </tr>  
@@ -285,10 +284,12 @@ export const MAU_PHIEU_XUATKHO = `
         </div>
     </body>
 </html>
+
 `;
 
 
 export const MAU_PHIEU_NHAPKHO = `
+
 <!doctype html>
 <html lang='en'>
     <head>  
@@ -387,8 +388,8 @@ export const MAU_PHIEU_NHAPKHO = `
                 
             </style>
     </head>
-    <body style='background:#fff'>
-        <div id="doc-pdf" class="print-document" style="padding: 0px; width: 92%; margin: auto;">
+    <body>
+        <div id="doc-pdf" class="print-document" style="padding: 30px;">
                 <div>
                     <div style="float: left; width: 25%;">
                             
@@ -413,7 +414,7 @@ export const MAU_PHIEU_NHAPKHO = `
 
                 <div>
                     <div style="text-align: center;">
-                        <p style="margin: 0px; padding: 5px 0px; font-size: 16px; font-weight: 500;"> PHIẾU XUẤT KHO </p>
+                        <p style="margin: 0px; padding: 5px 0px; font-size: 16px; font-weight: 500;"> PHIẾU NHẬP KHO </p>
                     </div>
                     <div style="position: absolute; right: 0px; top: -10px;">
                         {{BARCODE}}
@@ -480,8 +481,8 @@ export const MAU_PHIEU_NHAPKHO = `
                                 <tr>
                                     <td colspan="2" style="line-height:15px; padding:3px;">Tax Code : {{COMPANY_TAXNO}} </td>
                                 </tr>
-                                <tr>    
-                                    <td style="line-height:15px; padding:3px;" colspan="2">Mã Kho : </td>
+                                <tr>                                                                        
+                                    <td style="line-height:15px; padding:3px;" colspan="2">Mã Kho : <span class="text-uppercase">{{WAREHOUSE_CODE}}</span> </td>
                                 </tr>
 
                             </tbody>
@@ -496,21 +497,21 @@ export const MAU_PHIEU_NHAPKHO = `
                             <tbody>
                                 <tr>
                                     <td  style="width:100px; line-height:15px"> Ship to. </td>
-                                    <td style=" padding: 3px; text-transform:uppercase">  asdasd   </td>
+                                    <td style=" padding: 3px; text-transform:uppercase">     </td>
                                 </tr>
                                 
                                 <tr>
-                                    <td colspan='2' style=" line-height:15px; padding:3px">  Điểm giao nhận Vi Khang </td>
+                                    <td colspan='2' style=" line-height:15px; padding:3px">  {{RECEIVER_LOCATION}} </td>
                                 </tr>
                             
                                 <tr>
                                     <td colspan='2' style="line-height:15px; padding:3px">  
-                                        Lô F22, cư xá Vĩnh Hội, Bến Vân Đồn, Phường 5, Quận 4, Tp HCM (Cuối hẻm 183 Bến Vân Đồn)
+                                        {{RECEIVER_ADDRESS}}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td  style=" width:100px;line-height:15px; padding:3px;"> Liên hệ  </td>
-                                    <td  style=" line-height:15px; padding:3px;"> Vũ Dung    H/p: 0968220889 </td>
+                                    <td  style=" line-height:15px; padding:3px;"> {{RECEIVER_CONTACT}} </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -520,11 +521,11 @@ export const MAU_PHIEU_NHAPKHO = `
                         <table class="table-page-header">
                             <tr>
                                 <td style="width:100px; line-height:15px; padding:3px"> Staff Code  </td>
-                                <td style=" padding: 3px; text-transform:uppercase"> {{ PURCHASE_BELONG_USERCODE }}   </td>
+                                <td style=" padding: 3px; text-transform:uppercase"> {{PURCHASE_BELONG_USERCODE}}   </td>
                             </tr>
                             <tr>
                                 <td style="width:100px; line-height:15px"> Payment Term:  </td>
-                                <td style=" padding: 3px; line-height:15px; text-transform:uppercase"> {{ PURCHASE_PAYMENT }}   </td>
+                                <td style=" padding: 3px; line-height:15px; text-transform:uppercase"> {{PURCHASE_PAYMENT}}   </td>
                             </tr>
                             <tr>
                                 <td style="width:100px; line-height:15px"> Người mua:  </td>
@@ -550,8 +551,6 @@ export const MAU_PHIEU_NHAPKHO = `
                             <th class="text-center" style="vertical-align: middle; font-size: 17px; color: rgb(17, 17, 17); width: 290px; font-family: Arial;">Name / Tên hàng hoá</th>
                             <th class="text-center" style="vertical-align: middle; font-size: 17px; color: rgb(17, 17, 17); width: 41px; font-family: Arial;">Unit / ĐVT</th>
                             <th class="text-center" style="vertical-align: middle; font-size: 17px; color: rgb(17, 17, 17); width: 41px; font-family: Arial;">Q.ty / S.lượng</th>
-                            <th class="text-center" style="vertical-align: middle; font-size: 17px; color: rgb(17, 17, 17); width: 90px; font-family: Arial;">Unit Price / Đơn giá</th>
-                            <th class="text-center" style="vertical-align: middle; font-size: 17px; color: rgb(17, 17, 17); width: 90px; font-family: Arial;">Amount / Thành tiền</th>
                         </tr>
                     </thead>
                     <tbody style="border: 1px solid rgb(0, 0, 0);">
@@ -561,7 +560,7 @@ export const MAU_PHIEU_NHAPKHO = `
                 </table>
             </div>
             <div class="conditions ">
-                <p class="font-12"> Ghi chú / <i>Noted</i> : {{ RECEIPT_NOTE }}</p>
+                <p class="font-12"> Ghi chú / <i>Noted</i> : {{RECEIPT_NOTE}} </p>
                 <table>
                     <tr>
                         <td>
@@ -624,4 +623,5 @@ export const MAU_PHIEU_NHAPKHO = `
         </div>
     </body>
 </html>
+
 `;

@@ -1,6 +1,9 @@
 import { WAREHOUSE_RECEIPT, WAREHOUSE_TYPES, WAREHOUSE_TRACKS } from '../../../config/app.config';
 import Model from '../../../model/model';
 
+// HOOKS 
+import doGetModelInfo from '../../../hook/ultil/doGetModelInfo';
+
 // LIBS 
 import moment from 'moment';
 
@@ -24,6 +27,7 @@ import RankDatePicker from '../../../components/RankDatePicker';
 
 import ReceiptForm from './Form'; 
 import DeleteForm from './DeleteForm'; 
+import PrintForm from './PrintForm'; 
 
 
 
@@ -43,7 +47,8 @@ class ReceiptWarehouse extends Component {
             
             isOpenForm:false,
             isOpenDeleteForm:false,
-
+            isOpenPrintForm:false,
+            companyInfo:{},
             receiptType:'',
             actions:[
                 {code:'update',icon:'fa-pencil',name:'Cập nhật phiếu'},
@@ -167,9 +172,7 @@ class ReceiptWarehouse extends Component {
             isOpenForm:true,
             typeAction:'post'
         });
-
         
-
 
     }
     _onSubmitForm(res){
@@ -208,6 +211,12 @@ class ReceiptWarehouse extends Component {
                         isOpenProgressForm:true
                     }); 
                 break ;
+
+                case 'print':
+                    this.setState({
+                        isOpenPrintForm:true
+                    });
+                break;
         
             }
         }else{ 
@@ -246,8 +255,16 @@ class ReceiptWarehouse extends Component {
     }
 
 
-    componentDidMount(){
-        this.model.load();
+    async componentDidMount(){
+        this.model.load(); 
+        const resCom = await doGetModelInfo('companies',window.USERINFO.company_id);
+
+        if(resCom.name==='success'){
+            this.setState({
+                companyInfo:resCom.data
+            });
+        }
+
     }
     componentWillReceiveProps(newProps){
         this.grid.rowData = newProps[MODE]['list'];
@@ -257,12 +274,20 @@ class ReceiptWarehouse extends Component {
     }
     render() {
 
-        const FORM_NAME = this.state.receiptType === 'in' ? 'Phiếu nhập' : 'Phiếu xuất'
+        
         return (
             <div className="animated fadeIn">
                 <div className="ubuntu-app " style={{marginTop:20, padding:10}}>
                     <main>
 
+
+                        <PrintForm
+                            width="72%"
+                            data={this._curInfo}
+                            isOpen={ this.state.isOpenPrintForm }
+                            onToggle={ (isOpen)=>{ this.setState({isOpenPrintForm:isOpen}) } }
+                            companyInfo={this.state.companyInfo}
+                        />
                         <DeleteForm  
                             data={this._curInfo}
                             isOpen={ this.state.isOpenDeleteForm }
@@ -279,7 +304,7 @@ class ReceiptWarehouse extends Component {
                             onToggle={(isOpen)=>{this.setState({isOpenForm:isOpen}) }}
                             receiptType={ this.state.receiptType }
                             typeAction={ this.state.typeAction }
-
+ 
                             data={this._curInfo}
                             onSubmitForm={ (res)=>{ this._onSubmitForm(res) }}
                             model={this.model}

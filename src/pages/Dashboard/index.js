@@ -14,7 +14,8 @@ class Dashboard extends Component{
       <div className="animated fadeIn">
         <main style={{marginTop: 20, padding: 20, height:'89vh', overflow:'auto'}}>
 
-            <MyHeader />
+            <i>đang cập nhật Timeline...</i> 
+            {/*<MyHeader />
 
             <Row>
               <Col md={9}>
@@ -23,7 +24,7 @@ class Dashboard extends Component{
               <Col md={3}>
                 <RealtimeBox />
               </Col>
-            </Row>
+            </Row>*/}
 
         </main>
 

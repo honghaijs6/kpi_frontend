@@ -91,7 +91,7 @@ class OrderView extends Component{
         {code:'view-order',icon:'fa-search',name:'Xem Đơn hàng'}
         
         
-      ]
+      ]  
     }
 
     

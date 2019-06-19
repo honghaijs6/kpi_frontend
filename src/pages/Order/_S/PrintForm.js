@@ -1,23 +1,14 @@
 
-// HOOKS
-import doGetModelInfo from '../../../hook/ultil/doGetModelInfo';
-
 import {N2T} from '../../../hook/ultil/N2T'; 
 
 import React, { Component } from 'react';
 
 import ReactToPrint from 'react-to-print';
-
 import moment from 'moment';
 import numeral from 'numeral';
-import Barcode from 'react-barcode';
-
-
 
 
 import ViewModal from '../../../components/ViewModal';
-//import TemplateOrder from '../../../prints/TemplateOrder';
-//import TemplateQuotation from '../../../prints/TemplateQuotation'; 
 
 
 class PrintForm extends Component {  
@@ -171,6 +162,7 @@ class PrintForm extends Component {
 
                 HTML = HTML.replace(/{{BARCODE}}/g, `<img style="height:72px" src="https://barcode.tec-it.com/barcode.ashx?data=${ type==='quotation_temp' ? orderInfo.code.toUpperCase() : orderInfo.code_pi.toUpperCase() }"/>`);
                 
+                   
                 // END ORDER INFO 
 
                 // CART TABLE
@@ -243,6 +235,6 @@ class PrintForm extends Component {
 PrintForm.defaultProps = {
     onToggle:()=>{},
     data:{}
-}
+}  
 
 export default PrintForm

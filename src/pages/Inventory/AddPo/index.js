@@ -354,7 +354,9 @@ class CreatePO extends Component {
                 name:supInfo.name,
                 address:supInfo.address,
                 phone:supInfo.phone,
-                roots:supInfo.roots
+                roots:supInfo.roots,
+                tax_no:supInfo.tax_no,
+                email:supInfo.email
               }
               
               this.model.axios('post',data,(res)=>{ 
@@ -500,7 +502,7 @@ class CreatePO extends Component {
         });
          
   
-      }
+    }
 
     _onChange(name,value){
         this.setState({
