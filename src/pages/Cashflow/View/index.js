@@ -1,7 +1,9 @@
+// DATA
 import { BILL_ACC_TYPES } from '../../../config/app.config';
-
-// MODEL
 import Model from '../../../model/model';
+
+// HOOKS
+import doGetModelInfo from '../../../hook/ultil/doGetModelInfo';
 
 // LIBS 
 import moment from 'moment';
@@ -25,6 +27,7 @@ import RankDatePicker from '../../../components/RankDatePicker';
 
 import MyForm from './Form'; 
 import DeleteForm from './DeleteForm';
+import PrintForm from './PrintForm'
 
 
 
@@ -41,16 +44,18 @@ class CashFlowView extends Component {
             typeAction:'',
             onAction:'',
             status:'',
-
+  
             isOpenForm:false,
-            isOpenDeleteForm:false,
+            isOpenDeleteForm:false,  
+            isOpenPrintForm:false,
 
             receiptType:'',
             actions:[
                 {code:'update',icon:'fa-pencil',name:'Cập nhật phiếu'},
                 {code:'remove',icon:'fa-trash',name:'Huỷ phiếu',active:true},
                 {code:'print',icon:'fa-print',name:'In phiếu'}
-            ]
+            ],
+            companyInfo:{}
   
         }
 
@@ -163,6 +168,13 @@ class CashFlowView extends Component {
                         isOpenProgressForm:true
                     }); 
                 break ;
+
+                case 'print':
+                    this.setState({
+                        isOpenPrintForm:true
+                    });
+
+                break;
         
             }
         }else{ 
@@ -201,8 +213,18 @@ class CashFlowView extends Component {
         this.setState(Object.assign(this.state,newState));
     }
 
-    componentDidMount(){
+    async componentDidMount(){
         this.model.load();
+
+        // LOAD COMPANY INFO
+        const resComInfo = await doGetModelInfo('companies',window.USERINFO.company_id);
+        if(resComInfo.name==='success'){
+            this.setState({
+                companyInfo:resComInfo.data
+            });
+
+        }
+
     }
     componentWillReceiveProps(newProps){
         this.grid.rowData = newProps[MODE]['list'];
@@ -236,6 +258,16 @@ class CashFlowView extends Component {
                             receiptType={this.state.receiptType}
                             typeAction={this.state.typeAction}
                             onSubmitForm={ (res)=>{ this._onSubmitForm(res) }}
+                        />
+                        <PrintForm 
+                            
+                            width="60%"
+                            name="Print"
+                            isOpen={this.state.isOpenPrintForm}
+                            onToggle={(isOpen)=>{ this.setState({isOpenPrintForm:isOpen}) }}
+                            data={this._curInfo}
+                            companyInfo={this.state.companyInfo}
+
                         />
                         <BenGrid
 

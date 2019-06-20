@@ -6,7 +6,11 @@ import React, { Component } from 'react';
 import {BenExplorer} from '../../../components/BenExplorer';
 
 import BillAccountPage from './BillAccountPage'; // LOAI TÀI KHOẢN THANH TOÁN
-import BillDisplaySetting from './BillDisplaySetting' ; 
+
+
+
+import ThuChi from './ThuChi';
+
 import PaymentLimitPage from './PaymentLimitPage' ;
 
 
@@ -25,7 +29,7 @@ class CashflowSetting extends Component{
       onTab:'BillAccountPage',
       leftData:[
         {icon:'', code:'BillAccountPage',name:'Loại tài khoản',active:true},
-        {icon:'', code:'BillDisplaySetting',name:'Cấu hình Thu - Chi'},
+        {icon:'', code:'ThuChi',name:'Cấu hình Thu - Chi'},
         {icon:'', code:'PaymentLimitPage',name:'Hạn mức thanh toán'}
         
       ]
@@ -58,7 +62,7 @@ class CashflowSetting extends Component{
                 <BenExplorer onLeftSideChange={ this._onLeftSideChange } data={this.state.leftData} >
 
                    <BillAccountPage {...this.state} />
-                   <BillDisplaySetting {...this.state} /> 
+                   <ThuChi {...this.state} /> 
                    <PaymentLimitPage {...this.state} />
                    
 

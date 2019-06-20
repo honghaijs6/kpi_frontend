@@ -113,83 +113,41 @@ class PrintForm extends Component {
     }
     
 
-    _formatHTML(data,companyInfo,type){
+    _formatHTML(data,companyInfo){
         let HTML = ``;
 
         if(JSON.stringify(companyInfo)!='{}'){
 
-            type = type === '' ? 'quotation_temp':type;
-
-            HTML = companyInfo[type];
-
-
-            HTML = HTML.replace(/{{COMPANY_LOGO}}/g,companyInfo['logo']);
-            HTML = HTML.replace(/{{COMPANY_NAME}}/g,companyInfo['name']);
-            HTML = HTML.replace(/{{COMPANY_ADDRESS}}/g,companyInfo['address']);
-            HTML = HTML.replace(/{{COMPANY_TAXNO}}/g,companyInfo['tax_no']);
-            HTML = HTML.replace(/{{COMPANY_PHONE}}/g,companyInfo['phone']);
-            HTML = HTML.replace(/{{COMPANY_WEBSITE}}/g,companyInfo['website']);
-            HTML = HTML.replace(/{{COMPANY_EMAIL}}/g,companyInfo['email']);
-
-            // DECODE DATA
             if(JSON.stringify(data)!=='{}'){
-
-
-
-                const cusInfo = JSON.parse(data.customer_info);
                 
-                // PARSE CODE CUSTOMER
-                HTML = HTML.replace(/{{CUSTOMER_NAME}}/g,cusInfo.name);
-                HTML = HTML.replace(/{{CUSTOMER_ADDRESS}}/g,cusInfo.address_delivery);
-                HTML = HTML.replace(/{{CUSTOMER_PHONE}}/g,cusInfo.phone);
-                HTML = HTML.replace(/{{CUSTOMER_EMAIL}}/g,cusInfo.email);
-                HTML = HTML.replace(/{{CUSTOMER_RECEIVER}}/g,cusInfo.contact_name);
-                HTML = HTML.replace(/{{CUSTOMER_TAXNO}}/g,cusInfo.tax_no);
-                // END PARSE CODE CUSTOMER  
-
-                const orderInfo = data ; 
-                // ORDER INFO 
+                const types = { pt:'phieuthu_temp', pc:'phieuchi_temp' } 
+                HTML = companyInfo[types[data.type]];
                 
-                HTML = HTML.replace(/{{ORDER_CODE_PI}}/g,orderInfo.code_pi);
-                HTML = HTML.replace(/{{ORDER_CODE}}/g,orderInfo.code);
-                HTML = HTML.replace(/{{ORDER_CODE_CREATED}}/g, moment(orderInfo.date_created).format('YYYY-MM-DD'));
-                HTML = HTML.replace(/{{ORDER_DATE_CONFIRMED}}/g, moment(orderInfo.date_confirmed).format('YYYY-MM-DD'));
+                HTML = HTML.replace(/{{COMPANY_LOGO}}/g,companyInfo['logo']);
+                HTML = HTML.replace(/{{COMPANY_NAME}}/g,companyInfo['name']);
+                HTML = HTML.replace(/{{COMPANY_ADDRESS}}/g,companyInfo['address']);
+                HTML = HTML.replace(/{{COMPANY_TAXNO}}/g,companyInfo['tax_no']);
+                HTML = HTML.replace(/{{COMPANY_PHONE}}/g,companyInfo['phone']);
+                HTML = HTML.replace(/{{COMPANY_WEBSITE}}/g,companyInfo['website']);
+                HTML = HTML.replace(/{{COMPANY_EMAIL}}/g,companyInfo['email']);
 
-                HTML = HTML.replace(/{{ORDER_BELONG}}/g, orderInfo.belong_user);
-                HTML = HTML.replace(/{{ORDER_PAYMENT_CODE}}/g, orderInfo.payment_code);
-
+                // BILL INFO 
+                HTML = HTML.replace(/{{CASHFLOW_DATECREATED}}/g,moment(data.date_created).format('YYYY-MM-DD'));
+                const paymentTypes = {tm:'Tiền mặt',ck:'Chuyển khoảng'}
+                HTML = HTML.replace(/{{PAYMENT_TYPE}}/g, paymentTypes[data.bill_acc_type] );
+                HTML = HTML.replace(/{{CASHFLOW_ATTACK}}/g, data.ref_code );
+                HTML = HTML.replace(/{{CASHFLOW_CODE}}/g, data.code );
+                    
                 
+                // BILL BODY
+                HTML = HTML.replace(/{{CASHFLOW_PARTNER}}/g, data.person_name );
+                HTML = HTML.replace(/{{CASHFLOW_PARTNER_ADDRESS}}/g, data.person_address );
+                HTML = HTML.replace(/{{CASHFLOW_REASON}}/g, data.reason );
+                HTML = HTML.replace(/{{CASHFLOW_VALUE}}/g,  numeral(data.total).format('0,0')+' đ'  );
+                HTML = HTML.replace(/{{CASHFLOW_NOTE}}/g, data.note );
 
-                HTML = HTML.replace(/{{BARCODE}}/g, `<img style="height:72px" src="https://barcode.tec-it.com/barcode.ashx?data=${ type==='quotation_temp' ? orderInfo.code.toUpperCase() : orderInfo.code_pi.toUpperCase() }"/>`);
-                
-                   
-                // END ORDER INFO 
-
-                // CART TABLE
-                const cart = JSON.parse(orderInfo.cart);  
-                const TOTAL_VAT = parseFloat(orderInfo['total_sum']) * ( parseInt(orderInfo['vat'])/100 ) ; 
-
-                HTML = HTML.replace(/{{ORDER_RECORDS}}/g, type === 'quotation_temp' ? this._renderBodyQuotation(cart) : this._renderBodyOrder(cart) ); 
-                HTML = HTML.replace(/{{ORDER_DISCOUNT}}/g, numeral(orderInfo.level_discount).format('0,0') );
-                HTML = HTML.replace(/{{ORDER_AMOUNT}}/g, numeral(orderInfo.total_sum).format('0,0') );
-                HTML = HTML.replace(/{{VAT}}/g, orderInfo.vat );
-                HTML = HTML.replace(/{{ORDER_AMOUNT}}/g, numeral(orderInfo.total_sum_vat).format('0,0') );
-                HTML = HTML.replace(/{{ORDER_AMOUNT_TAX}}/g, numeral(TOTAL_VAT).format('0,0') );
-                HTML = HTML.replace(/{{ORDER_SUM}}/g, numeral(orderInfo['total_sum_vat']).format('0,0')+' đ' );
-                HTML = HTML.replace(/{{ORDER_SUM_TEXT}}/g, N2T(orderInfo['total_sum_vat'])+' đồng' );
-                // END CART TABLE
-
-                // FOOTER INFO 
-                HTML = HTML.replace(/{{ORDER_PAYMENT_DESC}}/g, orderInfo['payment_desc'] ); 
-                HTML = HTML.replace(/{{ORDER_PREPARE}}/g, window.USERINFO.username ); 
-                
-
-
-                // END FOOTER INFO
-                
             }
             
-
         }
 
         return HTML;
@@ -199,12 +157,12 @@ class PrintForm extends Component {
     render() {
         
         const data = this.props.data;
-        const HTML = this._formatHTML(data,this.props.companyInfo,this.props.type); //this._formatQuotationHTML(data,this.props.companyInfo);
+        const HTML = this._formatHTML(data,this.props.companyInfo); //this._formatQuotationHTML(data,this.props.companyInfo);
         
         
 
         return (
-            <ViewModal name={ <span className="text-uppercase"> { data.code } </span> }  { ...this.props }  onToggle={(isOpen)=>{  this.props.onToggle(isOpen)}} >
+            <ViewModal  { ...this.props } >
                 <div>
                     
                     <div style={{padding:10}}>

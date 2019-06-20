@@ -25,7 +25,8 @@ class PrintForm extends Component {
     state = {
         companyInfo:{},
         warehouseInfo:{},
-        purchaseInfo:{}
+        purchaseInfo:{},
+        orderInfo:{}
 
     }
 
@@ -36,22 +37,36 @@ class PrintForm extends Component {
 
             if(JSON.stringify(newProp.data)!=='{}'){
                 
+                const receiptInfo = newProp.data;
+                
+                switch(receiptInfo.track_code){
 
-                const resWHInfo = await doGetModelInfoCode('warehouses',newProp.data.warehouse_code);
-                if(resWHInfo.name==='success'){
+                    case 'muahang':
+                        const resWHInfo = await doGetModelInfoCode('warehouses',newProp.data.warehouse_code);
+                        if(resWHInfo.name==='success'){
+                            this.setState({
+                                warehouseInfo : resWHInfo.data
+                            });
+                        }
 
-                    this.setState({
-                        warehouseInfo : resWHInfo.data
-                    });
+                        const resPurInfo = await doGetModelInfoCode('purchases',newProp.data.purchase_code);
+                        if(resPurInfo.name==='success'){
+                            this.setState({
+                                purchaseInfo:resPurInfo.data
+                            })
+                        }
+                    break;
 
-                    
-                }
-
-                const resPurInfo = await doGetModelInfoCode('purchases',newProp.data.purchase_code);
-                if(resPurInfo.name==='success'){
-                    this.setState({
-                        purchaseInfo:resPurInfo.data
-                    })
+                    case 'banhang':
+                        
+                        const resOrder = await doGetModelInfoCode('orders',receiptInfo.order_code);
+                        
+                        if(resOrder.name==='success'){
+                            this.setState({
+                                orderInfo:resOrder.data
+                            });
+                        }
+                    break; 
                 }
                 
             }
@@ -110,7 +125,47 @@ class PrintForm extends Component {
     }
     
 
-     _renderPOBody(HTML, data){
+    _renderOrderBody(HTML,data){
+
+        // CUSTOMER INFO 
+        
+        const cusInfo = JSON.parse(data.customer_info);
+            
+        HTML = HTML.replace(/{{CUSTOMER_NAME}}/g, cusInfo.name);
+        HTML = HTML.replace(/{{CUSTOMER_ADDRESS}}/g, cusInfo.address_delivery);
+        HTML = HTML.replace(/{{CUSTOMER_PHONE}}/g, cusInfo.phone);
+        HTML = HTML.replace(/{{CUSTOMER_EMAIL}}/g, cusInfo.email);
+        HTML = HTML.replace(/{{CUSTOMER_RECEIVER}}/g, cusInfo.contact_name);
+        HTML = HTML.replace(/{{CUSTOMER_TAXNO}}/g, cusInfo.tax_no);
+        // END CUSTOMER
+            
+        // ORDER INFO 
+        HTML = HTML.replace(/{{RECEIPT_CODE_OUT}}/g, data.code_out);
+        HTML = HTML.replace(/{{RECEIPT_DATE_CREATED}}/g, moment(data.date_created).format('YYYY-MM-DD'));
+        HTML = HTML.replace(/{{RECEIPT_ORDER_INV}}/g, data.order_code);
+        HTML = HTML.replace(/{{WAREHOUSE_CODE}}/g, data.warehouse_code);
+        HTML = HTML.replace(/{{BARCODE}}/g, `<img style="height:60px" src="https://barcode.tec-it.com/barcode.ashx?data=${ data.code_out.toUpperCase() }"/>`);
+
+        HTML = HTML.replace(/{{RECEIPT_NOTE}}/g, data.note);
+        // END ORDER INFO 
+
+        // CART TABLE
+        const cart = JSON.parse(data.cart);  
+        HTML = HTML.replace(/{{ORDER_RECORDS}}/g,  this._renderBodyCart(cart) ); 
+        
+
+        // FOOTER 
+        HTML = HTML.replace(/{{USER_CODE}}/g, window.USERINFO.username);
+        console.log(this.state.orderInfo);
+
+        if(JSON.stringify(this.state.orderInfo)!=='{}'){
+            HTML = HTML.replace(/{{ORDER_BELONG_USER}}/g, this.state.orderInfo.belong_user);
+        }
+         
+
+        return HTML ; 
+    }
+    _renderPOBody(HTML, data){
         
         // SUPPLIER INFO
         const supInfo = JSON.parse(data.supplier_info);
@@ -206,6 +261,7 @@ class PrintForm extends Component {
                 switch(data.track_code){
                     case 'banhang':
                         HTML = companyInfo['receipt_out_temp'];
+                        HTML = this._renderOrderBody(HTML,data);
                         
                     break;
                     case 'muahang':
@@ -223,8 +279,7 @@ class PrintForm extends Component {
                     break;
                     
                 }
-
-
+                
                 HTML = HTML.replace(/{{COMPANY_LOGO}}/g,companyInfo['logo']);
                 HTML = HTML.replace(/{{COMPANY_NAME}}/g,companyInfo['name']);
                 HTML = HTML.replace(/{{COMPANY_ADDRESS}}/g,companyInfo['address']);
@@ -232,55 +287,6 @@ class PrintForm extends Component {
                 HTML = HTML.replace(/{{COMPANY_PHONE}}/g,companyInfo['phone']);
                 HTML = HTML.replace(/{{COMPANY_WEBSITE}}/g,companyInfo['website']);
                 HTML = HTML.replace(/{{COMPANY_EMAIL}}/g,companyInfo['email']);
-
-                
-                //const cusInfo = JSON.parse(data.customer_info);
-                
-
-
-
-                /*
-
-               
-
-                const orderInfo = data ; 
-                // ORDER INFO 
-                
-                HTML = HTML.replace(/{{ORDER_CODE_PI}}/g,orderInfo.code_pi);
-                HTML = HTML.replace(/{{ORDER_CODE}}/g,orderInfo.code);
-                HTML = HTML.replace(/{{ORDER_CODE_CREATED}}/g, moment(orderInfo.date_created).format('YYYY-MM-DD'));
-                HTML = HTML.replace(/{{ORDER_DATE_CONFIRMED}}/g, moment(orderInfo.date_confirmed).format('YYYY-MM-DD'));
-
-                HTML = HTML.replace(/{{ORDER_BELONG}}/g, orderInfo.belong_user);
-                HTML = HTML.replace(/{{ORDER_PAYMENT_CODE}}/g, orderInfo.payment_code);
-
-                
-
-                HTML = HTML.replace(/{{BARCODE}}/g, `<img style="height:72px" src="https://barcode.tec-it.com/barcode.ashx?data=${ type==='quotation_temp' ? orderInfo.code.toUpperCase() : orderInfo.code_pi.toUpperCase() }"/>`);
-                   
-                // END ORDER INFO 
-
-                // CART TABLE
-                const cart = JSON.parse(orderInfo.cart);  
-                const TOTAL_VAT = parseFloat(orderInfo['total_sum']) * ( parseInt(orderInfo['vat'])/100 ) ; 
-
-                HTML = HTML.replace(/{{ORDER_RECORDS}}/g, type === 'quotation_temp' ? this._renderBodyQuotation(cart) : this._renderBodyOrder(cart) ); 
-                HTML = HTML.replace(/{{ORDER_DISCOUNT}}/g, numeral(orderInfo.level_discount).format('0,0') );
-                HTML = HTML.replace(/{{ORDER_AMOUNT}}/g, numeral(orderInfo.total_sum).format('0,0') );
-                HTML = HTML.replace(/{{VAT}}/g, orderInfo.vat );
-                HTML = HTML.replace(/{{ORDER_AMOUNT}}/g, numeral(orderInfo.total_sum_vat).format('0,0') );
-                HTML = HTML.replace(/{{ORDER_AMOUNT_TAX}}/g, numeral(TOTAL_VAT).format('0,0') );
-                HTML = HTML.replace(/{{ORDER_SUM}}/g, numeral(orderInfo['total_sum_vat']).format('0,0')+' đ' );
-                HTML = HTML.replace(/{{ORDER_SUM_TEXT}}/g, N2T(orderInfo['total_sum_vat'])+' đồng' );
-                // END CART TABLE
-
-                // FOOTER INFO 
-                HTML = HTML.replace(/{{ORDER_PAYMENT_DESC}}/g, orderInfo['payment_desc'] ); 
-                HTML = HTML.replace(/{{ORDER_PREPARE}}/g, window.USERINFO.username ); 
-                
-
-
-                // END FOOTER INFO*/
                 
             }
             

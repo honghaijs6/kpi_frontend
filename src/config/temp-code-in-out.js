@@ -198,7 +198,7 @@ export const MAU_PHIEU_XUATKHO = `
                                         T.liệu T.K <span style="padding: 0px 10px;"> : </span>
                                     </td>
                                     <td style="border: 1px solid rgb(0, 0, 0); width: 100%; padding: 3px; font-size: 12px;">
-                                        {{RECEIPT_ORDER_INV}}
+                                        <span class="text-uppercase">{{RECEIPT_ORDER_INV}}</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -206,7 +206,7 @@ export const MAU_PHIEU_XUATKHO = `
                                        Mã kho <span style="padding: 0px 10px;"> : </span>
                                     </td>
                                     <td class="text-uppercase" style="border: 1px solid rgb(0, 0, 0); width: 100%; padding: 3px; font-size: 12px;">
-                                        {{ORDER_PAYMENT_CODE}}
+                                        {{WAREHOUSE_CODE}}
                                     </td>
                                 </tr>
 

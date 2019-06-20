@@ -383,6 +383,7 @@ class AddQuotation extends React.Component {
               name:cusInfo.name,
               contact_name:cusInfo.contact_name,
               phone:cusInfo.phone,
+              email:cusInfo.email,
               address_delivery:cusInfo.address_delivery,
               level_code:cusInfo.level_code,
               customer_original:cusInfo.customer_original,
@@ -459,6 +460,8 @@ class AddQuotation extends React.Component {
 
         // PRODUCT TYPE 
         if(discount_for!=='all'){
+
+          
           if(item.type===discount_for){
             const total_1 = parseInt(price) * amount ; 
             TOTAL_SUM_1 += total_1; 

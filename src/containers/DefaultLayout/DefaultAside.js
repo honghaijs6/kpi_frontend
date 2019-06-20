@@ -83,7 +83,7 @@ class DefaultAside extends Component {
               <ListGroupItem action tag="a" href="#" className="list-group-item-accent-danger list-group-item-divider">
                 <div>New UI Project - <strong>deadline</strong></div>
                 <small className="text-muted mr-3"><i className="icon-calendar"></i>&nbsp; 10 - 11pm</small>
-                <small className="text-muted"><i className="icon-home"></i>&nbsp; creativeLabs HQ</small>
+                <small className="text-muted"><i className="icon-home"></i>&nbsp; VIKANG CO.,ltd</small>
 
               </ListGroupItem>
 
@@ -102,12 +102,12 @@ class DefaultAside extends Component {
                 </div>
               </div>
               <div>
-                <small className="text-muted">Lukasz Holeczek</small>
+                <small className="text-muted">Hồng Hải</small>
                 <small className="text-muted float-right mt-1">1:52 PM</small>
               </div>
-              <div className="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
-              <small className="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt...
+              <div className="text-truncate font-weight-bold">Task notification nhận</div>
+              <small className="text-muted">
+              Mẫu notification task làm việc theo assign đã nhận được
               </small>
             </div>
             <hr />
@@ -119,12 +119,12 @@ class DefaultAside extends Component {
                 </div>
               </div>
               <div>
-                <small className="text-muted">Lukasz Holeczek</small>
+                <small className="text-muted">Hồng Hải</small>
                 <small className="text-muted float-right mt-1">1:52 PM</small>
               </div>
-              <div className="text-truncate font-weight-bold">Lorem ipsum dolor sit amet</div>
-              <small className="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt...
+              <div className="text-truncate font-weight-bold">Task notification nhận</div>
+              <small className="text-muted">
+              Mẫu notification task làm việc theo assign đã nhận được
               </small>
             </div>
             <hr />
@@ -140,8 +140,8 @@ class DefaultAside extends Component {
                 <AppSwitch className={'float-right'} variant={'pill'} label color={'success'} defaultChecked size={'sm'}/>
               </div>
               <div>
-                <small className="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                  tempor incididunt ut labore et dolore magna aliqua.
+                <small className="text-muted">Task notification nhận,   
+                Mẫu notification task làm việc theo assign đã nhận được
                 </small>
               </div>
             </div>
