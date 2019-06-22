@@ -368,6 +368,31 @@ class Model {
 
   }
 
+  doCall(url,onSuccess){
+
+    this.db.type = 'GET';
+    const {config} = this.db ;
+
+    url = server.base()+'/'+this.model+url;
+
+    
+
+    
+    axios.get(url,config)
+          .then((res) => {
+            //this.restResp(res); // KHÔNG LUU localStorage
+            onSuccess(res)
+
+          },
+          (error) => {
+              var status = error.response.status;
+              this.onError(error)
+
+            }
+          );
+
+  }
+
   call(url,onSuccess){
 
     this.db.type = 'GET';

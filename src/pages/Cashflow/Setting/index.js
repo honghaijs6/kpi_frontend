@@ -28,9 +28,9 @@ class CashflowSetting extends Component{
 
       onTab:'BillAccountPage',
       leftData:[
-        {icon:'', code:'BillAccountPage',name:'Loại tài khoản',active:true},
-        {icon:'', code:'ThuChi',name:'Cấu hình Thu - Chi'},
-        {icon:'', code:'PaymentLimitPage',name:'Hạn mức thanh toán'}
+        {icon:'fa fa-credit-card', code:'BillAccountPage',name:'Loại tài khoản',active:true},
+        {icon:'fa fa-print', code:'ThuChi',name:'Cấu hình Thu - Chi'},
+        {icon:'fa fa-clock-o', code:'PaymentLimitPage',name:'Hạn mức thanh toán'}
         
       ]
     }

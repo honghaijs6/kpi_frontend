@@ -103,6 +103,11 @@ const Delivery = Loadable({
 const IserviceReport = Loadable({
   loader:()=> import('./pages/iservice/report'),
   loading:Loading
+});
+
+const IserviceSetting = Loadable({
+  loader:()=> import('./pages/iservice/setting'),
+  loading:Loading 
 })
 
 // END ISERVICE 
@@ -228,6 +233,7 @@ const routes = [
   { path:'/services/tickets',name:'Tickets', component:Tickets },
   { path:'/services/delivery',name:'Giao hàng', component:Delivery },
   { path:'/services/report', name:'Báo cáo', component:IserviceReport },
+  { path:'/services/setting',  name:'Thiết lập', component:IserviceSetting },
 
   { path: '/order/_s', exact:true , name:'DS Đơn hàng', component:OrderView},
   { path: '/order/add', name:'Tạo Báo Giá', component:OrderAddQuot },

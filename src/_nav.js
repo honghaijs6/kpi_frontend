@@ -165,16 +165,22 @@ export default {
           url:'/services/tickets',
           icon:'fa fa-ticket'
         }, 
-        {
+        /*{
           name:'Giao hàng',
           url:'/services/delivery',
           icon:'fa fa-truck'
-        },
+        },*/
         {
           name:'Báo cáo',
           url:'/services/report',
           icon:'fa fa-pie-chart'
-        }
+        },
+        {
+          name:'Thiết lập',
+          url:'/services/setting',
+          icon:'fa fa-wrench'
+        },
+        
       ]
     },
     

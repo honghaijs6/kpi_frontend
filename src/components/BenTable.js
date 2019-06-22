@@ -5,7 +5,7 @@ import { Table } from 'reactstrap';
 export default class BenTable extends Component {
   render() {
     return (
-        <Table className="product-board table vk-table">
+        <Table className="product-board  vk-table">
             <thead>
                 <tr>
                     { 
@@ -25,9 +25,12 @@ export default class BenTable extends Component {
                         <tr key={index}>
                             {
                             this.props.grid.colums.map((item2,index2)=>{
+
+                                //console.log(item2.width);
+
                                 return(
                                     <td key={index2} style={{
-                                        width: item[item2['width']]
+                                        width: item2['width']
                                     }}> 
                                         { item[item2['field']] }
 
@@ -40,6 +43,7 @@ export default class BenTable extends Component {
                     })
                 }
             </tbody>
+            <tfoot style={{borderTop:'1px solid #ddd'}}></tfoot>
         </Table>
     );
   }

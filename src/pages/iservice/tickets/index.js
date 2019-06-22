@@ -80,7 +80,7 @@ class Tickets extends Component {
                  }
               },
               
-              {headerName: "Vấn đề", field: "content_issue",width:410 },
+              {headerName: "Nội dung", field: "content_issue",width:410 },
               {
                   headerName:"Trạng thái", field:"status", width:150,
                   cellRenderer(params){
@@ -317,10 +317,11 @@ class Tickets extends Component {
                                         onClick={()=>{ this._doOpenModal('osv') }} className="btn btn-normal">
                                         <i className="fa fa-plus-circle mr-5"></i> Phiếu Dịch vụ  
                                     </Button>
-                                    <Button 
+
+                                    {/*<Button 
                                         onClick={()=>{ this._doOpenModal('isv') }} className="btn btn-normal">
                                         <i className="fa fa-plus-circle mr-5"></i> Phiếu tiếp nhận 
-                                    </Button>
+                                    </Button>*/}
                                      
                                     <ButtonExpandList onSelected={(item)=>{  this._callAction(item) }} data={ this.state.actions } />
                                     
