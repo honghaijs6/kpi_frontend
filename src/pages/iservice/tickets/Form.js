@@ -88,8 +88,10 @@ export default class MyForm extends Component {
         const item = {
             id:json.id,
             code:json.code,
+            unit:json.unit_name,
             name:json.name,
-            price:numeral(json.price_4).format('0,0')
+            price:numeral(json.price_4).format('0,0'),
+            amount:1,
         }
 
         this.grid.rowData.push(item);
@@ -171,24 +173,29 @@ export default class MyForm extends Component {
 
     
     _onChangeRefcodeCustomer(item){
-        
+          
+            
         this.setState({
             ref_code:item.code,
+            customer_code:item.code,
             customer_info:{
                 name:item.name,
                 address_delivery:item.address,
                 phone:item.phone
-            }
+            },
+            
         });
 
         
     }
     _onChangeRefcode(item){
         
+        
         const cusInfo = JSON.parse(item.customer_info);
         
         this.setState({
             ref_code:item.code_pi,
+            customer_code:cusInfo.code,
             customer_info:cusInfo
         });
 

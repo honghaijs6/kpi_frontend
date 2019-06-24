@@ -6,6 +6,9 @@ import Model from '../../../model/model';
 // LIBS 
 import moment from 'moment';
 
+// HOOKS 
+import doGetModelInfo from '../../../hook/ultil/doGetModelInfo';
+
 
 
 import React, { Component } from 'react';
@@ -24,7 +27,8 @@ import DeleteForm from '../../../components/DeleteForm';
 
 
 import MyForm from './Form'; 
-import ReportForm from './ReportForm'
+import ReportForm from './ReportForm';
+import PrintForm from './PrintForm';
 
 
 
@@ -45,6 +49,7 @@ class Tickets extends Component {
             isOpenForm:false,
             isOpenDeleteForm:false,
             isOpenReportForm:false,
+            isOpenFormPrint:false,
 
             receiptType:'osv', // MAC DINH LA DỊCH VỤ TẬN NƠI
             actions:[
@@ -52,7 +57,9 @@ class Tickets extends Component {
                 {code:'remove',icon:'fa-trash',name:'Huỷ phiếu',active:true},
                 {code:'report',icon:'fa-mail-reply',name:'Báo cáo kết quả'},
                 {code:'print',icon:'fa-print',name:'In phiếu'}
-            ]
+            ],
+
+            companyInfo:{}
 
 
 
@@ -203,6 +210,12 @@ class Tickets extends Component {
                         isOpenReportForm:true
                     });
                 break ;
+
+                case 'print':
+                    this.setState({
+                        isOpenFormPrint:true
+                    });
+                break ;
             }
         }else{ 
             BenMessage({
@@ -241,9 +254,17 @@ class Tickets extends Component {
         this.setState(Object.assign(this.state,newState));
     }
 
-    componentDidMount(){
+    async componentDidMount(){
 
         this.model.load();
+
+        const resCom = await doGetModelInfo('companies',window.USERINFO.company_id);
+        if(resCom.name==='success'){
+            
+            this.setState({
+                companyInfo:resCom.data
+            });
+        }
 
     }
     componentWillReceiveProps(newProps){
@@ -260,6 +281,13 @@ class Tickets extends Component {
                 <div className="ubuntu-app" style={{marginTop:20, padding:10}}>
                     <main>
 
+                        <PrintForm
+                            width="72%"
+                            data={this._curInfo}
+                            isOpen={ this.state.isOpenFormPrint }
+                            onToggle={(isOpen)=>{ this.setState({isOpenFormPrint:isOpen}) }}
+                            companyInfo={this.state.companyInfo}
+                        /> 
                         
                         <DeleteForm  
                             data={this._curInfo}
