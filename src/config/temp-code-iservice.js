@@ -1,4 +1,5 @@
 export const MAU_ISERVICE = `
+
 <!doctype html>
 <html lang='en'>
     <head>
@@ -272,14 +273,14 @@ export const MAU_ISERVICE = `
                     <div style="float:right; width:50%; text-align:right">Phụ trách/Serve by : {{BELONG_USER}}</div>
                     <div style="clear:both"></div>
                 </div>
-                <div style="border:1px solid #333; padding:10px; margin-top:10px;">
+                <div style="border:1px solid #333; padding:10px; margin-top:10px; height:100px">
                     {{CONTENT_ISSUES}}
                 </div>
             </div>
 
             <div style="margin-top:20px; font-size:12px">
                 <div> Phản hồi/Cus.Resp :</div>
-                <div style="border:1px solid #333; padding:10px; margin-top:10px;">
+                <div style="border:1px solid #333; padding:10px; margin-top:10px; height:100px">
                     {{CONTENT_SOLVED}}
                 </div>
             </div>
@@ -303,4 +304,5 @@ export const MAU_ISERVICE = `
         </div>
     </body>
 </html>
+
 `;

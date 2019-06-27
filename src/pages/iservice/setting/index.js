@@ -87,7 +87,10 @@ class IserviceSetting extends Component {
                                                         Lấy mẫu mặc định
                                                     </span>
 
-                                                    <Input type="textarea" defaultValue={this.state.iservice_temp} style={{
+                                                    <Input 
+                                                        type="textarea" 
+                                                        onChange={(e)=>{ this.setState({iservice_temp:e.target.value})  }} 
+                                                        defaultValue={this.state.iservice_temp} style={{
                                                         height:420,
                                                         background:'#262A2E',
                                                         color:'#f1f1f1',

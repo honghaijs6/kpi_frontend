@@ -68,6 +68,16 @@ class PrintForm extends React.Component {
         return html;
     }
 
+    _sumCart(cart){
+        let sum = 0 ;
+        cart.map((item)=>{
+            const price = item.price.replace(/,/g,'');
+            const total = parseInt(price) * parseInt(item.amount);
+            sum += total;
+        });
+
+        return sum; 
+    }
     _formatHtml(data,companyInfo){
 
         let HTML = ``;
@@ -102,24 +112,49 @@ class PrintForm extends React.Component {
                 HTML = HTML.replace(/{{TIME_ARRIVED}}/g,moment(data.date_arrived).format('HH:MM'));
                 HTML = HTML.replace(/{{CREATOR_CODE}}/g, data.creator_code );
                 HTML = HTML.replace(/{{SERVICE_CODE}}/g, data.code );
+                
+                const cart = data.cart !== null ? JSON.parse(data.cart) : [];
+                const temp = data.cart !== null ? HTML = HTML.replace(/{{ORDER_RECORDS}}/g, this._renderBodyCart(JSON.parse(data.cart))  ) : '';    
+                HTML = HTML.replace(/{{ORDER_AMOUNT}}/g, numeral(this._sumCart(cart)).format('0,0') );
+                HTML = HTML.replace(/{{ORDER_AMOUNT_TAX}}/g, numeral((parseFloat(data.vat)/100 ) * this._sumCart(cart)).format('0,0') );
 
-                const temp = data.cart !== null ? HTML = HTML.replace(/{{ORDER_RECORDS}}/g, this._renderBodyCart(JSON.parse(data.cart))  ) : '';
+                const ORDER_SUM = this._sumCart(cart) + ( parseFloat(data.vat)/100 * this._sumCart(cart) );
+                HTML = HTML.replace(/{{ORDER_SUM}}/g,numeral(ORDER_SUM).format('0,0') );
+                HTML = HTML.replace(/{{ORDER_SUM_TEXT}}/g, N2T(ORDER_SUM) );
+                
+                // TICKET FOOTER
+                HTML = HTML.replace(/{{BELONG_USER}}/g, data.belong_user );
+                HTML = HTML.replace(/{{CONTENT_ISSUES}}/g, data.content_issue );
+                HTML = HTML.replace(/{{CONTENT_SOLVED}}/g, data.timeline_replies || '' );
+                
+                // BARCODE ;
+                HTML = HTML.replace(/{{BARCODE}}/g, `<img style="height:60px" src="https://barcode.tec-it.com/barcode.ashx?data=${ data.code.toUpperCase() }"/>`);
+                
+                
+                
+                
                 
 
 
             }
         }
 
+
+
         return HTML
     }
+
+    
     render() {
 
         
         const data = this.props.data;
         const HTML = this._formatHtml(data,this.props.companyInfo);
+        
+        
 
         return (
-            <ViewModal {...this.props}  >
+            <ViewModal name={ 'Print' } {...this.props}  >
                 <div>
                     <div style={{padding:10}}>
                         <div className="btn-group">
@@ -135,7 +170,8 @@ class PrintForm extends React.Component {
                     <div    
                         ref={el => (this.componentRef = el)}
                         style={{
-                                paddingBottom:20
+                                paddingTop:30,
+                                paddingBottom:30
                         }}
                             dangerouslySetInnerHTML={{ __html: HTML  }} 
                     />

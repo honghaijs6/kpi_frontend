@@ -15,8 +15,6 @@ import BenTable from './BenTable' ;
 
  
 
-
-
 Array.prototype.equals = function (array) {
     // if the other array is a falsy value, return
     if (!array)
@@ -148,8 +146,14 @@ class ButtonImportXLS extends Component {
             })
             
         }else{ 
+
+            BenMessage({
+                message:'Đã upload thành công'
+            });
+            
             this.setState({
-                status:'finish'
+                status:'finish',
+                isOpen:false
             });
 
             this.props.onComplete(true);

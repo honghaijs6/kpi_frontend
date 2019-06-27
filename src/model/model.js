@@ -592,8 +592,9 @@ class Model {
       }else{
 
         // SHOW ERROR HERE
-        let el = document.querySelector("#form-err");
-        el.innerHTML = '<span class="text-danger">'+idata.message+'</span>';
+        //let el = document.querySelector("#form-err");
+        //el.innerHTML = '<span class="text-danger">'+idata.message+'</span>';
+        console.log(idata.message);
         
 
       }

@@ -7,7 +7,7 @@ import doGetModelInfo from '../../../hook/ultil/doGetModelInfo' ;
 import moment from 'moment';
 
 import React, { Component } from 'react';
-import {   FormGroup } from 'reactstrap'; 
+import {   FormGroup, ButtonGroup } from 'reactstrap'; 
 import { connect } from 'react-redux';
 
 /* MODAL FORM & CTRL */
@@ -18,6 +18,12 @@ import formCtrl from './formCtrl';
 import ButtonExpand from '../../../components/ButtonExpand'; 
 import SelectListModelCode from '../../../components/SelectListModelCode';
 import SelectListModel from '../../../components/SelectListModel';
+
+import ButtonImportXLS from '../../../components/ButtonImportXLS' ; 
+import ButtonExportXLS from '../../../components/ButtonExportXLS';
+import ButtonExportXLSTemp from '../../../components/ButtonExportXLSTemp';
+
+
 
 
 
@@ -54,28 +60,30 @@ class OrderView extends Component{
         {headerName: "Nhóm", field: "type_name",width:120,
           cellRenderer(params){
 
-            return `<span class="badge myBadge" style="color:#fff; background:${params.data.color_code}"> ${ params.value } <span>` ; 
+            const colorCode = params.data.color_code === null || params.data.color_code ==='n/a' ? '#666' : params.data.color_code;
+            return `<span class="badge myBadge" style="color:#fff; background:${colorCode}"> ${ params.value } <span>` ; 
           }
         },
 
         {headerName: "Cấp bậc", field: "level_code",width:120,
           cellRenderer(params){
-
-            return `<span class="badge myBadge" style="color:#fff; background:${params.data.color_code}"> ${ params.value } <span>` ; 
+            const colorCode = params.data.color_code === null || params.data.color_code ==='n/a' ? '#666' : params.data.color_code;
+            return `<span class="badge myBadge" style="color:#fff; background:${colorCode}"> ${ params.value } <span>` ; 
           }
         },
 
         {headerName: "Trạng thái", field: "customer_status",width:140,
           cellRenderer(params){
 
-            return `<span class="badge myBadge" style="color:#fff; background:${params.data.color_code}"> ${ params.value || 'n/a' } <span>` ; 
+            const colorCode = params.data.color_code === null || params.data.color_code ==='n/a' ? '#666' : params.data.color_code;
+            return `<span class="badge myBadge" style="color:#fff; background:${colorCode}"> ${ params.value || 'n/a' } <span>` ; 
           }
         },
 
         {headerName: "Nguồn", field: "customer_original",width:160,
           cellRenderer(params){
-
-            return `<span class="badge myBadge" style="color:#fff; background:${params.data.color_code}"> ${ params.value || 'n/a' } <span>` ; 
+            const colorCode = params.data.color_code === null || params.data.color_code ==='n/a' ? '#666' : params.data.color_code;
+            return `<span class="badge myBadge" style="color:#fff; background:${colorCode}"> ${ params.value || 'n/a' } <span>` ; 
           }
         },
         
@@ -88,7 +96,8 @@ class OrderView extends Component{
         {headerName: "Người Liên Hệ", field: "contact_name"},
         {headerName: "Quản lý bởi", field: "belong_user",
           cellRenderer(params){
-            return `<span class="badge myBadge" style="color:#fff; background:${params.data.color_code}"> <i class="fa fa-user mr-5"></i> ${ params.value } <span>` ; 
+            const colorCode = params.data.color_code === null || params.data.color_code ==='n/a' ? '#666' : params.data.color_code;
+            return `<span class="badge myBadge" style="color:#fff; background:${colorCode}"> <i class="fa fa-user mr-5"></i> ${ params.value } <span>` ; 
           }
         },
         {headerName: "Người tạo", field: "creator",
@@ -205,6 +214,11 @@ class OrderView extends Component{
   componentDidMount(){
     this.model.initData() ; 
   }
+
+  _onCompleteUpload = ()=>{
+    this.model.load();
+    
+  }
   componentWillReceiveProps(newProps){
     
     // RESET GRID DATA
@@ -262,30 +276,58 @@ class OrderView extends Component{
 
                  nextColums={ this.grid.colums }
                  rowData={this.grid.rowData}
-                 model={ this.model }
+                 model={ this.model }  
 
                  customButton={
-                    <ButtonExpand>
-                        <FormGroup>
-                              <label> Nhóm </label>
-                              <SelectListModelCode onChange={(e)=>{ this._doFilter('type',e.target.value) }} name="Tất cả" strModel='customer_types' />
-                        </FormGroup>
-                        <FormGroup>
-                              <label> Cấp Bậc </label>
-                              <SelectListModel onChange={(e)=>{ this._doFilter('level_id',e.target.value) }} name="Tất cả" strModel='levels' />
-                        </FormGroup>
 
-                        <FormGroup>
-                              <label> Trạng Thái </label>
-                              <SelectListModelCode onChange={(e)=>{ this._doFilter('status_code',e.target.value) }} name="Tất cả" strModel='customer_status' />
 
-                        </FormGroup>
+                    <ButtonGroup>
+                        <ButtonExportXLSTemp
+                          strModel={MODE}
+                          columns={['code','type','name','address','subregion_code','region_code','tax_no','contact_name','phone','email','belong_user']}
+
+                        />
+
+                        <ButtonImportXLS 
+                          title="Import File Excel "
+                          strModel={MODE}
+                          columns={['code','type','name','address','subregion_code','region_code','tax_no','contact_name','phone','email','belong_user']}
                           
-                        <FormGroup>
-                              <label> Nguồn </label>
-                              <SelectListModelCode onChange={(e)=>{ this._doFilter('original_code',e.target.value) }} name="Tất cả" strModel='customer_originals' />
-                        </FormGroup>
-                    </ButtonExpand>     
+                          onComplete={ this._onCompleteUpload }
+                        />
+
+                        <ButtonExportXLS  
+                          title="Export File Excel"
+                          strModel={MODE}
+                          columns={['code','type','name','address','subregion_code','region_code','tax_no','contact_name','phone','email','belong_user']}
+                        />
+
+                        <ButtonExpand style={{borderRight:0}}> 
+                            <FormGroup>
+                                  <label> Nhóm </label>
+                                  <SelectListModelCode onChange={(e)=>{ this._doFilter('type',e.target.value) }} name="Tất cả" strModel='customer_types' />
+                            </FormGroup>
+                            <FormGroup>
+                                  <label> Cấp Bậc </label>
+                                  <SelectListModel onChange={(e)=>{ this._doFilter('level_id',e.target.value) }} name="Tất cả" strModel='levels' />
+                            </FormGroup>
+
+                            <FormGroup>
+                                  <label> Trạng Thái </label>
+                                  <SelectListModelCode onChange={(e)=>{ this._doFilter('status_code',e.target.value) }} name="Tất cả" strModel='customer_status' />
+
+                            </FormGroup>
+                              
+                            <FormGroup>
+                                  <label> Nguồn </label>
+                                  <SelectListModelCode onChange={(e)=>{ this._doFilter('original_code',e.target.value) }} name="Tất cả" strModel='customer_originals' />
+                            </FormGroup>
+                        </ButtonExpand>     
+                        
+                    </ButtonGroup>
+                    
+
+                    
                  }
                  
               />
