@@ -129,6 +129,9 @@ function ClassifyInfoRow(props){
 
   const modal = props.modal; 
   const data = modal.data; 
+
+  console.log();
+                    
   
 
   return(
@@ -138,7 +141,7 @@ function ClassifyInfoRow(props){
           <Col md="3">
             <FormGroup>
               <label> Nhóm KH </label>
-              <SelectListModelCode id="type" defaultValue={data.type} onChange={(e)=>{  modal.onChange('type',e.target.value)  }}  strModel="customer_types" name="Vui lòng chọn" /> 
+              <SelectListModelCode id="type" defaultValue={data.type.toLowerCase()} onChange={(e)=>{  modal.onChange('type',e.target.value)  }}  strModel="customer_types" name="Vui lòng chọn" /> 
 
 
             </FormGroup>

@@ -7,8 +7,6 @@ import logo from '../../assets/img/brand/logo.png'
 import sygnet from '../../assets/img/brand/sygnet.svg' ;
 
 import { Link } from 'react-router-dom';
-
-
 import Socket from '../../model/socket';
 
 
@@ -51,8 +49,8 @@ class DefaultHeader extends Component {
 
     // eslint-disable-next-line
     const { children, ...attributes } = this.props;
-
     const avatar = this.state.userInfo.photoURL  || 'https://firebasestorage.googleapis.com/v0/b/benjamin-region-hongkong.appspot.com/o/images%2F31.jpg?alt=media';
+
 
     return (
       <React.Fragment>
@@ -103,7 +101,9 @@ class DefaultHeader extends Component {
           </AppHeaderDropdown>
 
           <NavItem className="d-md-down-none">
-            <NavLink href="#"><i className="font-18 fa fa-globe"></i><Badge pill color="danger"></Badge></NavLink>
+            <NavLink href="#"><i className="font-18 fa fa-globe"></i>
+              <Badge style={{paddingTop:'3px'}} color="danger">1</Badge>
+            </NavLink>
           </NavItem>
           
         </Nav>

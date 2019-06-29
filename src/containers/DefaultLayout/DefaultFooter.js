@@ -13,13 +13,16 @@ class DefaultFooter extends Component {
     // eslint-disable-next-line
     const { children, ...attributes } = this.props;
 
+    const avatar = window.USERINFO.photoURL  || 'https://firebasestorage.googleapis.com/v0/b/benjamin-region-hongkong.appspot.com/o/images%2F31.jpg?alt=media';
+
+
     return (
       <React.Fragment>
-
+  
         <span>
           <div className="avatars-stack mt-2">
             <div className="avatar avatar-xs">
-              <img src={'assets/img/avatars/2.jpg'} className="img-avatar" id="user-avatar" />
+              <img src={avatar} className="img-avatar" title={window.USERINFO.name} id="user-avatar" />
             </div>
           </div>
          </span>
