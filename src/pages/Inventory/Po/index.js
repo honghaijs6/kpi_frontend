@@ -164,7 +164,7 @@ class Po extends Component {
         this._onDeleteFormSubmit = this._onDeleteFormSubmit.bind(this); 
         
 
-    }
+    } 
 
     _setup(){
         this.model = new Model(MODE,this.props.dispatch) ;

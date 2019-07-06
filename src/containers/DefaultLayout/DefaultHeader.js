@@ -9,6 +9,8 @@ import sygnet from '../../assets/img/brand/sygnet.svg' ;
 import { Link } from 'react-router-dom';
 import Socket from '../../model/socket';
 
+import ButtonExpand from '../../components/ButtonExpand';
+import BenDropDown from '../../components/BenDropDown';
 
 
 const propTypes = {
@@ -36,7 +38,7 @@ class DefaultHeader extends Component {
 
   }
   componentDidMount(){
-
+ 
     this.setState({
       userInfo:window.USERINFO
     });
@@ -101,9 +103,37 @@ class DefaultHeader extends Component {
           </AppHeaderDropdown>
 
           <NavItem className="d-md-down-none">
-            <NavLink href="#"><i className="font-18 fa fa-globe"></i>
-              <Badge style={{paddingTop:'3px'}} color="danger">1</Badge>
-            </NavLink>
+            
+
+            <BenDropDown style={{
+              background:'transparen',
+              border:0
+            }} icon={
+              <NavLink href="#"><i className="font-18 fa fa-globe"></i>
+                <Badge style={{paddingTop:'3px'}} color="danger">1</Badge>
+              </NavLink>
+            }> 
+              <ul className="nav">
+                  <li>
+                     <div 
+                        style={{
+                          float:'left',
+                          width:50
+                        }}
+                     >
+                        <img  className="img-avatar" src="https://i.imgur.com/khg4WBZ.png" /> 
+                     </div>
+                     <div style={{
+                        float:'left',
+                        marginLeft:10   
+                     }}>
+                       <h6> adasdas </h6> 
+                       <p>adasdasd</p>
+                     </div>
+                     <div style={{clear:'both'}}></div>
+                  </li>
+              </ul>
+            </BenDropDown>
           </NavItem>
           
         </Nav>

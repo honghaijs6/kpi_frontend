@@ -119,6 +119,7 @@ export default class RealTimePage extends React.Component {
       const res = responese.data ;
       if(res.desc==='ok'){
 
+        console.log(res.data);
       
         if(res.data.length>0){
 
