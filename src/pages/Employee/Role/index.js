@@ -9,10 +9,13 @@ import {   Table  } from 'reactstrap';
 import { AppSwitch } from '@coreui/react';
 
 
+import FormGroupUser from './FormGroupUser';
+
 const MODE = 'roles';
 const MODE_NAME = 'Vai trò';
 
 const MODE_USER_ROLES = 'user_roles';
+const MODE_GROUP_USERS = 'group_users';
 
 class Role extends Component {
 
@@ -40,6 +43,7 @@ class Role extends Component {
               { headerName:" Tính năng ",field:"name", width:'240px'},
               { headerName: "Root Admin",field:"admin", width:'140px'}
               
+              
             ],
             rowData:[]
         }
@@ -48,15 +52,17 @@ class Role extends Component {
 
         this._setup();
 
-        this._doOpenModalUpdate = this._doOpenModalUpdate.bind(this); 
-        this._doOpenModalPost = this._doOpenModalPost.bind(this);
+        
+        
 
     }
 
 
     _setup(){
         this.model = new Model(MODE,this.props.dispatch);
-        this.moUseRoles = new Model(MODE_USER_ROLES);
+        this.moUserRoles = new Model(MODE_USER_ROLES);
+        this.moGroupUsers = new Model(MODE_GROUP_USERS);
+
         
         // SETUP FOR GET ALL RECORD HERE 
         this.model.set('paginate',{
@@ -70,18 +76,21 @@ class Role extends Component {
 
     }
 
-    _detectRoles(group_id,role_id){
-        console.log(role_id);
-
-        let rets = [];
+    _listRoles(group_id){
+        const rets = [];
         this.state.userRoles.map((rows)=>{
             rows.map((item2)=>{
-                if(parseInt(item2.group_user_id) === parseInt(group_id)){
+                if(parseInt(item2.id) === parseInt(group_id)){
                     rets.push(item2);
                 }
             })
         });
+        return rets;
 
+    }
+    _detectRoles(group_id,role_id){
+        
+        let rets = this._listRoles(group_id);
         let ret = false;
         rets.map((item)=>{
             if(parseInt(item.role_id) === parseInt(role_id)){
@@ -91,15 +100,16 @@ class Role extends Component {
         
         return ret;
     }
-    _loadUserRoles(){
 
+    _loadGroupUserRoles(){
         const url = '/listAll/all';
 
-        this.moUseRoles.doCall(url,(res)=>{
+        this.moGroupUsers.doCall(url,(res)=>{
             const data = res.data;
             if(data.name==='success'){
-
+                
                 const rows = data.rows;
+                
 
                 const object = {};
                 const result = [];
@@ -107,22 +117,21 @@ class Role extends Component {
 
                 // GET DUPLICATED GROUP_USER ID ;
                 rows.map((item)=>{
-                    if(!object[item.group_user_id]){
-                        object[item.group_user_id] = 0;
+                    if(!object[item.id]){
+                        object[item.id] = 0;
                     }
-                    object[item.group_user_id] +=1 ;
+                    object[item.id] +=1 ;
                 });
                 Object.keys(object).map((item)=>{
                     if(object[item]>=1){
                         result.push(item);
                     }
                 });
-
-
+                
                 result.map((item)=>{
                     let arr = [];
                     rows.map((item2)=>{
-                        if(parseInt(item)===parseInt(item2.group_user_id)){
+                        if(parseInt(item)===parseInt(item2.id)){
                             arr.push(item2);
                         }
                     
@@ -130,6 +139,7 @@ class Role extends Component {
                     newArr.push(arr);
                 });
 
+                //console.log(newArr);
                 this._fixColumRoles(newArr);
 
                 this.setState({
@@ -139,23 +149,22 @@ class Role extends Component {
 
             }
         })        
-    }
-    _doOpenModalUpdate(data){
 
-        this._curInfo = data ; 
-        this.setState({
-            isOpenForm:true,
-            typeAction:'put'
-        });
     }
-    _doOpenModalPost(){
+    
+
+    _openForm(type='post',data={}){
+
+        alert(JSON.stringify(data));
         
+
         this.setState({
             isOpenForm:true,
-            typeAction:'post'
-        });
+            typeAction:type
+        })
     }
-
+    
+    
     _onSubmitForm(res){
         if(res.name==='success' || res.name==='ok'){
 
@@ -173,7 +182,8 @@ class Role extends Component {
     
 
     componentDidMount(){
-        this._loadUserRoles();
+        this._loadGroupUserRoles();
+
     }
     componentWillReceiveProps(newProps){  
 
@@ -194,27 +204,108 @@ class Role extends Component {
 
     _fixColumRoles(userRoles){
 
-        userRoles.map((item)=>{
-            this.grid.colums.push(
-                { headerName: item[0]['group_name'], field:"field-"+item[0]['group_user_id'], width:'140px'}
-            )
-        });
+        // GROUP BY : GROUP_USER_ID ;
+        this.grid.colums.length = 5 ; 
 
+        userRoles.map((item)=>{
+            
+            // detect colums
+            let isDup = false; 
+            this.grid.colums.map((colum)=>{
+                if(colum.field==='field-'+item[0]['id']){
+                    isDup = true;
+                }
+            });
+
+            if(!isDup){
+                this.grid.colums.push(
+                    { headerName: <a style={{cursor:'pointer'}} onClick={()=>{ this._openForm('put',item) }} className="text-red">{ item[0]['group_name'] }</a>, field:"field-"+item[0]['id'], width:'140px'}
+                );
+            }
+            
+        });
+        
+
+        // ADD LASTEST COLUMS
+        // REMOVE LASTITEM - AND RE-ADD IT AGAIN 
         this.grid.colums.push(
             { 
-                headerName: <a style={{borderRadius:12,fontSize:9}} className="btn btn-xs btn-normal" onClick={()=>{ alert('ok') }}> 
+                headerName: <a style={{borderRadius:12,fontSize:9}} className="btn btn-xs btn-normal" onClick={ ()=>{ this._openForm('post') } }> 
                     <i className="font-12 mr-5 fa fa-plus-circle"></i> Thêm nhóm phân quyền </a>, 
                 field:"field-button", 
                 width:'140px'
             }
-        )
+        );
+         
+       
+        
 
+    }
+
+    _toggleSetRoles(isChecked,group_id,role_id){
+
+        
+        if(isChecked){
+            // remove user_roles : 
+            const listRoles = this._listRoles(group_id);
+            // GET user_role_id ; 
+            let userRoleId = 0
+            listRoles.map((item)=>{
+                if(parseInt(item.role_id) === parseInt(role_id)){
+                    userRoleId = item.id   
+                }
+            });
+            
+            // REMOVE 
+            this.moUserRoles.delete(userRoleId,(data)=>{
+                if(data.name==='success'){
+                    this._loadGroupUserRoles()
+                }
+            })
+
+        }else{
+            this.moUserRoles.post({
+                role_id:role_id,
+                group_user_id:group_id
+            },(data)=>{
+                if(data.name==='success'){
+                    this._loadGroupUserRoles() 
+                }
+
+            })
+        }
+        
+
+    }
+
+    // groupName :''  - selectedUsers : [] 
+    _createGroup(state){
+        this.moGroupUsers.post({
+            name:state.groupName,
+            staff_on:state.selectedUsers
+        },(data)=>{
+            if(data.name==='success'){
+                this._loadGroupUserRoles();
+                this.setState({
+                    isOpenForm:false
+                })
+            }
+        })
     }
     render() {
 
         
         return (
             <div hidden={ this.state.tab === this.props.onTab ? false : true } style={{padding:30}} className="animated fadeIn">
+
+                <FormGroupUser 
+                    width="600"
+                    isOpen={this.state.isOpenForm}
+                    onToggle={(isOpen)=>{ this.setState({isOpenForm:isOpen}) }}
+                    typeAction={this.state.typeAction}
+                    onSubmit={(state)=>{ this._createGroup(state) }}
+
+                />
                 <Table className="product-board table vk-table">
                     <thead>
                         <tr>
@@ -256,8 +347,10 @@ class Role extends Component {
                                                         const isChecked =  this._detectRoles(group_id,item['id']);
 
                                                         value = <AppSwitch 
-                                                                        className={'mx-1'} 
-                                                                    variant={'pill'} color={'primary'}  checked={ isChecked }  />
+                                                                    onClick={()=>{ this._toggleSetRoles(isChecked,group_id,item['id']) }}  
+                                                                    className={'mx-1'} 
+                                                                    variant={'pill'} color={'primary'}  checked={ isChecked }  
+                                                                />
                                                         
                                                     }
                                                 
