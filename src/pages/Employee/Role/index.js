@@ -32,14 +32,15 @@ class Role extends Component {
 
             isOpenForm:false,
             tab:'role',
-            userRoles:[]
+            userRoles:[],
+            curGroupInfo:{}
         }
 
         this.grid = {
             colums:[
               { headerName:"STT",field:"stt",width:'50px' },
               { headerName:"SID",field:"id",width:'50px'},
-              { headerName: "Mã",field:"code",width:'140px'},
+              { headerName: "Mã",field:"code",width:'180px'},
               { headerName:" Tính năng ",field:"name", width:'240px'},
               { headerName: "Root Admin",field:"admin", width:'140px'}
               
@@ -155,12 +156,11 @@ class Role extends Component {
 
     _openForm(type='post',data={}){
 
-        alert(JSON.stringify(data));
         
-
         this.setState({
             isOpenForm:true,
-            typeAction:type
+            typeAction:type,
+            curGroupInfo:data[0]
         })
     }
     
@@ -252,16 +252,15 @@ class Role extends Component {
             let userRoleId = 0
             listRoles.map((item)=>{
                 if(parseInt(item.role_id) === parseInt(role_id)){
-                    userRoleId = item.id   
+                    userRoleId = item.user_roles_id   
                 }
             });
-            
-            // REMOVE 
+
             this.moUserRoles.delete(userRoleId,(data)=>{
                 if(data.name==='success'){
                     this._loadGroupUserRoles()
                 }
-            })
+            });
 
         }else{
             this.moUserRoles.post({
@@ -278,19 +277,40 @@ class Role extends Component {
 
     }
 
-    // groupName :''  - selectedUsers : [] 
-    _createGroup(state){
-        this.moGroupUsers.post({
-            name:state.groupName,
-            staff_on:state.selectedUsers
-        },(data)=>{
+    // DELETE GROUP 
+    _deleteGroup(id){
+        this.moGroupUsers.delete(id,(data)=>{
             if(data.name==='success'){
                 this._loadGroupUserRoles();
-                this.setState({
-                    isOpenForm:false
-                })
+                    this.setState({
+                        isOpenForm:false
+                    })
             }
         })
+    }
+    // groupName :''  - selectedUsers : [] 
+    _submitGroup(state){
+
+        if(this.state.typeAction!==''){
+            let data = {
+                name:state.groupName,
+                staff_on:state.selectedUsers
+            };
+    
+            if(this.state.typeAction==='put'){
+                data['id'] = state.id
+            }
+    
+            this.moGroupUsers.axios(this.state.typeAction,data,(data)=>{
+                if(data.name==='success'){
+                    this._loadGroupUserRoles();
+                    this.setState({
+                        isOpenForm:false
+                    })
+                }
+            });
+        }
+        
     }
     render() {
 
@@ -303,7 +323,9 @@ class Role extends Component {
                     isOpen={this.state.isOpenForm}
                     onToggle={(isOpen)=>{ this.setState({isOpenForm:isOpen}) }}
                     typeAction={this.state.typeAction}
-                    onSubmit={(state)=>{ this._createGroup(state) }}
+                    onSubmit={(state)=>{ this._submitGroup(state) }}
+                    curGroupInfo={this.state.curGroupInfo}
+                    onDeleteGroup={(id)=>{ this._deleteGroup(id) }}
 
                 />
                 <Table className="product-board table vk-table">

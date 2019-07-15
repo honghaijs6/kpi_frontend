@@ -10,12 +10,16 @@ import { FormGroup, Input, Col } from 'reactstrap';
 import Select from 'react-select';
 
 
+import BenConfirm from '../../../components/BenConfirm';
+
+
 
 
 class FormGroupUser extends Component {
 
     
     state={}
+    _users=[];
 
     _resetForm(){
         return {
@@ -26,21 +30,19 @@ class FormGroupUser extends Component {
     }
     async _loadUser(){
         const res = await doLoadAll('users');
+        
         if(res.name==='success'){
 
             let users = [];
             res.rows.map((item)=>{
-                
                 users.push({
                     value:item.email,
                     label:item.name
                 });
 
             });
+            this.users = users;
             
-            this.setState({
-                users:users
-            });
         }
     }
 
@@ -65,15 +67,38 @@ class FormGroupUser extends Component {
 
 
     }
-    componentDidMount(){
-        this._loadUser();
+    async componentDidMount(){
+        await this._loadUser();
     }
 
     componentWillReceiveProps(newProps){
         if(newProps.typeAction==='post'){
-            this.setState(this._resetForm)
+            this.setState(this._resetForm);
+            
         }else{
             // UPDATE MEMBERS 
+            if(JSON.stringify(newProps.curGroupInfo)!=='{}'){
+
+                const info = newProps.curGroupInfo;
+                
+                this.setState({
+                    id:info.id,
+                    groupName:info.group_name,
+                    selectedUsers:JSON.parse(info.staff_on)
+                });
+
+            }
+        }
+    }
+
+    _removeGroup = async ()=>{
+        let result = await BenConfirm({
+            title: 'Cảnh báo',
+            message: "Bạn có chắc là muốn xoá nhóm này ?"
+        });
+
+        if(result){
+            this.props.onDeleteGroup(this.state.id);
         }
     }
     render() {
@@ -95,12 +120,27 @@ class FormGroupUser extends Component {
                                 placeholder="Thêm người nhận"
                                 isSearchable ={true}
                                 isMulti ={true}
-                                
+                                value={this.state.selectedUsers}
                                 onChange={(option)=>{ this.setState({ selectedUsers:option }) }} 
-                                options={this.state.users}
+                                options={this.users}
                              />
                         </Col>
                     </FormGroup>
+                    {
+                        this.props.typeAction === 'put' ? 
+                        <FormGroup row>
+                            <Col>
+                                <a onClick={this._removeGroup} className="text-red" style={{
+                                    cursor:'pointer',
+                                    fontSize:12
+                                }}> Xoá nhóm phần quyền này </a>
+                            </Col>
+                        </FormGroup> :
+                        <div></div>
+                    }
+                    
+
+
                 </div>
             </ViewModal>
         );
@@ -109,7 +149,8 @@ class FormGroupUser extends Component {
 
 FormGroupUser.defaultProps= {
     typeAction:'post',
-    onSubmit:()=>{}
+    onSubmit:()=>{},
+    onDeleteGroup:()=>{}
 }
 
 export default FormGroupUser;

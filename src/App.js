@@ -1,10 +1,12 @@
+import './App.scss';
+import './scss/filemanager.scss';
+import './scss/ubuntu-style.scss';
+
+
 import React, { Component } from 'react';
 /*import { HashRouter, BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'; */
 import { HashRouter, Route, Switch } from 'react-router-dom';
-import './App.scss';
 
-import './scss/filemanager.scss';
-import './scss/ubuntu-style.scss';
 
 // Containers
 import { DefaultLayout } from './containers';
@@ -15,6 +17,8 @@ import socket from './model/socket';
 // HOOKED ;
 
 import doGetModelInfo from './hook/ultil/doGetModelInfo' ; 
+import doFindAll from './hook/ultil/doFindAll';
+
 import { preLoad } from './hook/before';
 
 
@@ -34,8 +38,20 @@ class App extends Component {
   async _getUserInfo(login,id){
     const res = await doGetModelInfo('users',id) ;
     window.USERINFO = res.name === 'success' ? res.data : {};
+    this._getUserRoles(window.USERINFO.email)
     this.setState({login});    
   }
+
+  async _getUserRoles(email){
+    const res = await doFindAll('user_roles',email);
+    if(res.name==='success'){
+      window.USER_ROLES = res.rows;
+      this.setState({
+        user_roles:window.USER_ROLES
+      })
+    }
+  }
+
   componentDidMount(){  
     
     preLoad('authenticate');

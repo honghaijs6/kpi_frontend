@@ -1,6 +1,10 @@
+// HOOKS 
+import rolesOfNavigation from '../../hook/before/rolesOfNavigation';
+
 import React, { Component } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { Container } from 'reactstrap';
+
 
 /* lib load*/
 import {
@@ -27,13 +31,42 @@ import DefaultHeader from './DefaultHeader';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+
+
 class DefaultLayout extends Component {
 
   constructor(props){
     super(props)
 
+    this.state = {
+      navigation:navigation
+    }
+
   }
+
+  componentWillReceiveProps(newProp){
+    
+      
+      
+      window.setTimeout(()=>{
+        const roles = window.USER_ROLES || [] ; 
+        const newNavigation = rolesOfNavigation(navigation,roles);
+        this.setState({
+          navigation:newNavigation
+        });
+        //console.log('1');
+
+      },100)
+
+  }
+
+  componentDidMount(){
+    
+  }
+
   render() {
+
+    
     return (
       <div className="app">
 
@@ -47,7 +80,7 @@ class DefaultLayout extends Component {
             <AppSidebarHeader />
             <AppSidebarForm />
 
-            <AppSidebarNav navConfig={navigation} {...this.props} />
+            <AppSidebarNav navConfig={ this.state.navigation } {...this.props} />
 
             <AppSidebarFooter />
             <AppSidebarMinimizer />

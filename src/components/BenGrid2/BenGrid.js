@@ -116,6 +116,9 @@ class BenGrid extends Component{
         }
         
       }
+
+
+      this.state.count = newProps.model.db.total;
       
     }
 

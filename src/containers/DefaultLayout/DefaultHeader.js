@@ -9,7 +9,6 @@ import sygnet from '../../assets/img/brand/sygnet.svg' ;
 import { Link } from 'react-router-dom';
 import Socket from '../../model/socket';
 
-import ButtonExpand from '../../components/ButtonExpand';
 import BenDropDown from '../../components/BenDropDown';
 
 
