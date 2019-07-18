@@ -49,8 +49,10 @@ class DefaultHeader extends Component {
   render() {
 
     // eslint-disable-next-line
-    const { children, ...attributes } = this.props;
-    const avatar = this.state.userInfo.photoURL  || 'https://firebasestorage.googleapis.com/v0/b/benjamin-region-hongkong.appspot.com/o/images%2F31.jpg?alt=media';
+    const { children, users, ...attributes } = this.props;
+    const userInfo = users.info;
+
+    const avatar = userInfo.photoURL  || 'https://firebasestorage.googleapis.com/v0/b/benjamin-region-hongkong.appspot.com/o/images%2F31.jpg?alt=media';
 
 
     return (
@@ -82,7 +84,7 @@ class DefaultHeader extends Component {
             <DropdownToggle nav>
               <img src={avatar} className="img-avatar" /> 
               <span className="caret"> 
-                { window.USERINFO.name }
+                { userInfo.name }
                 <i className="ml-10 fa fa-caret-down"></i>
               </span>
             </DropdownToggle>

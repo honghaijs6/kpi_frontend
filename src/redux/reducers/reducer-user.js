@@ -27,20 +27,39 @@ const iniState = {
     typeAction:'', // refer to model type action : post - put - update - delete 
     status:'' // refer to form status 
   },
-  list:[]
-}
+  list:[],
+  info:{},
+  userRoles:[]
+};
+
 
 
 export default function(state = iniState ,action = {}){
   switch(action.type){
 
-     case 'STATE-'+MODE:
+
+    // SAVE USER INFO 
+    case 'SAVE_USER':
+      return {
+        ...state,
+        info:action.info
+      }
+    break;
+
+    case 'SAVE_USER_ROLE':
+      return {
+        ...state,
+        userRoles:action.userRoles
+      }
+    break;
+
+    case 'STATE-'+MODE:
        return {
          ...state,
          state:action.state
 
        }
-     break;
+    break;
 
     /* PROACTIVE : DATA */
     case 'GET-'+MODE:

@@ -1,9 +1,12 @@
+
 import './App.scss';
 import './scss/filemanager.scss';
 import './scss/ubuntu-style.scss';
 
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 /*import { HashRouter, BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'; */
 import { HashRouter, Route, Switch } from 'react-router-dom';
 
@@ -38,6 +41,11 @@ class App extends Component {
   async _getUserInfo(login,id){
     const res = await doGetModelInfo('users',id) ;
     window.USERINFO = res.name === 'success' ? res.data : {};
+
+    // DISPATCH TO USERS : save user info 
+    this.props.saveUserInfo(res.data);
+    
+
     this._getUserRoles(window.USERINFO.email)
     this.setState({login});    
   }
@@ -46,6 +54,10 @@ class App extends Component {
     const res = await doFindAll('user_roles',email);
     if(res.name==='success'){
       window.USER_ROLES = res.rows;
+
+      // SAVE USER_ROLS TO REDUX 
+      this.props.saveUserRoles(res.rows);
+
       this.setState({
         user_roles:window.USER_ROLES
       })
@@ -70,14 +82,7 @@ class App extends Component {
 
         
         this._getUserInfo(login,res.userId)
-       
-
-        /*socket.client.service('users').get(res.userId).then(info=>{
-          // WRITE LOCAL STOREAGE
-          window.USERINFO = info;
-          this.setState({login});
-          
-        });*/
+        
 
       })
 
@@ -114,4 +119,21 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = dispatch => {
+  return {
+    saveUserInfo: (info) => {
+      dispatch({
+        type:'SAVE_USER',
+        info:info
+      });
+    },
+    saveUserRoles:(roles)=>{
+      dispatch({
+        type:'SAVE_USER_ROLE',
+        userRoles:roles
+      })
+    }
+  }
+}
+
+export default connect(null,mapDispatchToProps)(App);

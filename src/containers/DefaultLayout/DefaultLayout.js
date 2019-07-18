@@ -2,6 +2,8 @@
 import rolesOfNavigation from '../../hook/before/rolesOfNavigation';
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { Container } from 'reactstrap';
 
@@ -45,8 +47,6 @@ class DefaultLayout extends Component {
   }
 
   componentWillReceiveProps(newProp){
-    
-      
       
       window.setTimeout(()=>{
         const roles = window.USER_ROLES || [] ; 
@@ -71,7 +71,7 @@ class DefaultLayout extends Component {
       <div className="app">
 
         <AppHeader fixed>
-          <DefaultHeader />
+          <DefaultHeader users={this.props.users} />
         </AppHeader>
 
         <div className="app-body">
@@ -122,4 +122,10 @@ class DefaultLayout extends Component {
   }
 }
 
-export default DefaultLayout;
+const mapStateToProps = (state) => {
+  return {
+    users: state['users']
+  }
+}
+
+export default connect(mapStateToProps)(DefaultLayout);

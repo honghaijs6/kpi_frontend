@@ -4,6 +4,8 @@ import doUpdateModelInfo from '../../hook/ultil/doUpdateModelInfo';
 import doLogin from '../../hook/ultil/doLogin';
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import { Row, Col, Button, FormGroup, Input, InputGroup,InputGroupAddon, InputGroupText  } from 'reactstrap';
 
 import BenTabs from '../../components/BenTabs';
@@ -97,6 +99,9 @@ class Profile extends Component{
     if(detectForm(fields,this.state.data)===''){
       
       const res = await  doUpdateModelInfo('users',this.state.data);
+      const userInfo =  Object.assign(this.props.users.info,this.state.data);
+      
+      this.props.saveUserInfo(userInfo);
       
 
 
@@ -139,7 +144,8 @@ class Profile extends Component{
   }
 
   componentDidMount(){
-    const userInfo = window.USERINFO;
+    const userInfo = this.props.users.info
+    
     this.setState({
       data:{
         id:userInfo.id,
@@ -310,4 +316,28 @@ class Profile extends Component{
   }
 }
 
-export default Profile;
+
+const mapStateToProps = (state) => {
+  return {
+    users: state.users
+  }
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    saveUserInfo: (info) => {
+      dispatch({
+        type:'SAVE_USER',
+        info:info
+      });
+    },
+    saveUserRoles:(roles)=>{
+      dispatch({
+        type:'SAVE_USER_ROLE',
+        userRoles:roles
+      })
+    }
+  }
+}
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(Profile);
