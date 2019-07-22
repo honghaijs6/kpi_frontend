@@ -1,9 +1,9 @@
 
 import {N2T} from '../../../hook/ultil/N2T'; 
+import doPrint from '../../../hook/ultil/doPrint';
+
 
 import React, { Component } from 'react';
-
-import ReactToPrint from 'react-to-print';
 import moment from 'moment';
 import numeral from 'numeral';
 
@@ -209,12 +209,7 @@ class PrintForm extends Component {
                     
                     <div style={{padding:10}}>
                         <div className="btn-group">
-                        
-                            <ReactToPrint
-                                trigger={() => <a className="btn btn-normal btn-sm"> <i className="fa fa-print"></i></a>}
-                                content={() => this.componentRef}
-                            />
-                            
+                            <a onClick={()=>{ doPrint(HTML)  }} className="btn btn-normal btn-sm"> <i className="fa fa-print"></i></a>
                         </div>
                           
                     </div>

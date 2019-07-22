@@ -2,15 +2,22 @@
 
 export const MAU_QUOTATION = `
 
+
 <!doctype html>
 <html lang='en'>
     <head>
         <meta charset='utf-8'>
         <title>Print Preview</title>
         <meta name='description' content='Print preview'>
+           
             <style type='text/css'>
-                
-                .vendorListHeading th{ font-size: 12px !important;  border: 0px solid #111 !important; border-right: 1px solid #111 !important;}
+                @import url('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css');
+                @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+                   
+
+              
+               .text-uppercase{ text-transform:uppercase}
+               .vendorListHeading th{ font-size: 12px !important;  border: 0px solid #111 !important; border-right: 1px solid #111 !important;}
                 
 
                 p.N2T{ text-transform:lowercase;}
@@ -79,12 +86,14 @@ export const MAU_QUOTATION = `
                 .table-term tr td{ padding: 3px 0px; font-size: 12px; }
                 
                 
-                
+                 *{
+                 font-family: 'Roboto', sans-serif; font-size:14px ; 
+               }
                 
             </style>
     </head>
     <body>
-        <div class="print-document" style="padding:20px">
+        <div class="print-document" style="padding:30px">
             <div>
                 <div style="float: left; width: 25%;">
                     
@@ -294,9 +303,11 @@ export const MAU_QUOTATION = `
         </div>
     </body>
 </html>
+
 `;
 
 export const MAU_ORDER = `
+
 <!doctype html>
 <html lang='en'>
     <head>
@@ -304,6 +315,9 @@ export const MAU_ORDER = `
         <title>Print Preview</title>
         <meta name='description' content='Print preview'>
             <style type='text/css'>
+                @import url('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css');
+                @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
                 .vendorListHeading th{ font-size: 12px !important;  border: 0px solid #111 !important; border-right: 1px solid #000 !important;}
 
                 p.N2T{ text-transform:lowercase;}
@@ -378,11 +392,14 @@ export const MAU_ORDER = `
 
                 .signature{ font-size: 12px; margin-top: 20px;}
                 .signature p.cus{ line-height: 5px;}
-                
+                 
+                 *{
+                 font-family: 'Roboto', sans-serif;
+               }
             </style>
     </head>
     <body style='background:#fff'>
-        <div id="doc-pdf" class="print-document" style="padding: 0px; width: 92%; margin: auto;">
+        <div id="doc-pdf" class="print-document" style="padding: 30px; ">
                 <div>
                     <div style="float: left; width: 25%;">
                             
@@ -396,7 +413,7 @@ export const MAU_ORDER = `
                     <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> Website: {{COMPANY_WEBSITE}} - E-mail: {{COMPANY_EMAIL}} </p>
                 </div>
                 <div style="float: left; width: 10%; text-align: right;">
-                    <img src="http://kpi.vikhang.com:9000/js/app/cpanel/img/brand.jpg" style="height: 127px;">
+                    <img src="http://kpi.vikhang.com:9000/js/app/cpanel/img/brand.jpg" style="height: 127px;" />
                 </div>
                 
                 <div style="clear: both;"></div>
@@ -600,4 +617,5 @@ export const MAU_ORDER = `
         </div>
     </body>
 </html>
+
 `;

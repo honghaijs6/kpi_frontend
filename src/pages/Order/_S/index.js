@@ -303,8 +303,7 @@ class OrderView extends Component{
 
         case 'view-order':
 
-           console.log(this._curInfo);
-
+           
            if(this._curInfo.code_pi !== null){
               this.setState({
                 isOpenPrintForm:true,

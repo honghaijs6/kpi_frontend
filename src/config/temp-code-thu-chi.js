@@ -1,5 +1,6 @@
 
 export const MAU_PHIEUCHI = `
+
 <!doctype html>
 <html lang='en'>
   <head>
@@ -7,6 +8,12 @@ export const MAU_PHIEUCHI = `
       <title>Print Preview</title>
       <meta name='description' content='Print preview'>
       <style type='text/css'>
+          @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+          *{
+              font-family: 'Roboto', sans-serif;
+          }
+          .text-uppercase{ text-transform:uppercase}
+          
           @media print {
               #printbutton {display:none;}
           }
@@ -44,21 +51,22 @@ export const MAU_PHIEUCHI = `
       </style>
   </head>
   <body style='background:#fff;'>
-    <div style="padding:30px;">
-        <table width='100%'>
-            <tr>
-                <td style="line-height:22px">
-                    {{COMPANY_NAME}}<br>
-                    {{COMPANY_ADDRESS}} <br>
-                    SĐT : {{COMPANY_PHONE}}
-                </td>
-                <td style='width: 35%;line-height:22px '>
-                    Ngày : {{CASHFLOW_DATECREATED}} <br>
-                    Hình thức : {{PAYMENT_TYPE}} <br>
-                    Chứng từ : <span class="text-uppercase"> {{CASHFLOW_ATTACK}} </span>
-                </td>
-            </tr>
-        </table>
+    <div style="padding:20px;">
+
+        <div>
+          <div style="float:left; width:70%; line-height:22px">
+            {{COMPANY_NAME}}<br>
+            <span style="font-size:14px">{{COMPANY_ADDRESS}}</span> <br>
+            <span style="font-size:14px">SĐT : {{COMPANY_PHONE}} </span>
+          </div>
+          <div style="float:left;line-height:22px; width:30%">
+            <span style="font-size:14px">Ngày : {{CASHFLOW_DATECREATED}}</span> <br>
+            <span style="font-size:14px">Hình thức : {{PAYMENT_TYPE}} </span> <br>
+            <span style="font-size:14px">Chứng từ : <span class="text-uppercase"> {{CASHFLOW_ATTACK}} </span> </span>
+          </div>
+          <div style="clear:both"></div>  
+        <div>
+        
 
         <table style='width: 100%; margin-top:20px; margin-bottom:20px;'>
             <tbody>
@@ -129,6 +137,7 @@ export const MAU_PHIEUCHI = `
 
 
 export const MAU_PHIEUTHU = `
+
 <!doctype html>
 <html lang='en'>
   <head>
@@ -136,6 +145,12 @@ export const MAU_PHIEUTHU = `
       <title>Print Preview</title>
       <meta name='description' content='Print preview'>
       <style type='text/css'>
+          @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+          *{
+              font-family: 'Roboto', sans-serif;
+          }
+          .text-uppercase{ text-transform:uppercase}
+          
           @media print {
               #printbutton {display:none;}
           }
@@ -173,21 +188,20 @@ export const MAU_PHIEUTHU = `
       </style>
   </head>
   <body style='background:#fff;'>
-    <div style="padding:30px;">
-        <table width='100%'>
-            <tr>
-                <td style="line-height:22px">
-                    {{COMPANY_NAME}}<br>
-                    {{COMPANY_ADDRESS}} <br>
-                    SĐT : {{COMPANY_PHONE}}
-                </td>
-                <td style='width: 35%;line-height:22px '>
-                    Ngày : {{CASHFLOW_DATECREATED}} <br>
-                    Hình thức : {{PAYMENT_TYPE}} <br>
-                    Chứng từ : <span class="text-uppercase"> {{CASHFLOW_ATTACK}} </span>
-                </td>
-            </tr>
-        </table>
+    <div style="padding:20px;">
+        <div>
+          <div style="float:left; width:70%; line-height:22px">
+            {{COMPANY_NAME}}<br>
+            <span style="font-size:14px">{{COMPANY_ADDRESS}}</span> <br>
+            <span style="font-size:14px">SĐT : {{COMPANY_PHONE}} </span>
+          </div>
+          <div style="float:left;line-height:22px; width:30%">
+            <span style="font-size:14px">Ngày : {{CASHFLOW_DATECREATED}}</span> <br>
+            <span style="font-size:14px">Hình thức : {{PAYMENT_TYPE}} </span> <br>
+            <span style="font-size:14px">Chứng từ : <span class="text-uppercase"> {{CASHFLOW_ATTACK}} </span> </span>
+          </div>
+          <div style="clear:both"></div>  
+        <div>
 
         <table style='width: 100%; margin-top:20px; margin-bottom:20px;'>
             <tbody>
@@ -254,4 +268,5 @@ export const MAU_PHIEUTHU = `
     </div>
   </body>
 </html>
+
 `

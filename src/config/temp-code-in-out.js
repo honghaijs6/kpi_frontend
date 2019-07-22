@@ -1,5 +1,6 @@
 export const MAU_PHIEU_XUATKHO = `
 
+
 <!doctype html>
 <html lang='en'>
     <head>  
@@ -7,6 +8,8 @@ export const MAU_PHIEU_XUATKHO = `
         <title>Print Preview</title>
         <meta name='description' content='Print preview'>
             <style type='text/css'>
+                @import url('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css');
+                @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
                 .vendorListHeading th{ font-size: 12px !important;  border: 0px solid #111 !important; border-right: 1px solid #000 !important;}
 
                 p.N2T{ text-transform:lowercase;}
@@ -82,6 +85,9 @@ export const MAU_PHIEU_XUATKHO = `
                 .signature{ font-size: 12px; margin-top: 20px;}
                 .signature p.cus{ line-height: 5px;}
                 
+                   *{
+                 font-family: 'Roboto', sans-serif; font-size:14px !important;
+               }
             </style>
     </head>
     <body>
@@ -92,7 +98,7 @@ export const MAU_PHIEU_XUATKHO = `
                     <img src="{{COMPANY_LOGO}}" style="height: 127px;">
                 </div>
                 <div style="float: left; width: 65%; padding-left: 40px;">
-                    <p style="font-size: 14px; margin: 0px; padding: 5px 0px; font-weight: 500;"> {{COMPANY_NAME}} </p>
+                    <p style="font-size: 14px; margin: 0px; padding: 5px 0px; font-weight: 500; font-size:15px !important;"> {{COMPANY_NAME}} </p>
                     <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> {{COMPANY_ADDRESS}} </p>
                     <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> MST : {{COMPANY_TAXNO}} </p>
                     <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> Tel: {{COMPANY_PHONE}} </p>
@@ -109,7 +115,7 @@ export const MAU_PHIEU_XUATKHO = `
             <div style="margin-top: 30px; position: relative;">
                 <div>
                     <div style="text-align: center;">
-                        <p style="margin: 0px; padding: 5px 0px; font-size: 16px; font-weight: 500;"> PHIẾU XUẤT KHO </p>
+                        <p style="margin: 0px; padding: 5px 0px; font-size: 16px; font-weight: 500; font-size:20px !important"> PHIẾU XUẤT KHO </p>
                     </div>
                     <div style="position: absolute; right: 0px; top: -10px;">
                         {{BARCODE}}
@@ -285,6 +291,7 @@ export const MAU_PHIEU_XUATKHO = `
     </body>
 </html>
 
+
 `;
 
 
@@ -297,6 +304,9 @@ export const MAU_PHIEU_NHAPKHO = `
         <title>Print Preview</title>
         <meta name='description' content='Print preview'>
             <style type='text/css'>
+                @import url('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css');
+                @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
                 .vendorListHeading th{ font-size: 12px !important;  border: 0px solid #111 !important; border-right: 1px solid #000 !important;}
 
                 p.N2T{ text-transform:lowercase;}
@@ -384,7 +394,10 @@ export const MAU_PHIEU_NHAPKHO = `
                 .table-page-header td.right-left span{ padding: 0 10px 0 10px;}
                 .table-page-header td.right-right{ text-align: right }
                 .table-page-header td.right-right-wh{ text-align: left; border: 1px solid #333; width: 160px}
-
+  
+              *{
+                 font-family: 'Roboto', sans-serif; font-size:14px !important;
+               }
                 
             </style>
     </head>
@@ -396,7 +409,7 @@ export const MAU_PHIEU_NHAPKHO = `
                     <img src="{{COMPANY_LOGO}}" style="height: 127px;">
                 </div>
                 <div style="float: left; width: 65%; padding-left: 40px;">
-                    <p style="font-size: 14px; margin: 0px; padding: 5px 0px; font-weight: 500;"> {{COMPANY_NAME}} </p>
+                    <p style="font-size: 14px; margin: 0px; padding: 5px 0px; font-weight: 500; font-size:15px !important"> {{COMPANY_NAME}} </p>
                     <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> {{COMPANY_ADDRESS}} </p>
                     <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> MST : {{COMPANY_TAXNO}} </p>
                     <p style="font-size: 12px; margin: 0px; padding: 5px 0px;"> Tel: {{COMPANY_PHONE}} </p>
@@ -414,7 +427,7 @@ export const MAU_PHIEU_NHAPKHO = `
 
                 <div>
                     <div style="text-align: center;">
-                        <p style="margin: 0px; padding: 5px 0px; font-size: 16px; font-weight: 500;"> PHIẾU NHẬP KHO </p>
+                        <p style="margin: 0px; padding: 5px 0px; font-size: 16px; font-weight: 500; font-size:20px !important"> PHIẾU NHẬP KHO </p>
                     </div>
                     <div style="position: absolute; right: 0px; top: -10px;">
                         {{BARCODE}}
@@ -623,5 +636,6 @@ export const MAU_PHIEU_NHAPKHO = `
         </div>
     </body>
 </html>
+
 
 `;
