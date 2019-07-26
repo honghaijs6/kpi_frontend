@@ -59,7 +59,7 @@ class MyForm extends Component {
     _onSubmit(){
         //alert(this.props.typeAction);
 
-                const fields = ['name','email','phone','office_id','job_type','department_id','job_level','username'];
+                const fields = ['name','email','phone','office_id','department_id','job_level','username'];
         if(detectForm(fields,this.state)===''){
             
             let data = this.state ; 
@@ -70,8 +70,7 @@ class MyForm extends Component {
             this.props.model.axios(this.props.typeAction,data,(res)=>{ 
 
                 this._whereStateChange(res);     
-                //console.log(res);
-                //alert(JSON.stringify(res))
+                
 
             });
 

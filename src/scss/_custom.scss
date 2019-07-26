@@ -7,6 +7,7 @@
 /*GENERGAL */
 body{
   font: 14px "Roboto", sans-serif !important;
+  overflow-y: hidden;
 }
 
 /* COLOR*/
@@ -128,8 +129,9 @@ label{ font-weight: 500 !important; font-size: 14px;}
 .div-main{
   margin-top: 20px;
   padding: 20px;
-  height: 89vh + 0.4;
-  overflow: auto;
+  height: 100%;
+  overflow: auto; 
+  background: #F0F0F0;
 }
 .div-form{
   padding: 30px;

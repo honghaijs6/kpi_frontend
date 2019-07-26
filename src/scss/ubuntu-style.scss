@@ -32,8 +32,7 @@
     flex-direction: row;
     background: #fff;
     border: 1px solid rgba(0,0,0,0.2);
-    height: 83vh + 6.4 ;
-    overflow-y:hidden;
+    
     border-bottom: 0px;
     overflow-x: hidden;
 }
@@ -48,7 +47,7 @@
     flex: 0 0 260px;
     padding: 1rem;
     border-right: 1px solid #c8ced3;
-    height: 89vh + 0.5 ; overflow-y:auto;
+    height: 94vh  ; overflow-y:auto;
     background: #f0f0f0; //F0F0F0
 }
 

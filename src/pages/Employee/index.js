@@ -47,16 +47,12 @@ class Employee extends Component {
     render() {
         return (
             <div className="animated fadeIn">
-                <div className="ubuntu-app" style={{marginTop:20,border:0}}>
-                    <main>
-                        <BenExplorer onLeftSideChange={ this._onNavChange } data={this.state.navData} >
-                            <MyEmployee  {...this.state} />
-                            <MyOffice {...this.state} />
-                            <MyDepartment {...this.state} />
-                            <Role {...this.state} />
-                        </BenExplorer> 
-                    </main>
-                </div>
+                <BenExplorer style={{marginTop: 20,}} onLeftSideChange={ this._onNavChange } data={this.state.navData} >
+                    <MyEmployee  {...this.state} />
+                    <MyOffice {...this.state} />
+                    <MyDepartment {...this.state} />
+                    <Role {...this.state} />
+                </BenExplorer> 
             </div>
         );
     }
