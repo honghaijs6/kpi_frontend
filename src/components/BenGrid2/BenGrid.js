@@ -104,7 +104,9 @@ class BenGrid extends Component{
 
       // ADD ROW
       if( newProps.model.db.total > this.state.count){
-        this.gridApi.updateRowData({ add: [newProps.rowData[0]],addIndex: 0 });
+        //this.gridApi.updateRowData({ add: [newProps.rowData[0]],addIndex: 0 });
+        this.gridApi.setRowData(newProps.rowData);
+        
       }else if(newProps.model.db.total < this.state.count){
         // REMOVE ROW
         this.gridApi.updateRowData({ remove: this.state.selectedData });

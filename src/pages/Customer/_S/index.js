@@ -225,7 +225,7 @@ class OrderView extends Component{
     this.data[MODE] = newProps[MODE]['list'] || [] ;
     // UPDATE STATE FORM DATA
     Object.assign(this.state,newProps[MODE]['state']) ;
-
+    
 
     this.resetGrid();
 
