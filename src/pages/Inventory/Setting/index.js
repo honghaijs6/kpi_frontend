@@ -73,7 +73,6 @@ class Dashboard extends Component{
         <div className="div-main">
             <main className="form-general" >
               
-              
               <h4 className="text-uppercase"> Cài đặt kho hàng </h4>
               <Row>
                   <Col md="4">

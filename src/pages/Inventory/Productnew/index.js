@@ -93,9 +93,8 @@ class ProductNew extends Component {
   render() {
     return (
       <div className="animated fadeIn">
-        <div className="ubuntu-app" style={{marginTop:20, padding:10}}>
-          <main>
-
+        <div className="blank-app">
+          
                 <SerialForm
                   
                   isOpen={this.state.isOpenSerialForm}
@@ -158,7 +157,6 @@ class ProductNew extends Component {
 
                   
               />
-          </main>
         </div>
       </div>
     );

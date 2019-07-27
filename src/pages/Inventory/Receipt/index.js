@@ -277,8 +277,8 @@ class ReceiptWarehouse extends Component {
         
         return (
             <div className="animated fadeIn">
-                <div className="ubuntu-app " style={{marginTop:20, padding:10}}>
-                    <main>
+                <div className="blank-app ">
+                   
 
 
                         <PrintForm
@@ -365,7 +365,7 @@ class ReceiptWarehouse extends Component {
                             }
                             
                         />
-                    </main>
+                    
                 </div>
             </div>
         );

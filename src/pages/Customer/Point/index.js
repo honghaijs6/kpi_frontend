@@ -110,21 +110,16 @@ class Point extends Component{
   render(){
     return (
       <div className="animated fadeIn">
-        <div className="ubuntu-app " style={{border:0, marginTop:20}}>
-            <main>
-
+        <div className="blank-app">
               <BenGrid
 
                  isRightTool={ false }
                  height="79.9vh"
-                 
                  nextColums={ this.grid.colums }
                  rowData={this.grid.rowData}
                  model={ this.model }
 
               />
-
-            </main>
         </div>
       </div>
     )

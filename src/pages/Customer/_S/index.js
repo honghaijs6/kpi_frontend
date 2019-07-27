@@ -247,9 +247,8 @@ class OrderView extends Component{
     
     return (
       <div className="animated fadeIn">
-        <div className="ubuntu-app " style={{border:0, marginTop: 20}}>
-            <main style={{padding:10}}>
-
+        <div className="blank-app ">
+              
               <MyForm
 
                 width='72%'
@@ -332,7 +331,7 @@ class OrderView extends Component{
                  
               />
               
-            </main>
+            
         </div>
       </div>
     )

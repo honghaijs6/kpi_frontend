@@ -237,10 +237,7 @@ class CashFlowView extends Component {
     render() {
         return (
             <div className="animated fadeIn">
-                <div className="ubuntu-app " style={{marginTop:20, padding:10}}>
-                    <main>
-
-
+                <div className="blank-app ">
                         <DeleteForm  
                             data={this._curInfo}
                             isOpen={ this.state.isOpenDeleteForm }
@@ -322,7 +319,7 @@ class CashFlowView extends Component {
                             }
                             
                         />
-                    </main>
+                    
                 </div>
             </div>
         );

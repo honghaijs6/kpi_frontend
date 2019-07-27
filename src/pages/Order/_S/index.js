@@ -459,144 +459,139 @@ class OrderView extends Component{
     
     return (
       <div className="animated fadeIn">
-        <div className="ubuntu-app " style={{border:0, marginTop: 20,padding:10}}>
+        <div className="blank-app">
             <main>
+                <PrintForm width="72%" 
+                  type={this.state.type}
+                  isOpen={ this.state.isOpenPrintForm }
+                  onToggle={(isOpen)=>{ this.setState({isOpenPrintForm:isOpen}) }}
+                  data={this._curInfo}
 
-              <PrintForm width="72%" 
-                type={this.state.type}
-                isOpen={ this.state.isOpenPrintForm }
-                onToggle={(isOpen)=>{ this.setState({isOpenPrintForm:isOpen}) }}
-                data={this._curInfo}
-  
-                companyInfo = {this._companyInfo}
+                  companyInfo = {this._companyInfo}
 
-              />
-               
-
-              <CashFlowForm  
-                width="45%"
-                isOpen={this.state.isOpenCashflowForm}
-                onToggle={(isOpen)=>{ this.setState({isOpenCashflowForm:isOpen}) }}
-                model={ this.mBills }
-                data={ this._curInfo }
-                receiptType="pt"
-                typeAction="post"
-                onSubmitForm={(res)=>{   this._onSubmitCashFlowForm(res) }}
-
-              />
-              <ReceiptForm 
-                 width="72%"
-                 isOpen={this.state.isOpenReceiptForm}
-                 onToggle={(isOpen)=>{ this.setState({isOpenReceiptForm:isOpen}) }}
-                 model={this.mWarehousrReceipt}
-                 data={this._curInfo}
-                 receiptType='out'
-                 typeAction='post'
-
-                 onSubmitForm={ (res)=>{  this._onSubmitReceiptForm(res) }}
-
-
-              />
-              <ProgressForm 
-
-                name="Tiến trình" 
-                isOpen={ this.state.isOpenProgressForm } 
-                onToggle={(isOpen)=>{ this.setState({isOpenProgressForm:isOpen}) }}
-                onSubmit={ this._onProgressFormSubmit }
-
-                model={this.model}
-                data={ this._curInfo }
-                width='40%'
-
-              />
-              <DeleteForm  
-                name="Cảnh báo"
-                isOpen={ this.state.isOpenDeleteForm }
-                onToggle={(isOpen)=>{ this.setState({isOpenDeleteForm:isOpen}) }}
-                onSubmit={ this._onDeleteFormSubmit }
-
-                model={this.model}
-                data={this._curInfo}
-
-
-              />
-              <MyForm
-
-                width='90%'
-                name={ FORM_NAME }
-                data={ this._curInfo }
+                />
                 
-                isOpen={this.state.isOpenForm}
 
-                onToggle={(isOpen)=>{ this.setState({isOpenForm:isOpen}) }}
+                <CashFlowForm  
+                  width="45%"
+                  isOpen={this.state.isOpenCashflowForm}
+                  onToggle={(isOpen)=>{ this.setState({isOpenCashflowForm:isOpen}) }}
+                  model={ this.mBills }
+                  data={ this._curInfo }
+                  receiptType="pt"
+                  typeAction="post"
+                  onSubmitForm={(res)=>{   this._onSubmitCashFlowForm(res) }}
 
-                model={this.model}
+                />
+                <ReceiptForm 
+                  width="72%"
+                  isOpen={this.state.isOpenReceiptForm}
+                  onToggle={(isOpen)=>{ this.setState({isOpenReceiptForm:isOpen}) }}
+                  model={this.mWarehousrReceipt}
+                  data={this._curInfo}
+                  receiptType='out'
+                  typeAction='post'
 
-                onSubmit={ this._onFormSubmit }
-                
-              />
-
-              <BenGrid
-
-                 onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
-                 
-
-                 onCellSelected={(json)=>{ this._curInfo = json  }}
-
-                 gridID='id'
-                 rowSelection='single'
-
-                 isRightTool={ true }
-                 height="78vh"
-
-                 nextColums={ this.grid.colums }
-                 rowData={this.grid.rowData}
-                 model={ this.model }
-                 formStatus={ this.state.status }
-                 
-                 customButton={
-                   <ButtonGroup>
-
-                      
-                      <Link className="btn btn-normal" style={{borderRadius:0}} to="/order/add"> <i className="fa fa-plus-circle"></i> Tạo báo giá </Link>
-                      
-                      <ButtonExpandList onSelected={(item)=>{  this._callAction(item) }} data={ this.state.actions } />
-                      
-
-                      <Input 
-                          defaultValue={ this.state.defaultStatusType } 
-                          onChange={(e)=>{ this._load(e.target.value) }} style={{marginRight:10, borderRadius:0, backgroundColor:'#F5F6F7'}} type="select">
-                          <option value="2"> Tất cả </option>
-                          <option value="0"> Quản lý báo giá </option>
-                          <option value="1"> Quản lý đơn Hàng </option>
-                      </Input>
-
-                      <RankDatePicker onChange={(state)=>{ this._loadWithDate(state) }} />
-                      
-
-                      <ButtonExpand style={{borderRight:0}}  icon="fa-filter">
-                          <FormGroup>
-                            <Label> Trạng thái </Label>
-                            <SelectList name="Tất Cả" onChange={(e)=>{ this._onChange('status',e.target.value) }}  rows={ ORDER_STATUS } />
-                          </FormGroup>
-                          <FormGroup>
-                            <Label> Hạn mức  </Label>
-                            <SelectListModelCode onChange={(e)=>{ this._onChange( 'payment_code',e.target.value)  }}  name="Tất Cả" strModel='payments' />
-                          </FormGroup>
-                          
-
-                      </ButtonExpand>
-                      
-                   </ButtonGroup>
-                   
-                 }
-
-                 displayBtn = {[]}
+                  onSubmitForm={ (res)=>{  this._onSubmitReceiptForm(res) }}
 
 
-                 
-              />
-              
+                />
+                <ProgressForm 
+
+                  name="Tiến trình" 
+                  isOpen={ this.state.isOpenProgressForm } 
+                  onToggle={(isOpen)=>{ this.setState({isOpenProgressForm:isOpen}) }}
+                  onSubmit={ this._onProgressFormSubmit }
+
+                  model={this.model}
+                  data={ this._curInfo }
+                  width='40%'
+
+                />
+                <DeleteForm  
+                  name="Cảnh báo"
+                  isOpen={ this.state.isOpenDeleteForm }
+                  onToggle={(isOpen)=>{ this.setState({isOpenDeleteForm:isOpen}) }}
+                  onSubmit={ this._onDeleteFormSubmit }
+
+                  model={this.model}
+                  data={this._curInfo}
+
+
+                />
+                <MyForm
+
+                  width='90%'
+                  name={ FORM_NAME }
+                  data={ this._curInfo }
+                  
+                  isOpen={this.state.isOpenForm}
+
+                  onToggle={(isOpen)=>{ this.setState({isOpenForm:isOpen}) }}
+
+                  model={this.model}
+
+                  onSubmit={ this._onFormSubmit }
+                  
+                />
+
+                <BenGrid
+
+                  onBtnEdit={(data)=>{ this._doOpenModalUpdate(data)  }}
+                  
+
+                  onCellSelected={(json)=>{ this._curInfo = json  }}
+
+                  gridID='id'
+                  rowSelection='single'
+
+                  isRightTool={ true }
+                  height="78vh"
+
+                  nextColums={ this.grid.colums }
+                  rowData={this.grid.rowData}
+                  model={ this.model }
+                  formStatus={ this.state.status }
+                  
+                  customButton={
+                    <ButtonGroup>
+
+                        
+                        <Link className="btn btn-normal" style={{borderRadius:0}} to="/order/add"> <i className="fa fa-plus-circle"></i> Tạo báo giá </Link>
+                        
+                        <ButtonExpandList onSelected={(item)=>{  this._callAction(item) }} data={ this.state.actions } />
+                        
+
+                        <Input 
+                            defaultValue={ this.state.defaultStatusType } 
+                            onChange={(e)=>{ this._load(e.target.value) }} style={{marginRight:10, borderRadius:0, backgroundColor:'#F5F6F7'}} type="select">
+                            <option value="2"> Tất cả </option>
+                            <option value="0"> Quản lý báo giá </option>
+                            <option value="1"> Quản lý đơn Hàng </option>
+                        </Input>
+
+                        <RankDatePicker onChange={(state)=>{ this._loadWithDate(state) }} />
+                        
+
+                        <ButtonExpand style={{borderRight:0}}  icon="fa-filter">
+                            <FormGroup>
+                              <Label> Trạng thái </Label>
+                              <SelectList name="Tất Cả" onChange={(e)=>{ this._onChange('status',e.target.value) }}  rows={ ORDER_STATUS } />
+                            </FormGroup>
+                            <FormGroup>
+                              <Label> Hạn mức  </Label>
+                              <SelectListModelCode onChange={(e)=>{ this._onChange( 'payment_code',e.target.value)  }}  name="Tất Cả" strModel='payments' />
+                            </FormGroup>
+                            
+
+                        </ButtonExpand>
+                        
+                    </ButtonGroup>
+                    
+                  }
+
+                  displayBtn = {[]}
+                />    
             </main>
         </div>
       </div>

@@ -8,7 +8,7 @@ class Report extends Component {
     render() {
         return (
             <div className="animated fadeIn">
-                <div className="ubuntu-app" style={{marginTop:20, padding:10}}>
+                <div className="blank-app">
                     <main>
                         asdasd
                     </main>

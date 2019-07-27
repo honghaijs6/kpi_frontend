@@ -605,10 +605,13 @@ class AddQuotation extends React.Component {
         
         return this.state.onSuccess === false ?  (
             <div className="animated fadeIn">
-                <div className="ubuntu-app " style={{border:0, marginTop: 20}}>
+                <div style={{
+                  backgroundColor:'#fff',
+                  paddingTop:20,
+                }}>
 
                     <Row>
-                        <Col md={3} style={{background:'#f0f0f0',borderRight:'1px solid rgba(0,0,0,0.1)'}}>
+                        <Col md={3} style={{background:'#f0f0f0',borderRight:'1px solid rgba(0,0,0,0.1)',height:'94vh'}}>
                             <CustomerInfo {...this.state} 
                               onChange={this._onChange}  
                               onSelectedCustomer={ this._onSelectedCustomer }  
@@ -632,7 +635,7 @@ class AddQuotation extends React.Component {
                             <span className="ml-10 form-err" id="form-err"></span>
                         </Col>
                     </Row>
-                    
+
                 </div>
             </div>
         ): <Redirect to="/order/_s"/>

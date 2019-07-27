@@ -45,7 +45,7 @@ class Explorer extends Component{
 
 
     return(
-      <div className="ubuntu-app mb-4" {...this.props}>
+      <div className="ubuntu-app mb-4"   style={this.props.style} >
         <LeftSide onClick={ this._onClick } {...this.state} />
         <main>
           { this.props.children }

@@ -95,7 +95,7 @@ class SettingOrderPage extends Component{
     render(){
 
         return(
-            <div hidden={  this.props.onTab === this.state.tab ? false : true } style={{background:'#E4E5E6' , height:'90vh' }}>
+            <div hidden={  this.props.onTab === this.state.tab ? false : true } style={{background:'#E4E5E6' , height:'94vh' }}>
                 <div style={{padding:40}}>
                     <h4 className="text-uppercase" style={{marginBottom:20}}> Cấu hình đơn hàng </h4>
 

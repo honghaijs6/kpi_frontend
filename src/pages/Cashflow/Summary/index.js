@@ -216,7 +216,6 @@ class CashflowSummary extends Component{
       <div className="animated fadeIn">
         <main className="div-main"> 
           <div style={{padding:30}}>
-
             <h4 className="text-uppercase" style={{marginBottom:15}}> Tổng quan Thu - Chi </h4>
             <Row>
               <Col md={10}>
