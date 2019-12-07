@@ -14,7 +14,7 @@ class Dashboard extends Component{
       <div className="animated fadeIn">
 
         <div className="div-main">
-        <i>đang cập nhật Timeline...</i> 
+        <i>đang cập nhật Timeline...</i>
         {/*<MyHeader />
 
         <Row>
@@ -27,7 +27,7 @@ class Dashboard extends Component{
         </Row>*/}
 
         </div>
-        
+
       </div>
     )
   }

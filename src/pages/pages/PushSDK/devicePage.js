@@ -2,9 +2,8 @@ import React from 'react';
 import axios from 'axios';
 
 import { Table, Row, Col, ButtonGroup, Button } from 'reactstrap';
-
-
 import { toast } from "react-toastify";
+
 
 import server from '../../../config/server';
 
@@ -19,7 +18,7 @@ const MAU_JSON = `{
           "registrycode": "mã đăng ký push",
           "DeviceName": "tên thiết bị"
       }
-      
+
   ]
 }`;
 
@@ -37,7 +36,7 @@ class Devices extends React.Component {
       server: server.base(),
       typeAction:'', // post - put - delete ...
       onAction:'', // string method
-      status:'', 
+      status:'',
       viewSupport:false,
 
       tab:'devicePage',
@@ -75,7 +74,7 @@ class Devices extends React.Component {
       const res = responese.data ;
 
       toast.info('Khoá đã đóng : '+json.sn);
-      
+
       /*if(res.desc==='ok'){
            toast.info('Đã mở khoá : '+json.sn);
       }*/
@@ -91,19 +90,19 @@ class Devices extends React.Component {
       if(res.desc==='ok'){
            toast.info('Đã đồng bộ  : '+json.sn);
       }
-  
+
 
     })
 
 
   }
-  
-  
+
+
   componentWillReceiveProps(newProps){
-    
+
     switch(newProps.onAction){
       case 'viewSupport':
-      
+
           if(newProps.onTab === this.state.tab){
              this.setState({
                viewSupport: !this.state.viewSupport
@@ -128,14 +127,14 @@ class Devices extends React.Component {
 
   render() {
 
-    
+
     return (
       <div style={{padding:30}} hidden={  this.props.onTab === this.state.tab ? false : true } >
-          
+
           <div style={{marginBottom:20}}>
             <button onClick={this._viewSupport} className="btn btn-sm btn-success"> <i className="fa fa-support mr-5" /> Hướng dẩn </button>
           </div>
-          
+
           <div hidden={!this.state.viewSupport ? false : true } >
             <Table  className="table" >
               <thead style={{ border:0, background:'#222D32', color:'#fff' }} >
@@ -200,13 +199,13 @@ class Devices extends React.Component {
             </Table>
           </div>
 
-          
+
           <div style={{ fontFamily:'Roboto'}} hidden={ !this.state.viewSupport ? true : false }>
               <div className="guidebook">
 
               <h3> Thao tác về thiết bị </h3>
               <p>  Phần này là hướng dẩn cho chương trình demo về thiết bị   </p>
-              
+
               <h5> Request </h5>
               <ul>
                   <li> URL: /pushapi/deviceServlet?type=[numer] </li>
@@ -216,7 +215,7 @@ class Devices extends React.Component {
               <Table>
                   <thead style={{ border:0, background:'#222D32', color:'#fff' }}>
                       <tr>
-                          <th style={{width:'60px'}}> Type </th>   
+                          <th style={{width:'60px'}}> Type </th>
                           <th style={{width:500}}>Mô tả</th>
                       </tr>
                   </thead>
@@ -229,7 +228,7 @@ class Devices extends React.Component {
                           <td>2</td>
                           <td> Đồng bộ thời gian thiết bị </td>
                       </tr>
-                      
+
                   </tbody>
               </Table>
 
@@ -252,7 +251,7 @@ class Devices extends React.Component {
                 <p className="txt-green"> Đồng bộ thời gian tiết bị </p>
                 <p> URL: /pushapi/deviceServlet?type=2&sn=[<span className="txt-green">serialNo</span>] </p>
                 <p> Response : JSON Object </p>
-                
+
                 <pre style={{
                   background:'#263238',
                   color:'#f1f1f1',
@@ -266,7 +265,7 @@ class Devices extends React.Component {
                 <p className="txt-green"> Mở khoá </p>
                 <p> URL:/pushapi/createCmd?cmdType=userDefined&sn=[<span className="txt-green">serialNo</span>]&originalCmd=<span className="txt-green">CONTROL DEVICE 01010103</span> </p>
                 <p> Response : JSON Object </p>
-                
+
                 <br></br>
                 <br></br>
 

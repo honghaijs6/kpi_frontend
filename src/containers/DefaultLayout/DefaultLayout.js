@@ -1,4 +1,4 @@
-// HOOKS 
+// HOOKS
 import rolesOfNavigation from '../../hook/before/rolesOfNavigation';
 
 import React, { Component } from 'react';
@@ -47,26 +47,26 @@ class DefaultLayout extends Component {
   }
 
   componentWillReceiveProps(newProp){
-      
-      window.setTimeout(()=>{
-        const roles = window.USER_ROLES || [] ; 
+
+      /*window.setTimeout(()=>{
+        const roles = window.USER_ROLES || [] ;
         const newNavigation = rolesOfNavigation(navigation,roles);
         this.setState({
           navigation:newNavigation
         });
         //console.log('1');
 
-      },100)
+      },100)*/
 
   }
 
   componentDidMount(){
-    
+
   }
 
   render() {
 
-    
+
     return (
       <div className="app">
 
@@ -89,7 +89,7 @@ class DefaultLayout extends Component {
           <main className="main">
 
             {/*<AppBreadcrumb appRoutes={routes}/>*/}
-            
+
 
             <Container fluid style={{ padding:0, marginTop:-22}}>
 
@@ -114,7 +114,7 @@ class DefaultLayout extends Component {
 
           </AppAside>
         </div>
-        
+
         {/*<AppFooter>
           <DefaultFooter />
         </AppFooter>*/}

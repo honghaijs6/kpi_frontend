@@ -47,7 +47,7 @@ class Model {
   setup(){
 
     this.jwt = localStorage.getItem('feathers-jwt');
-    // SETUP MAC DINH 
+    // SETUP MAC DINH
     this.set('method',{
       name:'listAll',
       params:'all'
@@ -59,7 +59,7 @@ class Model {
   }
 
   configDB(){
-    
+
     let  url = this.db.base +   Object.keys(this.paginate).map((key)=>{
         return key +'='+ this.paginate[key]
     }).join('&');
@@ -85,7 +85,7 @@ class Model {
     if(name==='paginate'){
         //this.paginate = value ; // value = {}
         Object.assign(this.paginate,value);
-        
+
     }else{
       this.db[name] = value;
 
@@ -106,7 +106,7 @@ class Model {
 
 
     console.log(err);
-    
+
     /*const data = err.response.data ;
     const msg = data.errors[0];
     if(typeof msg === 'object'){
@@ -375,9 +375,9 @@ class Model {
 
     url = server.base()+'/'+this.model+url;
 
-    
 
-    
+
+
     axios.get(url,config)
           .then((res) => {
             //this.restResp(res); // KHÔNG LUU localStorage
@@ -419,20 +419,20 @@ class Model {
     });
 
     this.load();
-    
+
   }
 
   fetch(onSuccess){
 
     this.db.type = 'GET';
     const {url, config} = this.db ;
-    
-    
-      
+
+
+
     axios.get(url,config)
             .then((res) => {
               //this.restResp(res); // KHÔNG LUU localStorage
-              onSuccess(res)
+              onSuccess(res);
 
             },
             (error) => {
@@ -523,7 +523,7 @@ class Model {
             res = res.data ;
             this.data = res.rows ;
 
-            
+
 
             this.resetConfigDB("total",res.count);
 
@@ -551,11 +551,11 @@ class Model {
           case 'PUT':
 
             /*UPDATE REDUX STORE*/
-            
+
             if(this.dispatcher !== null){
               const id = idata.data.id;
               list.forEach((item,index)=>{
-                
+
                 if(parseInt(item.id) === parseInt(id)){
                   list[index] = idata.data;
                 }
@@ -565,7 +565,7 @@ class Model {
                 list:list
               });
             }
-            
+
 
 
           break ;
@@ -580,10 +580,10 @@ class Model {
 
             total -= 1;
             this.resetConfigDB("total",total);
-            
+
             this.restResp({
               list:list
-            }); 
+            });
           break ;
 
 
@@ -595,7 +595,7 @@ class Model {
         //let el = document.querySelector("#form-err");
         //el.innerHTML = '<span class="text-danger">'+idata.message+'</span>';
         console.log(idata.message);
-        
+
 
       }
 
@@ -637,9 +637,9 @@ class Model {
 
 
     Object.assign(this.state,newState);
-    
-    this.data = newState.list; 
-    
+
+    this.data = newState.list;
+
 
     if(this.dispatcher!==null){
       this.dispatcher(newState);
@@ -653,7 +653,7 @@ class Model {
 
   remove(name){
 
-    delete this.paginate[name] ; 
+    delete this.paginate[name] ;
     this.configDB();
   }
   set(name,value){

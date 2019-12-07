@@ -22,8 +22,8 @@ export default {
       },
     },
 
-    
-    
+
+
     {
       code:'employee.view',
       name:'Nhân sự',
@@ -169,7 +169,7 @@ export default {
         {
           code:'customer.point',
           name:'Điểm tích luỹ',
-          url:'/customer/point',  
+          url:'/customer/point',
           icon:'',
           class:''
         },
@@ -207,7 +207,7 @@ export default {
           url:'/services/tickets',
           icon:'fa fa-ticket',
           class:''
-        }, 
+        },
         /*{
           name:'Giao hàng',
           url:'/services/delivery',
@@ -227,10 +227,10 @@ export default {
           icon:'fa fa-wrench',
           class:''
         },
-        
+
       ]
     },
-    
+
     {
       code:'crm.view',
       name: 'Marketting (F3)',
@@ -285,39 +285,39 @@ export default {
       icon:'fa fa-dashboard',
       class:'',
       children:[
-        { 
+        {
           code:'kpi.view',
-          name:'DS KPI', 
-          url:'/kpi/target', 
+          name:'DS KPI',
+          url:'/kpi/target',
           icon:'',
-          class:'' 
-        
-        },
-        { 
-          code:'kpi.customer',
-          name:'Khách Hàng', 
-          url:'/kpi/customer', 
-          icon:'',
-          class:'' 
+          class:''
+
         },
         {
-          code:'kpi.employee', 
-          name:'Nhân viên', 
-          url:'/kpi/employee', 
+          code:'kpi.customer',
+          name:'Khách Hàng',
+          url:'/kpi/customer',
           icon:'',
-          class:'' 
+          class:''
         },
-        { 
-          code:'kpi.product',
-          name:'Sản phẩm', 
-          url:'/kpi/product', 
+        {
+          code:'kpi.employee',
+          name:'Nhân viên',
+          url:'/kpi/employee',
           icon:'',
-          class:'' 
+          class:''
+        },
+        {
+          code:'kpi.product',
+          name:'Sản phẩm',
+          url:'/kpi/product',
+          icon:'',
+          class:''
         }
-        
+
       ]
     },
-    
+
     {
       code:'portal.view',
       name: 'Web Portal',
@@ -326,7 +326,7 @@ export default {
       class:''
     },
 
-    
+
 
     {
       code:'setting.app',
@@ -335,7 +335,7 @@ export default {
       icon: 'icon-wrench',
       class:'',
       children:[
-        { 
+        {
           code:'setting.company',
           name:'Công ty',
           url:'/setting/company',

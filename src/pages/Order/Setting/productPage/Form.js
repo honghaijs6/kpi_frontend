@@ -13,10 +13,10 @@ import CKEditor from "react-ckeditor-component";
 
 import BenModal from '../../../../components/BenModal';
 import InputNumeral from '../../../../components/InputNumeral';
-import InputSuggest from '../../../../components/InputSuggest'; 
+import InputSuggest from '../../../../components/InputSuggest';
 import ButtonUploadImage from '../../../../components/ButtonUploadImage';
 
-import SelectListModel from '../../../../components/SelectListModel'; 
+import SelectListModel from '../../../../components/SelectListModel';
 
 
 
@@ -26,7 +26,7 @@ function FormRow1(props){
   const modal = props.modal;
   const data = modal.data ;
 
-  
+
   return(
     <div className="row-form">
       <h6 className="txt-green text-uppercase"> Thông tin sản phẩm  </h6>
@@ -56,25 +56,25 @@ function FormRow1(props){
           <Col md={2}>
             <FormGroup>
               <label> Danh mục </label>
-              <SelectListModel id="categories_id" 
-                  defaultValue={ data.categories_id } 
-                  strModel="categories" onChange={(e)=>{ modal.onChange('categories_id',e.target.value) }} 
-                  name="Vui lòng chọn" 
+              <SelectListModel id="categories_id"
+                  defaultValue={ data.categories_id }
+                  strModel="categories" onChange={(e)=>{ modal.onChange('categories_id',e.target.value) }}
+                  name="Vui lòng chọn"
               />
-              
-              
+
+
             </FormGroup>
           </Col>
           <Col md={2}>
              <FormGroup>
                 <label> Nhà cung cấp </label>
-                <InputSuggest 
-                  strModel='suppliers' 
-                  defaultValue={data.supplier_codes} 
-                  onSelected={(json)=>{ modal.onChange('supplier_codes',json.code) }} 
-                  value={ data.supplier_codes }  id="supplier_codes" 
-                />  
-                  
+                <InputSuggest
+                  strModel='suppliers'
+                  defaultValue={data.supplier_codes}
+                  onSelected={(json)=>{ modal.onChange('supplier_codes',json.code) }}
+                  value={ data.supplier_codes }  id="supplier_codes"
+                />
+
              </FormGroup>
           </Col>
 
@@ -89,17 +89,17 @@ function FormRow2(props){
   const modal = props.modal;
   const data = modal.data ;
 
-  let photo_url = data.images ;
-  
-  
-  
+  let photo_url = data.images ;   
+
+
+
 
   return(
     <div style={{marginTop: -20}} className="row-form">
 
       <Row>
           <Col md="2">
-            <FormGroup> 
+            <FormGroup>
               <label> Giá nhà máy <span className="text-danger">*</span></label>
               <InputNumeral  onChange={(value)=>{ props.onChangePrice('price_1',value) }} id="price_1"  defaultValue={ data.price_1 } />
 
@@ -131,7 +131,7 @@ function FormRow2(props){
                 <label> ĐVT </label>
                 <SelectListModel id="unit" defaultValue={ data.unit } onChange={(e)=>{ modal.onChange('unit',e.target.value) }} strModel="units" name="Vui lòng chọn" />
 
-                
+
              </FormGroup>
           </Col>
           <Col md="2">
@@ -159,9 +159,9 @@ function FormRow2(props){
         <Col md={6}>
           <Row>
             <Col md={6}>
-                
+
                 <ButtonUploadImage onUploaded={(res)=>{ props.onUploaded(res) }} />
-                
+
             </Col>
             <Col md={6}>
                 <div style={{
@@ -225,9 +225,9 @@ class MyForm extends Component {
 
     }
   }
-  
+
   onChangePrice(field,value){
-    
+
 
     try{
 
@@ -244,19 +244,19 @@ class MyForm extends Component {
           this.props.modal.onChange('price_4',d);
 
         }else{ this.props.modal.onChange(field,value) }
-        
-        
-        
+
+
+
     }catch(err){
         console.log(err);
     }
-    
-    //this.props.modal.onChange(field,value); 
+
+    //this.props.modal.onChange(field,value);
   }
-  
+
   render(){
 
-    
+
 
     return(
        <BenModal width={ this.props.width } name={ this.props.name } typeAction={ this.props.typeAction } modal={ this.props.modal }  >
@@ -266,7 +266,7 @@ class MyForm extends Component {
 
           <div>
             <CKEditor
-              
+
               activeClass="p10"
               content={this.state.content}
               events={{

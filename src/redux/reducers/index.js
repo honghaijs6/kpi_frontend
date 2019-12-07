@@ -29,14 +29,16 @@ import reducerBill from './reducer-bill';
 import reducerPayment from './reducer-payment';
 
 import reducerCusType from './reducer-customer-type' ;
-import reducerLevel from './reducer-level'; 
-import reducerCusStatus from './reducer-customer-status'; 
-import reducerCusOriginal from './reducer-customer-original'; 
-import reducerWarehouses from './reducer-warehouse'; 
+import reducerLevel from './reducer-level';
+import reducerCusStatus from './reducer-customer-status';
+import reducerCusOriginal from './reducer-customer-original';
+import reducerWarehouses from './reducer-warehouse';
 import reducerWarehouseReceipt from './reducer-warehouse-receipt';
 
 import reducerIservice from './reducer-iservice';
 import reducerRole from './reducer-role';
+
+import reducerCoupon from './reducer-coupon';
 
 
 
@@ -47,7 +49,7 @@ const allReducers = combineReducers({
   regions:reducerRegion,
   subregions:reducerSubregion,
   stores:reducerStore,
-  
+
   purchases:reducerPurchase,
 
   customers:reducerCustomer,
@@ -55,7 +57,7 @@ const allReducers = combineReducers({
   products:reducerProduct,
   product_logs:reducerProductLog,
   serials:reducerSerial,
-  
+
   categories:reducerCategory,
   suppliers:reducerSupplier,
   units:reducerUnit,
@@ -71,7 +73,8 @@ const allReducers = combineReducers({
   warehouses:reducerWarehouses,
   warehouse_receipts:reducerWarehouseReceipt,
   iservices:reducerIservice,
-  roles:reducerRole
+  roles:reducerRole,
+  coupons:reducerCoupon
 
 });
 

@@ -14,12 +14,12 @@ import { HashRouter, Route, Switch } from 'react-router-dom';
 // Containers
 import { DefaultLayout } from './containers';
 // Pages
-import { Login, Page404, Page500, PushSDK } from './pages/pages';
+import { Login, Page404, Page500, PushSDK, DemoTicket } from './pages/pages';
 import socket from './model/socket';
 
 // HOOKED ;
 
-import doGetModelInfo from './hook/ultil/doGetModelInfo' ; 
+import doGetModelInfo from './hook/ultil/doGetModelInfo' ;
 import doFindAll from './hook/ultil/doFindAll';
 
 import { preLoad } from './hook/before';
@@ -42,12 +42,12 @@ class App extends Component {
     const res = await doGetModelInfo('users',id) ;
     window.USERINFO = res.name === 'success' ? res.data : {};
 
-    // DISPATCH TO USERS : save user info 
+    // DISPATCH TO USERS : save user info
     this.props.saveUserInfo(res.data);
-    
+
 
     this._getUserRoles(window.USERINFO.email)
-    this.setState({login});    
+    this.setState({login});
   }
 
   async _getUserRoles(email){
@@ -55,7 +55,7 @@ class App extends Component {
     if(res.name==='success'){
       window.USER_ROLES = res.rows;
 
-      // SAVE USER_ROLS TO REDUX 
+      // SAVE USER_ROLS TO REDUX
       this.props.saveUserRoles(res.rows);
 
       this.setState({
@@ -64,8 +64,8 @@ class App extends Component {
     }
   }
 
-  componentDidMount(){  
-    
+  componentDidMount(){
+
     preLoad('authenticate');
     socket.client.authenticate().catch((err)=>{
 
@@ -73,16 +73,16 @@ class App extends Component {
       this.setState({login:false})
 
     });
-    
+
     socket.client.on('authenticated',login=>{
 
       preLoad('stop');
 
       socket.client.passport.verifyJWT(login.accessToken).then(res=>{
 
-        
+
         this._getUserInfo(login,res.userId)
-        
+
 
       })
 
@@ -107,6 +107,7 @@ class App extends Component {
               <Route  path="/404" name="Page 404" component={Page404} />
               <Route path="/500" name="Page 500" component={Page500} />
               <Route path='/pushsdk' name="Push SDK" component={PushSDK} />
+              <Route path='/demoticket' name="Demo Ticket" component={ DemoTicket } />
               <Route path={ '/'  } name="Home" component={ this.state.login ? DefaultLayout : Login } />
 
             </Switch>
