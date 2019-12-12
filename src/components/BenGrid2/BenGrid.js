@@ -28,7 +28,7 @@ class BenGrid extends Component{
 
 
     const gridID = props.gridID || '_id';
-    
+
     this.tools = {
       add:{
         icon:'fa fa-plus',
@@ -42,7 +42,7 @@ class BenGrid extends Component{
         icon:'fa fa-trash',
         name:'Remove'
       }
-      
+
     }
 
     this.state = {
@@ -80,13 +80,13 @@ class BenGrid extends Component{
           },*/
       rowData: [],
       count: props.model.db.total ,
-      selectedData:[],  
+      selectedData:[],
       displayBtn: props.displayBtn ||  ['add','edit','remove']
     }
 
     this.model = props.model;
 
-    
+
     this.onFindKeyUp = this.onFindKeyUp.bind(this);
     this.onBtnFind = this.onBtnFind.bind(this);
 
@@ -106,22 +106,22 @@ class BenGrid extends Component{
       if( newProps.model.db.total > this.state.count){
         //this.gridApi.updateRowData({ add: [newProps.rowData[0]],addIndex: 0 });
         this.gridApi.setRowData(newProps.rowData);
-        
+
       }else if(newProps.model.db.total < this.state.count){
         // REMOVE ROW
         this.gridApi.updateRowData({ remove: this.state.selectedData });
       }else if(newProps.model.db.total === this.state.count){
-        
-        
+
+
         if(newProps.formStatus==='success' || newProps.formStatus==='ok'){
           this.gridApi.setRowData(newProps.rowData);
         }
-        
+
       }
 
 
       this.state.count = newProps.model.db.total;
-      
+
     }
 
     this.setState({
@@ -132,7 +132,7 @@ class BenGrid extends Component{
   }
 
   error(msg){
-    console.log(msg); 
+    console.log(msg);
   }
 
 
@@ -153,10 +153,10 @@ class BenGrid extends Component{
   onBtnFind(){
 
     this.model.find(this.state.key);
-    
+
   }
-  
-  async _remove(){ 
+
+  async _remove(){
 
     const records = this.state.selectedData.length;
 
@@ -166,6 +166,9 @@ class BenGrid extends Component{
     });
 
     if(result){
+
+      this.props.onDeleted(this.state.selectedData) ;
+
 
       if(this.state.selectedData.length>1){
         this.model.deleteMulti(this.state.selectedData);
@@ -181,8 +184,8 @@ class BenGrid extends Component{
   }
 
   _onBtnClick(action){
-    
-    
+
+
     if(action==='add'){
 
       if(this.props.onBtnAdd !== undefined){
@@ -206,27 +209,27 @@ class BenGrid extends Component{
 
         }
       }else{ BenMessage({message:'You have to select record first!'}) }
-      
+
     }
-    
-    
-  } 
+
+
+  }
 
   onSelectionChanged(){
 
-    
+
     const selectedNodes = this.gridApi.getSelectedNodes()
     const selectedData = selectedNodes.map( node => node.data );
 
     this.setState({
       selectedData:selectedData
     });
-    
+
     // alway call back data on selected ;
-    this.props.onCellSelected(selectedData.length > 0 ? selectedData[0] : {}); 
-      
-    
-    
+    this.props.onCellSelected(selectedData.length > 0 ? selectedData[0] : {});
+
+
+
   }
 
   /* HOW */
@@ -237,9 +240,9 @@ class BenGrid extends Component{
   }
   render(){
 
-    
+
     const clnRightTool =  this.state.isRightTool ? '' : 'hidden';
-      
+
 
     return (
 
@@ -263,7 +266,7 @@ class BenGrid extends Component{
 
                 { this.props.customButton }
                 <ButtonGroup style={{marginRight:6}}>
-                    
+
                     <Input  placeholder="Search" onKeyUp={ this.onFindKeyUp }  style={{borderRadius:0}}  />
                     <Button style={{marginRight:10}} onClick={ this.onBtnFind }  className="btn-ubuntu"> <i className="fa fa-search"></i> </Button>
 
@@ -276,7 +279,7 @@ class BenGrid extends Component{
 
           <div className="ag-theme-material" id="myGrid" style={{boxSizing: "border-box", height: this.state.height, padding:'1rem'}}>
               <AgGridReact
-                  
+
                   onSelectionChanged={this.onSelectionChanged.bind(this)}
                   enableSorting={true}
                   rowSelection={this.state.rowSelection}
@@ -297,7 +300,8 @@ class BenGrid extends Component{
 }
 
 BenGrid.defaultProps = {
-  onCellSelected:()=>{}
+  onCellSelected:()=>{},
+  onDeleted:()=>{}
 }
 
 export default BenGrid;

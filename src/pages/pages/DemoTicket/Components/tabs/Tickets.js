@@ -1,6 +1,7 @@
 
 
 import Model from '../../../../../model/model';
+import zkpush from '../../../../../model/zkpush'
 import moment from 'moment';
 
 
@@ -49,7 +50,10 @@ class Ticket extends React.Component {
             onAction:'',
             status:'',
             isOpen:false,
-            isOpenFormPrint:false
+            isOpenFormPrint:false,
+
+            devices : [],
+            listSelectedDevice:[]
         }
 
         this.grid = {
@@ -104,7 +108,7 @@ class Ticket extends React.Component {
               }
             ],
             rowData: []
-          }
+        }
 
           this._setup();
 
@@ -112,17 +116,74 @@ class Ticket extends React.Component {
 
   _setup(){
     this.model =  new Model(MODE,this.props.dispatch);
+    this.zkpush = new zkpush() ;
+
+
   }
+
+
+  indexDevice = 0 ;
+
+  // WILL ADD USER TO ALL DEVICES
+  _addUserToDevice(data){
+
+      if(this.state.devices.length > this.indexDevice ){
+
+        const curDevice = this.state.devices[this.indexDevice] ;
+        const sn = curDevice.sn ;
+
+        const cmd = "DATA UPDATE user cardno="+data.code+"	pin="+data.code+"	password=	starttime=0	endtime=0	name=ticket	superauthorize=1	disable=0"
+
+
+        this.zkpush.createCmd(cmd,sn).then((res)=>{
+
+          this.indexDevice += 1 ;
+          this._addUserToDevice(data) ;
+
+        })
+      }else{
+        this.indexDevice = 0;
+      }
+  }
+
+  //WILL REMOVE USER TO ALL DEVICE
+  _deleteUserToDevice(code){
+
+    if(this.state.devices.length > this.indexDevice ){
+
+        const curDevice = this.state.devices[this.indexDevice] ;
+        const sn = curDevice.sn ;
+
+        const cmd = "DATA DELETE user pin="+code
+
+        this.zkpush.createCmd(cmd,sn).then((res)=>{
+
+          this.indexDevice += 1 ;
+          this._deleteUserToDevice(code) ;
+
+        });
+
+    }else{ this.indexDevice = 0 }
+
+  }
+
 
   // EVENT
   _onSubmit(data){
 
     this.model.axios(this.state.typeAction,data,(res)=>{
+
+
         if(res.name==='success'){
+
+            this._addUserToDevice(data) ;
+
             this.setState({
                 status:res.name,
                 isOpen:false,
-            })
+            }) ;
+
+
         }else{
 
             BenMessage({
@@ -171,12 +232,27 @@ class Ticket extends React.Component {
 
   componentDidMount(){
       this.model.load();
+
+      zkpush.loadDevice().then((list)=>{
+
+        this.setState({
+          devices:list
+        })
+      });
+
+
   }
 
   _whereStateChange(newState){
       this.setState(Object.assign(this.state,newState));
   }
 
+
+  _onGridDeleted(list){
+    const item = list[this.indexDevice] ;
+
+    this._deleteUserToDevice(item.code) ;
+  }
   render() {
     return (
       <div className="ubuntu-app" style={{ border:0, marginLeft:-10, marginTop:-10}}>
@@ -190,6 +266,7 @@ class Ticket extends React.Component {
                   width="40%"
                   data={this._curInfo}
                   onSubmit={(state)=>{ this._onSubmit(state)  }}
+                  devices={ this.state.devices }
               />
               <FormPrint
                   isOpen={ this.state.isOpenFormPrint }
@@ -205,6 +282,7 @@ class Ticket extends React.Component {
 
                 rowSelection="single"
 
+
                 onBtnAdd={ ()=>{  this._doOpenForm('post') } }
                 onBtnEdit={()=>{ this._doOpenForm('put') }}
                 onCellSelected={ this._onCellSelected }
@@ -212,6 +290,8 @@ class Ticket extends React.Component {
                 isRightTool={ true }
                 isLeftTool={ false }
                 formStatus={ this.state.status }
+
+                onDeleted={(list)=>{  this._onGridDeleted(list) }}
 
                 customButton={
                     <ButtonGroup style={{marginRight:10}}>

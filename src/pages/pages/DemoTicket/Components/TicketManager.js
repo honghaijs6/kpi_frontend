@@ -12,7 +12,7 @@ class TicketManager extends React.Component {
     super(props);
     this.state = {
 
-      onTab:'ticket',
+      onTab:'device',
       tabs:[
             { icon:'fa fa-plug',code:'device',name:'Thiết bị / Cổng' },
             { icon:'fa fa-ticket',code:'ticket',name:'Bán vé' },

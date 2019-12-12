@@ -110,7 +110,7 @@ class MyForm extends React.Component {
                             <Input id="code" disabled={ this.props.typeAction === 'put' ? true : false } onChange={(e)=>{ this._onChange('code',e.target.value) }} defaultValue={ this.state.code } type="text" />
                         </Col>
                         <Col md={6}>
-                            <label> Từ ng : <span className="text-red"> { this._calculateDay() } days</span></label>
+                            <label> Từ - Đến ngày : <span className="text-red"> { this._calculateDay() } days</span></label>
                             <div>
                                 <DatePicker
                                     selected={ this.state.date_begin }
